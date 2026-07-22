@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Bread Studio · edit &amp; configure the magazine</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1d1a17; --bone:#f6f1e7; --panel:#eae4d6; --paper2:#efe9db;
+    --muted:#8d857a; --pink:#f0477d; --teal:#12b795; --orange:#fe9a0d;
+    --line:rgba(29,26,23,.22);
+    --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',monospace;
+    --frak:'UnifrakturMaguntia',serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{font-family:var(--mono);background:var(--panel);color:var(--ink);font-size:13px;line-height:1.5;overflow:hidden}
+  button,input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
+  a{color:var(--pink)}
+
+  /* ---- app shell ---- */
+  .app{display:grid;grid-template-rows:auto 1fr;height:100vh}
+  header.bar{display:flex;align-items:center;gap:14px;background:var(--ink);color:var(--bone);
+    padding:0 16px;height:52px;border-bottom:2px solid var(--bone);flex-wrap:wrap;z-index:5}
+  header.bar .brand{font-family:var(--frak);font-size:26px;line-height:1}
+  header.bar .sub{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#b7ad9e}
+  header.bar .spacer{flex:1}
+  header.bar .status{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);min-width:88px;text-align:right}
+  header.bar .status.saving{color:var(--orange)}
+  .btn{background:transparent;border:2px solid var(--bone);color:var(--bone);padding:6px 11px;
+    font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
+  .btn:hover{background:var(--bone);color:var(--ink)}
+  .btn.pink{border-color:var(--pink);color:var(--pink)}
+  .btn.pink:hover{background:var(--pink);color:var(--bone)}
+  .btn.teal{border-color:var(--teal);color:var(--teal)}
+  .btn.teal:hover{background:var(--teal);color:var(--ink)}
+  select.btn{-webkit-appearance:none;appearance:none;padding-right:22px;
+    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='6'><path d='M0 0l4 6 4-6z' fill='%23f6f1e7'/></svg>") right 8px center no-repeat}
+
+  .main{display:grid;grid-template-columns:minmax(360px,468px) 1fr;min-height:0}
+  @media(max-width:900px){.main{grid-template-columns:1fr}.pane.preview.hide,.pane.edit.hide{display:none}}
+  .tabs{display:none}
+  @media(max-width:900px){.tabs{display:flex;gap:0}.tabs .btn{flex:1;border-width:0 0 2px 0;border-color:transparent}
+    .tabs .btn.on{border-color:var(--pink);color:var(--ink)}}
+
+  .pane{min-height:0;overflow:auto}
+  .pane.edit{background:var(--bone);border-right:2px solid var(--ink)}
+  .pane.preview{background:#c9c2b4;position:relative}
+
+  /* ---- editor accordion ---- */
+  .sec{border-bottom:2px solid var(--ink)}
+  .sec > .head{display:flex;align-items:center;gap:10px;width:100%;background:var(--panel);
+    border:0;border-bottom:1px solid var(--line);padding:11px 15px;cursor:pointer;text-align:left}
+  .sec > .head:hover{background:#e3dccc}
+  .sec > .head .no{font-size:9px;font-weight:700;letter-spacing:.14em;color:var(--muted)}
+  .sec > .head .ttl{font-weight:700;font-size:13px;letter-spacing:.02em}
+  .sec > .head .chev{margin-left:auto;transition:transform .15s;color:var(--muted)}
+  .sec.open > .head .chev{transform:rotate(90deg)}
+  .sec > .body{display:none;padding:14px 15px 20px}
+  .sec.open > .body{display:block}
+
+  .field{margin-bottom:13px}
+  .field > label{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:5px;font-weight:600}
+  .field input[type=text],.field textarea{width:100%;background:#fff;border:1.5px solid var(--line);
+    padding:7px 9px;line-height:1.5}
+  .field input[type=text]:focus,.field textarea:focus{outline:0;border-color:var(--pink)}
+  .field textarea{resize:vertical;min-height:60px}
+  .field.color{display:flex;align-items:center;gap:10px}
+  .field.color > label{margin:0;flex:1}
+  .field.color input[type=color]{width:34px;height:26px;border:1.5px solid var(--line);background:#fff;padding:0;cursor:pointer}
+  .field.color input[type=text]{width:96px;flex:none}
+
+  .imgrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .imgrow img{width:56px;height:56px;object-fit:cover;border:2px solid var(--ink)}
+  .imgrow .btn2{border:1.5px solid var(--ink);padding:6px 10px;background:#fff;cursor:pointer;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+  .imgrow .btn2:hover{background:var(--ink);color:var(--bone)}
+
+  /* ---- lists ---- */
+  .list-wrap{margin-top:6px;margin-bottom:16px}
+  .list-wrap > .lab{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
+    color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .list-wrap > .lab .count{color:var(--muted);font-weight:400}
+  .item{border:1.5px solid var(--ink);background:#fbf7ee;margin-bottom:9px}
+  .item > .itophd{display:flex;align-items:center;gap:6px;background:var(--panel);
+    border-bottom:1.5px solid var(--line);padding:5px 8px}
+  .item > .itophd .ix{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.1em}
+  .item > .itophd .name{font-size:11px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+  .item > .itophd .ctl{display:flex;gap:3px}
+  .item .mini{border:1px solid var(--line);background:#fff;width:22px;height:22px;cursor:pointer;
+    font-size:12px;line-height:1;display:flex;align-items:center;justify-content:center;color:var(--ink)}
+  .item .mini:hover{background:var(--ink);color:var(--bone)}
+  .item .mini.del:hover{background:var(--pink);border-color:var(--pink)}
+  .item > .ibody{padding:9px 10px}
+  .item.str > .ibody{padding:7px 8px}
+  .additem{border:1.5px dashed var(--ink);background:transparent;width:100%;padding:8px;
+    cursor:pointer;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink)}
+  .additem:hover{background:var(--ink);color:var(--bone)}
+
+  .hint{font-size:10.5px;color:var(--muted);line-height:1.5;margin:2px 0 12px}
+
+  /* ---- preview ---- */
+  .pvbar{position:sticky;top:0;display:flex;align-items:center;gap:10px;background:var(--ink);
+    color:#b7ad9e;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;z-index:2}
+  .pvbar .spacer{flex:1}
+  .pvbar button{background:transparent;border:1px solid #5a544b;color:#cfc6b6;padding:3px 8px;cursor:pointer;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase}
+  .pvbar button.on{background:var(--bone);color:var(--ink);border-color:var(--bone)}
+  .frame-wrap{padding:16px;display:flex;justify-content:center}
+  iframe#preview{width:100%;max-width:100%;height:calc(100vh - 52px - 33px - 32px);border:2px solid var(--ink);background:#fff;box-shadow:8px 8px 0 rgba(29,26,23,.35)}
+  iframe#preview.w-phone{width:390px}
+  iframe#preview.w-tab{width:760px}
+
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bone);
+    padding:10px 18px;font-size:11px;letter-spacing:.06em;border:2px solid var(--teal);opacity:0;
+    transition:opacity .2s;pointer-events:none;z-index:20}
+  .toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="bar">
+    <span class="brand">Daily&nbsp;Bread</span>
+    <span class="sub">Studio<br>edit &amp; configure</span>
+    <div class="spacer"></div>
+    <select class="btn" id="themeSel" title="Apply a theme preset"><option value="">Theme preset…</option></select>
+    <button class="btn" id="importBtn">Import JSON</button>
+    <button class="btn" id="exportBtn">Export JSON</button>
+    <button class="btn teal" id="publishBtn" title="Download index.html to commit">Publish → index.html</button>
+    <button class="btn pink" id="resetBtn">Reset</button>
+    <span class="status" id="status">Loaded</span>
+  </header>
+
+  <div class="tabs">
+    <button class="btn on" id="tabEdit">Edit</button>
+    <button class="btn" id="tabPreview">Preview</button>
+  </div>
+
+  <div class="main">
+    <div class="pane edit" id="editPane"></div>
+    <div class="pane preview" id="previewPane">
+      <div class="pvbar">
+        <span>Live preview · exactly what publishes</span>
+        <div class="spacer"></div>
+        <button data-w="full" class="on">Full</button>
+        <button data-w="tab">Tablet</button>
+        <button data-w="phone">Phone</button>
+        <button id="openTab">Open ↗</button>
+      </div>
+      <div class="frame-wrap"><iframe id="preview" title="Daily Bread preview"></iframe></div>
+    </div>
+  </div>
+</div>
+<input type="file" id="fileImport" accept="application/json" hidden>
+<input type="file" id="fileImage" accept="image/*" hidden>
+<div class="toast" id="toast"></div>
+
+<script src="db.js"></script>
+<script>
+"use strict";
+const KEY = "dailybread:model:v1";
+const $ = s => document.querySelector(s);
+
+/* ---------- state ---------- */
+let model = load();
+function load(){
+  try{ const s = localStorage.getItem(KEY); if(s) return JSON.parse(s); }catch(e){}
+  return DB.clone(DB.DEFAULT_MODEL);
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(model)); }catch(e){}
+}
+
+/* ---------- path helpers ---------- */
+function getPath(o, p){ return p.split(".").reduce((a,k)=> (a==null?a:a[k]), o); }
+function setPath(o, p, v){
+  const ks = p.split("."); let a = o;
+  for(let i=0;i<ks.length-1;i++){ if(a[ks[i]]==null) a[ks[i]]={}; a=a[ks[i]]; }
+  a[ks[ks.length-1]] = v;
+}
+
+/* ---------- preview (debounced) ---------- */
+let t=null, imgFor=null;
+function schedule(){
+  setStatus("Saving…", true);
+  clearTimeout(t);
+  t=setTimeout(()=>{ renderPreview(); save(); setStatus("Saved ✓", false); }, 160);
+}
+function renderPreview(){
+  try{ $("#preview").srcdoc = DB.render(model); }
+  catch(e){ console.error(e); setStatus("Render error", true); }
+}
+function setStatus(txt, saving){
+  const el=$("#status"); el.textContent=txt; el.classList.toggle("saving", !!saving);
+}
+
+/* ---------- build the editor from DB.SCHEMA ---------- */
+function esc(s){ return DB.esc(s); }
+function itemLabel(tpl, obj){
+  if(!tpl) return "";
+  return tpl.replace(/\{(\w+)\}/g, (_,k)=> (obj[k]!=null?obj[k]:"")).slice(0,60) || "(empty)";
+}
+
+function buildEditor(){
+  const pane = $("#editPane"); pane.innerHTML="";
+  DB.SCHEMA.forEach((sec, si)=>{
+    const wrap = document.createElement("div");
+    wrap.className = "sec" + (si===0 ? " open" : "");
+    const head = document.createElement("button");
+    head.className="head";
+    head.innerHTML = `<span class="no">${esc((sec.tag||"").replace('//','').trim())}</span>`+
+                     `<span class="ttl">${esc(sec.title)}</span><span class="chev">▸</span>`;
+    head.addEventListener("click", ()=> wrap.classList.toggle("open"));
+    const body = document.createElement("div");
+    body.className="body";
+
+    (sec.fields||[]).forEach(f => body.appendChild(fieldEl(f)));
+    (sec.lists||[]).forEach(l => body.appendChild(listEl(l)));
+
+    wrap.appendChild(head); wrap.appendChild(body); pane.appendChild(wrap);
+  });
+}
+
+/* single scalar field */
+function fieldEl(f){
+  const cur = getPath(model, f.path);
+  const d = document.createElement("div");
+  if(f.type==="color"){
+    d.className="field color";
+    d.innerHTML = `<label>${esc(f.label)}</label>`;
+    const sw=document.createElement("input"); sw.type="color"; sw.value=toHex(cur);
+    const tx=document.createElement("input"); tx.type="text"; tx.value=cur!=null?cur:"";
+    sw.addEventListener("input",()=>{ tx.value=sw.value; setPath(model,f.path,sw.value); schedule(); });
+    tx.addEventListener("input",()=>{ if(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(tx.value)) sw.value=tx.value; setPath(model,f.path,tx.value); schedule(); });
+    d.appendChild(sw); d.appendChild(tx); return d;
+  }
+  if(f.type==="image"){
+    d.className="field";
+    d.innerHTML=`<label>${esc(f.label)}</label>`;
+    const row=document.createElement("div"); row.className="imgrow";
+    const img=document.createElement("img"); img.src=cur||"";
+    const pick=document.createElement("button"); pick.className="btn2"; pick.textContent="Upload…";
+    const tx=document.createElement("input"); tx.type="text"; tx.value=cur||""; tx.style.flex="1"; tx.style.minWidth="140px";
+    pick.addEventListener("click",()=>{ imgFor={path:f.path, img, tx}; $("#fileImage").click(); });
+    tx.addEventListener("input",()=>{ setPath(model,f.path,tx.value); img.src=tx.value; schedule(); });
+    row.appendChild(img); row.appendChild(pick); row.appendChild(tx);
+    d.appendChild(row); return d;
+  }
+  d.className="field";
+  d.innerHTML=`<label>${esc(f.label)}</label>`;
+  const inp = f.type==="area" ? document.createElement("textarea") : document.createElement("input");
+  if(f.type!=="area") inp.type="text";
+  inp.value = cur!=null?cur:"";
+  inp.addEventListener("input",()=>{ setPath(model,f.path,inp.value); schedule(); });
+  d.appendChild(inp); return d;
+}
+
+/* a repeatable list (of strings or of objects) */
+function listEl(l){
+  const wrap=document.createElement("div"); wrap.className="list-wrap"; wrap.dataset.path=l.path;
+  redrawList(wrap, l);
+  return wrap;
+}
+function redrawList(wrap, l){
+  const arr = getPath(model, l.path) || [];
+  wrap.innerHTML="";
+  const lab=document.createElement("div"); lab.className="lab";
+  lab.innerHTML=`${esc(l.label)} <span class="count">· ${arr.length}</span>`;
+  wrap.appendChild(lab);
+
+  arr.forEach((it, i)=>{
+    const item=document.createElement("div"); item.className="item"+(l.strings?" str":"");
+    const hd=document.createElement("div"); hd.className="itophd";
+    hd.innerHTML=`<span class="ix">${String(i+1).padStart(2,"0")}</span>`+
+      `<span class="name">${esc(l.strings? String(it).slice(0,60) : itemLabel(l.item, it))}</span>`;
+    const ctl=document.createElement("div"); ctl.className="ctl";
+    ctl.appendChild(mini("↑", ()=>move(l,i,-1,wrap)));
+    ctl.appendChild(mini("↓", ()=>move(l,i,1,wrap)));
+    ctl.appendChild(mini("✕", ()=>remove(l,i,wrap), true));
+    hd.appendChild(ctl); item.appendChild(hd);
+
+    const ib=document.createElement("div"); ib.className="ibody";
+    if(l.strings){
+      const inp = l.area ? document.createElement("textarea") : document.createElement("input");
+      if(!l.area) inp.type="text";
+      inp.value = it!=null?it:"";
+      inp.addEventListener("input",()=>{ arr[i]=inp.value; hd.querySelector(".name").textContent=String(inp.value).slice(0,60); schedule(); });
+      ib.appendChild(inp);
+    } else {
+      (l.fields||[]).forEach(sf=>{
+        ib.appendChild(subField(sf, it, ()=>{ hd.querySelector(".name").textContent=itemLabel(l.item, it); }));
+      });
+    }
+    item.appendChild(ib); wrap.appendChild(item);
+  });
+
+  const add=document.createElement("button"); add.className="additem"; add.textContent="+ Add "+(l.strings?"item":"row");
+  add.addEventListener("click",()=>{
+    const a=getPath(model,l.path)||[]; setPath(model,l.path,a);
+    a.push(l.strings ? (l.def!=null?l.def:"") : DB.clone(l.def||{}));
+    redrawList(wrap,l); schedule();
+  });
+  wrap.appendChild(add);
+}
+function subField(sf, obj, onName){
+  const cur = obj[sf.path];
+  const d=document.createElement("div");
+  if(sf.type==="color"){
+    d.className="field color";
+    d.innerHTML=`<label>${esc(sf.label)}</label>`;
+    const sw=document.createElement("input"); sw.type="color"; sw.value=toHex(cur);
+    const tx=document.createElement("input"); tx.type="text"; tx.value=cur!=null?cur:"";
+    sw.addEventListener("input",()=>{ tx.value=sw.value; obj[sf.path]=sw.value; schedule(); });
+    tx.addEventListener("input",()=>{ if(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(tx.value)) sw.value=tx.value; obj[sf.path]=tx.value; schedule(); });
+    d.appendChild(sw); d.appendChild(tx); return d;
+  }
+  d.className="field";
+  d.innerHTML=`<label>${esc(sf.label)}</label>`;
+  const inp = sf.type==="area" ? document.createElement("textarea") : document.createElement("input");
+  if(sf.type!=="area") inp.type="text";
+  inp.value = cur!=null?cur:"";
+  inp.addEventListener("input",()=>{ obj[sf.path]=inp.value; onName&&onName(); schedule(); });
+  d.appendChild(inp); return d;
+}
+function mini(txt, fn, del){
+  const b=document.createElement("button"); b.className="mini"+(del?" del":""); b.textContent=txt;
+  b.addEventListener("click",e=>{ e.stopPropagation(); fn(); }); return b;
+}
+function move(l,i,dir,wrap){
+  const a=getPath(model,l.path); const j=i+dir;
+  if(j<0||j>=a.length) return;
+  const tmp=a[i]; a[i]=a[j]; a[j]=tmp; redrawList(wrap,l); schedule();
+}
+function remove(l,i,wrap){
+  const a=getPath(model,l.path); a.splice(i,1); redrawList(wrap,l); schedule();
+}
+function toHex(v){ return /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(v||"") ? v : "#000000"; }
+
+/* ---------- toolbar ---------- */
+function toast(msg){ const el=$("#toast"); el.textContent=msg; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"),1900); }
+function download(name, text, type){
+  const blob=new Blob([text], {type:type||"text/plain"});
+  const url=URL.createObjectURL(blob); const a=document.createElement("a");
+  a.href=url; a.download=name; document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 500);
+}
+
+$("#exportBtn").addEventListener("click",()=>{
+  const name = "daily-bread-"+(model.meta.issueNo||"issue").replace(/[^\w-]/g,"")+".json";
+  download(name, JSON.stringify(model,null,2), "application/json");
+  toast("Exported "+name);
+});
+$("#publishBtn").addEventListener("click",()=>{
+  download("index.html", DB.render(model), "text/html");
+  toast("Downloaded index.html — commit it to publish");
+});
+$("#importBtn").addEventListener("click",()=> $("#fileImport").click());
+$("#fileImport").addEventListener("change",e=>{
+  const file=e.target.files[0]; if(!file) return;
+  const r=new FileReader();
+  r.onload=()=>{ try{ model=JSON.parse(r.result); buildEditor(); renderPreview(); save(); toast("Imported "+file.name); setStatus("Saved ✓",false);}catch(err){ alert("Invalid JSON: "+err.message);} };
+  r.readAsText(file); e.target.value="";
+});
+$("#fileImage").addEventListener("change",e=>{
+  const file=e.target.files[0]; if(!file||!imgFor) return;
+  const r=new FileReader();
+  r.onload=()=>{ setPath(model, imgFor.path, r.result); imgFor.img.src=r.result; imgFor.tx.value="(embedded image)"; schedule(); toast("Image embedded"); };
+  r.readAsDataURL(file); e.target.value="";
+});
+$("#resetBtn").addEventListener("click",()=>{
+  if(!confirm("Reset all content to the built-in Daily Bread №1 default? Your current edits will be lost.")) return;
+  model=DB.clone(DB.DEFAULT_MODEL); buildEditor(); renderPreview(); save(); toast("Reset to default");
+});
+
+/* theme presets */
+(function(){
+  const sel=$("#themeSel");
+  Object.keys(DB.THEMES).forEach(k=>{
+    const o=document.createElement("option"); o.value=k; o.textContent=DB.THEMES[k].name; sel.appendChild(o);
+  });
+  sel.addEventListener("change",()=>{
+    const k=sel.value; if(!k) return;
+    model.theme = DB.clone(DB.THEMES[k]);
+    buildEditor(); renderPreview(); save(); toast("Applied theme: "+DB.THEMES[k].name);
+    sel.value="";
+  });
+})();
+
+/* preview width + open */
+document.querySelectorAll(".pvbar button[data-w]").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll(".pvbar button[data-w]").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on");
+    const f=$("#preview"); f.className=""; if(b.dataset.w!=="full") f.classList.add("w-"+b.dataset.w);
+  });
+});
+$("#openTab").addEventListener("click",()=>{
+  const w=window.open("","_blank"); w.document.open(); w.document.write(DB.render(model)); w.document.close();
+});
+
+/* mobile tabs */
+$("#tabEdit").addEventListener("click",()=>swap("edit"));
+$("#tabPreview").addEventListener("click",()=>swap("preview"));
+function swap(which){
+  $("#editPane").classList.toggle("hide", which!=="edit");
+  $("#previewPane").classList.toggle("hide", which!=="preview");
+  $("#tabEdit").classList.toggle("on", which==="edit");
+  $("#tabPreview").classList.toggle("on", which==="preview");
+}
+
+/* ---------- boot ---------- */
+buildEditor();
+renderPreview();
+setStatus(localStorage.getItem(KEY)?"Restored ✓":"Loaded default", false);
+</script>
+</body>
+</html>
