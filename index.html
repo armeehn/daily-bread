@@ -17,149 +17,181 @@
     --ink:#1d1a17; --bone:#f6f1e7; --panel:#eae4d6; --paper2:#efe9db;
     --dark:#2a2723; --muted:#8d857a;
     --pink:#f0477d; --teal:#12b795; --orange:#fe9a0d;
-    --checker:repeating-conic-gradient(var(--ink) 0% 25%,var(--bone) 0% 50%) 0 0/16px 16px;
-    --harlequin:repeating-conic-gradient(from 45deg,var(--pink) 0% 25%,var(--teal) 0% 50%) 0 0/20px 20px;
+    --maxw:1080px;
+    --checker:repeating-conic-gradient(var(--ink) 0% 25%,var(--bone) 0% 50%) 0 0/18px 18px;
+    --checker-inv:repeating-conic-gradient(var(--bone) 0% 25%,var(--ink) 0% 50%) 0 0/18px 18px;
+    --harlequin:repeating-conic-gradient(from 45deg,var(--pink) 0% 25%,var(--teal) 0% 50%) 0 0/26px 26px;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{
-    font-family:'IBM Plex Mono',ui-monospace,monospace;
+    font-family:'IBM Plex Mono',ui-monospace,'SFMono-Regular',monospace;
     background:var(--bone); color:var(--ink);
-    -webkit-font-smoothing:antialiased; line-height:1.6;
+    -webkit-font-smoothing:antialiased; line-height:1.7; font-size:16px;
   }
-  a{color:var(--pink);text-decoration:none}
+  a{color:var(--pink);text-decoration:none;transition:color .15s}
   a:hover{color:var(--teal)}
   img{max-width:100%;display:block}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
+  section{scroll-margin-top:52px}
 
-  /* ---- spec chrome ---- */
-  .speclabel{font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.72}
+  /* ---------- shared type ---------- */
+  .kicker{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;padding:5px 12px;background:var(--ink);color:var(--bone)}
+  .kicker.pink{background:var(--pink);color:var(--bone)}
+  .kicker.teal{background:var(--teal);color:var(--bone)}
+  .kicker.orange{background:var(--orange);color:var(--ink)}
+  .display{font-size:clamp(32px,5.4vw,54px);line-height:.96;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.015em}
+  .display .dot{color:var(--pink)}
+  .frak{font-family:'UnifrakturMaguntia',serif;font-weight:400;line-height:.9}
+  .dek{font-size:15.5px;line-height:1.7;max-width:62ch;color:#3a352e;margin-top:14px}
+  .prose{font-size:15.5px;line-height:1.78;max-width:64ch}
+  .prose p{margin:0 0 15px} .prose p:last-child{margin-bottom:0}
+  .justify{text-align:justify;hyphens:auto}
+  .meta{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
   .stamp{display:inline-block;border:2px solid var(--orange);color:var(--orange);
-    font-size:10px;font-weight:700;letter-spacing:.18em;padding:5px 11px;
-    transform:rotate(-2deg);text-transform:uppercase;white-space:nowrap}
+    font-size:11px;font-weight:700;letter-spacing:.16em;padding:7px 13px;
+    transform:rotate(-2.5deg);text-transform:uppercase;white-space:nowrap;background:transparent}
   .stamp.pink{border-color:var(--pink);color:var(--pink)}
   .stamp.teal{border-color:var(--teal);color:var(--teal)}
-  .scribble{font-family:'Caveat',cursive;font-size:22px;line-height:1.15;color:var(--pink);transform:rotate(-2deg)}
+  .scribble{font-family:'Caveat',cursive;font-size:26px;line-height:1.1;color:var(--pink);
+    transform:rotate(-2.5deg);display:inline-block}
   .scribble.teal{color:var(--teal)} .scribble.orange{color:var(--orange)}
 
-  /* ---- section furniture ---- */
-  section{padding:56px 0 8px;position:relative}
-  .sechead{display:flex;align-items:center;gap:14px;margin-bottom:24px}
-  .sechead .no{font-size:11px;font-weight:700;letter-spacing:.12em;background:var(--ink);color:var(--bone);padding:4px 10px}
-  .sechead .tag{font-size:11px;letter-spacing:.1em;color:var(--muted)}
-  .sechead .rule{flex:1;height:3px;border-top:2px solid var(--ink);border-bottom:1px dashed var(--ink);height:5px}
-  h2.big{font-size:clamp(30px,5vw,46px);line-height:.98;font-weight:800;text-transform:uppercase;letter-spacing:-.01em}
-  h2.big .dot{color:var(--pink)}
-  .lede{font-size:14px;line-height:1.65;max-width:60ch;margin-top:10px}
-  .justify{text-align:justify;hyphens:auto}
+  /* ---------- section headers ---------- */
+  .sec{padding:84px 0}
+  .sec.tight{padding:64px 0}
+  .sechead{display:flex;align-items:baseline;gap:16px;margin-bottom:30px;flex-wrap:wrap}
+  .sechead .no{font-size:12px;font-weight:700;letter-spacing:.14em;background:var(--ink);
+    color:var(--bone);padding:5px 11px;white-space:nowrap}
+  .sechead .tag{font-size:12px;letter-spacing:.08em;color:var(--muted)}
+  .rule{height:6px;border-top:2px solid currentColor;border-bottom:1px dashed currentColor;
+    color:var(--ink);opacity:.9;margin:0}
 
-  /* ---- boxes ---- */
-  .box{border:2px solid var(--ink);background:var(--bone)}
-  .box-h{display:flex;justify-content:space-between;gap:10px;align-items:center;
-    padding:7px 11px;font-size:9.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  /* ---------- cards / boxes with hard shadow ---------- */
+  .card{border:2px solid var(--ink);background:var(--bone);box-shadow:6px 6px 0 var(--ink)}
+  .card > .hd{display:flex;justify-content:space-between;gap:12px;align-items:center;
+    padding:10px 15px;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
     border-bottom:2px solid var(--ink);background:var(--panel)}
-  .box-h.pink{background:var(--pink);color:var(--bone)}
-  .box-h.teal{background:var(--teal);color:var(--bone)}
-  .box-h.orange{background:var(--orange);color:var(--ink)}
-  .box-h .r{color:var(--pink)}
-  .box-b{padding:12px 14px;font-size:12.5px;line-height:1.62}
-  .row{display:flex;align-items:baseline;gap:10px;padding:6px 0;border-bottom:1px dashed var(--ink)}
-  .row:last-child{border-bottom:0}
-  .chip{font-weight:700;color:var(--bone);padding:0 6px;font-size:10px;flex:none;background:var(--ink)}
-  .grow{margin-left:auto;flex:none;font-size:10px;opacity:.6;letter-spacing:.08em;text-align:right}
-  .k{font-size:9px;font-weight:700;letter-spacing:.1em;flex:none;padding:1px 7px;color:var(--bone)}
+  .card > .hd.pink{background:var(--pink);color:var(--bone)}
+  .card > .hd.teal{background:var(--teal);color:var(--bone)}
+  .card > .hd.orange{background:var(--orange);color:var(--ink)}
+  .card > .hd .r{opacity:.85}
+  .card > .bd{padding:16px 18px}
+  .list .li{display:flex;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px dashed rgba(29,26,23,.45)}
+  .list .li:last-child{border-bottom:0}
+  .list .li .t{font-size:14px;line-height:1.45}
+  .list .li .end{margin-left:auto;flex:none;text-align:right}
+  .pgchip{font-weight:700;color:var(--bone);background:var(--ink);font-size:12px;
+    padding:2px 8px;flex:none;min-width:34px;text-align:center}
+  .tagend{font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+  .statuschip{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--bone);padding:2px 9px;text-transform:uppercase}
 
-  /* ---- bands ---- */
-  .band{height:20px;background:var(--checker);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
-  .band.harl{background:var(--harlequin);height:26px}
-  .cols{columns:2;column-gap:22px;column-rule:1px dashed var(--ink);font-size:12.5px;line-height:1.62}
+  /* ---------- grids ---------- */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start}
+  .split.center{align-items:center}
+  .thirds{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 44px}
+  @media(max-width:860px){.split,.thirds,.toc-grid{grid-template-columns:1fr;gap:30px}}
 
-  /* ---- top bar ---- */
-  header.top{position:sticky;top:0;z-index:50;background:var(--ink);color:var(--bone);
-    border-bottom:2px solid var(--bone)}
-  header.top .bar{display:flex;align-items:center;gap:16px;height:40px}
-  header.top .speclabel{opacity:.7}
-  header.top nav{margin-left:auto;display:flex;gap:16px;flex-wrap:wrap}
-  header.top nav a{color:var(--bone);font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+  /* ---------- full-bleed fields ---------- */
+  .field-ink{background:var(--ink);color:var(--bone)}
+  .field-ink a{color:var(--pink)} .field-ink .rule{color:var(--bone)}
+  .field-ink .card{background:#26221e;border-color:var(--bone);box-shadow:6px 6px 0 rgba(246,241,231,.85);color:var(--bone)}
+  .field-ink .card>.hd{background:#332e28;color:var(--bone);border-color:var(--bone)}
+  .field-ink .sechead .no{background:var(--bone);color:var(--ink)}
+  .band{height:26px;background:var(--checker)}
+  .band.harl{height:34px;background:var(--harlequin)}
+  .band.br{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+
+  /* ---------- top bar ---------- */
+  header.top{position:sticky;top:0;z-index:60;background:var(--ink);color:var(--bone);border-bottom:2px solid var(--bone)}
+  header.top .bar{display:flex;align-items:center;gap:18px;height:46px}
+  header.top .brand{font-family:'UnifrakturMaguntia',serif;font-size:22px;line-height:1}
+  header.top nav{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
+  header.top nav a{color:var(--bone);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
   header.top nav a:hover{color:var(--pink)}
-  header.top .theme{color:var(--orange)}
-  @media(max-width:820px){header.top .theme,header.top .left{display:none}}
+  @media(max-width:760px){header.top nav{display:none}}
 
-  /* ---- hero ---- */
+  /* ---------- hero ---------- */
   .hero{background:var(--ink);color:var(--bone);position:relative;overflow:hidden}
-  .hero .band{border-top:0}
-  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:38px;align-items:center;
-    padding:52px 0 60px}
-  .masthead{font-family:'UnifrakturMaguntia',cursive;font-size:clamp(64px,12vw,132px);line-height:.86}
-  .hero .sub{font-size:11px;letter-spacing:.3em;margin-top:14px;opacity:.85;text-transform:uppercase}
-  .hero .issue{font-size:10px;letter-spacing:.2em;margin-top:22px;opacity:.6;text-transform:uppercase;line-height:1.9}
-  .hero p.intro{font-size:14px;line-height:1.7;margin-top:20px;max-width:44ch;opacity:.92}
-  .hero .badges{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px;align-items:center}
-  .cover-frame{position:relative;border:2px solid var(--bone);box-shadow:0 18px 60px rgba(0,0,0,.55)}
+  .hero .glow{position:absolute;inset:0;background:
+     radial-gradient(60% 50% at 78% 30%,rgba(240,71,125,.18),transparent 70%),
+     radial-gradient(50% 45% at 20% 80%,rgba(18,183,149,.15),transparent 70%);pointer-events:none}
+  .hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:start;padding:64px 0 82px}
+  .hero .mast{font-family:'UnifrakturMaguntia',serif;font-size:clamp(70px,13vw,158px);line-height:.82}
+  .hero .tagline{font-size:13px;letter-spacing:.34em;text-transform:uppercase;margin-top:22px;color:#e7ddcd}
+  .hero .issueline{font-size:11px;letter-spacing:.22em;text-transform:uppercase;margin-top:24px;line-height:2;color:#b7ad9e}
+  .hero p.intro{font-size:16px;line-height:1.75;margin-top:22px;max-width:46ch;color:#efe7d9}
+  .hero .badges{display:flex;gap:16px;flex-wrap:wrap;margin-top:30px;align-items:center}
+  .cover-wrap{position:relative}
+  .cover-wrap .tab{position:absolute;top:-14px;left:14px;background:var(--ink);
+    border:2px solid var(--bone);border-bottom:0;font-size:9.5px;letter-spacing:.16em;
+    text-transform:uppercase;padding:4px 10px;color:#cfc6b6}
+  .cover-frame{border:3px solid var(--bone);box-shadow:14px 14px 0 rgba(240,71,125,.85)}
   .cover-frame img{width:100%;display:block}
-  .cover-frame .cap{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;
-    background:var(--ink);color:var(--bone);font-size:8.5px;letter-spacing:.13em;padding:5px 9px;text-transform:uppercase}
-  .cover-frame .fold{position:absolute;top:-10px;right:16px}
-  @media(max-width:800px){.hero-grid{grid-template-columns:1fr;gap:28px}.cover-frame{max-width:420px}}
+  .cover-frame .cap{display:flex;justify-content:space-between;gap:8px;background:var(--bone);color:var(--ink);
+    font-size:9px;letter-spacing:.11em;padding:7px 10px;text-transform:uppercase;border-top:3px solid var(--bone);font-weight:600}
+  .cover-wrap .free{position:absolute;bottom:-16px;right:-10px;background:var(--bone);transform:rotate(4deg)}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;gap:40px;padding:52px 0 70px}
+    .cover-wrap{max-width:420px}.cover-frame{box-shadow:9px 9px 0 rgba(240,71,125,.85)}}
 
-  /* ---- generic two-col ---- */
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:26px}
-  @media(max-width:800px){.two{grid-template-columns:1fr}.cols{columns:1}}
+  /* ---------- editor letter ---------- */
+  .letter .prose .drop{font-weight:700;background:var(--pink);color:var(--bone);padding:0 6px}
+  .dropcap::first-letter{font-family:'UnifrakturMaguntia',serif;font-size:4.6em;float:left;
+    line-height:.66;padding:6px 12px 0 0;color:var(--ink)}
+  .signoff{font-family:'Caveat',cursive;font-size:34px;color:var(--teal);transform:rotate(-2deg);margin-top:18px}
+  .masthead-list .li .lab{color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+  .masthead-list .li .val{margin-left:auto;font-weight:700;text-align:right;font-size:13.5px}
 
-  /* ---- editor letter ---- */
-  .drop{font-weight:700;background:var(--pink);color:var(--bone);padding:0 5px}
-  .letter-body p{margin:0 0 12px}
-  .masthead-box .row .lab{opacity:.6}
-  .signoff{font-family:'Caveat',cursive;font-size:28px;color:var(--teal);transform:rotate(-2deg);margin-top:12px}
-
-  /* ---- report cards ---- */
+  /* ---------- reports ---------- */
   .report{display:flex;flex-direction:column;height:100%}
-  .report h3{font-size:clamp(19px,2.4vw,24px);line-height:1.05;font-weight:800;text-transform:uppercase;margin:0}
-  .report p{font-size:12.5px;line-height:1.62;margin:10px 0 0}
-  .pull{border-left:6px solid var(--pink);padding:6px 0 6px 12px;font-size:15px;line-height:1.35;
-    font-weight:600;font-style:italic;margin-top:14px}
+  .report .bd{display:flex;flex-direction:column;flex:1}
+  .report h3{font-size:clamp(20px,2.5vw,25px);line-height:1.06;font-weight:800;text-transform:uppercase;margin:0 0 12px}
+  .report p{font-size:14px;line-height:1.62;margin:0}
+  .pull{border-left:6px solid var(--pink);padding:8px 0 8px 15px;font-size:17px;line-height:1.34;
+    font-weight:600;font-style:italic;margin-top:auto;padding-top:16px}
   .pull.orange{border-color:var(--orange)} .pull.teal{border-color:var(--teal)}
 
-  /* ---- stats ---- */
-  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
-  .stat{border:2px solid var(--ink);padding:14px 10px;text-align:center;background:var(--bone)}
-  .stat .n{font-size:clamp(30px,5vw,42px);font-weight:800;line-height:1}
-  .stat .l{font-size:9px;letter-spacing:.1em;margin-top:6px;text-transform:uppercase;opacity:.85}
-  @media(max-width:520px){.stats{grid-template-columns:1fr}}
+  /* ---------- stats ---------- */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .stat{border:2px solid var(--ink);background:var(--bone);box-shadow:6px 6px 0 var(--ink);padding:22px 14px;text-align:center}
+  .stat .n{font-size:clamp(44px,7vw,66px);font-weight:800;line-height:.9}
+  .stat .l{font-size:10px;letter-spacing:.1em;margin-top:12px;text-transform:uppercase;line-height:1.5;color:#3a352e}
+  @media(max-width:560px){.stats{grid-template-columns:1fr}}
 
-  /* ---- quote band (dark) ---- */
-  .quoteband{background:var(--ink);color:var(--bone);padding:44px 0;margin-top:48px}
-  .quoteband .big-quote{font-size:clamp(22px,4vw,38px);line-height:1.2;font-weight:600;font-style:italic;max-width:24ch}
-  .quoteband .attrib{font-size:10px;letter-spacing:.18em;margin-top:18px;opacity:.7;text-transform:uppercase}
+  /* ---------- quote band ---------- */
+  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;max-width:20ch}
+  .bigquote .mk{color:var(--pink);font-style:normal}
+  .attrib{font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:22px;color:#b7ad9e}
 
-  /* ---- checklist / vote ---- */
-  .check{padding:5px 0;border-bottom:1px dashed var(--ink);font-size:12px}
-  .check:last-child{border-bottom:0}
+  /* ---------- checkline / vote ---------- */
+  .checkline{padding:8px 0;border-bottom:1px dashed rgba(29,26,23,.4);font-size:14px;line-height:1.5}
+  .checkline:last-child{border-bottom:0}
+  .field-ink .checkline{border-color:rgba(246,241,231,.28)}
+  .fine{font-size:10px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
 
-  /* ---- lab ---- */
-  .lab-logo{width:min(260px,70%)}
-
-  /* ---- footer / back cover ---- */
-  footer{background:var(--ink);color:var(--bone);margin-top:56px}
-  footer .band{border-bottom:0}
-  footer .inner{padding:46px 0;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
-  footer img.logo{width:280px;filter:invert(1)}
-  footer .tag{font-size:10px;letter-spacing:.45em;text-transform:uppercase}
-  footer p{font-size:12px;line-height:1.7;max-width:40ch;opacity:.85}
-  .barcode{width:120px;height:34px;background:repeating-linear-gradient(90deg,var(--bone) 0 3px,var(--ink) 3px 5px,var(--bone) 5px 6px,var(--ink) 6px 10px)}
-  footer .foot-meta{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
-  footer .colophon{font-size:9px;letter-spacing:.1em;opacity:.55;text-transform:uppercase;border-top:1px solid rgba(246,241,231,.25);padding-top:16px;margin-top:6px;max-width:70ch}
-
-  .annot-wrap{display:flex;justify-content:flex-end;margin-top:10px}
-  .releft{position:relative}
+  /* ---------- footer ---------- */
+  footer{background:var(--ink);color:var(--bone)}
+  footer .inner{padding:60px 0;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
+  footer img.logo{width:min(300px,72%);filter:invert(1)}
+  footer .tg{font-size:11px;letter-spacing:.45em;text-transform:uppercase}
+  footer p.blurb{font-size:14px;line-height:1.75;max-width:42ch;color:#e7ddcd}
+  .barcode{width:130px;height:38px;background:repeating-linear-gradient(90deg,var(--bone) 0 3px,var(--ink) 3px 5px,var(--bone) 5px 6px,var(--ink) 6px 10px)}
+  footer .fmeta{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap}
+  footer .colophon{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#8d857a;
+    border-top:1px solid rgba(246,241,231,.22);padding-top:20px;margin-top:8px;max-width:74ch;line-height:1.9}
+  .annot{margin-top:14px}
+  .annot.right{text-align:right}
 </style>
 </head>
 <body>
 
-<!-- ================= TOP BAR ================= -->
+<!-- ============ TOP BAR ============ -->
 <header class="top">
   <div class="wrap bar">
-    <span class="speclabel left">Daily Bread №1 · Kelowna BC</span>
+    <span class="brand">Daily&nbsp;Bread</span>
     <nav>
       <a href="#letter">Letter</a>
       <a href="#contents">Contents</a>
@@ -170,208 +202,198 @@
       <a href="#submit">Submit</a>
       <a href="#lab">The Lab</a>
     </nav>
-    <span class="speclabel theme">Theme: Kelowna's Collapse</span>
   </div>
 </header>
 
-<!-- ================= HERO ================= -->
+<!-- ============ HERO ============ -->
 <div class="hero">
+  <div class="glow"></div>
   <div class="wrap">
     <div class="hero-grid">
       <div>
-        <div class="masthead">Daily<br>Bread</div>
-        <div class="sub">A Queer Magazine for the Okanagan</div>
+        <div class="mast">Daily<br>Bread</div>
+        <div class="tagline">A Queer Magazine for the Okanagan</div>
         <p class="intro">You found the first issue of a queer magazine in a city that keeps telling us it doesn't have one. Kelowna has queer history, queer kids, queer elders, queer bakers and bureaucrats; what it hasn't had is paper that says so out loud.</p>
-        <div class="issue">Issue №1 · Summer 2026<br>Kelowna's Collapse · 48 pp · Print run 500</div>
+        <div class="issueline">Issue №1 · Summer 2026<br>Kelowna's Collapse · 48 pp · Print run 500</div>
         <div class="badges">
           <span class="stamp">Batch №1 · Fresh</span>
-          <span class="stamp pink">Free / PWYC</span>
-          <span class="scribble teal">get crumbs on it →</span>
+          <a href="#contents" class="stamp pink" style="cursor:pointer">Read the issue ↓</a>
         </div>
       </div>
-      <div class="releft">
-        <div class="fold" style="text-align:right"><span class="speclabel" style="color:var(--muted)">Sheet 00 · Front cover</span></div>
+      <div class="cover-wrap">
+        <span class="tab">Sheet 00 · Front cover</span>
         <div class="cover-frame">
           <img src="assets/cover.jpg" alt="Daily Bread №1 cover — an open mouth with dripping teeth over a jewelled tongue, blackletter wordmark overlaid" width="1000" height="1536">
-          <div class="cap"><span>№1 — Kelowna's Collapse</span><span>Pay what you can</span><span>Riposte Laboratories</span></div>
+          <div class="cap"><span>№1 — Kelowna's Collapse</span><span>Riposte Laboratories</span></div>
         </div>
+        <span class="stamp free">Free / PWYC</span>
       </div>
     </div>
   </div>
   <div class="band"></div>
 </div>
 
-<main>
-<!-- ================= EDITOR'S LETTER ================= -->
-<section id="letter">
+<!-- ============ EDITOR'S LETTER ============ -->
+<section id="letter" class="sec letter">
   <div class="wrap">
-    <div class="sechead"><span class="no">Sec.00</span><span class="tag">// editor's letter</span><span class="rule"></span></div>
-    <div class="two">
+    <div class="sechead"><span class="no">Sec.00</span><span class="tag">// editor's letter</span></div>
+    <div class="rule" style="margin-bottom:34px"></div>
+    <div class="split">
       <div>
-        <h2 class="big">Our Daily<br>Dread</h2>
-        <div class="letter-body" style="font-size:13px;line-height:1.7;margin-top:16px" >
-          <p class="justify"><span class="drop">HI.</span> You found the first issue of a queer magazine in a city that keeps telling us it doesn't have one. Kelowna has queer history, queer kids, queer elders, queer bakers and bureaucrats; what it hasn't had is paper that says so out loud.</p>
-          <p class="justify">This issue is about collapse: the orchards, the venues, the rent math, the bridge traffic. Not because we're doomers, but because things fall apart here on schedule, and naming the schedule is the first act of repair.</p>
-          <p class="justify">Rip out the poster. Colour the cartoon. Mail us your fury and your recipes. This thing only works if you get crumbs on it.</p>
+        <h2 class="display">Our Daily<br>Dread</h2>
+        <div class="prose justify" style="margin-top:22px">
+          <p><span class="drop">HI.</span> You found the first issue of a queer magazine in a city that keeps telling us it doesn't have one. Kelowna has queer history, queer kids, queer elders, queer bakers and bureaucrats; what it hasn't had is paper that says so out loud.</p>
+          <p>This issue is about collapse: the orchards, the venues, the rent math, the bridge traffic. Not because we're doomers, but because things fall apart here on schedule, and naming the schedule is the first act of repair.</p>
+          <p>Rip out the poster. Colour the cartoon. Mail us your fury and your recipes. This thing only works if you get crumbs on it.</p>
         </div>
         <div class="signoff">— the editors ✕</div>
       </div>
       <div>
-        <div class="box masthead-box">
-          <div class="box-h"><span>Masthead / №1 · Summer 2026</span><span class="r">DB-000</span></div>
-          <div class="box-b" style="padding:12px 14px">
-            <div class="row"><span class="lab">Editor</span><span class="grow" style="opacity:1;font-weight:700;color:var(--ink)">your name here</span></div>
-            <div class="row"><span class="lab">Art + comics</span><span class="grow" style="opacity:1;font-weight:700;color:var(--ink)">open call</span></div>
-            <div class="row"><span class="lab">Young voices desk</span><span class="grow" style="opacity:1;font-weight:700;color:var(--ink)">three writers, 17–24</span></div>
-            <div class="row"><span class="lab">Printed</span><span class="grow" style="opacity:1;font-weight:700;color:var(--ink)">on unceded syilx territory</span></div>
+        <div class="card masthead-list">
+          <div class="hd"><span>Masthead / №1 · Summer 2026</span><span class="r">DB-000</span></div>
+          <div class="bd list">
+            <div class="li"><span class="lab">Editor</span><span class="val">your name here</span></div>
+            <div class="li"><span class="lab">Art + comics</span><span class="val">open call</span></div>
+            <div class="li"><span class="lab">Young voices desk</span><span class="val">three writers, 17–24</span></div>
+            <div class="li"><span class="lab">Printed on</span><span class="val">unceded syilx territory</span></div>
           </div>
         </div>
-        <p style="font-size:12px;line-height:1.65;margin-top:16px" class="justify">Daily Bread is published on the unceded, ancestral territory of the syilx Okanagan people. We pay rent to a landlord and respect to a Nation, and we know only one of those is owed.</p>
-        <div style="margin-top:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-          <img class="lab-logo" src="assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:150px">
-          <div class="speclabel" style="letter-spacing:.08em;line-height:1.6">Funded by Riposte Laboratories Inc.<br><span style="opacity:.6">Editorial independence clause: read on</span></div>
+        <p class="prose justify" style="margin-top:24px">Daily Bread is published on the unceded, ancestral territory of the syilx Okanagan people. We pay rent to a landlord and respect to a Nation, and we know only one of those is owed.</p>
+        <div style="margin-top:22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <img src="assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:160px">
+          <div class="meta" style="line-height:1.8">Funded by Riposte<br>Laboratories Inc.</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ================= CONTENTS ================= -->
-<section id="contents">
+<div class="band harl br"></div>
+
+<!-- ============ CONTENTS ============ -->
+<section id="contents" class="sec" style="background:var(--paper2)">
   <div class="wrap">
-    <div class="sechead"><span class="no">Sec.01</span><span class="tag">// contents · manifest / 48 pp</span><span class="rule"></span></div>
-    <div class="two">
+    <div class="sechead"><span class="no">Sec.01</span><span class="tag">// contents · manifest / 48 pp</span></div>
+    <h2 class="display">Contents<span class="dot">.</span></h2>
+    <p class="dek">Twelve contributors made №1: writers aged 17–74, two photographers, one cartoonist, one very patient proofreader. Every byline is local. Every fee got paid before the printer did.</p>
+    <div class="card" style="margin-top:30px">
+      <div class="hd"><span>Manifest / 48 pp</span><span class="r">DB-TOC</span></div>
+      <div class="bd"><div class="toc-grid list" id="toc"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HISTORY + LEDGER ============ -->
+<section id="history" class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.02</span><span class="tag">// history · before the bridge</span></div>
+    <div class="split">
       <div>
-        <h2 class="big">Contents<span class="dot">.</span></h2>
-        <div class="box" style="margin-top:14px">
-          <div class="box-h"><span>Manifest / 48 pp</span><span class="r">DB-TOC</span></div>
-          <div class="box-b" style="padding:8px 12px" id="toc"></div>
+        <h2 class="display">A Rude<br>History</h2>
+        <div class="prose justify" style="margin-top:22px">
+          <p>The valley sold itself twice: first as Eden, then as equity. Fruit ranchers went broke so often the packinghouses printed their own scrip; when fruit died, the pitch became retirement sun; when the retirees priced out the pickers, the pitch became lakeside lofts. Each act ended the same way, with the people who did the work living further from the water.</p>
+          <p>The queer history is braided through all of it: dance halls with unofficial nights, friendship networks that doubled as housing lists, a scene that survived by being useful and quiet until it didn't have to be.</p>
         </div>
+        <div class="annot"><span class="scribble orange">"quiet until it didn't have to be" — put on a shirt</span></div>
       </div>
       <div>
-        <span class="k" style="background:var(--teal);display:inline-block;margin-bottom:12px">Who's in here</span>
-        <p style="font-size:12.5px;line-height:1.6" class="justify">Twelve contributors made №1: writers aged 17–74, two photographers, one cartoonist, one very patient proofreader. Every byline is local. Every fee got paid before the printer did.</p>
-        <div class="box" style="margin-top:16px">
-          <div class="box-h orange"><span>Submit to №2 — "The Thaw"</span></div>
-          <div class="box-b" style="padding:12px 14px">
-            <div class="check">▸ <b>Art for the centrefold</b> — one page, yours, 300dpi. We pay.</div>
-            <div class="check">▸ <b>Opinion (under 25)</b> — 500 words of correct anger.</div>
-            <div class="check">▸ <b>Poems, fiction, comics</b> — weird welcome.</div>
-            <div class="check">▸ <b>Deadline</b> — Sept 15 · <a href="#submit">hello@dailybread.example</a></div>
-          </div>
+        <span class="kicker">Ledger / what collapsed when</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>Entry</span><span>Status</span></div>
+          <div class="bd list" id="ledger"></div>
         </div>
-        <div class="annot-wrap"><div class="scribble">yes, YOU. we mean you. →</div></div>
+        <p class="meta" style="margin-top:14px;line-height:1.7"><span style="color:var(--pink);font-weight:700">Method</span> — compiled from city archives, newspaper morgues, and elders who were there. Corrections welcome and expected.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ================= HISTORY + LEDGER ================= -->
-<section id="history">
+<!-- ============ YOUNG VOICES ============ -->
+<section id="voices" class="sec field-ink">
   <div class="wrap">
-    <div class="sechead"><span class="no">Sec.02</span><span class="tag">// history · before the bridge</span><span class="rule"></span></div>
-    <div class="two">
-      <div>
-        <h2 class="big">A Rude<br>History</h2>
-        <p class="cols justify" style="margin-top:16px">The valley sold itself twice: first as Eden, then as equity. Fruit ranchers went broke so often the packinghouses printed their own scrip; when fruit died, the pitch became retirement sun; when the retirees priced out the pickers, the pitch became lakeside lofts. Each act ended the same way, with the people who did the work living further from the water. The queer history is braided through all of it: dance halls with unofficial nights, friendship networks that doubled as housing lists, a scene that survived by being useful and quiet until it didn't have to be.</p>
-        <div class="annot-wrap" style="justify-content:flex-start"><div class="scribble orange">"quiet until it didn't have to be" — put on a shirt</div></div>
-      </div>
-      <div>
-        <span class="k" style="background:var(--ink);display:inline-block;margin-bottom:12px">Ledger / what collapsed when</span>
-        <div class="box">
-          <div class="box-h"><span>Entry</span><span>Status</span></div>
-          <div class="box-b" style="padding:6px 12px" id="ledger"></div>
-        </div>
-        <p class="speclabel" style="margin-top:10px;line-height:1.55;opacity:.7"><span style="color:var(--pink);font-weight:700">Method</span> — compiled from city archives, newspaper morgues, and elders who were there. Corrections welcome and expected.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= YOUNG VOICES ================= -->
-<section id="voices">
-  <div class="wrap">
-    <div class="sechead"><span class="no">Sec.03</span><span class="tag">// young voices desk · unreviewed. unedited. correct.</span><span class="rule"></span></div>
-    <div class="two" style="grid-template-columns:1fr 1fr 1fr;gap:20px" >
-      <div class="box"><div class="box-h pink"><span>Report 01</span><span>Age 19 · Housing</span></div>
-        <div class="box-b report">
+    <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">// young voices desk · unreviewed. unedited. correct.</span></div>
+    <h2 class="display">Young Voices</h2>
+    <p class="dek" style="color:#cfc6b6">Three field reports from writers who can't vote yet but can already do the rent math. We paid them; we didn't touch a word.</p>
+    <div class="thirds" style="margin-top:34px">
+      <div class="card report"><div class="hd pink"><span>Report 01</span><span>Age 19 · Housing</span></div>
+        <div class="bd">
           <h3>Nobody My Age Can Afford to Stay</h3>
-          <p>I work two jobs and split a two-bedroom with three people, and I'm the success story. My group chat is a slow-motion goodbye party: Vernon, Calgary, mom's basement in Surrey. Every viewing is forty people deep and one of them is always crying.</p>
+          <p>I work two jobs and split a two-bedroom with three people, and I'm the success story. My group chat is a slow-motion goodbye party: Vernon, Calgary, mom's basement in Surrey.</p>
           <div class="pull">"Every viewing is forty people deep and one of them is always crying."</div>
         </div>
       </div>
-      <div class="box"><div class="box-h orange"><span>Report 02</span><span>Age 22 · Coming out</span></div>
-        <div class="box-b report">
+      <div class="card report"><div class="hd orange"><span>Report 02</span><span>Age 22 · Coming out</span></div>
+        <div class="bd">
           <h3>Out at the Packinghouse</h3>
-          <p>I came out at a bush party in Glenmore and the worst thing that happened was a guy named Tyler said "cool" and asked if I could drive him home. That's the Kelowna nobody writes about: not paradise, not hell, just a small city learning faster than its city council.</p>
-          <div class="scribble orange" style="margin-top:auto;padding-top:14px">geography is the last closet</div>
+          <p>I came out at a bush party in Glenmore and the worst thing that happened was a guy named Tyler said "cool" and asked if I could drive him home. Not paradise, not hell, just a small city learning faster than its city council.</p>
+          <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange);border:0;padding-left:0">geography is the last closet</div>
         </div>
       </div>
-      <div class="box"><div class="box-h teal"><span>Report 03</span><span>Age 17 · Fire season</span></div>
-        <div class="box-b report">
+      <div class="card report"><div class="hd teal"><span>Report 03</span><span>Age 17 · Fire season</span></div>
+        <div class="bd">
           <h3>I've Evacuated Twice and I Can't Vote Yet</h3>
-          <p>My childhood photos are sorted by smoke year. We packed the car in 2021 and again in 2023, and both times the adults on the radio called it unprecedented. It has precedent. I am the precedent.</p>
+          <p>My childhood photos are sorted by smoke year. We packed the car in 2021 and again in 2023, and both times the adults on the radio called it unprecedented. It has precedent.</p>
           <div class="pull teal">"I am the precedent."</div>
         </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- waitlist stats -->
-    <div style="margin-top:40px">
-      <div class="two" style="align-items:center">
-        <div>
-          <span class="k" style="background:var(--pink);display:inline-block;margin-bottom:12px">10 · Current issues</span>
-          <h2 class="big" style="font-size:clamp(28px,4.4vw,40px)">The Waitlist</h2>
-          <p class="lede">Trying to find queer-competent healthcare in the Central Okanagan is a part-time job with no benefits. We phoned every clinic so you don't have to.</p>
-        </div>
-        <div class="stats">
-          <div class="stat"><div class="n" style="color:var(--pink)">14</div><div class="l">Months · avg gender clinic wait</div></div>
-          <div class="stat"><div class="n" style="color:var(--orange)">2</div><div class="l">Providers taking new patients</div></div>
-          <div class="stat"><div class="n" style="color:var(--teal)">400</div><div class="l">km to the nearest alternative</div></div>
-        </div>
+<!-- ============ WAITLIST STATS ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="split center">
+      <div>
+        <span class="kicker pink">10 · Current issues</span>
+        <h2 class="display" style="margin-top:16px">The Waitlist</h2>
+        <p class="dek">Trying to find queer-competent healthcare in the Central Okanagan is a part-time job with no benefits. We phoned every clinic so you don't have to; everyone we reached described the same triangle of phone tag, referral limbo, and a highway.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="n" style="color:var(--pink)">14</div><div class="l">Months · avg gender clinic wait</div></div>
+        <div class="stat"><div class="n" style="color:var(--orange)">2</div><div class="l">Providers taking new patients</div></div>
+        <div class="stat"><div class="n" style="color:var(--teal)">400</div><div class="l">km to the nearest alternative</div></div>
       </div>
     </div>
   </div>
 </section>
-</main>
 
-<!-- ================= INTERVIEW QUOTE BAND ================= -->
-<div class="quoteband">
+<!-- ============ INTERVIEW QUOTE ============ -->
+<div class="field-ink sec tight">
   <div class="wrap">
-    <div class="sechead" style="margin-bottom:20px"><span class="no" style="background:var(--pink);color:var(--bone)">Sec.05</span><span class="tag" style="color:#c9c0b2">// interview · forty years of nerve</span></div>
-    <div class="big-quote">"We didn't have a bar, darling. We had basements, and we had nerve."</div>
+    <div class="sechead"><span class="no">Sec.05</span><span class="tag" style="color:#b7ad9e">// interview · forty years of nerve</span></div>
+    <div class="bigquote"><span class="mk">"</span>We didn't have a bar, darling. We had basements, and we had nerve.<span class="mk">"</span></div>
     <div class="attrib">Miss Demeanour · performing in the Okanagan since 1986</div>
-    <p style="font-size:12.5px;line-height:1.7;margin-top:22px;max-width:60ch;opacity:.9">"The audience got younger and the rent got meaner. In '86 the danger was people; now the danger is landlords. Nowhere, sweetheart; that's the secret. We're all still here, we just meet in gymnasiums and orchards and each other's kitchens. A scene isn't an address."</p>
+    <p class="prose" style="margin-top:26px;color:#e7ddcd;max-width:66ch">"The audience got younger and the rent got meaner. In '86 the danger was people; now the danger is landlords. Where did everyone go when the venues closed? Nowhere, sweetheart; that's the secret. We're all still here, we just meet in gymnasiums and orchards and each other's kitchens. A scene isn't an address."</p>
   </div>
 </div>
 
-<main>
-<!-- ================= CALENDAR ================= -->
-<section id="calendar">
+<!-- ============ CALENDAR ============ -->
+<section id="calendar" class="sec">
   <div class="wrap">
-    <div class="sechead"><span class="no">Sec.14</span><span class="tag">// the calendar · aug–oct 2026 · clip + fridge</span><span class="rule"></span></div>
-    <div class="two">
+    <div class="sechead"><span class="no">Sec.14</span><span class="tag">// the calendar · aug–oct 2026 · clip + fridge</span></div>
+    <div class="split">
       <div>
-        <h2 class="big">The Calendar<span class="dot" style="color:var(--teal)">.</span></h2>
-        <div class="box" style="margin-top:14px">
-          <div class="box-h"><span>Aug — Oct 2026</span><span class="r">Clip + fridge</span></div>
-          <div class="box-b" style="padding:6px 12px" id="events"></div>
+        <h2 class="display">The Calendar<span class="dot" style="color:var(--teal)">.</span></h2>
+        <p class="dek">Listings are free; email by the 15th. Sober and all-ages options marked ◦.</p>
+        <div class="card" style="margin-top:24px">
+          <div class="hd"><span>Aug — Oct 2026</span><span class="r">Clip + fridge</span></div>
+          <div class="bd list" id="events"></div>
         </div>
-        <p class="speclabel" style="margin-top:10px">Listings are free · email by the 15th · sober + all-ages options marked ◦</p>
       </div>
       <div>
-        <span class="k" style="background:var(--teal);display:inline-block;margin-bottom:12px">Movies in the park / hosted by Daily Bread</span>
-        <div class="box">
-          <div class="box-h"><span>Summer slate / at dusk</span><span class="r">Rain moves us to the Lab</span></div>
-          <div class="box-b" style="padding:6px 12px" id="screenings"></div>
+        <span class="kicker teal">Movies in the park / hosted by Daily Bread</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>Summer slate / at dusk</span><span class="r">Rain moves us to the Lab</span></div>
+          <div class="bd list" id="screenings"></div>
         </div>
-        <div class="box" style="margin-top:16px">
-          <div class="box-h pink"><span>Vote — October screening</span></div>
-          <div class="box-b" style="padding:12px 14px">
-            <div class="check">☐ Portrait of a Lady on Fire (2019)</div>
-            <div class="check">☐ Hedwig and the Angry Inch (2001)</div>
-            <div class="check">☐ Bound (1996)</div>
-            <div class="check" style="opacity:.6;font-size:9.5px;letter-spacing:.1em">Mark one · photograph · send. Film democracy.</div>
+        <div class="card" style="margin-top:24px">
+          <div class="hd pink"><span>Vote — October screening</span></div>
+          <div class="bd">
+            <div class="checkline">☐ Portrait of a Lady on Fire (2019)</div>
+            <div class="checkline">☐ Hedwig and the Angry Inch (2001)</div>
+            <div class="checkline">☐ Bound (1996)</div>
+            <div class="checkline fine">Mark one · photograph · send. Film democracy.</div>
           </div>
         </div>
       </div>
@@ -379,165 +401,160 @@
   </div>
 </section>
 
-<!-- ================= DIRECTORY ================= -->
-<section id="directory">
+<!-- ============ DIRECTORY ============ -->
+<section id="directory" class="sec" style="background:var(--paper2)">
   <div class="wrap">
-    <div class="sechead"><span class="no">Sec.18</span><span class="tag">// mutual aid · keep this page · verified quarterly</span><span class="rule"></span></div>
-    <div class="two">
+    <div class="sechead"><span class="no">Sec.18</span><span class="tag">// mutual aid · keep this page · verified quarterly</span></div>
+    <div class="split">
       <div>
-        <span class="k" style="background:var(--teal);display:inline-block;margin-bottom:12px">Keep this page / directory</span>
-        <div class="box">
-          <div class="box-h"><span>Verified quarterly · tear out ok</span></div>
-          <div class="box-b" style="padding:6px 12px" id="directory"></div>
+        <span class="kicker teal">Keep this page / directory</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>Verified quarterly · tear out ok</span></div>
+          <div class="bd list" id="dir-list"></div>
         </div>
-        <p class="speclabel" style="margin-top:10px">A resource missing? Wrong number? Tell us — this page is the whole point.</p>
+        <p class="meta" style="margin-top:14px;line-height:1.7">A resource missing? Wrong number? Tell us — this page is the whole point.</p>
       </div>
       <div>
-        <span class="k" style="background:var(--ink);display:inline-block;margin-bottom:12px">What actually helps / checklist</span>
-        <div class="box">
-          <div class="box-h"><span>Field-tested</span></div>
-          <div class="box-b" style="padding:10px 14px">
-            <div class="check">☐ The informed-consent clinic list — updated quarterly</div>
-            <div class="check">☐ Pharmacists can renew more than you think — ask directly</div>
-            <div class="check">☐ Telehealth counts. Bad wifi is still shorter than 400 km</div>
-            <div class="check">☐ Bring a friend to appointments. Bureaucracy respects witnesses</div>
+        <span class="kicker">What actually helps / checklist</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>Field-tested</span></div>
+          <div class="bd">
+            <div class="checkline">☐ The informed-consent clinic list — updated quarterly</div>
+            <div class="checkline">☐ Pharmacists can renew more than you think — ask directly</div>
+            <div class="checkline">☐ Telehealth counts. Bad wifi is still shorter than 400 km</div>
+            <div class="checkline">☐ Bring a friend to appointments. Bureaucracy respects witnesses</div>
           </div>
         </div>
-        <div class="annot-wrap" style="justify-content:flex-start"><div class="scribble">shout out Deb, seriously</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-</main>
-
-<div class="band harl"></div>
-
-<main>
-<!-- ================= SUBMIT ================= -->
-<section id="submit">
-  <div class="wrap">
-    <div class="sechead"><span class="no">Sec.19</span><span class="tag">// submissions · №2 — "the thaw"</span><span class="rule"></span></div>
-    <div class="two">
-      <div>
-        <h2 class="big">Get Crumbs<br>On It<span class="dot">.</span></h2>
-        <p class="lede">Serialized fiction, an open centrefold, a young-voices desk, a directory that stays current: №1 is a first draft of a scene arguing it exists. №2 is "The Thaw" — what comes back. Send us your fury and your recipes.</p>
-        <div class="box" style="margin-top:18px">
-          <div class="box-h"><span>Submit / №2 centrefold</span><span class="r">The Wall</span></div>
-          <div class="box-b" style="padding:12px 14px">
-            <div class="check">▸ A4 landscape, 300dpi, any medium that scans</div>
-            <div class="check">▸ Fee paid on selection · rights stay yours</div>
-            <div class="check">▸ <a href="mailto:hello@dailybread.example?subject=WALL">hello@dailybread.example</a> · subject: WALL</div>
-          </div>
-        </div>
-        <div style="margin-top:18px"><span class="stamp">Deadline · Sept 15</span></div>
-      </div>
-      <div>
-        <div class="box">
-          <div class="box-h pink"><span>Vote — №2 theme</span></div>
-          <div class="box-b" style="padding:12px 14px">
-            <div class="check">☐ The Thaw (what comes back)</div>
-            <div class="check">☐ Water Rights &amp; Wrongs</div>
-            <div class="check">☐ Night Shift (who runs 2AM Kelowna)</div>
-            <div class="check" style="opacity:.6;font-size:9.5px;letter-spacing:.1em">Mark one · photograph · send. Democracy.</div>
-          </div>
-        </div>
-        <div class="box" style="margin-top:16px">
-          <div class="box-h orange"><span>What we take</span></div>
-          <div class="box-b" style="padding:12px 14px">
-            <div class="check">▸ <b>Opinion (under 25)</b> — 500 words of correct anger</div>
-            <div class="check">▸ <b>Poems &amp; fiction</b> — we read everything twice</div>
-            <div class="check">▸ <b>Comics</b> — pitch us six panels for the guest slot</div>
-            <div class="check">▸ <b>Listings &amp; corrections</b> — free, always</div>
-          </div>
-        </div>
-        <div class="annot-wrap"><div class="scribble teal">send poems. weird welcome.</div></div>
+        <div class="annot"><span class="scribble">shout out Deb, seriously</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ================= FROM THE LAB ================= -->
-<section id="lab">
+<div class="band harl br"></div>
+
+<!-- ============ SUBMIT ============ -->
+<section id="submit" class="sec field-ink">
   <div class="wrap">
-    <div class="sechead"><span class="no">Sec.16</span><span class="tag">// from the lab · funder disclosure, printed large</span><span class="rule"></span></div>
-    <div class="two">
+    <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">// submissions · №2 — "the thaw"</span></div>
+    <div class="split">
       <div>
-        <img class="lab-logo" src="assets/riposte-logo.svg" alt="Riposte Laboratories">
-        <div class="speclabel" style="letter-spacing:.45em;margin-top:8px">Laboratories Inc.</div>
-        <h2 class="big" style="margin-top:18px;font-size:clamp(26px,4vw,34px)">From the Lab</h2>
-        <p style="font-size:12.5px;line-height:1.65;margin-top:12px" class="justify">Full disclosure, printed large: this magazine is funded by Riposte Laboratories, a Kelowna outfit that counter-attacks waste with recycled-plastic injection molding and reclaimed-cell modular power. We share what we're building here, in the same pages, at the same volume as everyone else.</p>
-        <p style="font-size:12.5px;line-height:1.65;margin-top:10px" class="justify">The deal, in writing: the Lab pays the printer and gets two pages. The editors answer to readers, not the funder. If that ever changes, the colouring page will let you know.</p>
-        <div style="margin-top:16px"><span class="stamp">Funder disclosure · signed</span></div>
-        <div class="scribble teal" style="margin-top:18px">parry. riposte. recycle.</div>
+        <h2 class="display">Get Crumbs<br>On It<span class="dot">.</span></h2>
+        <p class="dek" style="color:#cfc6b6">Serialized fiction, an open centrefold, a young-voices desk, a directory that stays current: №1 is a first draft of a scene arguing it exists. №2 is "The Thaw" — what comes back. Send us your fury and your recipes.</p>
+        <div style="margin-top:26px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+          <a href="mailto:hello@dailybread.example?subject=WALL" class="stamp pink">hello@dailybread.example</a>
+          <span class="stamp">Deadline · Sept 15</span>
+        </div>
+        <div class="annot"><span class="scribble teal">send poems. weird welcome.</span></div>
       </div>
       <div>
-        <div class="box">
-          <div class="box-h"><span>This quarter / status board</span><span class="r">Q3-26</span></div>
-          <div class="box-b" style="padding:8px 12px" id="lab"></div>
+        <div class="card">
+          <div class="hd orange"><span>What we take</span></div>
+          <div class="bd">
+            <div class="checkline">▸ <b>Art for the centrefold</b> — A4 landscape, 300dpi, any medium. We pay; rights stay yours.</div>
+            <div class="checkline">▸ <b>Opinion (under 25)</b> — 500 words of correct anger.</div>
+            <div class="checkline">▸ <b>Poems &amp; fiction</b> — we read everything twice.</div>
+            <div class="checkline">▸ <b>Comics</b> — pitch us six panels for the guest slot.</div>
+            <div class="checkline">▸ <b>Listings &amp; corrections</b> — free, always.</div>
+          </div>
         </div>
-        <div class="box" style="margin-top:16px">
-          <div class="box-h orange"><span>Why fund a magazine?</span></div>
-          <div class="box-b justify" style="padding:12px 14px">Because a lab that fixes material waste in a town losing its cultural material would be doing half a job. Paper is infrastructure. So are drag nights. Line item approved.</div>
+        <div class="card" style="margin-top:24px">
+          <div class="hd pink"><span>Vote — №2 theme</span></div>
+          <div class="bd">
+            <div class="checkline">☐ The Thaw (what comes back)</div>
+            <div class="checkline">☐ Water Rights &amp; Wrongs</div>
+            <div class="checkline">☐ Night Shift (who runs 2AM Kelowna)</div>
+            <div class="checkline fine">Mark one · photograph · send. Democracy.</div>
+          </div>
         </div>
-        <p class="speclabel" style="margin-top:10px">Tour the shop: open doors first Fridays · bring clean #2 + #5 plastics</p>
       </div>
     </div>
   </div>
 </section>
-</main>
 
-<!-- ================= FOOTER / BACK COVER ================= -->
+<!-- ============ FROM THE LAB ============ -->
+<section id="lab" class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.16</span><span class="tag">// from the lab · funder disclosure, printed large</span></div>
+    <div class="split">
+      <div>
+        <img src="assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:min(280px,80%)">
+        <div class="meta" style="letter-spacing:.45em;margin-top:10px">Laboratories Inc.</div>
+        <h2 class="display" style="margin-top:22px">From the Lab</h2>
+        <div class="prose justify" style="margin-top:18px">
+          <p>Full disclosure, printed large: this magazine is funded by Riposte Laboratories, a Kelowna outfit that counter-attacks waste with recycled-plastic injection molding and reclaimed-cell modular power. We share what we're building here, in the same pages, at the same volume as everyone else.</p>
+          <p>The deal, in writing: the Lab pays the printer and gets two pages. The editors answer to readers, not the funder. If that ever changes, the colouring page will let you know.</p>
+        </div>
+        <div style="margin-top:22px"><span class="stamp">Funder disclosure · signed</span></div>
+        <div class="signoff" style="margin-top:20px">parry. riposte. recycle.</div>
+      </div>
+      <div>
+        <span class="kicker">This quarter / status board</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>Q3 · 2026</span><span class="r">Rev. A</span></div>
+          <div class="bd list" id="lab-board"></div>
+        </div>
+        <div class="card" style="margin-top:24px">
+          <div class="hd orange"><span>Why fund a magazine?</span></div>
+          <div class="bd" style="font-size:14px;line-height:1.7">Because a lab that fixes material waste in a town losing its cultural material would be doing half a job. Paper is infrastructure. So are drag nights. Line item approved.</div>
+        </div>
+        <p class="meta" style="margin-top:14px;line-height:1.7">Tour the shop: open doors first Fridays · bring clean #2 + #5 plastics.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER / BACK COVER ============ -->
 <footer>
-  <div class="band harl"></div>
+  <div class="band harl" style="border-top:2px solid var(--bone)"></div>
   <div class="wrap inner">
     <img class="logo" src="assets/riposte-logo.svg" alt="Riposte Laboratories">
-    <div class="tag">Riposte Laboratories Inc.</div>
-    <p>Daily Bread is baked quarterly in Kelowna, BC. Free where you found it. Pay what you can where you can't.</p>
-    <div class="foot-meta">
+    <div class="tg">Riposte Laboratories Inc.</div>
+    <p class="blurb">Daily Bread is baked quarterly in Kelowna, BC. Free where you found it. Pay what you can where you can't.</p>
+    <div class="fmeta">
       <div class="barcode"></div>
-      <div class="speclabel" style="line-height:1.6;opacity:.7">ISSN pending<br>№1 · Summer 2026</div>
+      <div class="meta" style="line-height:1.7;text-align:left">ISSN pending<br>№1 · Summer 2026</div>
     </div>
-    <div class="scribble" style="color:var(--pink)">see you at the thaw ✕</div>
+    <div class="signoff" style="color:var(--pink);margin-top:4px">see you at the thaw ✕</div>
     <div class="colophon">Printed on unceded syilx Okanagan territory in a run of 500. Set in IBM Plex Mono and UnifrakturMaguntia. Errors are ours; corrections are yours; the leftover ink went into the stickers. · Parry. Riposte.</div>
   </div>
-  <div class="band" style="border-top:2px solid var(--bone);border-bottom:0"></div>
+  <div class="band" style="border-top:2px solid var(--bone)"></div>
 </footer>
 
 <script>
-// ---- data lifted from the Daily Bread №1 design ----
 const DATA = {
   toc:[
-    {pg:'01',t:"Our Daily Dread — editor's letter",k:'HOUSE',c:'#1d1a17'},
-    {pg:'04',t:'Before the Bridge — a rude history',k:'HISTORY',c:'#f0477d'},
-    {pg:'08',t:'Vacancy — photo essay, Bernard Ave',k:'PHOTO',c:'#fe9a0d'},
-    {pg:'11',t:'Young Voices — three field reports',k:'OPINION',c:'#12b795'},
-    {pg:'14',t:'Crumbs — ep.1, a golem seeks housing',k:'COMIC',c:'#1d1a17'},
-    {pg:'16',t:'Forty Years of Nerve — Miss Demeanour',k:'INTERVIEW',c:'#f0477d'},
-    {pg:'19',t:'Lake Effect / Harvest — poems',k:'LIT',c:'#fe9a0d'},
-    {pg:'20',t:'The Wall — rip-out centrefold',k:'ART',c:'#12b795'},
-    {pg:'23',t:'Colour Your Own Collapse',k:'SATIRE',c:'#1d1a17'},
-    {pg:'24',t:'Peel Me — sticker sheet',k:'STICKERS',c:'#f0477d'},
-    {pg:'25',t:'The Waitlist — healthcare feature',k:'ISSUES',c:'#fe9a0d'},
-    {pg:'28',t:'The Lake Takes — fiction pt.1',k:'LIT',c:'#12b795'},
-    {pg:'30',t:'From the Lab — funder disclosure',k:'RIPOSTE',c:'#1d1a17'},
-    {pg:'32',t:'Ask a Local Gay / Reviews / Calendar',k:'SERVICE',c:'#f0477d'},
-    {pg:'36',t:'The Bite Back — restaurant critique',k:'FOOD',c:'#fe9a0d'},
-    {pg:'37',t:"Rotation — what we're listening to",k:'MUSIC',c:'#f0477d'},
-    {pg:'38',t:'The Rewind + Movies in the Park',k:'FILM',c:'#12b795'},
-    {pg:'40',t:'Directory + Crumbs Mail',k:'AID',c:'#12b795'},
-    {pg:'44',t:'Who Made This — staff, assembled',k:'COLOPHON',c:'#1d1a17'},
+    {pg:'01',t:"Our Daily Dread — editor's letter",k:'House',c:'#1d1a17'},
+    {pg:'04',t:'Before the Bridge — a rude history',k:'History',c:'#f0477d'},
+    {pg:'08',t:'Vacancy — photo essay, Bernard Ave',k:'Photo',c:'#fe9a0d'},
+    {pg:'11',t:'Young Voices — three field reports',k:'Opinion',c:'#12b795'},
+    {pg:'14',t:'Crumbs — ep.1, a golem seeks housing',k:'Comic',c:'#1d1a17'},
+    {pg:'16',t:'Forty Years of Nerve — Miss Demeanour',k:'Interview',c:'#f0477d'},
+    {pg:'19',t:'Lake Effect / Harvest — poems',k:'Lit',c:'#fe9a0d'},
+    {pg:'20',t:'The Wall — rip-out centrefold',k:'Art',c:'#12b795'},
+    {pg:'23',t:'Colour Your Own Collapse',k:'Satire',c:'#1d1a17'},
+    {pg:'24',t:'Peel Me — sticker sheet',k:'Stickers',c:'#f0477d'},
+    {pg:'25',t:'The Waitlist — healthcare feature',k:'Issues',c:'#fe9a0d'},
+    {pg:'28',t:'The Lake Takes — fiction pt.1',k:'Lit',c:'#12b795'},
+    {pg:'30',t:'From the Lab — funder disclosure',k:'Riposte',c:'#1d1a17'},
+    {pg:'32',t:'Ask a Local Gay / Reviews / Calendar',k:'Service',c:'#f0477d'},
+    {pg:'36',t:'The Bite Back — restaurant critique',k:'Food',c:'#fe9a0d'},
+    {pg:'37',t:"Rotation — what we're listening to",k:'Music',c:'#f0477d'},
+    {pg:'38',t:'The Rewind + Movies in the Park',k:'Film',c:'#12b795'},
+    {pg:'40',t:'Directory + Crumbs Mail',k:'Aid',c:'#12b795'},
+    {pg:'44',t:'Who Made This — staff, assembled',k:'Colophon',c:'#1d1a17'},
   ],
   ledger:[
-    {y:'1913',e:'fruit prices crater; scrip economy begins',s:'BUST',sc:'#f0477d'},
-    {y:'1930s',e:'packinghouse layoffs, valley-wide',s:'BUST',sc:'#f0477d'},
-    {y:'1958',e:'bridge opens; ferry workers obsolete overnight',s:'PIVOT',sc:'#fe9a0d'},
-    {y:'1973',e:'ALR freezes orchard speculation (briefly)',s:'PARRY',sc:'#12b795'},
-    {y:'1980s',e:'sawmill era ends; wine era begins',s:'PIVOT',sc:'#fe9a0d'},
-    {y:'2003',e:'firestorm; 239 homes, 30k evacuated',s:'BURN',sc:'#f0477d'},
-    {y:'2017',e:'flood year — the lake takes the boardwalk',s:'FLOOD',sc:'#f0477d'},
-    {y:'2021',e:'heat dome; hottest place in Canada, again',s:'BURN',sc:'#f0477d'},
-    {y:'2024',e:'last dedicated queer venue closes',s:'BUST',sc:'#f0477d'},
-    {y:'2026',e:'this magazine. your move, city.',s:'RIPOSTE',sc:'#12b795'},
+    {y:'1913',e:'fruit prices crater; scrip economy begins',s:'Bust',sc:'#f0477d'},
+    {y:'1930s',e:'packinghouse layoffs, valley-wide',s:'Bust',sc:'#f0477d'},
+    {y:'1958',e:'bridge opens; ferry workers obsolete overnight',s:'Pivot',sc:'#fe9a0d'},
+    {y:'1973',e:'ALR freezes orchard speculation (briefly)',s:'Parry',sc:'#12b795'},
+    {y:'1980s',e:'sawmill era ends; wine era begins',s:'Pivot',sc:'#fe9a0d'},
+    {y:'2003',e:'firestorm; 239 homes, 30k evacuated',s:'Burn',sc:'#f0477d'},
+    {y:'2017',e:'flood year; the lake takes the boardwalk',s:'Flood',sc:'#f0477d'},
+    {y:'2021',e:'heat dome; hottest place in Canada, again',s:'Burn',sc:'#f0477d'},
+    {y:'2024',e:'last dedicated queer venue closes',s:'Bust',sc:'#f0477d'},
+    {y:'2026',e:'this magazine. your move, city.',s:'Riposte',sc:'#12b795'},
   ],
   events:[
     {d:'Aug 07',t:'First Friday at the Lab ◦',w:'Riposte shop floor — tours, benches, zines',c:'#12b795'},
@@ -545,7 +562,7 @@ const DATA = {
     {d:'Aug 15',t:'Queer Beach Assembly ◦',w:'Gyro Beach, north end — bring shade to share',c:'#f0477d'},
     {d:'Aug 22',t:'Harvest Moon drag night',w:'community hall — PWYC at the door',c:'#fe9a0d'},
     {d:'Sep 05',t:'Zine-making + submission clinic ◦',w:'library makerspace — bring your fury',c:'#12b795'},
-    {d:'Sep 15',t:'№2 SUBMISSION DEADLINE',w:'art, opinion, poems',c:'#f0477d'},
+    {d:'Sep 15',t:'№2 submission deadline',w:'art, opinion, poems',c:'#f0477d'},
     {d:'Sep 19',t:'Orchard walk with an elder ◦',w:'East Kelowna benches — history underfoot',c:'#fe9a0d'},
     {d:'Oct 03',t:'Cassette night: the Shoebox Fonds',w:'venue TBA — Miss Demeanour presiding',c:'#f0477d'},
     {d:'Oct 17',t:'Issue №2 launch + colouring contest',w:'location in №2. obviously',c:'#12b795'},
@@ -565,21 +582,21 @@ const DATA = {
     {t:'Sober hangs ◦',w:'see calendar, marked ◦'},
   ],
   lab:[
-    {t:'Plastic Works — molds v2, park benches from #5 tubs',s:'LIVE',c:'#12b795'},
+    {t:'Plastic Works — molds v2, park benches from #5 tubs',s:'Live',c:'#12b795'},
     {t:'Project HEX — reclaimed-cell grading rig',s:'WIP',c:'#fe9a0d'},
-    {t:'Esh — shop assistant, currently a whiteboard',s:'DRAWING',c:'#f0477d'},
-    {t:'Daily Bread №2 — theme vote',s:'OPEN',c:'#1d1a17'},
-    {t:'First Friday open doors — bring clean plastics',s:'RECURRING',c:'#12b795'},
+    {t:'Esh — shop assistant, currently a whiteboard',s:'Drawing',c:'#f0477d'},
+    {t:'Daily Bread №2 — theme vote',s:'Open',c:'#1d1a17'},
+    {t:'First Friday open doors — bring clean plastics',s:'Recurring',c:'#12b795'},
   ],
 };
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-function fill(id,html){const el=document.getElementById(id);if(el)el.innerHTML=html;}
-fill('toc',DATA.toc.map(r=>`<div class="row"><span class="chip" style="background:${r.c}">${r.pg}</span><span style="font-weight:600">${esc(r.t)}</span><span class="grow">${r.k}</span></div>`).join(''));
-fill('ledger',DATA.ledger.map(l=>`<div class="row"><span style="font-weight:700;flex:none;width:46px">${l.y}</span><span style="min-width:0">${esc(l.e)}</span><span class="grow" style="opacity:1;font-weight:700;color:${l.sc};letter-spacing:.1em">${l.s}</span></div>`).join(''));
-fill('events',DATA.events.map(e=>`<div class="row"><span style="font-weight:700;flex:none;width:52px;color:${e.c}">${e.d}</span><span style="min-width:0"><b>${esc(e.t)}</b> · ${esc(e.w)}</span></div>`).join(''));
-fill('screenings',DATA.screenings.map(s=>`<div class="row"><span style="font-weight:700;flex:none;width:52px;color:${s.c}">${s.d}</span><span style="min-width:0"><b>${esc(s.f)}</b> · ${esc(s.p)}</span></div>`).join('')+`<div class="row" style="border-bottom:0;opacity:.6;font-size:9.5px;letter-spacing:.1em">Free / PWYC · captions on · projector + power: reclaimed cells, Project HEX</div>`);
-fill('directory',DATA.directory.map(d=>`<div class="row"><span style="font-weight:700;min-width:0">${esc(d.t)}</span><span class="grow">${esc(d.w)}</span></div>`).join(''));
-fill('lab',DATA.lab.map(j=>`<div class="row"><span style="font-weight:600;min-width:0">${esc(j.t)}</span><span class="k" style="margin-left:auto;background:${j.c}">${j.s}</span></div>`).join(''));
+const set=(id,html)=>{const el=document.getElementById(id);if(el)el.innerHTML=html;};
+set('toc',DATA.toc.map(r=>`<div class="li"><span class="pgchip" style="background:${r.c}">${r.pg}</span><span class="t">${esc(r.t)}</span><span class="end tagend">${r.k}</span></div>`).join(''));
+set('ledger',DATA.ledger.map(l=>`<div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">${l.y}</span><span class="t">${esc(l.e)}</span><span class="end"><span class="statuschip" style="background:${l.sc}">${l.s}</span></span></div>`).join(''));
+set('events',DATA.events.map(e=>`<div class="li"><span class="pgchip" style="background:${e.c};min-width:60px">${e.d}</span><span class="t"><b>${esc(e.t)}</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">${esc(e.w)}</span></span></div>`).join(''));
+set('screenings',DATA.screenings.map(s=>`<div class="li"><span class="pgchip" style="background:${s.c};min-width:60px">${s.d}</span><span class="t"><b>${esc(s.f)}</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">${esc(s.p)}</span></span></div>`).join('')+`<div class="li"><span class="fine">Free / PWYC · captions on · projector + power: reclaimed cells, Project HEX</span></div>`);
+set('dir-list',DATA.directory.map(d=>`<div class="li"><span class="t" style="font-weight:700">${esc(d.t)}</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">${esc(d.w)}</span></div>`).join(''));
+set('lab-board',DATA.lab.map(j=>`<div class="li"><span class="t">${esc(j.t)}</span><span class="end"><span class="statuschip" style="background:${j.c}">${j.s}</span></span></div>`).join(''));
 </script>
 </body>
 </html>
