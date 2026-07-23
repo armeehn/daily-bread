@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Bread №1 · Sự Sụp Đổ Của Kelowna · Một Tạp Chí Queer Cho Okanagan</title>
+<meta name="description" content="Daily Bread là một tạp chí queer cho Okanagan, được nướng theo quý tại Kelowna, BC. Số №1: Sự Sụp Đổ Của Kelowna. Miễn phí ở nơi bạn tìm thấy nó; trả tùy tâm ở nơi bạn không thể. Được tài trợ bởi Riposte Laboratories.">
+<meta property="og:title" content="Daily Bread №1: Sự Sụp Đổ Của Kelowna">
+<meta property="og:description" content="Một tạp chí queer cho Okanagan. Miễn phí / trả tùy tâm. Số №1, Hè 2026.">
+<meta property="og:image" content="/assets/cover.jpg">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://dailybre.ad/vi/">
+<link rel="alternate" hreflang="en" href="https://dailybre.ad/">
+<link rel="alternate" hreflang="fr" href="https://dailybre.ad/fr/">
+<link rel="alternate" hreflang="es" href="https://dailybre.ad/es/">
+<link rel="alternate" hreflang="it" href="https://dailybre.ad/it/">
+<link rel="alternate" hreflang="pl" href="https://dailybre.ad/pl/">
+<link rel="alternate" hreflang="zh-Hans" href="https://dailybre.ad/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://dailybre.ad/zh-hant/">
+<link rel="alternate" hreflang="pa" href="https://dailybre.ad/pa/">
+<link rel="alternate" hreflang="ko" href="https://dailybre.ad/ko/">
+<link rel="alternate" hreflang="ja" href="https://dailybre.ad/ja/">
+<link rel="alternate" hreflang="tl" href="https://dailybre.ad/tl/">
+<link rel="alternate" hreflang="vi" href="https://dailybre.ad/vi/">
+<link rel="alternate" hreflang="hi" href="https://dailybre.ad/hi/">
+<link rel="alternate" hreflang="ar" href="https://dailybre.ad/ar/">
+<link rel="alternate" hreflang="fa" href="https://dailybre.ad/fa/">
+<link rel="alternate" hreflang="x-default" href="https://dailybre.ad/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1d1a17; --bone:#f6f1e7; --panel:#eae4d6; --paper2:#efe9db;
+    --dark:#2a2723; --muted:#8d857a;
+    --pink:#f0477d; --teal:#12b795; --orange:#fe9a0d;
+    --maxw:1080px;
+    --checker:repeating-conic-gradient(var(--ink) 0% 25%,var(--bone) 0% 50%) 0 0/18px 18px;
+    --checker-inv:repeating-conic-gradient(var(--bone) 0% 25%,var(--ink) 0% 50%) 0 0/18px 18px;
+    --harlequin:repeating-conic-gradient(from 45deg,var(--pink) 0% 25%,var(--teal) 0% 50%) 0 0/26px 26px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'IBM Plex Mono',ui-monospace,'SFMono-Regular',monospace;
+    background:var(--bone); color:var(--ink);
+    -webkit-font-smoothing:antialiased; line-height:1.7; font-size:16px;
+  }
+  a{color:var(--pink);text-decoration:none;transition:color .15s}
+  a:hover{color:var(--teal)}
+  img{max-width:100%;display:block}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
+  section{scroll-margin-top:52px}
+
+  /* ---------- shared type ---------- */
+  .kicker{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;padding:5px 12px;background:var(--ink);color:var(--bone)}
+  .kicker.pink{background:var(--pink);color:var(--bone)}
+  .kicker.teal{background:var(--teal);color:var(--bone)}
+  .kicker.orange{background:var(--orange);color:var(--ink)}
+  .display{font-size:clamp(32px,5.4vw,54px);line-height:.96;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.015em}
+  .display .dot{color:var(--pink)}
+  .frak{font-family:'UnifrakturMaguntia',serif;font-weight:400;line-height:.9}
+  .dek{font-size:15.5px;line-height:1.7;max-width:62ch;color:#3a352e;margin-top:14px}
+  .prose{font-size:15.5px;line-height:1.78;max-width:64ch}
+  .prose p{margin:0 0 15px} .prose p:last-child{margin-bottom:0}
+  .justify{text-align:justify;hyphens:auto}
+  .meta{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .stamp{display:inline-block;border:2px solid var(--orange);color:var(--orange);
+    font-size:11px;font-weight:700;letter-spacing:.16em;padding:7px 13px;
+    transform:rotate(-2.5deg);text-transform:uppercase;white-space:nowrap;background:transparent}
+  .stamp.pink{border-color:var(--pink);color:var(--pink)}
+  .stamp.teal{border-color:var(--teal);color:var(--teal)}
+  .scribble{font-family:'Caveat',cursive;font-size:26px;line-height:1.1;color:var(--pink);
+    transform:rotate(-2.5deg);display:inline-block}
+  .scribble.teal{color:var(--teal)} .scribble.orange{color:var(--orange)}
+
+  /* ---------- section headers ---------- */
+  .sec{padding:84px 0}
+  .sec.tight{padding:64px 0}
+  .sechead{display:flex;align-items:baseline;gap:16px;margin-bottom:30px;flex-wrap:wrap}
+  .sechead .no{font-size:12px;font-weight:700;letter-spacing:.14em;background:var(--ink);
+    color:var(--bone);padding:5px 11px;white-space:nowrap}
+  .sechead .tag{font-size:12px;letter-spacing:.08em;color:var(--muted)}
+  .rule{height:6px;border-top:2px solid currentColor;border-bottom:1px dashed currentColor;
+    color:var(--ink);opacity:.9;margin:0}
+
+  /* ---------- cards / boxes with hard shadow ---------- */
+  .card{border:2px solid var(--ink);background:var(--bone);box-shadow:6px 6px 0 var(--ink)}
+  .card > .hd{display:flex;justify-content:space-between;gap:12px;align-items:center;
+    padding:10px 15px;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    border-bottom:2px solid var(--ink);background:var(--panel)}
+  .card > .hd.pink{background:var(--pink);color:var(--bone)}
+  .card > .hd.teal{background:var(--teal);color:var(--bone)}
+  .card > .hd.orange{background:var(--orange);color:var(--ink)}
+  .card > .hd .r{opacity:.85}
+  .card > .bd{padding:16px 18px}
+  .list .li{display:flex;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px dashed rgba(29,26,23,.45)}
+  .list .li:last-child{border-bottom:0}
+  .list .li .t{font-size:14px;line-height:1.45}
+  .list .li .end{margin-left:auto;flex:none;text-align:right}
+  .pgchip{font-weight:700;color:var(--bone);background:var(--ink);font-size:12px;
+    padding:2px 8px;flex:none;min-width:34px;text-align:center}
+  .tagend{font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+  .statuschip{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--bone);padding:2px 9px;text-transform:uppercase}
+
+  /* ---------- grids ---------- */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start}
+  .split.center{align-items:center}
+  .thirds{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 44px}
+  @media(max-width:860px){.split,.thirds,.toc-grid{grid-template-columns:1fr;gap:30px}}
+
+  /* ---------- full-bleed fields ---------- */
+  .field-ink{background:var(--ink);color:var(--bone)}
+  .field-ink a{color:var(--pink)} .field-ink .rule{color:var(--bone)}
+  .field-ink .card{background:#26221e;border-color:var(--bone);box-shadow:6px 6px 0 rgba(246,241,231,.85);color:var(--bone)}
+  .field-ink .card>.hd{background:#332e28;color:var(--bone);border-color:var(--bone)}
+  .field-ink .sechead .no{background:var(--bone);color:var(--ink)}
+  .band{height:26px;background:var(--checker)}
+  .band.harl{height:34px;background:var(--harlequin)}
+  .band.br{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+
+  /* ---------- top bar ---------- */
+  header.top{position:sticky;top:0;z-index:60;background:var(--ink);color:var(--bone);border-bottom:2px solid var(--bone)}
+  header.top .bar{display:flex;align-items:center;gap:18px;height:46px}
+  header.top .brand{font-family:'UnifrakturMaguntia',serif;font-size:22px;line-height:1}
+  header.top nav{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
+  header.top nav a{color:var(--bone);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  header.top nav a:hover{color:var(--pink)}
+  @media(max-width:760px){header.top nav{display:none}}
+
+  /* ---------- hero ---------- */
+  .hero{background:var(--ink);color:var(--bone);position:relative;overflow:hidden}
+  .hero .glow{position:absolute;inset:0;background:
+     radial-gradient(60% 50% at 78% 30%,rgba(240,71,125,.18),transparent 70%),
+     radial-gradient(50% 45% at 20% 80%,rgba(18,183,149,.15),transparent 70%);pointer-events:none}
+  .hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:start;padding:64px 0 82px}
+  .hero .mast{font-family:'UnifrakturMaguntia',serif;font-size:clamp(70px,13vw,158px);line-height:.82}
+  .hero .tagline{font-size:13px;letter-spacing:.34em;text-transform:uppercase;margin-top:22px;color:#e7ddcd}
+  .hero .issueline{font-size:11px;letter-spacing:.22em;text-transform:uppercase;margin-top:24px;line-height:2;color:#b7ad9e}
+  .hero p.intro{font-size:16px;line-height:1.75;margin-top:22px;max-width:46ch;color:#efe7d9}
+  .hero .badges{display:flex;gap:16px;flex-wrap:wrap;margin-top:30px;align-items:center}
+  .cover-wrap{position:relative}
+  .cover-wrap .tab{position:absolute;top:-14px;left:14px;background:var(--ink);
+    border:2px solid var(--bone);border-bottom:0;font-size:9.5px;letter-spacing:.16em;
+    text-transform:uppercase;padding:4px 10px;color:#cfc6b6}
+  .cover-frame{border:3px solid var(--bone);box-shadow:14px 14px 0 rgba(240,71,125,.85)}
+  .cover-frame img{width:100%;display:block}
+  .cover-frame .cap{display:flex;justify-content:space-between;gap:8px;background:var(--bone);color:var(--ink);
+    font-size:9px;letter-spacing:.11em;padding:7px 10px;text-transform:uppercase;border-top:3px solid var(--bone);font-weight:600}
+  .cover-wrap .free{position:absolute;bottom:-16px;right:-10px;background:var(--bone);transform:rotate(4deg)}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;gap:40px;padding:52px 0 70px}
+    .cover-wrap{max-width:420px}.cover-frame{box-shadow:9px 9px 0 rgba(240,71,125,.85)}}
+
+  /* ---------- editor letter ---------- */
+  .letter .prose .drop{font-weight:700;background:var(--pink);color:var(--bone);padding:0 6px}
+  .dropcap::first-letter{font-family:'UnifrakturMaguntia',serif;font-size:4.6em;float:left;
+    line-height:.66;padding:6px 12px 0 0;color:var(--ink)}
+  .signoff{font-family:'Caveat',cursive;font-size:34px;color:var(--teal);transform:rotate(-2deg);margin-top:18px}
+  .masthead-list .li .lab{color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+  .masthead-list .li .val{margin-left:auto;font-weight:700;text-align:right;font-size:13.5px}
+
+  /* ---------- reports ---------- */
+  .report{display:flex;flex-direction:column;height:100%}
+  .report .bd{display:flex;flex-direction:column;flex:1}
+  .report h3{font-size:clamp(20px,2.5vw,25px);line-height:1.06;font-weight:800;text-transform:uppercase;margin:0 0 12px}
+  .report p{font-size:14px;line-height:1.62;margin:0}
+  .pull{border-left:6px solid var(--pink);padding:8px 0 8px 15px;font-size:17px;line-height:1.34;
+    font-weight:600;font-style:italic;margin-top:auto;padding-top:16px}
+  .pull.orange{border-color:var(--orange)} .pull.teal{border-color:var(--teal)}
+
+  /* ---------- stats ---------- */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .stat{border:2px solid var(--ink);background:var(--bone);box-shadow:6px 6px 0 var(--ink);padding:22px 14px;text-align:center}
+  .stat .n{font-size:clamp(44px,7vw,66px);font-weight:800;line-height:.9}
+  .stat .l{font-size:10px;letter-spacing:.1em;margin-top:12px;text-transform:uppercase;line-height:1.5;color:#3a352e}
+  @media(max-width:560px){.stats{grid-template-columns:1fr}}
+
+  /* ---------- quote band ---------- */
+  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;max-width:20ch}
+  .bigquote .mk{color:var(--pink);font-style:normal}
+  .attrib{font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:22px;color:#b7ad9e}
+
+  /* ---------- checkline / vote ---------- */
+  .checkline{padding:8px 0;border-bottom:1px dashed rgba(29,26,23,.4);font-size:14px;line-height:1.5}
+  .checkline:last-child{border-bottom:0}
+  .field-ink .checkline{border-color:rgba(246,241,231,.28)}
+  .fine{font-size:10px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--ink);color:var(--bone)}
+  footer .inner{padding:60px 0;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
+  footer img.logo{width:min(300px,72%);filter:invert(1)}
+  footer .tg{font-size:11px;letter-spacing:.45em;text-transform:uppercase}
+  footer p.blurb{font-size:14px;line-height:1.75;max-width:42ch;color:#e7ddcd}
+  .barcode{width:130px;height:38px;background:repeating-linear-gradient(90deg,var(--bone) 0 3px,var(--ink) 3px 5px,var(--bone) 5px 6px,var(--ink) 6px 10px)}
+  footer .fmeta{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap}
+  footer .colophon{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#8d857a;
+    border-top:1px solid rgba(246,241,231,.22);padding-top:20px;margin-top:8px;max-width:74ch;line-height:1.9}
+  .annot{margin-top:14px}
+  .annot.right{text-align:right}
+
+  /* ---------- i18n chrome: language picker + MT notice ---------- */
+  header.top .bar .langpick{position:relative;margin-left:14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  .langpick>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;color:var(--bone);padding:4px 2px}
+  .langpick>summary::-webkit-details-marker{display:none}
+  .langpick>summary .globe{font-size:13px}
+  .langpick>summary .car{font-size:9px;opacity:.6;transition:transform .15s}
+  .langpick[open]>summary .car{transform:rotate(180deg)}
+  .langmenu{position:absolute;top:100%;inset-inline-end:0;margin-top:6px;z-index:90;
+    background:var(--bone);border:2px solid var(--bone);box-shadow:6px 6px 0 rgba(0,0,0,.4);
+    display:grid;grid-template-columns:1fr 1fr;min-width:288px;max-height:min(72vh,420px);overflow:auto}
+  .langmenu a{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:8px 11px;
+    color:var(--ink);border-bottom:1px dashed rgba(29,26,23,.4);border-right:1px dashed rgba(29,26,23,.4);
+    font-size:12.5px;letter-spacing:.02em;text-transform:none;line-height:1.25}
+  .langmenu a:nth-child(even){border-right:none}
+  .langmenu a[aria-current]{background:var(--ink);color:var(--bone);font-weight:700}
+  .langmenu a:hover{background:var(--teal);color:var(--ink)}
+  .langmenu a .en{font-size:9px;opacity:.6;letter-spacing:.04em;text-transform:uppercase}
+  .langmenu a[aria-current] .en{opacity:.85}
+  .mtnote{background:var(--orange);color:var(--ink);font-size:11px;letter-spacing:.02em;
+    text-align:center;padding:8px 16px;line-height:1.55;border-bottom:2px solid var(--ink)}
+  .mtnote a{color:var(--ink);text-decoration:underline;font-weight:700}
+  @media(max-width:760px){header.top .bar .langpick{margin-left:auto}}
+  /* RTL adjustments for machine-translated Arabic / Farsi */
+  [dir="rtl"] .dropcap::first-letter{float:right;padding:6px 0 0 12px}
+  [dir="rtl"] .pull{border-left:0;border-right:6px solid var(--pink);padding-left:0;padding-right:15px}
+  [dir="rtl"] .pull.orange{border-right-color:var(--orange)}
+  [dir="rtl"] .pull.teal{border-right-color:var(--teal)}
+  [dir="rtl"] .list .li .end{margin-left:0;margin-right:auto}
+  [dir="rtl"] .masthead-list .li .val{margin-left:0;margin-right:auto}
+
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR ============ -->
+<header class="top">
+  <div class="wrap bar">
+    <span class="brand">Daily&nbsp;Bread</span>
+    <nav>
+      <a href="#letter">Thư ngỏ</a>
+      <a href="#contents">Mục lục</a>
+      <a href="#history">Lịch sử</a>
+      <a href="#voices">Tiếng nói</a>
+      <a href="#calendar">Lịch</a>
+      <a href="#directory">Danh bạ</a>
+      <a href="#submit">Gửi bài</a>
+      <a href="#lab">Phòng Lab</a>
+    </nav>
+    <details class="langpick"><summary aria-label="Ngôn ngữ"><span class="globe" aria-hidden="true">🌐</span> Tiếng Việt <span class="car" aria-hidden="true">▾</span></summary><div class="langmenu"><a href="/" hreflang="en" lang="en"><span class="endo">English</span><span class="en">English</span></a><a href="/fr/" hreflang="fr" lang="fr"><span class="endo">Français</span><span class="en">French</span></a><a href="/es/" hreflang="es" lang="es"><span class="endo">Español</span><span class="en">Spanish</span></a><a href="/it/" hreflang="it" lang="it"><span class="endo">Italiano</span><span class="en">Italian</span></a><a href="/pl/" hreflang="pl" lang="pl"><span class="endo">Polski</span><span class="en">Polish</span></a><a href="/zh-hans/" hreflang="zh-Hans" lang="zh-Hans"><span class="endo">简体中文</span><span class="en">Chinese (Simplified)</span></a><a href="/zh-hant/" hreflang="zh-Hant" lang="zh-Hant"><span class="endo">繁體中文</span><span class="en">Chinese (Traditional)</span></a><a href="/pa/" hreflang="pa" lang="pa"><span class="endo">ਪੰਜਾਬੀ</span><span class="en">Punjabi</span></a><a href="/ko/" hreflang="ko" lang="ko"><span class="endo">한국어</span><span class="en">Korean</span></a><a href="/ja/" hreflang="ja" lang="ja"><span class="endo">日本語</span><span class="en">Japanese</span></a><a href="/tl/" hreflang="tl" lang="tl"><span class="endo">Tagalog</span><span class="en">Tagalog</span></a><a href="/vi/" hreflang="vi" lang="vi" aria-current="true"><span class="endo">Tiếng Việt</span><span class="en">Vietnamese</span></a><a href="/hi/" hreflang="hi" lang="hi"><span class="endo">हिन्दी</span><span class="en">Hindi</span></a><a href="/ar/" hreflang="ar" lang="ar" dir="rtl"><span class="endo">العربية</span><span class="en">Arabic</span></a><a href="/fa/" hreflang="fa" lang="fa" dir="rtl"><span class="endo">فارسی</span><span class="en">Farsi</span></a></div></details>
+  </div>
+</header>
+<div class="mtnote">Đây là bản dịch máy từ một nguyên bản tiếng Anh. Đọc <a href="/">bản tiếng Anh</a>.</div>
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="mast">Daily<br>Bread</div>
+        <div class="tagline">Một Tạp Chí Queer Cho Okanagan</div>
+        <p class="intro">Bạn vừa tìm thấy số đầu tiên của một tạp chí queer ở một thành phố cứ khăng khăng bảo rằng nó không có tạp chí ấy. Kelowna có lịch sử queer, có những đứa trẻ queer, những bậc cao niên queer, những người thợ nướng bánh và công chức queer; thứ nó chưa từng có là trang giấy nói điều đó ra thành lời.</p>
+        <div class="issueline">Số №1 · Hè 2026<br>Sự Sụp Đổ Của Kelowna · 48 pp · In 500 bản</div>
+        <div class="badges">
+          <span class="stamp">Mẻ №1 · Nóng hổi</span>
+          <a href="#contents" class="stamp pink" style="cursor:pointer">Đọc số này ↓</a>
+        </div>
+      </div>
+      <div class="cover-wrap">
+        <span class="tab">Tờ 00 · Bìa trước</span>
+        <div class="cover-frame">
+          <img src="/assets/cover.jpg" alt="Bìa Daily Bread №1: một cái miệng há hốc với hàm răng nhỏ giọt trên một chiếc lưỡi nạm ngọc, chữ hiệu blackletter phủ lên trên" width="1000" height="1536">
+          <div class="cap"><span>№1: Sự Sụp Đổ Của Kelowna</span><span>Riposte Laboratories</span></div>
+        </div>
+        <span class="stamp free">Miễn phí / trả tùy tâm</span>
+      </div>
+    </div>
+  </div>
+  <div class="band"></div>
+</div>
+
+<!-- ============ EDITOR'S LETTER ============ -->
+<section id="letter" class="sec letter">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.00</span><span class="tag">// thư của ban biên tập</span></div>
+    <div class="rule" style="margin-bottom:34px"></div>
+    <div class="split">
+      <div>
+        <h2 class="display">Nỗi Sợ<br>Hằng Ngày</h2>
+        <div class="prose justify" style="margin-top:22px">
+          <p><span class="drop">CHÀO.</span> Bạn vừa tìm thấy số đầu tiên của một tạp chí queer ở một thành phố cứ khăng khăng bảo rằng nó không có tạp chí ấy. Kelowna có lịch sử queer, có những đứa trẻ queer, những bậc cao niên queer, những người thợ nướng bánh và công chức queer; thứ nó chưa từng có là trang giấy nói điều đó ra thành lời.</p>
+          <p>Số này nói về sự sụp đổ: những vườn cây ăn quả, những sân khấu, bài toán tiền thuê nhà, dòng xe kẹt trên cầu. Không phải vì chúng tôi bi quan, mà vì mọi thứ ở đây tan vỡ đúng theo lịch trình, và gọi tên cái lịch trình ấy là hành động sửa chữa đầu tiên.</p>
+          <p>Xé tấm áp phích ra. Tô màu bức tranh biếm họa. Gửi cho chúng tôi cơn giận dữ và công thức nấu ăn của bạn. Thứ này chỉ hiệu quả khi bạn để lại vụn bánh trên đó.</p>
+        </div>
+        <div class="signoff">— ban biên tập ✕</div>
+      </div>
+      <div>
+        <div class="card masthead-list">
+          <div class="hd"><span>Măng sét / №1 · Hè 2026</span><span class="r">DB-000</span></div>
+          <div class="bd list">
+            <div class="li"><span class="lab">Biên tập</span><span class="val">tên bạn ở đây</span></div>
+            <div class="li"><span class="lab">Mỹ thuật + truyện tranh</span><span class="val">kêu gọi mở</span></div>
+            <div class="li"><span class="lab">Ban tiếng nói trẻ</span><span class="val">ba cây bút, 17–24</span></div>
+            <div class="li"><span class="lab">In trên</span><span class="val">lãnh thổ syilx chưa nhượng</span></div>
+          </div>
+        </div>
+        <p class="prose justify" style="margin-top:24px">Daily Bread được xuất bản trên lãnh thổ tổ tiên, chưa nhượng của người syilx Okanagan. Chúng tôi trả tiền thuê cho chủ đất và bày tỏ sự tôn kính với một Dân tộc, và chúng tôi biết chỉ một trong hai điều đó là món nợ.</p>
+        <div style="margin-top:22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:160px">
+          <div class="meta" style="line-height:1.8">Được tài trợ bởi Riposte<br>Laboratories Inc.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="band harl br"></div>
+
+<!-- ============ CONTENTS ============ -->
+<section id="contents" class="sec" style="background:var(--paper2)">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.01</span><span class="tag">// mục lục · bản kê / 48 pp</span></div>
+    <h2 class="display">Mục Lục<span class="dot">.</span></h2>
+    <p class="dek">Mười hai người góp mặt làm nên №1: những cây bút tuổi từ 17–74, hai nhiếp ảnh gia, một họa sĩ biếm họa, một người soát lỗi rất kiên nhẫn. Mọi dòng ghi tên đều là người địa phương. Mọi khoản thù lao đều được trả trước cả nhà in.</p>
+    <div class="card" style="margin-top:30px">
+      <div class="hd"><span>Bản kê / 48 pp</span><span class="r">DB-TOC</span></div>
+      <div class="bd"><div class="toc-grid list" id="toc"><div class="li"><span class="pgchip" style="background:#1d1a17">01</span><span class="t">Nỗi Sợ Hằng Ngày — thư của ban biên tập</span><span class="end tagend">Ban nhà</span></div><div class="li"><span class="pgchip" style="background:#f0477d">04</span><span class="t">Trước Khi Có Cầu — một thứ lịch sử xấc xược</span><span class="end tagend">Lịch sử</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">08</span><span class="t">Bỏ Trống — phóng sự ảnh, Bernard Ave</span><span class="end tagend">Ảnh</span></div><div class="li"><span class="pgchip" style="background:#12b795">11</span><span class="t">Tiếng Nói Trẻ — ba bài phóng sự thực địa</span><span class="end tagend">Quan điểm</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">14</span><span class="t">Vụn Bánh — tập 1, một golem đi tìm nhà ở</span><span class="end tagend">Truyện tranh</span></div><div class="li"><span class="pgchip" style="background:#f0477d">16</span><span class="t">Bốn Mươi Năm Gan Lì — Miss Demeanour</span><span class="end tagend">Phỏng vấn</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">19</span><span class="t">Hiệu Ứng Hồ / Thu Hoạch — thơ</span><span class="end tagend">Văn</span></div><div class="li"><span class="pgchip" style="background:#12b795">20</span><span class="t">Bức Tường — trang giữa xé ra</span><span class="end tagend">Tranh</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">23</span><span class="t">Tự Tô Màu Cuộc Sụp Đổ Của Bạn</span><span class="end tagend">Châm biếm</span></div><div class="li"><span class="pgchip" style="background:#f0477d">24</span><span class="t">Bóc Tôi Ra — tờ sticker</span><span class="end tagend">Sticker</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">25</span><span class="t">Danh Sách Chờ — bài về y tế</span><span class="end tagend">Vấn đề</span></div><div class="li"><span class="pgchip" style="background:#12b795">28</span><span class="t">Hồ Nuốt Chửng — truyện phần 1</span><span class="end tagend">Văn</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">30</span><span class="t">Từ Phòng Lab — công bố tài trợ</span><span class="end tagend">Riposte</span></div><div class="li"><span class="pgchip" style="background:#f0477d">32</span><span class="t">Hỏi Một Người Gay Bản Địa / Điểm Sách / Lịch</span><span class="end tagend">Dịch vụ</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">36</span><span class="t">Cắn Trả — phê bình nhà hàng</span><span class="end tagend">Ẩm thực</span></div><div class="li"><span class="pgchip" style="background:#f0477d">37</span><span class="t">Vòng Quay — những gì chúng tôi đang nghe</span><span class="end tagend">Âm nhạc</span></div><div class="li"><span class="pgchip" style="background:#12b795">38</span><span class="t">Tua Lại + Chiếu Phim Trong Công Viên</span><span class="end tagend">Phim</span></div><div class="li"><span class="pgchip" style="background:#12b795">40</span><span class="t">Danh Bạ + Thư Vụn Bánh</span><span class="end tagend">Trợ giúp</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">44</span><span class="t">Ai Làm Nên Thứ Này — ê-kíp, đã tập hợp</span><span class="end tagend">Colophon</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HISTORY + LEDGER ============ -->
+<section id="history" class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.02</span><span class="tag">// lịch sử · trước khi có cầu</span></div>
+    <div class="split">
+      <div>
+        <h2 class="display">Một Thứ Lịch Sử<br>Xấc Xược</h2>
+        <div class="prose justify" style="margin-top:22px">
+          <p>Thung lũng này tự bán mình hai lần: đầu tiên là một Eden, rồi sau là cổ phần. Những chủ vườn cây phá sản thường xuyên đến mức các xưởng đóng gói tự in tiền phiếu riêng; khi cây trái lụi tàn, khẩu hiệu đổi thành nắng hưu trí; khi người về hưu đẩy giá vượt tầm với của thợ hái, khẩu hiệu đổi thành căn hộ bên hồ. Mỗi màn đều kết thúc theo cùng một kiểu, với những người làm công phải sống ngày càng xa mặt nước.</p>
+          <p>Lịch sử queer đan bện xuyên suốt tất cả những điều đó: những vũ trường với các đêm không chính thức, những mạng lưới bạn bè kiêm luôn danh sách chỗ ở, một cộng đồng sống sót nhờ hữu ích và lặng lẽ cho đến khi nó không cần phải như thế nữa.</p>
+        </div>
+        <div class="annot"><span class="scribble orange">"lặng lẽ cho đến khi nó không cần phải như thế nữa" — in lên áo đi</span></div>
+      </div>
+      <div>
+        <span class="kicker">Sổ cái / cái gì sụp đổ khi nào</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>Mục</span><span>Trạng thái</span></div>
+          <div class="bd list" id="ledger"><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1913</span><span class="t">giá trái cây lao dốc; nền kinh tế tiền phiếu bắt đầu</span><span class="end"><span class="statuschip" style="background:#f0477d">Vỡ nợ</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1930s</span><span class="t">sa thải ở xưởng đóng gói, khắp thung lũng</span><span class="end"><span class="statuschip" style="background:#f0477d">Vỡ nợ</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1958</span><span class="t">cầu thông xe; công nhân phà thành thừa thãi chỉ sau một đêm</span><span class="end"><span class="statuschip" style="background:#fe9a0d">Xoay trục</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1973</span><span class="t">ALR đóng băng đầu cơ vườn cây (trong chốc lát)</span><span class="end"><span class="statuschip" style="background:#12b795">Đỡ đòn</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1980s</span><span class="t">kỷ nguyên xưởng cưa kết thúc; kỷ nguyên rượu vang bắt đầu</span><span class="end"><span class="statuschip" style="background:#fe9a0d">Xoay trục</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2003</span><span class="t">bão lửa; 239 ngôi nhà, 30k người sơ tán</span><span class="end"><span class="statuschip" style="background:#f0477d">Cháy</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2017</span><span class="t">năm lũ; hồ nuốt chửng lối đi ván ven bờ</span><span class="end"><span class="statuschip" style="background:#f0477d">Lụt</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2021</span><span class="t">vòm nhiệt; nơi nóng nhất Canada, lại một lần nữa</span><span class="end"><span class="statuschip" style="background:#f0477d">Cháy</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2024</span><span class="t">sân khấu queer riêng cuối cùng đóng cửa</span><span class="end"><span class="statuschip" style="background:#f0477d">Vỡ nợ</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2026</span><span class="t">tạp chí này. tới lượt ngươi, thành phố.</span><span class="end"><span class="statuschip" style="background:#12b795">Riposte</span></span></div></div>
+        </div>
+        <p class="meta" style="margin-top:14px;line-height:1.7"><span style="color:var(--pink);font-weight:700">Phương pháp</span> — biên soạn từ văn khố thành phố, kho lưu báo cũ, và những bậc cao niên từng có mặt ở đó. Đón nhận và mong chờ mọi đính chính.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ YOUNG VOICES ============ -->
+<section id="voices" class="sec field-ink">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">// ban tiếng nói trẻ · chưa duyệt. chưa biên tập. chuẩn xác.</span></div>
+    <h2 class="display">Tiếng Nói Trẻ</h2>
+    <p class="dek" style="color:#cfc6b6">Ba bài phóng sự thực địa từ những cây bút chưa được đi bầu nhưng đã tính được bài toán tiền thuê nhà. Chúng tôi đã trả thù lao cho họ; chúng tôi không đụng đến một chữ nào.</p>
+    <div class="thirds" style="margin-top:34px">
+      <div class="card report"><div class="hd pink"><span>Phóng sự 01</span><span>19 tuổi · Nhà ở</span></div>
+        <div class="bd">
+          <h3>Không Ai Bằng Tuổi Tôi Đủ Khả Năng Ở Lại</h3>
+          <p>Tôi làm hai việc và chia một căn hai phòng ngủ với ba người khác, mà tôi lại là câu chuyện thành công. Nhóm chat của tôi là một bữa tiệc chia tay quay chậm: Vernon, Calgary, tầng hầm nhà mẹ ở Surrey.</p>
+          <div class="pull">"Mỗi lần xem nhà là bốn mươi người xếp hàng và luôn có một người đang khóc."</div>
+        </div>
+      </div>
+      <div class="card report"><div class="hd orange"><span>Phóng sự 02</span><span>22 tuổi · Come out</span></div>
+        <div class="bd">
+          <h3>Come Out Ở Xưởng Đóng Gói</h3>
+          <p>Tôi come out tại một bữa tiệc trong bụi rậm ở Glenmore và điều tệ nhất xảy ra là một gã tên Tyler nói "ngầu đấy" rồi hỏi tôi có thể chở hắn về nhà không. Không phải thiên đường, không phải địa ngục, chỉ là một thành phố nhỏ đang học nhanh hơn cả hội đồng thành phố của nó.</p>
+          <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange);border:0;padding-left:0">địa lý là chiếc tủ kín cuối cùng</div>
+        </div>
+      </div>
+      <div class="card report"><div class="hd teal"><span>Phóng sự 03</span><span>17 tuổi · Mùa cháy rừng</span></div>
+        <div class="bd">
+          <h3>Tôi Đã Sơ Tán Hai Lần Và Vẫn Chưa Được Đi Bầu</h3>
+          <p>Ảnh thời thơ ấu của tôi được sắp theo năm khói lửa. Chúng tôi chất đồ lên xe năm 2021 rồi lại năm 2023, và cả hai lần người lớn trên radio đều gọi đó là chưa từng có tiền lệ. Nó có tiền lệ đấy.</p>
+          <div class="pull teal">"Tôi chính là cái tiền lệ."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WAITLIST STATS ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="split center">
+      <div>
+        <span class="kicker pink">10 · Vấn đề hiện tại</span>
+        <h2 class="display" style="margin-top:16px">Danh Sách Chờ</h2>
+        <p class="dek">Cố tìm dịch vụ chăm sóc sức khỏe am hiểu người queer ở Central Okanagan là một công việc bán thời gian không phúc lợi. Chúng tôi đã gọi mọi phòng khám để bạn khỏi phải gọi; ai chúng tôi liên lạc được cũng mô tả cùng một tam giác gồm điện thoại chờ mãi, mòn mỏi chờ giới thiệu, và một con đường cao tốc.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="n" style="color:var(--pink)">14</div><div class="l">Tháng · thời gian chờ trung bình ở phòng khám giới tính</div></div>
+        <div class="stat"><div class="n" style="color:var(--orange)">2</div><div class="l">Cơ sở nhận bệnh nhân mới</div></div>
+        <div class="stat"><div class="n" style="color:var(--teal)">400</div><div class="l">km đến nơi thay thế gần nhất</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INTERVIEW QUOTE ============ -->
+<div class="field-ink sec tight">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.05</span><span class="tag" style="color:#b7ad9e">// phỏng vấn · bốn mươi năm gan lì</span></div>
+    <div class="bigquote"><span class="mk">"</span>Chúng tôi làm gì có quán bar, cưng à. Chúng tôi có những tầng hầm, và chúng tôi có sự gan lì.<span class="mk">"</span></div>
+    <div class="attrib">Miss Demeanour · biểu diễn ở Okanagan từ năm 1986</div>
+    <p class="prose" style="margin-top:26px;color:#e7ddcd;max-width:66ch">"Khán giả ngày một trẻ hơn còn tiền thuê nhà ngày một cay nghiệt hơn. Năm '86 mối nguy là con người; giờ mối nguy là chủ nhà. Mọi người đã đi đâu khi các sân khấu đóng cửa? Chẳng đi đâu cả, cưng ơi; đó là bí mật đấy. Tất cả chúng tôi vẫn còn ở đây, chỉ là chúng tôi gặp nhau trong phòng tập thể dục, trong vườn cây và trong bếp của nhau. Một cộng đồng không phải là một địa chỉ."</p>
+  </div>
+</div>
+
+<!-- ============ CALENDAR ============ -->
+<section id="calendar" class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.14</span><span class="tag">// lịch · tháng 8–10 2026 · cắt + dán tủ lạnh</span></div>
+    <div class="split">
+      <div>
+        <h2 class="display">Lịch<span class="dot" style="color:var(--teal)">.</span></h2>
+        <p class="dek">Đăng tin miễn phí; email trước ngày 15. Các lựa chọn không rượu bia và cho mọi lứa tuổi được đánh dấu ◦.</p>
+        <div class="card" style="margin-top:24px">
+          <div class="hd"><span>Tháng 8 — 10 2026</span><span class="r">Cắt + dán tủ lạnh</span></div>
+          <div class="bd list" id="events"><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Aug 07</span><span class="t"><b>Thứ Sáu Đầu Tháng ở Phòng Lab ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Sàn xưởng Riposte — tham quan, ghế dài, zine</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Aug 14</span><span class="t"><b>Chiếu Phim Trong Công Viên №1 ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">City Park — Paris Is Burning</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Aug 15</span><span class="t"><b>Tụ Họp Queer Bên Bãi Biển ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Gyro Beach, đầu phía bắc — mang bóng râm đến chia sẻ</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Aug 22</span><span class="t"><b>Đêm drag Trăng Mùa Gặt</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">hội trường cộng đồng — trả tùy tâm ở cửa</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Sep 05</span><span class="t"><b>Làm zine + phòng tư vấn gửi bài ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">makerspace thư viện — mang cơn giận của bạn đến</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Sep 15</span><span class="t"><b>Hạn chót gửi bài №2</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">tranh, bài quan điểm, thơ</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Sep 19</span><span class="t"><b>Dạo vườn cây cùng một bậc cao niên ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">những băng ghế East Kelowna — lịch sử dưới chân</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Oct 03</span><span class="t"><b>Đêm băng cassette: the Shoebox Fonds</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">địa điểm sẽ thông báo — Miss Demeanour chủ trì</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Oct 17</span><span class="t"><b>Ra mắt Số №2 + cuộc thi tô màu</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">địa điểm trong №2. dĩ nhiên rồi</span></span></div></div>
+        </div>
+      </div>
+      <div>
+        <span class="kicker teal">Chiếu phim trong công viên / do Daily Bread tổ chức</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>Danh mục mùa hè / lúc chạng vạng</span><span class="r">Mưa thì dời vào Phòng Lab</span></div>
+          <div class="bd list" id="screenings"><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Aug 14</span><span class="t"><b>Paris Is Burning (1990)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">City Park, lúc chạng vạng</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Sep 04</span><span class="t"><b>My Own Private Idaho (1991)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Ben Lee Park, lúc chạng vạng</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Sep 25</span><span class="t"><b>The Watermelon Woman (1996)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Rutland Centennial Park, lúc chạng vạng</span></span></div><div class="li"><span class="fine">Miễn phí / trả tùy tâm · bật phụ đề · máy chiếu + điện: pin tái chế, Project HEX</span></div></div>
+        </div>
+        <div class="card" style="margin-top:24px">
+          <div class="hd pink"><span>Bình chọn — buổi chiếu tháng Mười</span></div>
+          <div class="bd">
+            <div class="checkline">☐ Portrait of a Lady on Fire (2019)</div>
+            <div class="checkline">☐ Hedwig and the Angry Inch (2001)</div>
+            <div class="checkline">☐ Bound (1996)</div>
+            <div class="checkline fine">Đánh dấu một · chụp ảnh · gửi. Dân chủ điện ảnh.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DIRECTORY ============ -->
+<section id="directory" class="sec" style="background:var(--paper2)">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.18</span><span class="tag">// tương trợ · giữ trang này · kiểm chứng theo quý</span></div>
+    <div class="split">
+      <div>
+        <span class="kicker teal">Giữ trang này / danh bạ</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>Kiểm chứng theo quý · xé ra được</span></div>
+          <div class="bd list" id="dir-list"><div class="li"><span class="t" style="font-weight:700">Đường dây khủng hoảng (24/7, am hiểu người chuyển giới)</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">chỗ trống — xác minh trước khi in</span></div><div class="li"><span class="t" style="font-weight:700">Danh sách phòng khám theo mô hình đồng thuận sáng suốt</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">cập nhật theo quý · trang này</span></div><div class="li"><span class="t" style="font-weight:700">Điểm sinh hoạt cho thanh thiếu niên (14–24) ◦</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">thứ tư + thứ bảy · trung tâm</span></div><div class="li"><span class="t" style="font-weight:700">Kho tương trợ thực phẩm</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">rutland · không hỏi han</span></div><div class="li"><span class="t" style="font-weight:700">Trợ giúp pháp lý — bảo vệ người thuê nhà</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">thứ hai đầu tháng · thư viện</span></div><div class="li"><span class="t" style="font-weight:700">Sinh hoạt queer cao niên (55+) ◦</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">các thứ năm · ven hồ</span></div><div class="li"><span class="t" style="font-weight:700">Tụ họp không rượu bia ◦</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">xem lịch, đánh dấu ◦</span></div></div>
+        </div>
+        <p class="meta" style="margin-top:14px;line-height:1.7">Thiếu một nguồn trợ giúp? Sai số điện thoại? Báo cho chúng tôi — trang này chính là mục đích của tất cả.</p>
+      </div>
+      <div>
+        <span class="kicker">Cái gì thực sự giúp ích / danh sách kiểm</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>Đã thử nghiệm thực tế</span></div>
+          <div class="bd">
+            <div class="checkline">☐ Danh sách phòng khám theo mô hình đồng thuận sáng suốt — cập nhật theo quý</div>
+            <div class="checkline">☐ Dược sĩ có thể gia hạn nhiều hơn bạn tưởng — cứ hỏi thẳng</div>
+            <div class="checkline">☐ Khám bệnh từ xa vẫn tính. Wifi tệ vẫn còn ngắn hơn 400 km</div>
+            <div class="checkline">☐ Dẫn một người bạn đi cùng khi khám. Bộ máy hành chính nể người làm chứng</div>
+          </div>
+        </div>
+        <div class="annot"><span class="scribble">cảm ơn Deb, thật lòng đấy</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="band harl br"></div>
+
+<!-- ============ SUBMIT ============ -->
+<section id="submit" class="sec field-ink">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">// gửi bài · №2 — "tan băng"</span></div>
+    <div class="split">
+      <div>
+        <h2 class="display">Để Lại Vụn Bánh<br>Trên Đó<span class="dot">.</span></h2>
+        <p class="dek" style="color:#cfc6b6">Tiểu thuyết đăng nhiều kỳ, một trang giữa mở, một ban tiếng nói trẻ, một danh bạ luôn cập nhật: №1 là bản thảo đầu tiên của một cộng đồng đang tranh luận rằng nó tồn tại. №2 là "Tan Băng" — thứ gì quay trở lại. Gửi cho chúng tôi cơn giận dữ và công thức nấu ăn của bạn.</p>
+        <div style="margin-top:26px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+          <a href="mailto:hello@dailybread.example?subject=WALL" class="stamp pink">hello@dailybread.example</a>
+          <span class="stamp">Hạn chót · 15 tháng 9</span>
+        </div>
+        <div class="annot"><span class="scribble teal">gửi thơ đi. thứ kỳ quặc được chào đón.</span></div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="hd orange"><span>Chúng tôi nhận gì</span></div>
+          <div class="bd">
+            <div class="checkline">▸ <b>Tranh cho trang giữa</b> — A4 nằm ngang, 300dpi, chất liệu bất kỳ. Chúng tôi trả thù lao; bản quyền vẫn của bạn.</div>
+            <div class="checkline">▸ <b>Bài quan điểm (dưới 25 tuổi)</b> — 500 chữ giận dữ chính đáng.</div>
+            <div class="checkline">▸ <b>Thơ &amp; truyện</b> — chúng tôi đọc mọi thứ hai lần.</div>
+            <div class="checkline">▸ <b>Truyện tranh</b> — chào mời chúng tôi sáu khung cho ô khách mời.</div>
+            <div class="checkline">▸ <b>Đăng tin &amp; đính chính</b> — miễn phí, luôn luôn.</div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:24px">
+          <div class="hd pink"><span>Bình chọn — chủ đề №2</span></div>
+          <div class="bd">
+            <div class="checkline">☐ Tan Băng (thứ gì quay trở lại)</div>
+            <div class="checkline">☐ Quyền &amp; Sai Về Nước</div>
+            <div class="checkline">☐ Ca Đêm (ai vận hành Kelowna lúc 2 giờ sáng)</div>
+            <div class="checkline fine">Đánh dấu một · chụp ảnh · gửi. Dân chủ.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FROM THE LAB ============ -->
+<section id="lab" class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.16</span><span class="tag">// từ phòng lab · công bố tài trợ, in cỡ lớn</span></div>
+    <div class="split">
+      <div>
+        <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:min(280px,80%)">
+        <div class="meta" style="letter-spacing:.45em;margin-top:10px">Laboratories Inc.</div>
+        <h2 class="display" style="margin-top:22px">Từ Phòng Lab</h2>
+        <div class="prose justify" style="margin-top:18px">
+          <p>Công bố đầy đủ, in cỡ lớn: tạp chí này được tài trợ bởi Riposte Laboratories, một xưởng ở Kelowna phản công lại sự lãng phí bằng công nghệ ép phun nhựa tái chế và nguồn điện mô-đun từ pin thu hồi. Chúng tôi chia sẻ những gì mình đang xây dựng ở đây, trên cùng những trang giấy này, với cùng âm lượng như mọi người khác.</p>
+          <p>Thỏa thuận, ghi rõ trên giấy: Phòng Lab trả tiền nhà in và nhận hai trang. Ban biên tập chịu trách nhiệm với độc giả, không phải với nhà tài trợ. Nếu điều đó có bao giờ thay đổi, trang tô màu sẽ báo cho bạn biết.</p>
+        </div>
+        <div style="margin-top:22px"><span class="stamp">Công bố tài trợ · đã ký</span></div>
+        <div class="signoff" style="margin-top:20px">parry. riposte. recycle.</div>
+      </div>
+      <div>
+        <span class="kicker">Quý này / bảng trạng thái</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>Q3 · 2026</span><span class="r">Rev. A</span></div>
+          <div class="bd list" id="lab-board"><div class="li"><span class="t">Plastic Works — khuôn v2, ghế công viên từ thùng nhựa #5</span><span class="end"><span class="statuschip" style="background:#12b795">Đang chạy</span></span></div><div class="li"><span class="t">Project HEX — giàn phân loại pin thu hồi</span><span class="end"><span class="statuschip" style="background:#fe9a0d">Đang làm</span></span></div><div class="li"><span class="t">Esh — trợ lý xưởng, hiện đang là một tấm bảng trắng</span><span class="end"><span class="statuschip" style="background:#f0477d">Đang vẽ</span></span></div><div class="li"><span class="t">Daily Bread №2 — bình chọn chủ đề</span><span class="end"><span class="statuschip" style="background:#1d1a17">Đang mở</span></span></div><div class="li"><span class="t">Mở cửa thứ Sáu đầu tháng — mang nhựa sạch đến</span><span class="end"><span class="statuschip" style="background:#12b795">Định kỳ</span></span></div></div>
+        </div>
+        <div class="card" style="margin-top:24px">
+          <div class="hd orange"><span>Tại sao lại tài trợ một tạp chí?</span></div>
+          <div class="bd" style="font-size:14px;line-height:1.7">Bởi một phòng lab sửa chữa rác thải vật chất ở một thị trấn đang đánh mất chất liệu văn hóa của mình thì chỉ mới làm được nửa phần việc. Giấy là hạ tầng. Các đêm drag cũng vậy. Khoản chi được duyệt.</div>
+        </div>
+        <p class="meta" style="margin-top:14px;line-height:1.7">Tham quan xưởng: mở cửa các thứ Sáu đầu tháng · mang nhựa sạch loại #2 + #5.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER / BACK COVER ============ -->
+<footer>
+  <div class="band harl" style="border-top:2px solid var(--bone)"></div>
+  <div class="wrap inner">
+    <img class="logo" src="/assets/riposte-logo.svg" alt="Riposte Laboratories">
+    <div class="tg">Riposte Laboratories Inc.</div>
+    <p class="blurb">Daily Bread được nướng theo quý tại Kelowna, BC. Miễn phí ở nơi bạn tìm thấy nó. Trả tùy tâm ở nơi bạn không thể.</p>
+    <div class="fmeta">
+      <div class="barcode"></div>
+      <div class="meta" style="line-height:1.7;text-align:left">ISSN đang chờ cấp<br>№1 · Hè 2026</div>
+    </div>
+    <div class="signoff" style="color:var(--pink);margin-top:4px">hẹn gặp lại lúc tan băng ✕</div>
+    <div class="colophon">In trên lãnh thổ syilx Okanagan chưa nhượng với số lượng 500 bản. Chữ dàn bằng IBM Plex Mono và UnifrakturMaguntia. Lỗi là của chúng tôi; đính chính là của bạn; mực thừa được dồn vào làm sticker. · Parry. Riposte.</div>
+  </div>
+  <div class="band" style="border-top:2px solid var(--bone)"></div>
+</footer>
+
+</body>
+</html>

@@ -7,8 +7,25 @@
 <meta name="description" content="Daily Bread is a queer magazine for the Okanagan, baked quarterly in Kelowna, BC. Issue №1: Kelowna's Collapse. Free where you found it; pay what you can where you can't. Funded by Riposte Laboratories.">
 <meta property="og:title" content="Daily Bread №1 — Kelowna's Collapse">
 <meta property="og:description" content="A queer magazine for the Okanagan. Free / PWYC. Issue №1, Summer 2026.">
-<meta property="og:image" content="assets/cover.jpg">
+<meta property="og:image" content="/assets/cover.jpg">
 <meta property="og:type" content="website">
+<link rel="canonical" href="https://dailybre.ad/">
+<link rel="alternate" hreflang="en" href="https://dailybre.ad/">
+<link rel="alternate" hreflang="fr" href="https://dailybre.ad/fr/">
+<link rel="alternate" hreflang="es" href="https://dailybre.ad/es/">
+<link rel="alternate" hreflang="it" href="https://dailybre.ad/it/">
+<link rel="alternate" hreflang="pl" href="https://dailybre.ad/pl/">
+<link rel="alternate" hreflang="zh-Hans" href="https://dailybre.ad/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://dailybre.ad/zh-hant/">
+<link rel="alternate" hreflang="pa" href="https://dailybre.ad/pa/">
+<link rel="alternate" hreflang="ko" href="https://dailybre.ad/ko/">
+<link rel="alternate" hreflang="ja" href="https://dailybre.ad/ja/">
+<link rel="alternate" hreflang="tl" href="https://dailybre.ad/tl/">
+<link rel="alternate" hreflang="vi" href="https://dailybre.ad/vi/">
+<link rel="alternate" hreflang="hi" href="https://dailybre.ad/hi/">
+<link rel="alternate" hreflang="ar" href="https://dailybre.ad/ar/">
+<link rel="alternate" hreflang="fa" href="https://dailybre.ad/fa/">
+<link rel="alternate" hreflang="x-default" href="https://dailybre.ad/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
@@ -130,10 +147,10 @@
     border:2px solid var(--bone);border-bottom:0;font-size:9.5px;letter-spacing:.16em;
     text-transform:uppercase;padding:4px 10px;color:#cfc6b6}
   .cover-frame{border:3px solid var(--bone);box-shadow:14px 14px 0 rgba(240,71,125,.85)}
-  .cover-frame img{width:100%;display:block}
+  .cover-frame img{width:100%;height:auto;display:block}
   .cover-frame .cap{display:flex;justify-content:space-between;gap:8px;background:var(--bone);color:var(--ink);
     font-size:9px;letter-spacing:.11em;padding:7px 10px;text-transform:uppercase;border-top:3px solid var(--bone);font-weight:600}
-  .cover-wrap .free{position:absolute;bottom:-16px;right:-10px;background:var(--bone);transform:rotate(4deg)}
+  .cover-wrap .free{position:absolute;bottom:-30px;right:-14px;background:var(--bone);transform:rotate(4deg)}
   @media(max-width:860px){.hero-grid{grid-template-columns:1fr;gap:40px;padding:52px 0 70px}
     .cover-wrap{max-width:420px}.cover-frame{box-shadow:9px 9px 0 rgba(240,71,125,.85)}}
 
@@ -184,6 +201,37 @@
     border-top:1px solid rgba(246,241,231,.22);padding-top:20px;margin-top:8px;max-width:74ch;line-height:1.9}
   .annot{margin-top:14px}
   .annot.right{text-align:right}
+
+  /* ---------- i18n chrome: language picker + MT notice ---------- */
+  header.top .bar .langpick{position:relative;margin-left:14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  .langpick>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;color:var(--bone);padding:4px 2px}
+  .langpick>summary::-webkit-details-marker{display:none}
+  .langpick>summary .globe{font-size:13px}
+  .langpick>summary .car{font-size:9px;opacity:.6;transition:transform .15s}
+  .langpick[open]>summary .car{transform:rotate(180deg)}
+  .langmenu{position:absolute;top:100%;inset-inline-end:0;margin-top:6px;z-index:90;
+    background:var(--bone);border:2px solid var(--bone);box-shadow:6px 6px 0 rgba(0,0,0,.4);
+    display:grid;grid-template-columns:1fr 1fr;min-width:288px;max-height:min(72vh,420px);overflow:auto}
+  .langmenu a{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:8px 11px;
+    color:var(--ink);border-bottom:1px dashed rgba(29,26,23,.4);border-right:1px dashed rgba(29,26,23,.4);
+    font-size:12.5px;letter-spacing:.02em;text-transform:none;line-height:1.25}
+  .langmenu a:nth-child(even){border-right:none}
+  .langmenu a[aria-current]{background:var(--ink);color:var(--bone);font-weight:700}
+  .langmenu a:hover{background:var(--teal);color:var(--ink)}
+  .langmenu a .en{font-size:9px;opacity:.6;letter-spacing:.04em;text-transform:uppercase}
+  .langmenu a[aria-current] .en{opacity:.85}
+  .mtnote{background:var(--orange);color:var(--ink);font-size:11px;letter-spacing:.02em;
+    text-align:center;padding:8px 16px;line-height:1.55;border-bottom:2px solid var(--ink)}
+  .mtnote a{color:var(--ink);text-decoration:underline;font-weight:700}
+  @media(max-width:760px){header.top .bar .langpick{margin-left:auto}}
+  /* RTL adjustments for machine-translated Arabic / Farsi */
+  [dir="rtl"] .dropcap::first-letter{float:right;padding:6px 0 0 12px}
+  [dir="rtl"] .pull{border-left:0;border-right:6px solid var(--pink);padding-left:0;padding-right:15px}
+  [dir="rtl"] .pull.orange{border-right-color:var(--orange)}
+  [dir="rtl"] .pull.teal{border-right-color:var(--teal)}
+  [dir="rtl"] .list .li .end{margin-left:0;margin-right:auto}
+  [dir="rtl"] .masthead-list .li .val{margin-left:0;margin-right:auto}
+
 </style>
 </head>
 <body>
@@ -202,8 +250,10 @@
       <a href="#submit">Submit</a>
       <a href="#lab">The Lab</a>
     </nav>
+    <details class="langpick"><summary aria-label="Language"><span class="globe" aria-hidden="true">🌐</span> English <span class="car" aria-hidden="true">▾</span></summary><div class="langmenu"><a href="/" hreflang="en" lang="en" aria-current="true"><span class="endo">English</span><span class="en">English</span></a><a href="/fr/" hreflang="fr" lang="fr"><span class="endo">Français</span><span class="en">French</span></a><a href="/es/" hreflang="es" lang="es"><span class="endo">Español</span><span class="en">Spanish</span></a><a href="/it/" hreflang="it" lang="it"><span class="endo">Italiano</span><span class="en">Italian</span></a><a href="/pl/" hreflang="pl" lang="pl"><span class="endo">Polski</span><span class="en">Polish</span></a><a href="/zh-hans/" hreflang="zh-Hans" lang="zh-Hans"><span class="endo">简体中文</span><span class="en">Chinese (Simplified)</span></a><a href="/zh-hant/" hreflang="zh-Hant" lang="zh-Hant"><span class="endo">繁體中文</span><span class="en">Chinese (Traditional)</span></a><a href="/pa/" hreflang="pa" lang="pa"><span class="endo">ਪੰਜਾਬੀ</span><span class="en">Punjabi</span></a><a href="/ko/" hreflang="ko" lang="ko"><span class="endo">한국어</span><span class="en">Korean</span></a><a href="/ja/" hreflang="ja" lang="ja"><span class="endo">日本語</span><span class="en">Japanese</span></a><a href="/tl/" hreflang="tl" lang="tl"><span class="endo">Tagalog</span><span class="en">Tagalog</span></a><a href="/vi/" hreflang="vi" lang="vi"><span class="endo">Tiếng Việt</span><span class="en">Vietnamese</span></a><a href="/hi/" hreflang="hi" lang="hi"><span class="endo">हिन्दी</span><span class="en">Hindi</span></a><a href="/ar/" hreflang="ar" lang="ar" dir="rtl"><span class="endo">العربية</span><span class="en">Arabic</span></a><a href="/fa/" hreflang="fa" lang="fa" dir="rtl"><span class="endo">فارسی</span><span class="en">Farsi</span></a></div></details>
   </div>
 </header>
+
 
 <!-- ============ HERO ============ -->
 <div class="hero">
@@ -223,7 +273,7 @@
       <div class="cover-wrap">
         <span class="tab">Sheet 00 · Front cover</span>
         <div class="cover-frame">
-          <img src="assets/cover.jpg" alt="Daily Bread №1 cover — an open mouth with dripping teeth over a jewelled tongue, blackletter wordmark overlaid" width="1000" height="1536">
+          <img src="assets/cover.jpg" alt="Daily Bread №1 cover — an open mouth with dripping teeth over a jewelled tongue, blackletter wordmark overlaid" width="1000" height="1500">
           <div class="cap"><span>№1 — Kelowna's Collapse</span><span>Riposte Laboratories</span></div>
         </div>
         <span class="stamp free">Free / PWYC</span>
@@ -260,7 +310,7 @@
         </div>
         <p class="prose justify" style="margin-top:24px">Daily Bread is published on the unceded, ancestral territory of the syilx Okanagan people. We pay rent to a landlord and respect to a Nation, and we know only one of those is owed.</p>
         <div style="margin-top:22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-          <img src="assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:160px">
+          <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:160px">
           <div class="meta" style="line-height:1.8">Funded by Riposte<br>Laboratories Inc.</div>
         </div>
       </div>
@@ -278,7 +328,7 @@
     <p class="dek">Twelve contributors made №1: writers aged 17–74, two photographers, one cartoonist, one very patient proofreader. Every byline is local. Every fee got paid before the printer did.</p>
     <div class="card" style="margin-top:30px">
       <div class="hd"><span>Manifest / 48 pp</span><span class="r">DB-TOC</span></div>
-      <div class="bd"><div class="toc-grid list" id="toc"></div></div>
+      <div class="bd"><div class="toc-grid list" id="toc"><div class="li"><span class="pgchip" style="background:#1d1a17">01</span><span class="t">Our Daily Dread — editor's letter</span><span class="end tagend">House</span></div><div class="li"><span class="pgchip" style="background:#f0477d">04</span><span class="t">Before the Bridge — a rude history</span><span class="end tagend">History</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">08</span><span class="t">Vacancy — photo essay, Bernard Ave</span><span class="end tagend">Photo</span></div><div class="li"><span class="pgchip" style="background:#12b795">11</span><span class="t">Young Voices — three field reports</span><span class="end tagend">Opinion</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">14</span><span class="t">Crumbs — ep.1, a golem seeks housing</span><span class="end tagend">Comic</span></div><div class="li"><span class="pgchip" style="background:#f0477d">16</span><span class="t">Forty Years of Nerve — Miss Demeanour</span><span class="end tagend">Interview</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">19</span><span class="t">Lake Effect / Harvest — poems</span><span class="end tagend">Lit</span></div><div class="li"><span class="pgchip" style="background:#12b795">20</span><span class="t">The Wall — rip-out centrefold</span><span class="end tagend">Art</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">23</span><span class="t">Colour Your Own Collapse</span><span class="end tagend">Satire</span></div><div class="li"><span class="pgchip" style="background:#f0477d">24</span><span class="t">Peel Me — sticker sheet</span><span class="end tagend">Stickers</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">25</span><span class="t">The Waitlist — healthcare feature</span><span class="end tagend">Issues</span></div><div class="li"><span class="pgchip" style="background:#12b795">28</span><span class="t">The Lake Takes — fiction pt.1</span><span class="end tagend">Lit</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">30</span><span class="t">From the Lab — funder disclosure</span><span class="end tagend">Riposte</span></div><div class="li"><span class="pgchip" style="background:#f0477d">32</span><span class="t">Ask a Local Gay / Reviews / Calendar</span><span class="end tagend">Service</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">36</span><span class="t">The Bite Back — restaurant critique</span><span class="end tagend">Food</span></div><div class="li"><span class="pgchip" style="background:#f0477d">37</span><span class="t">Rotation — what we're listening to</span><span class="end tagend">Music</span></div><div class="li"><span class="pgchip" style="background:#12b795">38</span><span class="t">The Rewind + Movies in the Park</span><span class="end tagend">Film</span></div><div class="li"><span class="pgchip" style="background:#12b795">40</span><span class="t">Directory + Crumbs Mail</span><span class="end tagend">Aid</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">44</span><span class="t">Who Made This — staff, assembled</span><span class="end tagend">Colophon</span></div></div></div>
     </div>
   </div>
 </section>
@@ -300,7 +350,7 @@
         <span class="kicker">Ledger / what collapsed when</span>
         <div class="card" style="margin-top:16px">
           <div class="hd"><span>Entry</span><span>Status</span></div>
-          <div class="bd list" id="ledger"></div>
+          <div class="bd list" id="ledger"><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1913</span><span class="t">fruit prices crater; scrip economy begins</span><span class="end"><span class="statuschip" style="background:#f0477d">Bust</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1930s</span><span class="t">packinghouse layoffs, valley-wide</span><span class="end"><span class="statuschip" style="background:#f0477d">Bust</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1958</span><span class="t">bridge opens; ferry workers obsolete overnight</span><span class="end"><span class="statuschip" style="background:#fe9a0d">Pivot</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1973</span><span class="t">ALR freezes orchard speculation (briefly)</span><span class="end"><span class="statuschip" style="background:#12b795">Parry</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1980s</span><span class="t">sawmill era ends; wine era begins</span><span class="end"><span class="statuschip" style="background:#fe9a0d">Pivot</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2003</span><span class="t">firestorm; 239 homes, 30k evacuated</span><span class="end"><span class="statuschip" style="background:#f0477d">Burn</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2017</span><span class="t">flood year; the lake takes the boardwalk</span><span class="end"><span class="statuschip" style="background:#f0477d">Flood</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2021</span><span class="t">heat dome; hottest place in Canada, again</span><span class="end"><span class="statuschip" style="background:#f0477d">Burn</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2024</span><span class="t">last dedicated queer venue closes</span><span class="end"><span class="statuschip" style="background:#f0477d">Bust</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2026</span><span class="t">this magazine. your move, city.</span><span class="end"><span class="statuschip" style="background:#12b795">Riposte</span></span></div></div>
         </div>
         <p class="meta" style="margin-top:14px;line-height:1.7"><span style="color:var(--pink);font-weight:700">Method</span> — compiled from city archives, newspaper morgues, and elders who were there. Corrections welcome and expected.</p>
       </div>
@@ -378,14 +428,14 @@
         <p class="dek">Listings are free; email by the 15th. Sober and all-ages options marked ◦.</p>
         <div class="card" style="margin-top:24px">
           <div class="hd"><span>Aug — Oct 2026</span><span class="r">Clip + fridge</span></div>
-          <div class="bd list" id="events"></div>
+          <div class="bd list" id="events"><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Aug 07</span><span class="t"><b>First Friday at the Lab ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Riposte shop floor — tours, benches, zines</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Aug 14</span><span class="t"><b>Movies in the Park №1 ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">City Park — Paris Is Burning</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Aug 15</span><span class="t"><b>Queer Beach Assembly ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Gyro Beach, north end — bring shade to share</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Aug 22</span><span class="t"><b>Harvest Moon drag night</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">community hall — PWYC at the door</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Sep 05</span><span class="t"><b>Zine-making + submission clinic ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">library makerspace — bring your fury</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Sep 15</span><span class="t"><b>№2 submission deadline</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">art, opinion, poems</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Sep 19</span><span class="t"><b>Orchard walk with an elder ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">East Kelowna benches — history underfoot</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Oct 03</span><span class="t"><b>Cassette night: the Shoebox Fonds</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">venue TBA — Miss Demeanour presiding</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Oct 17</span><span class="t"><b>Issue №2 launch + colouring contest</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">location in №2. obviously</span></span></div></div>
         </div>
       </div>
       <div>
         <span class="kicker teal">Movies in the park / hosted by Daily Bread</span>
         <div class="card" style="margin-top:16px">
           <div class="hd"><span>Summer slate / at dusk</span><span class="r">Rain moves us to the Lab</span></div>
-          <div class="bd list" id="screenings"></div>
+          <div class="bd list" id="screenings"><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Aug 14</span><span class="t"><b>Paris Is Burning (1990)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">City Park, at dusk</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Sep 04</span><span class="t"><b>My Own Private Idaho (1991)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Ben Lee Park, at dusk</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Sep 25</span><span class="t"><b>The Watermelon Woman (1996)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Rutland Centennial Park, at dusk</span></span></div><div class="li"><span class="fine">Free / PWYC · captions on · projector + power: reclaimed cells, Project HEX</span></div></div>
         </div>
         <div class="card" style="margin-top:24px">
           <div class="hd pink"><span>Vote — October screening</span></div>
@@ -410,7 +460,7 @@
         <span class="kicker teal">Keep this page / directory</span>
         <div class="card" style="margin-top:16px">
           <div class="hd"><span>Verified quarterly · tear out ok</span></div>
-          <div class="bd list" id="dir-list"></div>
+          <div class="bd list" id="dir-list"><div class="li"><span class="t" style="font-weight:700">Crisis line (24/7, trans-competent)</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">placeholder — verify before print</span></div><div class="li"><span class="t" style="font-weight:700">Informed-consent clinic list</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">updated quarterly · this page</span></div><div class="li"><span class="t" style="font-weight:700">Youth drop-in (14–24) ◦</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">wed + sat · downtown</span></div><div class="li"><span class="t" style="font-weight:700">Mutual aid pantry</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">rutland · no questions</span></div><div class="li"><span class="t" style="font-weight:700">Legal aid — tenant defence</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">first mondays · library</span></div><div class="li"><span class="t" style="font-weight:700">Elder queer social (55+) ◦</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">thursdays · lakeshore</span></div><div class="li"><span class="t" style="font-weight:700">Sober hangs ◦</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">see calendar, marked ◦</span></div></div>
         </div>
         <p class="meta" style="margin-top:14px;line-height:1.7">A resource missing? Wrong number? Tell us — this page is the whole point.</p>
       </div>
@@ -478,7 +528,7 @@
     <div class="sechead"><span class="no">Sec.16</span><span class="tag">// from the lab · funder disclosure, printed large</span></div>
     <div class="split">
       <div>
-        <img src="assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:min(280px,80%)">
+        <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:min(280px,80%)">
         <div class="meta" style="letter-spacing:.45em;margin-top:10px">Laboratories Inc.</div>
         <h2 class="display" style="margin-top:22px">From the Lab</h2>
         <div class="prose justify" style="margin-top:18px">
@@ -492,7 +542,7 @@
         <span class="kicker">This quarter / status board</span>
         <div class="card" style="margin-top:16px">
           <div class="hd"><span>Q3 · 2026</span><span class="r">Rev. A</span></div>
-          <div class="bd list" id="lab-board"></div>
+          <div class="bd list" id="lab-board"><div class="li"><span class="t">Plastic Works — molds v2, park benches from #5 tubs</span><span class="end"><span class="statuschip" style="background:#12b795">Live</span></span></div><div class="li"><span class="t">Project HEX — reclaimed-cell grading rig</span><span class="end"><span class="statuschip" style="background:#fe9a0d">WIP</span></span></div><div class="li"><span class="t">Esh — shop assistant, currently a whiteboard</span><span class="end"><span class="statuschip" style="background:#f0477d">Drawing</span></span></div><div class="li"><span class="t">Daily Bread №2 — theme vote</span><span class="end"><span class="statuschip" style="background:#1d1a17">Open</span></span></div><div class="li"><span class="t">First Friday open doors — bring clean plastics</span><span class="end"><span class="statuschip" style="background:#12b795">Recurring</span></span></div></div>
         </div>
         <div class="card" style="margin-top:24px">
           <div class="hd orange"><span>Why fund a magazine?</span></div>
@@ -508,7 +558,7 @@
 <footer>
   <div class="band harl" style="border-top:2px solid var(--bone)"></div>
   <div class="wrap inner">
-    <img class="logo" src="assets/riposte-logo.svg" alt="Riposte Laboratories">
+    <img class="logo" src="/assets/riposte-logo.svg" alt="Riposte Laboratories">
     <div class="tg">Riposte Laboratories Inc.</div>
     <p class="blurb">Daily Bread is baked quarterly in Kelowna, BC. Free where you found it. Pay what you can where you can't.</p>
     <div class="fmeta">
@@ -521,82 +571,5 @@
   <div class="band" style="border-top:2px solid var(--bone)"></div>
 </footer>
 
-<script>
-const DATA = {
-  toc:[
-    {pg:'01',t:"Our Daily Dread — editor's letter",k:'House',c:'#1d1a17'},
-    {pg:'04',t:'Before the Bridge — a rude history',k:'History',c:'#f0477d'},
-    {pg:'08',t:'Vacancy — photo essay, Bernard Ave',k:'Photo',c:'#fe9a0d'},
-    {pg:'11',t:'Young Voices — three field reports',k:'Opinion',c:'#12b795'},
-    {pg:'14',t:'Crumbs — ep.1, a golem seeks housing',k:'Comic',c:'#1d1a17'},
-    {pg:'16',t:'Forty Years of Nerve — Miss Demeanour',k:'Interview',c:'#f0477d'},
-    {pg:'19',t:'Lake Effect / Harvest — poems',k:'Lit',c:'#fe9a0d'},
-    {pg:'20',t:'The Wall — rip-out centrefold',k:'Art',c:'#12b795'},
-    {pg:'23',t:'Colour Your Own Collapse',k:'Satire',c:'#1d1a17'},
-    {pg:'24',t:'Peel Me — sticker sheet',k:'Stickers',c:'#f0477d'},
-    {pg:'25',t:'The Waitlist — healthcare feature',k:'Issues',c:'#fe9a0d'},
-    {pg:'28',t:'The Lake Takes — fiction pt.1',k:'Lit',c:'#12b795'},
-    {pg:'30',t:'From the Lab — funder disclosure',k:'Riposte',c:'#1d1a17'},
-    {pg:'32',t:'Ask a Local Gay / Reviews / Calendar',k:'Service',c:'#f0477d'},
-    {pg:'36',t:'The Bite Back — restaurant critique',k:'Food',c:'#fe9a0d'},
-    {pg:'37',t:"Rotation — what we're listening to",k:'Music',c:'#f0477d'},
-    {pg:'38',t:'The Rewind + Movies in the Park',k:'Film',c:'#12b795'},
-    {pg:'40',t:'Directory + Crumbs Mail',k:'Aid',c:'#12b795'},
-    {pg:'44',t:'Who Made This — staff, assembled',k:'Colophon',c:'#1d1a17'},
-  ],
-  ledger:[
-    {y:'1913',e:'fruit prices crater; scrip economy begins',s:'Bust',sc:'#f0477d'},
-    {y:'1930s',e:'packinghouse layoffs, valley-wide',s:'Bust',sc:'#f0477d'},
-    {y:'1958',e:'bridge opens; ferry workers obsolete overnight',s:'Pivot',sc:'#fe9a0d'},
-    {y:'1973',e:'ALR freezes orchard speculation (briefly)',s:'Parry',sc:'#12b795'},
-    {y:'1980s',e:'sawmill era ends; wine era begins',s:'Pivot',sc:'#fe9a0d'},
-    {y:'2003',e:'firestorm; 239 homes, 30k evacuated',s:'Burn',sc:'#f0477d'},
-    {y:'2017',e:'flood year; the lake takes the boardwalk',s:'Flood',sc:'#f0477d'},
-    {y:'2021',e:'heat dome; hottest place in Canada, again',s:'Burn',sc:'#f0477d'},
-    {y:'2024',e:'last dedicated queer venue closes',s:'Bust',sc:'#f0477d'},
-    {y:'2026',e:'this magazine. your move, city.',s:'Riposte',sc:'#12b795'},
-  ],
-  events:[
-    {d:'Aug 07',t:'First Friday at the Lab ◦',w:'Riposte shop floor — tours, benches, zines',c:'#12b795'},
-    {d:'Aug 14',t:'Movies in the Park №1 ◦',w:'City Park — Paris Is Burning',c:'#fe9a0d'},
-    {d:'Aug 15',t:'Queer Beach Assembly ◦',w:'Gyro Beach, north end — bring shade to share',c:'#f0477d'},
-    {d:'Aug 22',t:'Harvest Moon drag night',w:'community hall — PWYC at the door',c:'#fe9a0d'},
-    {d:'Sep 05',t:'Zine-making + submission clinic ◦',w:'library makerspace — bring your fury',c:'#12b795'},
-    {d:'Sep 15',t:'№2 submission deadline',w:'art, opinion, poems',c:'#f0477d'},
-    {d:'Sep 19',t:'Orchard walk with an elder ◦',w:'East Kelowna benches — history underfoot',c:'#fe9a0d'},
-    {d:'Oct 03',t:'Cassette night: the Shoebox Fonds',w:'venue TBA — Miss Demeanour presiding',c:'#f0477d'},
-    {d:'Oct 17',t:'Issue №2 launch + colouring contest',w:'location in №2. obviously',c:'#12b795'},
-  ],
-  screenings:[
-    {d:'Aug 14',f:'Paris Is Burning (1990)',p:'City Park, at dusk',c:'#f0477d'},
-    {d:'Sep 04',f:'My Own Private Idaho (1991)',p:'Ben Lee Park, at dusk',c:'#fe9a0d'},
-    {d:'Sep 25',f:'The Watermelon Woman (1996)',p:'Rutland Centennial Park, at dusk',c:'#12b795'},
-  ],
-  directory:[
-    {t:'Crisis line (24/7, trans-competent)',w:'placeholder — verify before print'},
-    {t:'Informed-consent clinic list',w:'updated quarterly · this page'},
-    {t:'Youth drop-in (14–24) ◦',w:'wed + sat · downtown'},
-    {t:'Mutual aid pantry',w:'rutland · no questions'},
-    {t:'Legal aid — tenant defence',w:'first mondays · library'},
-    {t:'Elder queer social (55+) ◦',w:'thursdays · lakeshore'},
-    {t:'Sober hangs ◦',w:'see calendar, marked ◦'},
-  ],
-  lab:[
-    {t:'Plastic Works — molds v2, park benches from #5 tubs',s:'Live',c:'#12b795'},
-    {t:'Project HEX — reclaimed-cell grading rig',s:'WIP',c:'#fe9a0d'},
-    {t:'Esh — shop assistant, currently a whiteboard',s:'Drawing',c:'#f0477d'},
-    {t:'Daily Bread №2 — theme vote',s:'Open',c:'#1d1a17'},
-    {t:'First Friday open doors — bring clean plastics',s:'Recurring',c:'#12b795'},
-  ],
-};
-const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-const set=(id,html)=>{const el=document.getElementById(id);if(el)el.innerHTML=html;};
-set('toc',DATA.toc.map(r=>`<div class="li"><span class="pgchip" style="background:${r.c}">${r.pg}</span><span class="t">${esc(r.t)}</span><span class="end tagend">${r.k}</span></div>`).join(''));
-set('ledger',DATA.ledger.map(l=>`<div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">${l.y}</span><span class="t">${esc(l.e)}</span><span class="end"><span class="statuschip" style="background:${l.sc}">${l.s}</span></span></div>`).join(''));
-set('events',DATA.events.map(e=>`<div class="li"><span class="pgchip" style="background:${e.c};min-width:60px">${e.d}</span><span class="t"><b>${esc(e.t)}</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">${esc(e.w)}</span></span></div>`).join(''));
-set('screenings',DATA.screenings.map(s=>`<div class="li"><span class="pgchip" style="background:${s.c};min-width:60px">${s.d}</span><span class="t"><b>${esc(s.f)}</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">${esc(s.p)}</span></span></div>`).join('')+`<div class="li"><span class="fine">Free / PWYC · captions on · projector + power: reclaimed cells, Project HEX</span></div>`);
-set('dir-list',DATA.directory.map(d=>`<div class="li"><span class="t" style="font-weight:700">${esc(d.t)}</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">${esc(d.w)}</span></div>`).join(''));
-set('lab-board',DATA.lab.map(j=>`<div class="li"><span class="t">${esc(j.t)}</span><span class="end"><span class="statuschip" style="background:${j.c}">${j.s}</span></span></div>`).join(''));
-</script>
 </body>
 </html>
