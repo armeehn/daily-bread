@@ -1,0 +1,3 @@
+# Cloudflare Pages: land the project root on the studio.
+# (This file is ignored by GitHub Pages; it only affects the Cloudflare Pages deploy.)
+/    /studio.html    302
