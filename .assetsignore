@@ -1,0 +1,7 @@
+# Files tracked in the repo but not part of the served site.
+# (Cloudflare Workers static assets uses .gitignore-style patterns.)
+wrangler.jsonc
+CLOUDFLARE.md
+README.md
+tools/
+.gitignore
