@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Bread №1 · 凱洛納的崩塌 · 一本獻給 Okanagan 的酷兒雜誌</title>
+<meta name="description" content="Daily Bread 是一本獻給 Okanagan 的酷兒雜誌，每季在 BC 省 Kelowna 新鮮出爐。第 №1 期：凱洛納的崩塌。在你撿到的地方免費取閱；付不出錢的地方，量力而為。由 Riposte Laboratories 資助。">
+<meta property="og:title" content="Daily Bread №1：凱洛納的崩塌">
+<meta property="og:description" content="一本獻給 Okanagan 的酷兒雜誌。免費／量力而為。第 №1 期，2026 年夏。">
+<meta property="og:image" content="/assets/cover.jpg">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://dailybre.ad/zh-hant/">
+<link rel="alternate" hreflang="en" href="https://dailybre.ad/">
+<link rel="alternate" hreflang="fr" href="https://dailybre.ad/fr/">
+<link rel="alternate" hreflang="es" href="https://dailybre.ad/es/">
+<link rel="alternate" hreflang="it" href="https://dailybre.ad/it/">
+<link rel="alternate" hreflang="pl" href="https://dailybre.ad/pl/">
+<link rel="alternate" hreflang="zh-Hans" href="https://dailybre.ad/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://dailybre.ad/zh-hant/">
+<link rel="alternate" hreflang="pa" href="https://dailybre.ad/pa/">
+<link rel="alternate" hreflang="ko" href="https://dailybre.ad/ko/">
+<link rel="alternate" hreflang="ja" href="https://dailybre.ad/ja/">
+<link rel="alternate" hreflang="tl" href="https://dailybre.ad/tl/">
+<link rel="alternate" hreflang="vi" href="https://dailybre.ad/vi/">
+<link rel="alternate" hreflang="hi" href="https://dailybre.ad/hi/">
+<link rel="alternate" hreflang="ar" href="https://dailybre.ad/ar/">
+<link rel="alternate" hreflang="fa" href="https://dailybre.ad/fa/">
+<link rel="alternate" hreflang="x-default" href="https://dailybre.ad/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1d1a17; --bone:#f6f1e7; --panel:#eae4d6; --paper2:#efe9db;
+    --dark:#2a2723; --muted:#8d857a;
+    --pink:#f0477d; --teal:#12b795; --orange:#fe9a0d;
+    --maxw:1080px;
+    --checker:repeating-conic-gradient(var(--ink) 0% 25%,var(--bone) 0% 50%) 0 0/18px 18px;
+    --checker-inv:repeating-conic-gradient(var(--bone) 0% 25%,var(--ink) 0% 50%) 0 0/18px 18px;
+    --harlequin:repeating-conic-gradient(from 45deg,var(--pink) 0% 25%,var(--teal) 0% 50%) 0 0/26px 26px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'IBM Plex Mono',ui-monospace,'SFMono-Regular',monospace;
+    background:var(--bone); color:var(--ink);
+    -webkit-font-smoothing:antialiased; line-height:1.7; font-size:16px;
+  }
+  a{color:var(--pink);text-decoration:none;transition:color .15s}
+  a:hover{color:var(--teal)}
+  img{max-width:100%;display:block}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
+  section{scroll-margin-top:52px}
+
+  /* ---------- shared type ---------- */
+  .kicker{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;padding:5px 12px;background:var(--ink);color:var(--bone)}
+  .kicker.pink{background:var(--pink);color:var(--bone)}
+  .kicker.teal{background:var(--teal);color:var(--bone)}
+  .kicker.orange{background:var(--orange);color:var(--ink)}
+  .display{font-size:clamp(32px,5.4vw,54px);line-height:.96;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.015em}
+  .display .dot{color:var(--pink)}
+  .frak{font-family:'UnifrakturMaguntia',serif;font-weight:400;line-height:.9}
+  .dek{font-size:15.5px;line-height:1.7;max-width:62ch;color:#3a352e;margin-top:14px}
+  .prose{font-size:15.5px;line-height:1.78;max-width:64ch}
+  .prose p{margin:0 0 15px} .prose p:last-child{margin-bottom:0}
+  .justify{text-align:justify;hyphens:auto}
+  .meta{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .stamp{display:inline-block;border:2px solid var(--orange);color:var(--orange);
+    font-size:11px;font-weight:700;letter-spacing:.16em;padding:7px 13px;
+    transform:rotate(-2.5deg);text-transform:uppercase;white-space:nowrap;background:transparent}
+  .stamp.pink{border-color:var(--pink);color:var(--pink)}
+  .stamp.teal{border-color:var(--teal);color:var(--teal)}
+  .scribble{font-family:'Caveat',cursive;font-size:26px;line-height:1.1;color:var(--pink);
+    transform:rotate(-2.5deg);display:inline-block}
+  .scribble.teal{color:var(--teal)} .scribble.orange{color:var(--orange)}
+
+  /* ---------- section headers ---------- */
+  .sec{padding:84px 0}
+  .sec.tight{padding:64px 0}
+  .sechead{display:flex;align-items:baseline;gap:16px;margin-bottom:30px;flex-wrap:wrap}
+  .sechead .no{font-size:12px;font-weight:700;letter-spacing:.14em;background:var(--ink);
+    color:var(--bone);padding:5px 11px;white-space:nowrap}
+  .sechead .tag{font-size:12px;letter-spacing:.08em;color:var(--muted)}
+  .rule{height:6px;border-top:2px solid currentColor;border-bottom:1px dashed currentColor;
+    color:var(--ink);opacity:.9;margin:0}
+
+  /* ---------- cards / boxes with hard shadow ---------- */
+  .card{border:2px solid var(--ink);background:var(--bone);box-shadow:6px 6px 0 var(--ink)}
+  .card > .hd{display:flex;justify-content:space-between;gap:12px;align-items:center;
+    padding:10px 15px;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    border-bottom:2px solid var(--ink);background:var(--panel)}
+  .card > .hd.pink{background:var(--pink);color:var(--bone)}
+  .card > .hd.teal{background:var(--teal);color:var(--bone)}
+  .card > .hd.orange{background:var(--orange);color:var(--ink)}
+  .card > .hd .r{opacity:.85}
+  .card > .bd{padding:16px 18px}
+  .list .li{display:flex;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px dashed rgba(29,26,23,.45)}
+  .list .li:last-child{border-bottom:0}
+  .list .li .t{font-size:14px;line-height:1.45}
+  .list .li .end{margin-left:auto;flex:none;text-align:right}
+  .pgchip{font-weight:700;color:var(--bone);background:var(--ink);font-size:12px;
+    padding:2px 8px;flex:none;min-width:34px;text-align:center}
+  .tagend{font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+  .statuschip{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--bone);padding:2px 9px;text-transform:uppercase}
+
+  /* ---------- grids ---------- */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start}
+  .split.center{align-items:center}
+  .thirds{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 44px}
+  @media(max-width:860px){.split,.thirds,.toc-grid{grid-template-columns:1fr;gap:30px}}
+
+  /* ---------- full-bleed fields ---------- */
+  .field-ink{background:var(--ink);color:var(--bone)}
+  .field-ink a{color:var(--pink)} .field-ink .rule{color:var(--bone)}
+  .field-ink .card{background:#26221e;border-color:var(--bone);box-shadow:6px 6px 0 rgba(246,241,231,.85);color:var(--bone)}
+  .field-ink .card>.hd{background:#332e28;color:var(--bone);border-color:var(--bone)}
+  .field-ink .sechead .no{background:var(--bone);color:var(--ink)}
+  .band{height:26px;background:var(--checker)}
+  .band.harl{height:34px;background:var(--harlequin)}
+  .band.br{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+
+  /* ---------- top bar ---------- */
+  header.top{position:sticky;top:0;z-index:60;background:var(--ink);color:var(--bone);border-bottom:2px solid var(--bone)}
+  header.top .bar{display:flex;align-items:center;gap:18px;height:46px}
+  header.top .brand{font-family:'UnifrakturMaguntia',serif;font-size:22px;line-height:1}
+  header.top nav{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
+  header.top nav a{color:var(--bone);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  header.top nav a:hover{color:var(--pink)}
+  @media(max-width:760px){header.top nav{display:none}}
+
+  /* ---------- hero ---------- */
+  .hero{background:var(--ink);color:var(--bone);position:relative;overflow:hidden}
+  .hero .glow{position:absolute;inset:0;background:
+     radial-gradient(60% 50% at 78% 30%,rgba(240,71,125,.18),transparent 70%),
+     radial-gradient(50% 45% at 20% 80%,rgba(18,183,149,.15),transparent 70%);pointer-events:none}
+  .hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:start;padding:64px 0 82px}
+  .hero .mast{font-family:'UnifrakturMaguntia',serif;font-size:clamp(70px,13vw,158px);line-height:.82}
+  .hero .tagline{font-size:13px;letter-spacing:.34em;text-transform:uppercase;margin-top:22px;color:#e7ddcd}
+  .hero .issueline{font-size:11px;letter-spacing:.22em;text-transform:uppercase;margin-top:24px;line-height:2;color:#b7ad9e}
+  .hero p.intro{font-size:16px;line-height:1.75;margin-top:22px;max-width:46ch;color:#efe7d9}
+  .hero .badges{display:flex;gap:16px;flex-wrap:wrap;margin-top:30px;align-items:center}
+  .cover-wrap{position:relative}
+  .cover-wrap .tab{position:absolute;top:-14px;left:14px;background:var(--ink);
+    border:2px solid var(--bone);border-bottom:0;font-size:9.5px;letter-spacing:.16em;
+    text-transform:uppercase;padding:4px 10px;color:#cfc6b6}
+  .cover-frame{border:3px solid var(--bone);box-shadow:14px 14px 0 rgba(240,71,125,.85)}
+  .cover-frame img{width:100%;display:block}
+  .cover-frame .cap{display:flex;justify-content:space-between;gap:8px;background:var(--bone);color:var(--ink);
+    font-size:9px;letter-spacing:.11em;padding:7px 10px;text-transform:uppercase;border-top:3px solid var(--bone);font-weight:600}
+  .cover-wrap .free{position:absolute;bottom:-16px;right:-10px;background:var(--bone);transform:rotate(4deg)}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;gap:40px;padding:52px 0 70px}
+    .cover-wrap{max-width:420px}.cover-frame{box-shadow:9px 9px 0 rgba(240,71,125,.85)}}
+
+  /* ---------- editor letter ---------- */
+  .letter .prose .drop{font-weight:700;background:var(--pink);color:var(--bone);padding:0 6px}
+  .dropcap::first-letter{font-family:'UnifrakturMaguntia',serif;font-size:4.6em;float:left;
+    line-height:.66;padding:6px 12px 0 0;color:var(--ink)}
+  .signoff{font-family:'Caveat',cursive;font-size:34px;color:var(--teal);transform:rotate(-2deg);margin-top:18px}
+  .masthead-list .li .lab{color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+  .masthead-list .li .val{margin-left:auto;font-weight:700;text-align:right;font-size:13.5px}
+
+  /* ---------- reports ---------- */
+  .report{display:flex;flex-direction:column;height:100%}
+  .report .bd{display:flex;flex-direction:column;flex:1}
+  .report h3{font-size:clamp(20px,2.5vw,25px);line-height:1.06;font-weight:800;text-transform:uppercase;margin:0 0 12px}
+  .report p{font-size:14px;line-height:1.62;margin:0}
+  .pull{border-left:6px solid var(--pink);padding:8px 0 8px 15px;font-size:17px;line-height:1.34;
+    font-weight:600;font-style:italic;margin-top:auto;padding-top:16px}
+  .pull.orange{border-color:var(--orange)} .pull.teal{border-color:var(--teal)}
+
+  /* ---------- stats ---------- */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .stat{border:2px solid var(--ink);background:var(--bone);box-shadow:6px 6px 0 var(--ink);padding:22px 14px;text-align:center}
+  .stat .n{font-size:clamp(44px,7vw,66px);font-weight:800;line-height:.9}
+  .stat .l{font-size:10px;letter-spacing:.1em;margin-top:12px;text-transform:uppercase;line-height:1.5;color:#3a352e}
+  @media(max-width:560px){.stats{grid-template-columns:1fr}}
+
+  /* ---------- quote band ---------- */
+  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;max-width:20ch}
+  .bigquote .mk{color:var(--pink);font-style:normal}
+  .attrib{font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:22px;color:#b7ad9e}
+
+  /* ---------- checkline / vote ---------- */
+  .checkline{padding:8px 0;border-bottom:1px dashed rgba(29,26,23,.4);font-size:14px;line-height:1.5}
+  .checkline:last-child{border-bottom:0}
+  .field-ink .checkline{border-color:rgba(246,241,231,.28)}
+  .fine{font-size:10px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--ink);color:var(--bone)}
+  footer .inner{padding:60px 0;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
+  footer img.logo{width:min(300px,72%);filter:invert(1)}
+  footer .tg{font-size:11px;letter-spacing:.45em;text-transform:uppercase}
+  footer p.blurb{font-size:14px;line-height:1.75;max-width:42ch;color:#e7ddcd}
+  .barcode{width:130px;height:38px;background:repeating-linear-gradient(90deg,var(--bone) 0 3px,var(--ink) 3px 5px,var(--bone) 5px 6px,var(--ink) 6px 10px)}
+  footer .fmeta{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap}
+  footer .colophon{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#8d857a;
+    border-top:1px solid rgba(246,241,231,.22);padding-top:20px;margin-top:8px;max-width:74ch;line-height:1.9}
+  .annot{margin-top:14px}
+  .annot.right{text-align:right}
+
+  /* ---------- i18n chrome: language picker + MT notice ---------- */
+  header.top .bar .langpick{position:relative;margin-left:14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  .langpick>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;color:var(--bone);padding:4px 2px}
+  .langpick>summary::-webkit-details-marker{display:none}
+  .langpick>summary .globe{font-size:13px}
+  .langpick>summary .car{font-size:9px;opacity:.6;transition:transform .15s}
+  .langpick[open]>summary .car{transform:rotate(180deg)}
+  .langmenu{position:absolute;top:100%;inset-inline-end:0;margin-top:6px;z-index:90;
+    background:var(--bone);border:2px solid var(--bone);box-shadow:6px 6px 0 rgba(0,0,0,.4);
+    display:grid;grid-template-columns:1fr 1fr;min-width:288px;max-height:min(72vh,420px);overflow:auto}
+  .langmenu a{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:8px 11px;
+    color:var(--ink);border-bottom:1px dashed rgba(29,26,23,.4);border-right:1px dashed rgba(29,26,23,.4);
+    font-size:12.5px;letter-spacing:.02em;text-transform:none;line-height:1.25}
+  .langmenu a:nth-child(even){border-right:none}
+  .langmenu a[aria-current]{background:var(--ink);color:var(--bone);font-weight:700}
+  .langmenu a:hover{background:var(--teal);color:var(--ink)}
+  .langmenu a .en{font-size:9px;opacity:.6;letter-spacing:.04em;text-transform:uppercase}
+  .langmenu a[aria-current] .en{opacity:.85}
+  .mtnote{background:var(--orange);color:var(--ink);font-size:11px;letter-spacing:.02em;
+    text-align:center;padding:8px 16px;line-height:1.55;border-bottom:2px solid var(--ink)}
+  .mtnote a{color:var(--ink);text-decoration:underline;font-weight:700}
+  @media(max-width:760px){header.top .bar .langpick{margin-left:auto}}
+  /* RTL adjustments for machine-translated Arabic / Farsi */
+  [dir="rtl"] .dropcap::first-letter{float:right;padding:6px 0 0 12px}
+  [dir="rtl"] .pull{border-left:0;border-right:6px solid var(--pink);padding-left:0;padding-right:15px}
+  [dir="rtl"] .pull.orange{border-right-color:var(--orange)}
+  [dir="rtl"] .pull.teal{border-right-color:var(--teal)}
+  [dir="rtl"] .list .li .end{margin-left:0;margin-right:auto}
+  [dir="rtl"] .masthead-list .li .val{margin-left:0;margin-right:auto}
+
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR ============ -->
+<header class="top">
+  <div class="wrap bar">
+    <span class="brand">Daily&nbsp;Bread</span>
+    <nav>
+      <a href="#letter">編者信</a>
+      <a href="#contents">目錄</a>
+      <a href="#history">歷史</a>
+      <a href="#voices">聲音</a>
+      <a href="#calendar">行事曆</a>
+      <a href="#directory">資源名錄</a>
+      <a href="#submit">投稿</a>
+      <a href="#lab">實驗室</a>
+    </nav>
+    <details class="langpick"><summary aria-label="語言"><span class="globe" aria-hidden="true">🌐</span> 繁體中文 <span class="car" aria-hidden="true">▾</span></summary><div class="langmenu"><a href="/" hreflang="en" lang="en"><span class="endo">English</span><span class="en">English</span></a><a href="/fr/" hreflang="fr" lang="fr"><span class="endo">Français</span><span class="en">French</span></a><a href="/es/" hreflang="es" lang="es"><span class="endo">Español</span><span class="en">Spanish</span></a><a href="/it/" hreflang="it" lang="it"><span class="endo">Italiano</span><span class="en">Italian</span></a><a href="/pl/" hreflang="pl" lang="pl"><span class="endo">Polski</span><span class="en">Polish</span></a><a href="/zh-hans/" hreflang="zh-Hans" lang="zh-Hans"><span class="endo">简体中文</span><span class="en">Chinese (Simplified)</span></a><a href="/zh-hant/" hreflang="zh-Hant" lang="zh-Hant" aria-current="true"><span class="endo">繁體中文</span><span class="en">Chinese (Traditional)</span></a><a href="/pa/" hreflang="pa" lang="pa"><span class="endo">ਪੰਜਾਬੀ</span><span class="en">Punjabi</span></a><a href="/ko/" hreflang="ko" lang="ko"><span class="endo">한국어</span><span class="en">Korean</span></a><a href="/ja/" hreflang="ja" lang="ja"><span class="endo">日本語</span><span class="en">Japanese</span></a><a href="/tl/" hreflang="tl" lang="tl"><span class="endo">Tagalog</span><span class="en">Tagalog</span></a><a href="/vi/" hreflang="vi" lang="vi"><span class="endo">Tiếng Việt</span><span class="en">Vietnamese</span></a><a href="/hi/" hreflang="hi" lang="hi"><span class="endo">हिन्दी</span><span class="en">Hindi</span></a><a href="/ar/" hreflang="ar" lang="ar" dir="rtl"><span class="endo">العربية</span><span class="en">Arabic</span></a><a href="/fa/" hreflang="fa" lang="fa" dir="rtl"><span class="endo">فارسی</span><span class="en">Farsi</span></a></div></details>
+  </div>
+</header>
+<div class="mtnote">這是英文原版的機器翻譯。請閱讀<a href="/">英文版</a>。</div>
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="mast">Daily<br>Bread</div>
+        <div class="tagline">一本獻給 Okanagan 的酷兒雜誌</div>
+        <p class="intro">你翻開了一本酷兒雜誌的創刊號，而這座城市一直告訴我們它沒有酷兒。Kelowna 有酷兒的歷史、酷兒的孩子、酷兒的長者、酷兒的麵包師與公務員；它缺的，是一張敢大聲說出來的紙。</p>
+        <div class="issueline">第 №1 期 · 2026 年夏<br>凱洛納的崩塌 · 48 pp · 印量 500</div>
+        <div class="badges">
+          <span class="stamp">第 №1 批 · 新鮮</span>
+          <a href="#contents" class="stamp pink" style="cursor:pointer">翻閱本期 ↓</a>
+        </div>
+      </div>
+      <div class="cover-wrap">
+        <span class="tab">第 00 頁 · 封面</span>
+        <div class="cover-frame">
+          <img src="/assets/cover.jpg" alt="Daily Bread №1 封面：一張張開的嘴，牙齒滴著液，覆在一條鑲寶石的舌頭上，疊上黑體字刊名" width="1000" height="1536">
+          <div class="cap"><span>№1：凱洛納的崩塌</span><span>Riposte Laboratories</span></div>
+        </div>
+        <span class="stamp free">免費／量力而為</span>
+      </div>
+    </div>
+  </div>
+  <div class="band"></div>
+</div>
+
+<!-- ============ EDITOR'S LETTER ============ -->
+<section id="letter" class="sec letter">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.00</span><span class="tag">// 編者的信</span></div>
+    <div class="rule" style="margin-bottom:34px"></div>
+    <div class="split">
+      <div>
+        <h2 class="display">我們的每日<br>惶惶</h2>
+        <div class="prose justify" style="margin-top:22px">
+          <p><span class="drop">嗨。</span>你翻開了一本酷兒雜誌的創刊號，而這座城市一直告訴我們它沒有酷兒。Kelowna 有酷兒的歷史、酷兒的孩子、酷兒的長者、酷兒的麵包師與公務員；它缺的，是一張敢大聲說出來的紙。</p>
+          <p>本期談的是崩塌：果園、場館、房租的算術、過橋的車陣。不是因為我們是末日論者，而是因為這裡的東西總是按時瓦解，而點破這個時間表，正是修補的第一步。</p>
+          <p>撕下海報。替漫畫上色。把你的怒火和食譜寄給我們。這玩意兒要沾上你的碎屑，才算數。</p>
+        </div>
+        <div class="signoff">——編輯群 ✕</div>
+      </div>
+      <div>
+        <div class="card masthead-list">
+          <div class="hd"><span>版權頁／№1 · 2026 年夏</span><span class="r">DB-000</span></div>
+          <div class="bd list">
+            <div class="li"><span class="lab">編輯</span><span class="val">你的名字寫在這裡</span></div>
+            <div class="li"><span class="lab">美術＋漫畫</span><span class="val">公開徵集</span></div>
+            <div class="li"><span class="lab">青年之聲部門</span><span class="val">三位作者，17–24 歲</span></div>
+            <div class="li"><span class="lab">印製於</span><span class="val">未割讓的 syilx 土地</span></div>
+          </div>
+        </div>
+        <p class="prose justify" style="margin-top:24px">Daily Bread 在 syilx Okanagan 人未割讓的祖傳土地上出版。我們向房東付租，向一個原住民族致敬，而我們清楚只有其中一樣是真正欠下的。</p>
+        <div style="margin-top:22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:160px">
+          <div class="meta" style="line-height:1.8">由 Riposte<br>Laboratories Inc. 資助。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="band harl br"></div>
+
+<!-- ============ CONTENTS ============ -->
+<section id="contents" class="sec" style="background:var(--paper2)">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.01</span><span class="tag">// 目錄 · 清單／48 pp</span></div>
+    <h2 class="display">目錄<span class="dot">.</span></h2>
+    <p class="dek">十二位供稿人成就了 №1：17–74 歲的作者、兩位攝影師、一位漫畫家、一位極有耐性的校對。每一則署名都是本地人。每一筆稿費都趕在印刷廠之前付清。</p>
+    <div class="card" style="margin-top:30px">
+      <div class="hd"><span>清單／48 pp</span><span class="r">DB-TOC</span></div>
+      <div class="bd"><div class="toc-grid list" id="toc"><div class="li"><span class="pgchip" style="background:#1d1a17">01</span><span class="t">我們的每日惶惶——編者的信</span><span class="end tagend">本社</span></div><div class="li"><span class="pgchip" style="background:#f0477d">04</span><span class="t">過橋之前——一部無禮的歷史</span><span class="end tagend">歷史</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">08</span><span class="t">空置——攝影散文，Bernard Ave</span><span class="end tagend">攝影</span></div><div class="li"><span class="pgchip" style="background:#12b795">11</span><span class="t">青年之聲——三份現場報導</span><span class="end tagend">評論</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">14</span><span class="t">碎屑——第 1 集，一個魔像找房子</span><span class="end tagend">漫畫</span></div><div class="li"><span class="pgchip" style="background:#f0477d">16</span><span class="t">四十年的膽識——Miss Demeanour</span><span class="end tagend">專訪</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">19</span><span class="t">湖效／收成——詩</span><span class="end tagend">文學</span></div><div class="li"><span class="pgchip" style="background:#12b795">20</span><span class="t">那道牆——可撕下的跨頁</span><span class="end tagend">美術</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">23</span><span class="t">替你自己的崩塌上色</span><span class="end tagend">諷刺</span></div><div class="li"><span class="pgchip" style="background:#f0477d">24</span><span class="t">撕我——貼紙頁</span><span class="end tagend">貼紙</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">25</span><span class="t">候補名單——醫療專題</span><span class="end tagend">議題</span></div><div class="li"><span class="pgchip" style="background:#12b795">28</span><span class="t">湖水索取——小說 第 1 部</span><span class="end tagend">文學</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">30</span><span class="t">來自實驗室——資助方揭露</span><span class="end tagend">Riposte</span></div><div class="li"><span class="pgchip" style="background:#f0477d">32</span><span class="t">問問本地同志／評論／行事曆</span><span class="end tagend">服務</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">36</span><span class="t">回咬一口——餐廳評論</span><span class="end tagend">飲食</span></div><div class="li"><span class="pgchip" style="background:#f0477d">37</span><span class="t">輪播——我們最近在聽什麼</span><span class="end tagend">音樂</span></div><div class="li"><span class="pgchip" style="background:#12b795">38</span><span class="t">倒帶＋公園裡的電影</span><span class="end tagend">電影</span></div><div class="li"><span class="pgchip" style="background:#12b795">40</span><span class="t">資源名錄＋碎屑來信</span><span class="end tagend">互助</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">44</span><span class="t">誰做了這本——工作人員，集結完畢</span><span class="end tagend">版本記錄</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HISTORY + LEDGER ============ -->
+<section id="history" class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.02</span><span class="tag">// 歷史 · 過橋之前</span></div>
+    <div class="split">
+      <div>
+        <h2 class="display">一部無禮的<br>歷史</h2>
+        <div class="prose justify" style="margin-top:22px">
+          <p>這片河谷把自己賣了兩次：先當伊甸園，再當投資標的。果農破產得太頻繁，包裝廠索性自印代用券；果樹死了，賣點就變成退休的陽光；退休者把採果工人擠出市場後，賣點又變成湖畔閣樓。每一幕的收場都一樣：幹活的人住得離水越來越遠。</p>
+          <p>酷兒的歷史編織在這一切之中：有非官方之夜的舞廳、身兼租屋名單的友誼網絡、一個靠著實用又安靜而存活的圈子，直到它不必再安靜。</p>
+        </div>
+        <div class="annot"><span class="scribble orange">「靠安靜而存活，直到它不必再安靜」——印在衣服上</span></div>
+      </div>
+      <div>
+        <span class="kicker">帳本／何時崩了什麼</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>條目</span><span>狀態</span></div>
+          <div class="bd list" id="ledger"><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1913</span><span class="t">果價崩盤；代用券經濟開始</span><span class="end"><span class="statuschip" style="background:#f0477d">蕭條</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1930s</span><span class="t">包裝廠裁員，遍及全谷</span><span class="end"><span class="statuschip" style="background:#f0477d">蕭條</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1958</span><span class="t">大橋通車；渡輪工人一夜之間過時</span><span class="end"><span class="statuschip" style="background:#fe9a0d">轉向</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1973</span><span class="t">ALR 凍結果園炒作（短暫地）</span><span class="end"><span class="statuschip" style="background:#12b795">回擊</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1980s</span><span class="t">鋸木廠時代結束；葡萄酒時代開始</span><span class="end"><span class="statuschip" style="background:#fe9a0d">轉向</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2003</span><span class="t">大火；239 戶家園，3 萬人撤離</span><span class="end"><span class="statuschip" style="background:#f0477d">焚燒</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2017</span><span class="t">洪水年；湖水吞了木棧道</span><span class="end"><span class="statuschip" style="background:#f0477d">洪水</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2021</span><span class="t">熱穹；全加拿大最熱的地方，又一次</span><span class="end"><span class="statuschip" style="background:#f0477d">焚燒</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2024</span><span class="t">最後一間專屬酷兒場館關門</span><span class="end"><span class="statuschip" style="background:#f0477d">蕭條</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2026</span><span class="t">這本雜誌。看你的了，這座城。</span><span class="end"><span class="statuschip" style="background:#12b795">Riposte</span></span></div></div>
+        </div>
+        <p class="meta" style="margin-top:14px;line-height:1.7"><span style="color:var(--pink);font-weight:700">方法</span>：彙整自市檔案、報紙資料室，以及當年在場的長者。歡迎且預期會有更正。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ YOUNG VOICES ============ -->
+<section id="voices" class="sec field-ink">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">// 青年之聲部門 · 未審。未編。正確。</span></div>
+    <h2 class="display">青年之聲</h2>
+    <p class="dek" style="color:#cfc6b6">三份來自作者的現場報導：他們還不能投票，卻已經會算房租的帳。我們付了稿費；一個字都沒動。</p>
+    <div class="thirds" style="margin-top:34px">
+      <div class="card report"><div class="hd pink"><span>報導 01</span><span>19 歲 · 住房</span></div>
+        <div class="bd">
+          <h3>我這年紀的人沒一個留得起</h3>
+          <p>我打兩份工，跟三個人合租一間兩房，而我還算是成功案例。我的群組聊天是一場慢動作的告別派對：Vernon、Calgary、Surrey 老媽的地下室。</p>
+          <div class="pull">「每次看房都擠了四十個人，其中總有一個在哭。」</div>
+        </div>
+      </div>
+      <div class="card report"><div class="hd orange"><span>報導 02</span><span>22 歲 · 出櫃</span></div>
+        <div class="bd">
+          <h3>在包裝廠出櫃</h3>
+          <p>我在 Glenmore 的一場野地派對上出櫃，最糟的下場是一個叫 Tyler 的傢伙說了聲「酷」，然後問我能不能載他回家。不是天堂，不是地獄，只是一座學得比市議會快的小城。</p>
+          <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange);border:0;padding-left:0">地理是最後一個櫃子</div>
+        </div>
+      </div>
+      <div class="card report"><div class="hd teal"><span>報導 03</span><span>17 歲 · 火季</span></div>
+        <div class="bd">
+          <h3>我撤離過兩次，卻還不能投票</h3>
+          <p>我的童年照片是按煙年分類的。我們在 2021 年打包上車，2023 年又一次，兩次收音機裡的大人都稱之為「史無前例」。它有前例。</p>
+          <div class="pull teal">「我就是那個前例。」</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WAITLIST STATS ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="split center">
+      <div>
+        <span class="kicker pink">10 · 當前議題</span>
+        <h2 class="display" style="margin-top:16px">候補名單</h2>
+        <p class="dek">在 Central Okanagan 想找到懂酷兒的醫療，是一份沒有福利的兼職。我們替你打過每一間診所的電話；每一個接通的人，描述的都是同一個三角：電話捉迷藏、轉診的煉獄，還有一條公路。</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="n" style="color:var(--pink)">14</div><div class="l">個月 · 性別診所平均等候</div></div>
+        <div class="stat"><div class="n" style="color:var(--orange)">2</div><div class="l">間接收新病患的機構</div></div>
+        <div class="stat"><div class="n" style="color:var(--teal)">400</div><div class="l">公里到最近的替代選項</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INTERVIEW QUOTE ============ -->
+<div class="field-ink sec tight">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.05</span><span class="tag" style="color:#b7ad9e">// 專訪 · 四十年的膽識</span></div>
+    <div class="bigquote"><span class="mk">"</span>親愛的，我們沒有酒吧。我們有地下室，還有膽識。<span class="mk">"</span></div>
+    <div class="attrib">Miss Demeanour · 自 1986 年起在 Okanagan 演出</div>
+    <p class="prose" style="margin-top:26px;color:#e7ddcd;max-width:66ch">「觀眾越來越年輕，房租越來越刻薄。在 '86 年，危險來自人；現在，危險來自房東。場館關了以後大家都去哪了？哪兒都沒去，寶貝；這就是祕密。我們全都還在，只是改在體育館、果園和彼此的廚房裡聚。一個圈子不是一個地址。」</p>
+  </div>
+</div>
+
+<!-- ============ CALENDAR ============ -->
+<section id="calendar" class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.14</span><span class="tag">// 行事曆 · aug–oct 2026 · 剪下＋貼冰箱</span></div>
+    <div class="split">
+      <div>
+        <h2 class="display">行事曆<span class="dot" style="color:var(--teal)">.</span></h2>
+        <p class="dek">刊登免費；請於 15 日前來信。清醒場與全年齡場以 ◦ 標示。</p>
+        <div class="card" style="margin-top:24px">
+          <div class="hd"><span>Aug — Oct 2026</span><span class="r">剪下＋貼冰箱</span></div>
+          <div class="bd list" id="events"><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Aug 07</span><span class="t"><b>實驗室的第一個週五 ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Riposte 工坊——導覽、長椅、小誌</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Aug 14</span><span class="t"><b>公園裡的電影 №1 ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">City Park——Paris Is Burning</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Aug 15</span><span class="t"><b>酷兒海灘集會 ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Gyro Beach 北端——帶遮陽的東西來分享</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Aug 22</span><span class="t"><b>收穫月變裝之夜</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">社區禮堂——門口量力而為</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Sep 05</span><span class="t"><b>小誌製作＋投稿門診 ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">圖書館創客空間——帶著你的怒火來</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Sep 15</span><span class="t"><b>№2 截稿</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">美術、評論、詩</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Sep 19</span><span class="t"><b>與長者同行的果園散步 ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">East Kelowna 長椅——歷史就在腳下</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Oct 03</span><span class="t"><b>卡帶之夜：the Shoebox Fonds</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">場地待定——Miss Demeanour 主持</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Oct 17</span><span class="t"><b>№2 發行＋著色比賽</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">地點見 №2。當然。</span></span></div></div>
+        </div>
+      </div>
+      <div>
+        <span class="kicker teal">公園裡的電影／由 Daily Bread 主辦</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>夏日片單／黃昏放映</span><span class="r">下雨就移師實驗室</span></div>
+          <div class="bd list" id="screenings"><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Aug 14</span><span class="t"><b>Paris Is Burning (1990)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">City Park，黃昏放映</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Sep 04</span><span class="t"><b>My Own Private Idaho (1991)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Ben Lee Park，黃昏放映</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Sep 25</span><span class="t"><b>The Watermelon Woman (1996)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Rutland Centennial Park，黃昏放映</span></span></div><div class="li"><span class="fine">免費／量力而為 · 開字幕 · 投影＋電力：回收電芯，Project HEX</span></div></div>
+        </div>
+        <div class="card" style="margin-top:24px">
+          <div class="hd pink"><span>投票——十月放映</span></div>
+          <div class="bd">
+            <div class="checkline">☐ Portrait of a Lady on Fire (2019)</div>
+            <div class="checkline">☐ Hedwig and the Angry Inch (2001)</div>
+            <div class="checkline">☐ Bound (1996)</div>
+            <div class="checkline fine">圈選一部 · 拍照 · 寄出。電影民主。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DIRECTORY ============ -->
+<section id="directory" class="sec" style="background:var(--paper2)">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.18</span><span class="tag">// 互助 · 留著這一頁 · 每季查核</span></div>
+    <div class="split">
+      <div>
+        <span class="kicker teal">留著這一頁／資源名錄</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>每季查核 · 可撕下</span></div>
+          <div class="bd list" id="dir-list"><div class="li"><span class="t" style="font-weight:700">危機專線（24/7，懂跨性別）</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">占位——付印前請查核</span></div><div class="li"><span class="t" style="font-weight:700">知情同意診所名單</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">每季更新 · 就在這一頁</span></div><div class="li"><span class="t" style="font-weight:700">青少年臨時中心（14–24）◦</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">週三＋週六 · 市中心</span></div><div class="li"><span class="t" style="font-weight:700">互助食物櫃</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">rutland · 不問問題</span></div><div class="li"><span class="t" style="font-weight:700">法律援助——租客防衛</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">每月第一個週一 · 圖書館</span></div><div class="li"><span class="t" style="font-weight:700">年長酷兒社交（55+）◦</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">週四 · 湖濱</span></div><div class="li"><span class="t" style="font-weight:700">清醒聚會 ◦</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">見行事曆，標 ◦ 者</span></div></div>
+        </div>
+        <p class="meta" style="margin-top:14px;line-height:1.7">少了哪項資源？號碼錯了？告訴我們——這一頁的全部意義就在於此。</p>
+      </div>
+      <div>
+        <span class="kicker">真正有用的／清單</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>實測有效</span></div>
+          <div class="bd">
+            <div class="checkline">☐ 知情同意診所名單——每季更新</div>
+            <div class="checkline">☐ 藥師能續的處方比你以為的多——直接問</div>
+            <div class="checkline">☐ 遠距醫療也算數。爛 wifi 還是比 400 km 短</div>
+            <div class="checkline">☐ 看診帶個朋友。官僚敬畏見證者</div>
+          </div>
+        </div>
+        <div class="annot"><span class="scribble">大聲謝謝 Deb，真的</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="band harl br"></div>
+
+<!-- ============ SUBMIT ============ -->
+<section id="submit" class="sec field-ink">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">// 投稿 · №2——「解凍」</span></div>
+    <div class="split">
+      <div>
+        <h2 class="display">沾上你的<br>碎屑<span class="dot">.</span></h2>
+        <p class="dek" style="color:#cfc6b6">連載小說、一整幅開放跨頁、一個青年之聲部門、一份持續更新的資源名錄：№1 是一個圈子辯稱自己存在的初稿。№2 是「解凍」——那些回來的東西。把你的怒火和食譜寄給我們。</p>
+        <div style="margin-top:26px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+          <a href="mailto:hello@dailybread.example?subject=WALL" class="stamp pink">hello@dailybread.example</a>
+          <span class="stamp">截稿 · Sept 15</span>
+        </div>
+        <div class="annot"><span class="scribble teal">寄詩來。歡迎古怪。</span></div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="hd orange"><span>我們收什麼</span></div>
+          <div class="bd">
+            <div class="checkline">▸ <b>跨頁美術</b>——A4 橫幅，300dpi，任何媒材。我們付費；版權歸你。</div>
+            <div class="checkline">▸ <b>評論（25 歲以下）</b>——500 字正確的憤怒。</div>
+            <div class="checkline">▸ <b>詩 &amp; 小說</b>——我們每一篇都讀兩遍。</div>
+            <div class="checkline">▸ <b>漫畫</b>——用六格向我們提案客座欄位。</div>
+            <div class="checkline">▸ <b>刊登 &amp; 更正</b>——免費，永遠。</div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:24px">
+          <div class="hd pink"><span>投票——№2 主題</span></div>
+          <div class="bd">
+            <div class="checkline">☐ 解凍（那些回來的東西）</div>
+            <div class="checkline">☐ 水權 &amp; 水錯</div>
+            <div class="checkline">☐ 夜班（誰在運轉凌晨兩點的 Kelowna）</div>
+            <div class="checkline fine">圈選一項 · 拍照 · 寄出。民主。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FROM THE LAB ============ -->
+<section id="lab" class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.16</span><span class="tag">// 來自實驗室 · 資助方揭露，放大印刷</span></div>
+    <div class="split">
+      <div>
+        <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:min(280px,80%)">
+        <div class="meta" style="letter-spacing:.45em;margin-top:10px">Laboratories Inc.</div>
+        <h2 class="display" style="margin-top:22px">來自實驗室</h2>
+        <div class="prose justify" style="margin-top:18px">
+          <p>完整揭露，放大印刷：本雜誌由 Riposte Laboratories 資助，這是一家 Kelowna 的機構，用回收塑膠射出成型與回收電芯模組化電力反擊浪費。我們在同樣的頁面、以和其他人同樣的音量，分享我們正在打造的東西。</p>
+          <p>白紙黑字的協議：實驗室付印刷費，換得兩頁。編輯對讀者負責，不對資助方。若這一點哪天變了，塗色頁會讓你知道。</p>
+        </div>
+        <div style="margin-top:22px"><span class="stamp">資助方揭露 · 已簽署</span></div>
+        <div class="signoff" style="margin-top:20px">parry. riposte. recycle.</div>
+      </div>
+      <div>
+        <span class="kicker">本季／狀態看板</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>Q3 · 2026</span><span class="r">Rev. A</span></div>
+          <div class="bd list" id="lab-board"><div class="li"><span class="t">Plastic Works——模具 v2，用 #5 桶做公園長椅</span><span class="end"><span class="statuschip" style="background:#12b795">運行中</span></span></div><div class="li"><span class="t">Project HEX——回收電芯分級裝置</span><span class="end"><span class="statuschip" style="background:#fe9a0d">進行中</span></span></div><div class="li"><span class="t">Esh——工坊助手，目前是一塊白板</span><span class="end"><span class="statuschip" style="background:#f0477d">繪製中</span></span></div><div class="li"><span class="t">Daily Bread №2——主題投票</span><span class="end"><span class="statuschip" style="background:#1d1a17">開放中</span></span></div><div class="li"><span class="t">第一個週五開放日——帶乾淨塑膠來</span><span class="end"><span class="statuschip" style="background:#12b795">循環進行</span></span></div></div>
+        </div>
+        <div class="card" style="margin-top:24px">
+          <div class="hd orange"><span>為什麼要資助一本雜誌？</span></div>
+          <div class="bd" style="font-size:14px;line-height:1.7">因為一家修補物質浪費的實驗室，若身處一座正在流失文化物質的小城，卻只做了一半的活。紙張是基礎建設。變裝之夜也是。此項核准。</div>
+        </div>
+        <p class="meta" style="margin-top:14px;line-height:1.7">逛逛工坊：每月第一個週五開放 · 帶乾淨的 #2 與 #5 塑膠來。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER / BACK COVER ============ -->
+<footer>
+  <div class="band harl" style="border-top:2px solid var(--bone)"></div>
+  <div class="wrap inner">
+    <img class="logo" src="/assets/riposte-logo.svg" alt="Riposte Laboratories">
+    <div class="tg">Riposte Laboratories Inc.</div>
+    <p class="blurb">Daily Bread 每季在 BC 省 Kelowna 新鮮出爐。在你撿到的地方免費取閱。付不出錢的地方，量力而為。</p>
+    <div class="fmeta">
+      <div class="barcode"></div>
+      <div class="meta" style="line-height:1.7;text-align:left">ISSN 申請中<br>№1 · 2026 年夏</div>
+    </div>
+    <div class="signoff" style="color:var(--pink);margin-top:4px">解凍時見 ✕</div>
+    <div class="colophon">在未割讓的 syilx Okanagan 土地上印製，印量 500。以 IBM Plex Mono 與 UnifrakturMaguntia 排版。錯誤是我們的；更正是你們的；剩下的油墨全進了貼紙。 · Parry. Riposte.</div>
+  </div>
+  <div class="band" style="border-top:2px solid var(--bone)"></div>
+</footer>
+
+</body>
+</html>
