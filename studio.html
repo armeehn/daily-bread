@@ -58,6 +58,11 @@
   .sec > .head:hover{background:#e3dccc}
   .sec > .head .no{font-size:9px;font-weight:700;letter-spacing:.14em;color:var(--muted)}
   .sec > .head .ttl{font-weight:700;font-size:13px;letter-spacing:.02em}
+  .sec > .head .rename{margin-left:8px;border:1px solid transparent;background:transparent;color:var(--muted);cursor:pointer;font-size:12px;line-height:1;width:22px;height:22px;padding:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .12s,border-color .12s,color .12s}
+  .sec > .head:hover .rename,.sec > .head:focus .rename{opacity:.7}
+  .sec > .head .rename:hover{opacity:1;border-color:var(--ink);color:var(--ink)}
+  .sec > .head .ttl-edit{font-family:inherit;font-weight:700;font-size:13px;letter-spacing:.02em;border:1.5px solid var(--pink);background:#fff;color:var(--ink);padding:2px 6px;flex:1;min-width:0}
+  .sec > .head .ttl-edit:focus{outline:0}
   .sec > .head .chev{margin-left:auto;transition:transform .15s;color:var(--muted)}
   .sec.open > .head .chev{transform:rotate(90deg)}
   .sec > .body{display:none;padding:14px 15px 20px}
@@ -167,9 +172,29 @@ const $ = s => document.querySelector(s);
 /* ---------- state ---------- */
 let model = load();
 function load(){
-  try{ const s = localStorage.getItem(KEY); if(s) return JSON.parse(s); }catch(e){}
-  return DB.clone(DB.DEFAULT_MODEL);
+  let m;
+  try{ const s = localStorage.getItem(KEY); if(s) m = JSON.parse(s); }catch(e){}
+  if(!m) m = DB.clone(DB.DEFAULT_MODEL);
+  return migrate(m, DB.DEFAULT_MODEL);
 }
+// backfill keys added to the schema after a model was saved (e.g. new section
+// headings) without disturbing existing edits or list contents
+function migrate(m, def){
+  if(!def || typeof def!=="object" || Array.isArray(def)) return m;
+  for(const k in def){
+    if(!(k in m)) m[k] = DB.clone(def[k]);
+    else if(def[k] && typeof def[k]==="object" && !Array.isArray(def[k])) migrate(m[k], def[k]);
+  }
+  return m;
+}
+
+// studio-only preference: custom labels for the editor's accordion sections
+// (kept separate from the magazine model — cosmetic to the tool)
+const LKEY = "dailybread:labels:v1";
+let labels = loadLabels();
+function loadLabels(){ try{ return JSON.parse(localStorage.getItem(LKEY)) || {}; }catch(e){ return {}; } }
+function saveLabels(){ try{ localStorage.setItem(LKEY, JSON.stringify(labels)); }catch(e){} }
+function sectionLabel(sec){ const v=labels[sec.id]; return (v!=null && v!=="") ? v : sec.title; }
 function save(){
   try{ localStorage.setItem(KEY, JSON.stringify(model)); }catch(e){}
 }
@@ -209,11 +234,15 @@ function buildEditor(){
   DB.SCHEMA.forEach((sec, si)=>{
     const wrap = document.createElement("div");
     wrap.className = "sec" + (si===0 ? " open" : "");
-    const head = document.createElement("button");
-    head.className="head";
+    const head = document.createElement("div");
+    head.className="head"; head.setAttribute("role","button"); head.tabIndex=0;
     head.innerHTML = `<span class="no">${esc((sec.tag||"").replace('//','').trim())}</span>`+
-                     `<span class="ttl">${esc(sec.title)}</span><span class="chev">▸</span>`;
+                     `<span class="ttl">${esc(sectionLabel(sec))}</span>`+
+                     `<button class="rename" title="Rename this editor section" aria-label="Rename section">✎</button>`+
+                     `<span class="chev">▸</span>`;
     head.addEventListener("click", ()=> wrap.classList.toggle("open"));
+    head.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); wrap.classList.toggle("open"); } });
+    head.querySelector(".rename").addEventListener("click", e=>{ e.stopPropagation(); startRename(head, sec); });
     const body = document.createElement("div");
     body.className="body";
 
@@ -222,6 +251,35 @@ function buildEditor(){
 
     wrap.appendChild(head); wrap.appendChild(body); pane.appendChild(wrap);
   });
+}
+
+/* inline-rename an accordion section label (class ttl); persists to labels store */
+function startRename(head, sec){
+  const ttl = head.querySelector(".ttl");
+  if(!ttl) return;
+  const renameBtn = head.querySelector(".rename");
+  if(renameBtn) renameBtn.style.visibility="hidden";
+  const input = document.createElement("input");
+  input.type="text"; input.className="ttl-edit"; input.value = sectionLabel(sec);
+  ttl.replaceWith(input);
+  input.focus(); input.select();
+  let done=false;
+  const commit = ()=>{
+    if(done) return; done=true;
+    const v = input.value.trim();
+    if(v==="" || v===sec.title) delete labels[sec.id]; else labels[sec.id]=v;
+    saveLabels();
+    const span=document.createElement("span"); span.className="ttl"; span.textContent=sectionLabel(sec);
+    input.replaceWith(span);
+    if(renameBtn) renameBtn.style.visibility="";
+  };
+  input.addEventListener("click", e=>e.stopPropagation());
+  input.addEventListener("keydown", e=>{
+    e.stopPropagation();
+    if(e.key==="Enter"){ e.preventDefault(); input.blur(); }
+    else if(e.key==="Escape"){ input.value=sectionLabel(sec); input.blur(); }
+  });
+  input.addEventListener("blur", commit);
 }
 
 /* single scalar field */
@@ -361,7 +419,7 @@ $("#importBtn").addEventListener("click",()=> $("#fileImport").click());
 $("#fileImport").addEventListener("change",e=>{
   const file=e.target.files[0]; if(!file) return;
   const r=new FileReader();
-  r.onload=()=>{ try{ model=JSON.parse(r.result); buildEditor(); renderPreview(); save(); toast("Imported "+file.name); setStatus("Saved ✓",false);}catch(err){ alert("Invalid JSON: "+err.message);} };
+  r.onload=()=>{ try{ model=migrate(JSON.parse(r.result), DB.DEFAULT_MODEL); buildEditor(); renderPreview(); save(); toast("Imported "+file.name); setStatus("Saved ✓",false);}catch(err){ alert("Invalid JSON: "+err.message);} };
   r.readAsText(file); e.target.value="";
 });
 $("#fileImage").addEventListener("change",e=>{
