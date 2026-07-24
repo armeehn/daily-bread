@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="la">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Bread №1 · Ruina Kelownae · Commentarii Queer pro Okanagan</title>
+<meta name="description" content="Daily Bread commentarii queer pro Okanagan sunt, singulis trimestribus Kelownae in BC cocti. Numerus №1: Ruina Kelownae. Gratis ubi eos invenisti; ubi non potes, solve quod potes. A Riposte Laboratories subventi.">
+<meta property="og:title" content="Daily Bread №1 — Ruina Kelownae">
+<meta property="og:description" content="Commentarii queer pro Okanagan. Gratis / PWYC. Numerus №1, Aestas 2026.">
+<meta property="og:image" content="/assets/cover.jpg">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://dailybre.ad/la/">
+<link rel="alternate" hreflang="en" href="https://dailybre.ad/">
+<link rel="alternate" hreflang="fr" href="https://dailybre.ad/fr/">
+<link rel="alternate" hreflang="es" href="https://dailybre.ad/es/">
+<link rel="alternate" hreflang="it" href="https://dailybre.ad/it/">
+<link rel="alternate" hreflang="pl" href="https://dailybre.ad/pl/">
+<link rel="alternate" hreflang="la" href="https://dailybre.ad/la/">
+<link rel="alternate" hreflang="zh-Hans" href="https://dailybre.ad/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://dailybre.ad/zh-hant/">
+<link rel="alternate" hreflang="pa" href="https://dailybre.ad/pa/">
+<link rel="alternate" hreflang="ko" href="https://dailybre.ad/ko/">
+<link rel="alternate" hreflang="ja" href="https://dailybre.ad/ja/">
+<link rel="alternate" hreflang="tl" href="https://dailybre.ad/tl/">
+<link rel="alternate" hreflang="vi" href="https://dailybre.ad/vi/">
+<link rel="alternate" hreflang="hi" href="https://dailybre.ad/hi/">
+<link rel="alternate" hreflang="ar" href="https://dailybre.ad/ar/">
+<link rel="alternate" hreflang="fa" href="https://dailybre.ad/fa/">
+<link rel="alternate" hreflang="x-default" href="https://dailybre.ad/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1d1a17; --bone:#f6f1e7; --panel:#eae4d6; --paper2:#efe9db;
+    --dark:#2a2723; --muted:#8d857a;
+    --pink:#f0477d; --teal:#12b795; --orange:#fe9a0d;
+    --maxw:1080px;
+    --checker:repeating-conic-gradient(var(--ink) 0% 25%,var(--bone) 0% 50%) 0 0/18px 18px;
+    --checker-inv:repeating-conic-gradient(var(--bone) 0% 25%,var(--ink) 0% 50%) 0 0/18px 18px;
+    --harlequin:repeating-conic-gradient(from 45deg,var(--pink) 0% 25%,var(--teal) 0% 50%) 0 0/26px 26px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'IBM Plex Mono',ui-monospace,'SFMono-Regular',monospace;
+    background:var(--bone); color:var(--ink);
+    -webkit-font-smoothing:antialiased; line-height:1.7; font-size:16px;
+  }
+  a{color:var(--pink);text-decoration:none;transition:color .15s}
+  a:hover{color:var(--teal)}
+  img{max-width:100%;display:block}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
+  section{scroll-margin-top:52px}
+
+  /* ---------- shared type ---------- */
+  .kicker{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;padding:5px 12px;background:var(--ink);color:var(--bone)}
+  .kicker.pink{background:var(--pink);color:var(--bone)}
+  .kicker.teal{background:var(--teal);color:var(--bone)}
+  .kicker.orange{background:var(--orange);color:var(--ink)}
+  .display{font-size:clamp(32px,5.4vw,54px);line-height:.96;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.015em}
+  .display .dot{color:var(--pink)}
+  .frak{font-family:'UnifrakturMaguntia',serif;font-weight:400;line-height:.9}
+  .dek{font-size:15.5px;line-height:1.7;max-width:62ch;color:#3a352e;margin-top:14px}
+  .prose{font-size:15.5px;line-height:1.78;max-width:64ch}
+  .prose p{margin:0 0 15px} .prose p:last-child{margin-bottom:0}
+  .justify{text-align:justify;hyphens:auto}
+  .meta{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .stamp{display:inline-block;border:2px solid var(--orange);color:var(--orange);
+    font-size:11px;font-weight:700;letter-spacing:.16em;padding:7px 13px;
+    transform:rotate(-2.5deg);text-transform:uppercase;white-space:nowrap;background:transparent}
+  .stamp.pink{border-color:var(--pink);color:var(--pink)}
+  .stamp.teal{border-color:var(--teal);color:var(--teal)}
+  .scribble{font-family:'Caveat',cursive;font-size:26px;line-height:1.1;color:var(--pink);
+    transform:rotate(-2.5deg);display:inline-block}
+  .scribble.teal{color:var(--teal)} .scribble.orange{color:var(--orange)}
+
+  /* ---------- section headers ---------- */
+  .sec{padding:84px 0}
+  .sec.tight{padding:64px 0}
+  .sechead{display:flex;align-items:baseline;gap:16px;margin-bottom:30px;flex-wrap:wrap}
+  .sechead .no{font-size:12px;font-weight:700;letter-spacing:.14em;background:var(--ink);
+    color:var(--bone);padding:5px 11px;white-space:nowrap}
+  .sechead .tag{font-size:12px;letter-spacing:.08em;color:var(--muted)}
+  .rule{height:6px;border-top:2px solid currentColor;border-bottom:1px dashed currentColor;
+    color:var(--ink);opacity:.9;margin:0}
+
+  /* ---------- cards / boxes with hard shadow ---------- */
+  .card{border:2px solid var(--ink);background:var(--bone);box-shadow:6px 6px 0 var(--ink)}
+  .card > .hd{display:flex;justify-content:space-between;gap:12px;align-items:center;
+    padding:10px 15px;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    border-bottom:2px solid var(--ink);background:var(--panel)}
+  .card > .hd.pink{background:var(--pink);color:var(--bone)}
+  .card > .hd.teal{background:var(--teal);color:var(--bone)}
+  .card > .hd.orange{background:var(--orange);color:var(--ink)}
+  .card > .hd .r{opacity:.85}
+  .card > .bd{padding:16px 18px}
+  .list .li{display:flex;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px dashed rgba(29,26,23,.45)}
+  .list .li:last-child{border-bottom:0}
+  .list .li .t{font-size:14px;line-height:1.45}
+  .list .li .end{margin-left:auto;flex:none;text-align:right}
+  .pgchip{font-weight:700;color:var(--bone);background:var(--ink);font-size:12px;
+    padding:2px 8px;flex:none;min-width:34px;text-align:center}
+  .tagend{font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+  .statuschip{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--bone);padding:2px 9px;text-transform:uppercase}
+
+  /* ---------- grids ---------- */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start}
+  .split.center{align-items:center}
+  .thirds{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 44px}
+  @media(max-width:860px){.split,.thirds,.toc-grid{grid-template-columns:1fr;gap:30px}}
+
+  /* ---------- full-bleed fields ---------- */
+  .field-ink{background:var(--ink);color:var(--bone)}
+  .field-ink a{color:var(--pink)} .field-ink .rule{color:var(--bone)}
+  .field-ink .card{background:#26221e;border-color:var(--bone);box-shadow:6px 6px 0 rgba(246,241,231,.85);color:var(--bone)}
+  .field-ink .card>.hd{background:#332e28;color:var(--bone);border-color:var(--bone)}
+  .field-ink .sechead .no{background:var(--bone);color:var(--ink)}
+  .band{height:26px;background:var(--checker)}
+  .band.harl{height:34px;background:var(--harlequin)}
+  .band.br{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+
+  /* ---------- top bar ---------- */
+  header.top{position:sticky;top:0;z-index:60;background:var(--ink);color:var(--bone);border-bottom:2px solid var(--bone)}
+  header.top .bar{display:flex;align-items:center;gap:18px;height:46px}
+  header.top .brand{font-family:'UnifrakturMaguntia',serif;font-size:22px;line-height:1}
+  header.top nav{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
+  header.top nav a{color:var(--bone);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  header.top nav a:hover{color:var(--pink)}
+  @media(max-width:760px){header.top nav{display:none}}
+
+  /* ---------- hero ---------- */
+  .hero{background:var(--ink);color:var(--bone);position:relative;overflow:hidden}
+  .hero .glow{position:absolute;inset:0;background:
+     radial-gradient(60% 50% at 78% 30%,rgba(240,71,125,.18),transparent 70%),
+     radial-gradient(50% 45% at 20% 80%,rgba(18,183,149,.15),transparent 70%);pointer-events:none}
+  .hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:start;padding:64px 0 82px}
+  .hero .mast{font-family:'UnifrakturMaguntia',serif;font-size:clamp(70px,13vw,158px);line-height:.82}
+  .hero .tagline{font-size:13px;letter-spacing:.34em;text-transform:uppercase;margin-top:22px;color:#e7ddcd}
+  .hero .issueline{font-size:11px;letter-spacing:.22em;text-transform:uppercase;margin-top:24px;line-height:2;color:#b7ad9e}
+  .hero p.intro{font-size:16px;line-height:1.75;margin-top:22px;max-width:46ch;color:#efe7d9}
+  .hero .badges{display:flex;gap:16px;flex-wrap:wrap;margin-top:30px;align-items:center}
+  .cover-wrap{position:relative}
+  .cover-wrap .tab{position:absolute;top:-14px;left:14px;background:var(--ink);
+    border:2px solid var(--bone);border-bottom:0;font-size:9.5px;letter-spacing:.16em;
+    text-transform:uppercase;padding:4px 10px;color:#cfc6b6}
+  .cover-frame{border:3px solid var(--bone);box-shadow:14px 14px 0 rgba(240,71,125,.85)}
+  .cover-frame img{width:100%;height:auto;display:block}
+  .cover-frame .cap{display:flex;justify-content:space-between;gap:8px;background:var(--bone);color:var(--ink);
+    font-size:9px;letter-spacing:.11em;padding:7px 10px;text-transform:uppercase;border-top:3px solid var(--bone);font-weight:600}
+  .cover-wrap .free{position:absolute;bottom:-30px;right:-14px;background:var(--bone);transform:rotate(4deg)}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;gap:40px;padding:52px 0 70px}
+    .cover-wrap{max-width:420px}.cover-frame{box-shadow:9px 9px 0 rgba(240,71,125,.85)}}
+
+  /* ---------- editor letter ---------- */
+  .letter .prose .drop{font-weight:700;background:var(--pink);color:var(--bone);padding:0 6px}
+  .dropcap::first-letter{font-family:'UnifrakturMaguntia',serif;font-size:4.6em;float:left;
+    line-height:.66;padding:6px 12px 0 0;color:var(--ink)}
+  .signoff{font-family:'Caveat',cursive;font-size:34px;color:var(--teal);transform:rotate(-2deg);margin-top:18px}
+  .masthead-list .li .lab{color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+  .masthead-list .li .val{margin-left:auto;font-weight:700;text-align:right;font-size:13.5px}
+
+  /* ---------- reports ---------- */
+  .report{display:flex;flex-direction:column;height:100%}
+  .report .bd{display:flex;flex-direction:column;flex:1}
+  .report h3{font-size:clamp(20px,2.5vw,25px);line-height:1.06;font-weight:800;text-transform:uppercase;margin:0 0 12px}
+  .report p{font-size:14px;line-height:1.62;margin:0}
+  .pull{border-left:6px solid var(--pink);padding:8px 0 8px 15px;font-size:17px;line-height:1.34;
+    font-weight:600;font-style:italic;margin-top:auto;padding-top:16px}
+  .pull.orange{border-color:var(--orange)} .pull.teal{border-color:var(--teal)}
+
+  /* ---------- stats ---------- */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .stat{border:2px solid var(--ink);background:var(--bone);box-shadow:6px 6px 0 var(--ink);padding:22px 14px;text-align:center}
+  .stat .n{font-size:clamp(44px,7vw,66px);font-weight:800;line-height:.9}
+  .stat .l{font-size:10px;letter-spacing:.1em;margin-top:12px;text-transform:uppercase;line-height:1.5;color:#3a352e}
+  @media(max-width:560px){.stats{grid-template-columns:1fr}}
+
+  /* ---------- quote band ---------- */
+  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;max-width:20ch}
+  .bigquote .mk{color:var(--pink);font-style:normal}
+  .attrib{font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:22px;color:#b7ad9e}
+
+  /* ---------- checkline / vote ---------- */
+  .checkline{padding:8px 0;border-bottom:1px dashed rgba(29,26,23,.4);font-size:14px;line-height:1.5}
+  .checkline:last-child{border-bottom:0}
+  .field-ink .checkline{border-color:rgba(246,241,231,.28)}
+  .fine{font-size:10px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--ink);color:var(--bone)}
+  footer .inner{padding:60px 0;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
+  footer img.logo{width:min(300px,72%);filter:invert(1)}
+  footer .tg{font-size:11px;letter-spacing:.45em;text-transform:uppercase}
+  footer p.blurb{font-size:14px;line-height:1.75;max-width:42ch;color:#e7ddcd}
+  .barcode{width:130px;height:38px;background:repeating-linear-gradient(90deg,var(--bone) 0 3px,var(--ink) 3px 5px,var(--bone) 5px 6px,var(--ink) 6px 10px)}
+  footer .fmeta{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap}
+  footer .colophon{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#8d857a;
+    border-top:1px solid rgba(246,241,231,.22);padding-top:20px;margin-top:8px;max-width:74ch;line-height:1.9}
+  .annot{margin-top:14px}
+  .annot.right{text-align:right}
+
+  /* ---------- i18n chrome: language picker + MT notice ---------- */
+  header.top .bar .langpick{position:relative;margin-left:14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  .langpick>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;color:var(--bone);padding:4px 2px}
+  .langpick>summary::-webkit-details-marker{display:none}
+  .langpick>summary .globe{font-size:13px}
+  .langpick>summary .car{font-size:9px;opacity:.6;transition:transform .15s}
+  .langpick[open]>summary .car{transform:rotate(180deg)}
+  .langmenu{position:absolute;top:100%;inset-inline-end:0;margin-top:6px;z-index:90;
+    background:var(--bone);border:2px solid var(--bone);box-shadow:6px 6px 0 rgba(0,0,0,.4);
+    display:grid;grid-template-columns:1fr 1fr;min-width:288px;max-height:min(72vh,420px);overflow:auto}
+  .langmenu a{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:8px 11px;
+    color:var(--ink);border-bottom:1px dashed rgba(29,26,23,.4);border-right:1px dashed rgba(29,26,23,.4);
+    font-size:12.5px;letter-spacing:.02em;text-transform:none;line-height:1.25}
+  .langmenu a:nth-child(even){border-right:none}
+  .langmenu a[aria-current]{background:var(--ink);color:var(--bone);font-weight:700}
+  .langmenu a:hover{background:var(--teal);color:var(--ink)}
+  .langmenu a .en{font-size:9px;opacity:.6;letter-spacing:.04em;text-transform:uppercase}
+  .langmenu a[aria-current] .en{opacity:.85}
+  .mtnote{background:var(--orange);color:var(--ink);font-size:11px;letter-spacing:.02em;
+    text-align:center;padding:8px 16px;line-height:1.55;border-bottom:2px solid var(--ink)}
+  .mtnote a{color:var(--ink);text-decoration:underline;font-weight:700}
+  @media(max-width:760px){header.top .bar .langpick{margin-left:auto}}
+  /* RTL adjustments for machine-translated Arabic / Farsi */
+  [dir="rtl"] .dropcap::first-letter{float:right;padding:6px 0 0 12px}
+  [dir="rtl"] .pull{border-left:0;border-right:6px solid var(--pink);padding-left:0;padding-right:15px}
+  [dir="rtl"] .pull.orange{border-right-color:var(--orange)}
+  [dir="rtl"] .pull.teal{border-right-color:var(--teal)}
+  [dir="rtl"] .list .li .end{margin-left:0;margin-right:auto}
+  [dir="rtl"] .masthead-list .li .val{margin-left:0;margin-right:auto}
+
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR ============ -->
+<header class="top">
+  <div class="wrap bar">
+    <span class="brand">Daily&nbsp;Bread</span>
+    <nav>
+      <a href="#letter">Epistula</a>
+      <a href="#contents">Index</a>
+      <a href="#history">Historia</a>
+      <a href="#voices">Voces</a>
+      <a href="#calendar">Calendarium</a>
+      <a href="#directory">Directorium</a>
+      <a href="#submit">Mitte</a>
+      <a href="#lab">Officina</a>
+    </nav>
+    <details class="langpick"><summary aria-label="Lingua"><span class="globe" aria-hidden="true">🌐</span> Latina <span class="car" aria-hidden="true">▾</span></summary><div class="langmenu"><a href="/" hreflang="en" lang="en"><span class="endo">English</span><span class="en">English</span></a><a href="/fr/" hreflang="fr" lang="fr"><span class="endo">Français</span><span class="en">French</span></a><a href="/es/" hreflang="es" lang="es"><span class="endo">Español</span><span class="en">Spanish</span></a><a href="/it/" hreflang="it" lang="it"><span class="endo">Italiano</span><span class="en">Italian</span></a><a href="/pl/" hreflang="pl" lang="pl"><span class="endo">Polski</span><span class="en">Polish</span></a><a href="/la/" hreflang="la" lang="la" aria-current="true"><span class="endo">Latina</span><span class="en">Latin</span></a><a href="/zh-hans/" hreflang="zh-Hans" lang="zh-Hans"><span class="endo">简体中文</span><span class="en">Chinese (Simplified)</span></a><a href="/zh-hant/" hreflang="zh-Hant" lang="zh-Hant"><span class="endo">繁體中文</span><span class="en">Chinese (Traditional)</span></a><a href="/pa/" hreflang="pa" lang="pa"><span class="endo">ਪੰਜਾਬੀ</span><span class="en">Punjabi</span></a><a href="/ko/" hreflang="ko" lang="ko"><span class="endo">한국어</span><span class="en">Korean</span></a><a href="/ja/" hreflang="ja" lang="ja"><span class="endo">日本語</span><span class="en">Japanese</span></a><a href="/tl/" hreflang="tl" lang="tl"><span class="endo">Tagalog</span><span class="en">Tagalog</span></a><a href="/vi/" hreflang="vi" lang="vi"><span class="endo">Tiếng Việt</span><span class="en">Vietnamese</span></a><a href="/hi/" hreflang="hi" lang="hi"><span class="endo">हिन्दी</span><span class="en">Hindi</span></a><a href="/ar/" hreflang="ar" lang="ar" dir="rtl"><span class="endo">العربية</span><span class="en">Arabic</span></a><a href="/fa/" hreflang="fa" lang="fa" dir="rtl"><span class="endo">فارسی</span><span class="en">Farsi</span></a></div></details>
+  </div>
+</header>
+<div class="mtnote">Haec est translatio machinalis originalis Anglici. Lege <a href="/">editionem Anglicam</a>.</div>
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="mast">Daily<br>Bread</div>
+        <div class="tagline">Commentarii Queer pro Okanagan</div>
+        <p class="intro">Primum numerum commentariorum queer invenisti in urbe quae nobis semper dicit se nullos habere. Kelowna historiam queer habet, pueros queer, senes queer, pistores et scribas queer; quod ei defuit est charta quae hoc clara voce dicat.</p>
+        <div class="issueline">Numerus №1 · Aestas 2026<br>Ruina Kelownae · 48 pp · Editio 500</div>
+        <div class="badges">
+          <span class="stamp">Coctura №1 · Recens</span>
+          <a href="#contents" class="stamp pink" style="cursor:pointer">Lege numerum ↓</a>
+        </div>
+      </div>
+      <div class="cover-wrap">
+        <span class="tab">Folium 00 · Operculum primum</span>
+        <div class="cover-frame">
+          <img src="/assets/cover.jpg" alt="Operculum Daily Bread №1 — os apertum dentibus stillantibus super linguam gemmatam, insigni litterarum gothicarum superposito" width="1000" height="1500">
+          <div class="cap"><span>№1 — Ruina Kelownae</span><span>Riposte Laboratories</span></div>
+        </div>
+        <span class="stamp free">Gratis / PWYC</span>
+      </div>
+    </div>
+  </div>
+  <div class="band"></div>
+</div>
+
+<!-- ============ EDITOR'S LETTER ============ -->
+<section id="letter" class="sec letter">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.00</span><span class="tag">// epistula redactoris</span></div>
+    <div class="rule" style="margin-bottom:34px"></div>
+    <div class="split">
+      <div>
+        <h2 class="display">Noster Cotidianus<br>Pavor</h2>
+        <div class="prose justify" style="margin-top:22px">
+          <p><span class="drop">SALVE.</span> Primum numerum commentariorum queer invenisti in urbe quae nobis semper dicit se nullos habere. Kelowna historiam queer habet, pueros queer, senes queer, pistores et scribas queer; quod ei defuit est charta quae hoc clara voce dicat.</p>
+          <p>Hic numerus de ruina est: pomaria, loca spectaculorum, calculus mercedis, frequentia in ponte. Non quod fatum extremum canimus, sed quod hic res statuto tempore dilabuntur, et tempus nominare primum est reficiendi opus.</p>
+          <p>Tabulam avelle. Imaginem colora. Furorem tuum et culinae praecepta nobis mitte. Haec res non nisi micis conspersa valet.</p>
+        </div>
+        <div class="signoff">— redactores ✕</div>
+      </div>
+      <div>
+        <div class="card masthead-list">
+          <div class="hd"><span>Album / №1 · Aestas 2026</span><span class="r">DB-000</span></div>
+          <div class="bd list">
+            <div class="li"><span class="lab">Redactor</span><span class="val">nomen tuum hic</span></div>
+            <div class="li"><span class="lab">Ars + comici</span><span class="val">invitatio aperta</span></div>
+            <div class="li"><span class="lab">Sedes vocum iuvenum</span><span class="val">tres scriptores, 17–24</span></div>
+            <div class="li"><span class="lab">Impressum in</span><span class="val">territorio syilx non cesso</span></div>
+          </div>
+        </div>
+        <p class="prose justify" style="margin-top:24px">Daily Bread in territorio non cesso et avito populi syilx Okanagan editur. Mercedem domino solvimus et reverentiam Nationi, et scimus alterum tantum horum deberi.</p>
+        <div style="margin-top:22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:160px">
+          <div class="meta" style="line-height:1.8">Subventum a Riposte<br>Laboratories Inc.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="band harl br"></div>
+
+<!-- ============ CONTENTS ============ -->
+<section id="contents" class="sec" style="background:var(--paper2)">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.01</span><span class="tag">// index · tabula / 48 pp</span></div>
+    <h2 class="display">Index<span class="dot">.</span></h2>
+    <p class="dek">Duodecim adiutores №1 fecerunt: scriptores annos 17–74 nati, duo photographi, unus pictor comicus, unus corrector patientissimus. Omne nomen locale est. Omnis merces soluta est antequam typographus.</p>
+    <div class="card" style="margin-top:30px">
+      <div class="hd"><span>Tabula / 48 pp</span><span class="r">DB-TOC</span></div>
+      <div class="bd"><div class="toc-grid list" id="toc"><div class="li"><span class="pgchip" style="background:#1d1a17">01</span><span class="t">Noster Cotidianus Pavor — epistula redactoris</span><span class="end tagend">Domus</span></div><div class="li"><span class="pgchip" style="background:#f0477d">04</span><span class="t">Ante Pontem — historia proterva</span><span class="end tagend">Historia</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">08</span><span class="t">Vacuitas — commentatio photographica, Bernard Ave</span><span class="end tagend">Photo</span></div><div class="li"><span class="pgchip" style="background:#12b795">11</span><span class="t">Voces Iuvenum — tres relationes ex agro</span><span class="end tagend">Sententia</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">14</span><span class="t">Micae — ep.1, golem habitationem quaerit</span><span class="end tagend">Comicus</span></div><div class="li"><span class="pgchip" style="background:#f0477d">16</span><span class="t">Quadraginta Anni Audaciae — Miss Demeanour</span><span class="end tagend">Colloquium</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">19</span><span class="t">Effectus Lacus / Messis — carmina</span><span class="end tagend">Litterae</span></div><div class="li"><span class="pgchip" style="background:#12b795">20</span><span class="t">Murus — media pagina avellenda</span><span class="end tagend">Ars</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">23</span><span class="t">Colora Tuam Ipsius Ruinam</span><span class="end tagend">Satura</span></div><div class="li"><span class="pgchip" style="background:#f0477d">24</span><span class="t">Deme Me — folium titulorum adhaesivorum</span><span class="end tagend">Tituli</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">25</span><span class="t">Index Exspectantium — de cura medica</span><span class="end tagend">Res</span></div><div class="li"><span class="pgchip" style="background:#12b795">28</span><span class="t">Lacus Rapit — fabula pars 1</span><span class="end tagend">Litterae</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">30</span><span class="t">Ex Officina — patroni professio</span><span class="end tagend">Riposte</span></div><div class="li"><span class="pgchip" style="background:#f0477d">32</span><span class="t">Roga Indigenam Gay / Recensiones / Calendarium</span><span class="end tagend">Officium</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">36</span><span class="t">Morsus Repercussus — iudicium popinae</span><span class="end tagend">Cibus</span></div><div class="li"><span class="pgchip" style="background:#f0477d">37</span><span class="t">Rotatio — quae audimus</span><span class="end tagend">Musica</span></div><div class="li"><span class="pgchip" style="background:#12b795">38</span><span class="t">Retro + Pelliculae in Horto</span><span class="end tagend">Pellicula</span></div><div class="li"><span class="pgchip" style="background:#12b795">40</span><span class="t">Directorium + Epistulae Micarum</span><span class="end tagend">Auxilium</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">44</span><span class="t">Qui Hoc Fecerunt — turba, congregata</span><span class="end tagend">Colophon</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HISTORY + LEDGER ============ -->
+<section id="history" class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.02</span><span class="tag">// historia · ante pontem</span></div>
+    <div class="split">
+      <div>
+        <h2 class="display">Historia<br>Proterva</h2>
+        <div class="prose justify" style="margin-top:22px">
+          <p>Vallis se bis vendidit: primum ut Eden, deinde ut bona pretiosa. Pomorum cultores tam saepe decoxerunt ut horrea propriam pecuniam chartaceam cuderent; cum poma perierunt, promissum sol otii factus est; cum otiosi pretiis lectores expulerunt, promissum cenacula ad lacum facta sunt. Quisque actus eodem modo desiit: qui laborem faciebant procul ab aqua magis magisque habitabant.</p>
+          <p>Historia queer per omnia intexta est: aulae saltatoriae noctibus non publicis, retia amicitiae quae etiam indices habitationis erant, communitas quae superfuit utilis et tacita manendo donec ei non iam necesse fuit.</p>
+        </div>
+        <div class="annot"><span class="scribble orange">«tacita donec ei non iam necesse fuit» — in tunica imprimenda</span></div>
+      </div>
+      <div>
+        <span class="kicker">Tabulae / quid quando corruit</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>Eventum</span><span>Status</span></div>
+          <div class="bd list" id="ledger"><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1913</span><span class="t">pretia pomorum corruunt; oeconomia chartae nummariae incipit</span><span class="end"><span class="statuschip" style="background:#f0477d">Ruina</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1930s</span><span class="t">dimissiones ex horreis, per totam vallem</span><span class="end"><span class="statuschip" style="background:#f0477d">Ruina</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1958</span><span class="t">pons aperitur; portitores una nocte inutiles</span><span class="end"><span class="statuschip" style="background:#fe9a0d">Conversio</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1973</span><span class="t">ALR pomariorum speculationem congelat (breviter)</span><span class="end"><span class="statuschip" style="background:#12b795">Parry</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1980s</span><span class="t">aetas serrariae finitur; aetas vini incipit</span><span class="end"><span class="statuschip" style="background:#fe9a0d">Conversio</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2003</span><span class="t">tempestas ignea; 239 domus, 30k fugati</span><span class="end"><span class="statuschip" style="background:#f0477d">Ardor</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2017</span><span class="t">annus diluvii; lacus pontem ligneum rapit</span><span class="end"><span class="statuschip" style="background:#f0477d">Diluvium</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2021</span><span class="t">cupula caloris; locus calidissimus in Canada, iterum</span><span class="end"><span class="statuschip" style="background:#f0477d">Ardor</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2024</span><span class="t">ultimus locus queer proprius clauditur</span><span class="end"><span class="statuschip" style="background:#f0477d">Ruina</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2026</span><span class="t">hi commentarii. tuae partes, urbs.</span><span class="end"><span class="statuschip" style="background:#12b795">Riposte</span></span></div></div>
+        </div>
+        <p class="meta" style="margin-top:14px;line-height:1.7"><span style="color:var(--pink);font-weight:700">Ratio</span> — ex urbis tabulariis, ephemeridum archivis, et senibus qui aderant collecta. Correctiones gratae et exspectatae.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ YOUNG VOICES ============ -->
+<section id="voices" class="sec field-ink">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">// sedes vocum iuvenum · non recognita. non emendata. recta.</span></div>
+    <h2 class="display">Voces Iuvenum</h2>
+    <p class="dek" style="color:#cfc6b6">Tres relationes ex agro a scriptoribus qui suffragium ferre nondum possunt sed calculum mercedis iam facere possunt. Eos remuneravimus; verbum non tetigimus.</p>
+    <div class="thirds" style="margin-top:34px">
+      <div class="card report"><div class="hd pink"><span>Relatio 01</span><span>Annos 19 · Habitatio</span></div>
+        <div class="bd">
+          <h3>Nemo Meae Aetatis Manere Potest</h3>
+          <p>Duobus operibus laboro et cubiculum duplex cum tribus hominibus partior, et ego felix exemplum sum. Colloquium nostri gregis lenta valedictionis celebratio est: Vernon, Calgary, cella materna in Surrey.</p>
+          <div class="pull">«Omnis inspectio quadraginta homines profunda est et unus semper flet.»</div>
+        </div>
+      </div>
+      <div class="card report"><div class="hd orange"><span>Relatio 02</span><span>Annos 22 · Confessio</span></div>
+        <div class="bd">
+          <h3>Palam apud Horreum</h3>
+          <p>Me palam feci in convivio silvestri in Glenmore et pessimum quod accidit fuit quod quidam nomine Tyler dixit «bene» et rogavit num eum domum veherem. Non paradisus, non infernus, tantum parva urbs celerius quam eius curia discens.</p>
+          <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange);border:0;padding-left:0">geographia est ultimum latibulum</div>
+        </div>
+      </div>
+      <div class="card report"><div class="hd teal"><span>Relatio 03</span><span>Annos 17 · Tempus incendiorum</span></div>
+        <div class="bd">
+          <h3>Bis Fugi Nec Suffragium Ferre Possum</h3>
+          <p>Imagines pueritiae meae per annos fumi digestae sunt. Currum oneravimus anno 2021 et iterum anno 2023, et utroque tempore adulti per radiophonium id sine exemplo appellaverunt. Exemplum habet.</p>
+          <div class="pull teal">«Exemplum ego sum.»</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WAITLIST STATS ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="split center">
+      <div>
+        <span class="kicker pink">10 · Res praesentes</span>
+        <h2 class="display" style="margin-top:16px">Index Exspectantium</h2>
+        <p class="dek">Curam medicam queer peritam in Central Okanagan quaerere est opus partiarium sine emolumentis. Omne valetudinarium pro te vocavimus; omnes quos attigimus idem triangulum descripserunt: telephoni ludum, delegationis moras, et viam longam.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="n" style="color:var(--pink)">14</div><div class="l">Menses · media mora valetudinarii generis</div></div>
+        <div class="stat"><div class="n" style="color:var(--orange)">2</div><div class="l">Medici novos aegros accipientes</div></div>
+        <div class="stat"><div class="n" style="color:var(--teal)">400</div><div class="l">km ad proximam optionem</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INTERVIEW QUOTE ============ -->
+<div class="field-ink sec tight">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.05</span><span class="tag" style="color:#b7ad9e">// colloquium · quadraginta anni audaciae</span></div>
+    <div class="bigquote"><span class="mk">"</span>Tabernam non habebamus, carissime. Cellas habebamus, et audaciam habebamus.<span class="mk">"</span></div>
+    <div class="attrib">Miss Demeanour · in Okanagan agens ab anno 1986</div>
+    <p class="prose" style="margin-top:26px;color:#e7ddcd;max-width:66ch">«Spectatores iuveniores facti sunt et merces asperior. Anno '86 periculum homines erant; nunc periculum domini sunt. Quo omnes abierunt cum loca clausa sunt? Nusquam, deliciae; hoc est arcanum. Omnes adhuc hic sumus, tantum in gymnasiis et pomariis et alienis culinis convenimus. Communitas non est inscriptio.»</p>
+  </div>
+</div>
+
+<!-- ============ CALENDAR ============ -->
+<section id="calendar" class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.14</span><span class="tag">// calendarium · aug–oct 2026 · exscinde + in refrigeratorium</span></div>
+    <div class="split">
+      <div>
+        <h2 class="display">Calendarium<span class="dot" style="color:var(--teal)">.</span></h2>
+        <p class="dek">Indices gratuiti sunt; scribe ante diem 15. Optiones sobriae et omnibus aetatibus signo ◦ notatae.</p>
+        <div class="card" style="margin-top:24px">
+          <div class="hd"><span>Aug — Oct 2026</span><span class="r">Exscinde + in refrigeratorium</span></div>
+          <div class="bd list" id="events"><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Aug 07</span><span class="t"><b>Prima Veneris in Officina ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Riposte officinae area — circumitus, scamna, zines</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Aug 14</span><span class="t"><b>Pelliculae in Horto №1 ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">City Park — Paris Is Burning</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Aug 15</span><span class="t"><b>Conventus Litoris Queer ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Gyro Beach, ad septentriones — umbram ad communicandum affer</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Aug 22</span><span class="t"><b>Nox drag Lunae Messis</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">aula communitatis — PWYC ad ianuam</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Sep 05</span><span class="t"><b>Zines faciendi + submissionum statio ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">bibliothecae officina — furorem tuum affer</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Sep 15</span><span class="t"><b>Terminus submissionis №2</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">ars, sententia, carmina</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Sep 19</span><span class="t"><b>Ambulatio per pomarium cum sene ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">scamna East Kelowna — historia sub pedibus</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Oct 03</span><span class="t"><b>Nox cassettarum: the Shoebox Fonds</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">locus nondum notus — Miss Demeanour praesidens</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Oct 17</span><span class="t"><b>Emissio numeri №2 + certamen colorandi</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">locus in №2. scilicet</span></span></div></div>
+        </div>
+      </div>
+      <div>
+        <span class="kicker teal">Pelliculae in horto / a Daily Bread curatae</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>Tabula aestiva / sub crepusculo</span><span class="r">Pluvia nos in Officinam movet</span></div>
+          <div class="bd list" id="screenings"><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Aug 14</span><span class="t"><b>Paris Is Burning (1990)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">City Park, sub crepusculo</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Sep 04</span><span class="t"><b>My Own Private Idaho (1991)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Ben Lee Park, sub crepusculo</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Sep 25</span><span class="t"><b>The Watermelon Woman (1996)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Rutland Centennial Park, sub crepusculo</span></span></div><div class="li"><span class="fine">Gratis / PWYC · subscriptiones activae · proiector + vis: cellulae recuperatae, Project HEX</span></div></div>
+        </div>
+        <div class="card" style="margin-top:24px">
+          <div class="hd pink"><span>Suffragium — spectaculum Octobris</span></div>
+          <div class="bd">
+            <div class="checkline">☐ Portrait of a Lady on Fire (2019)</div>
+            <div class="checkline">☐ Hedwig and the Angry Inch (2001)</div>
+            <div class="checkline">☐ Bound (1996)</div>
+            <div class="checkline fine">Unum nota · photographa · mitte. Pelliculae res publica.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DIRECTORY ============ -->
+<section id="directory" class="sec" style="background:var(--paper2)">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.18</span><span class="tag">// auxilium mutuum · hanc paginam serva · singulis trimestribus probata</span></div>
+    <div class="split">
+      <div>
+        <span class="kicker teal">Hanc paginam serva / directorium</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>Singulis trimestribus probata · avellere licet</span></div>
+          <div class="bd list" id="dir-list"><div class="li"><span class="t" style="font-weight:700">Linea auxilii (24/7, trans perita)</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">vacans — proba ante impressionem</span></div><div class="li"><span class="t" style="font-weight:700">Index valetudinariorum consensus informati</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">singulis trimestribus renovatus · haec pagina</span></div><div class="li"><span class="t" style="font-weight:700">Statio iuventutis (14–24) ◦</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">mer + sab · in centro</span></div><div class="li"><span class="t" style="font-weight:700">Cella auxilii mutui</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">rutland · nullae interrogationes</span></div><div class="li"><span class="t" style="font-weight:700">Auxilium iuridicum — defensio inquilini</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">primis Lunae diebus · bibliotheca</span></div><div class="li"><span class="t" style="font-weight:700">Conventus senum queer (55+) ◦</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">Iovis diebus · ad lacum</span></div><div class="li"><span class="t" style="font-weight:700">Conventus sobrii ◦</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">vide calendarium, signo ◦ notatum</span></div></div>
+        </div>
+        <p class="meta" style="margin-top:14px;line-height:1.7">Deestne subsidium? Numerus falsus? Nobis dic — haec pagina tota res est.</p>
+      </div>
+      <div>
+        <span class="kicker">Quid revera iuvat / index</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>In agro probatum</span></div>
+          <div class="bd">
+            <div class="checkline">☐ Index valetudinariorum consensus informati — singulis trimestribus renovatus</div>
+            <div class="checkline">☐ Pharmacopolae plura quam putas renovare possunt — recta roga</div>
+            <div class="checkline">☐ Cura per interrete valet. Wifi malum adhuc brevius est quam 400 km</div>
+            <div class="checkline">☐ Amicum ad constituta adduc. Administratio testes veretur</div>
+          </div>
+        </div>
+        <div class="annot"><span class="scribble">salutem Deb, serio</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="band harl br"></div>
+
+<!-- ============ SUBMIT ============ -->
+<section id="submit" class="sec field-ink">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">// submissiones · №2 — «gelu solutum»</span></div>
+    <div class="split">
+      <div>
+        <h2 class="display">Micis Id<br>Conspurca<span class="dot">.</span></h2>
+        <p class="dek" style="color:#cfc6b6">Fabula in partes divisa, media pagina aperta, sedes vocum iuvenum, directorium quod recens manet: №1 primum exemplar est communitatis se esse arguentis. №2 est «Gelu Solutum» — quod redit. Furorem tuum et culinae praecepta nobis mitte.</p>
+        <div style="margin-top:26px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+          <a href="mailto:hello@dailybread.example?subject=WALL" class="stamp pink">hello@dailybread.example</a>
+          <span class="stamp">Terminus · Sept 15</span>
+        </div>
+        <div class="annot"><span class="scribble teal">carmina mitte. mira grata.</span></div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="hd orange"><span>Quae accipimus</span></div>
+          <div class="bd">
+            <div class="checkline">▸ <b>Ars pro media pagina</b> — A4 transversa, 300dpi, quovis modo. Solvimus; iura tua manent.</div>
+            <div class="checkline">▸ <b>Sententia (infra 25)</b> — 500 verba iustae irae.</div>
+            <div class="checkline">▸ <b>Carmina &amp; fabulae</b> — omnia bis legimus.</div>
+            <div class="checkline">▸ <b>Comici</b> — sex tabellas pro loco hospitis nobis propone.</div>
+            <div class="checkline">▸ <b>Indices &amp; correctiones</b> — gratis, semper.</div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:24px">
+          <div class="hd pink"><span>Suffragium — argumentum №2</span></div>
+          <div class="bd">
+            <div class="checkline">☐ Gelu Solutum (quod redit)</div>
+            <div class="checkline">☐ Iura Aquae &amp; Iniuriae</div>
+            <div class="checkline">☐ Custodia Nocturna (quis Kelownam hora 2 regit)</div>
+            <div class="checkline fine">Unum nota · photographa · mitte. Res publica.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FROM THE LAB ============ -->
+<section id="lab" class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.16</span><span class="tag">// ex officina · patroni professio, grandibus litteris impressa</span></div>
+    <div class="split">
+      <div>
+        <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:min(280px,80%)">
+        <div class="meta" style="letter-spacing:.45em;margin-top:10px">Laboratories Inc.</div>
+        <h2 class="display" style="margin-top:22px">Ex Officina</h2>
+        <div class="prose justify" style="margin-top:18px">
+          <p>Plena professio, grandibus litteris impressa: hi commentarii a Riposte Laboratories subventi sunt, officina Kelownensi quae detrimento repugnat plastico redivivo in formas iniecto et vi modulari ex cellulis recuperatis. Quod hic fabricamus communicamus, in isdem paginis, eadem voce qua ceteri omnes.</p>
+          <p>Pactum, scriptum: Officina typographo solvit et duas paginas accipit. Redactores lectoribus respondent, non patrono. Si id umquam mutabitur, pagina coloranda te certiorem faciet.</p>
+        </div>
+        <div style="margin-top:22px"><span class="stamp">Patroni professio · subscripta</span></div>
+        <div class="signoff" style="margin-top:20px">parry. riposte. recycle.</div>
+      </div>
+      <div>
+        <span class="kicker">Hoc trimestre / tabula status</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>Q3 · 2026</span><span class="r">Rev. A</span></div>
+          <div class="bd list" id="lab-board"><div class="li"><span class="t">Plastic Works — formae v2, scamna hortensia ex #5 alveis</span><span class="end"><span class="statuschip" style="background:#12b795">Actuosum</span></span></div><div class="li"><span class="t">Project HEX — machina cellularum recuperatarum aestimandarum</span><span class="end"><span class="statuschip" style="background:#fe9a0d">In opere</span></span></div><div class="li"><span class="t">Esh — officinae adiutor, nunc tabula alba</span><span class="end"><span class="statuschip" style="background:#f0477d">Delineatur</span></span></div><div class="li"><span class="t">Daily Bread №2 — suffragium argumenti</span><span class="end"><span class="statuschip" style="background:#1d1a17">Apertum</span></span></div><div class="li"><span class="t">Prima Veneris ianuae apertae — munda plastica affer</span><span class="end"><span class="statuschip" style="background:#12b795">Recurrens</span></span></div></div>
+        </div>
+        <div class="card" style="margin-top:24px">
+          <div class="hd orange"><span>Cur commentarios subvenire?</span></div>
+          <div class="bd" style="font-size:14px;line-height:1.7">Quia officina quae materiae detrimentum reficit in urbe materiam culturalem amittente dimidium opus faceret. Charta est fundamentum. Sicut et noctes drag. Sumptus probatus.</div>
+        </div>
+        <p class="meta" style="margin-top:14px;line-height:1.7">Officinam visita: ianuae apertae primis Veneris diebus · munda plastica #2 + #5 affer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER / BACK COVER ============ -->
+<footer>
+  <div class="band harl" style="border-top:2px solid var(--bone)"></div>
+  <div class="wrap inner">
+    <img class="logo" src="/assets/riposte-logo.svg" alt="Riposte Laboratories">
+    <div class="tg">Riposte Laboratories Inc.</div>
+    <p class="blurb">Daily Bread singulis trimestribus Kelownae in BC coquitur. Gratis ubi eos invenisti. Ubi non potes, solve quod potes.</p>
+    <div class="fmeta">
+      <div class="barcode"></div>
+      <div class="meta" style="line-height:1.7;text-align:left">ISSN pendens<br>№1 · Aestas 2026</div>
+    </div>
+    <div class="signoff" style="color:var(--pink);margin-top:4px">ad gelu solutum te videbimus ✕</div>
+    <div class="colophon">Impressum in territorio non cesso syilx Okanagan, editione 500. Compositum litteris IBM Plex Mono et UnifrakturMaguntia. Errata nostra sunt; correctiones tuae; atramentum reliquum in titulos adhaesivos abiit. · Parry. Riposte.</div>
+  </div>
+  <div class="band" style="border-top:2px solid var(--bone)"></div>
+</footer>
+
+</body>
+</html>
