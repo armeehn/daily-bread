@@ -175,7 +175,7 @@ ${mtnote(t, code)}
       <div class="cover-wrap">
         <span class="tab">${t['hero.sheet']}</span>
         <div class="cover-frame">
-          <img src="/assets/cover.jpg" alt="${esc(t['hero.coverAlt'])}" width="1000" height="1536">
+          <img src="/assets/cover.jpg" alt="${esc(t['hero.coverAlt'])}" width="1000" height="1500">
           <div class="cap"><span>${t['hero.capA']}</span><span>${t['hero.capB']}</span></div>
         </div>
         <span class="stamp free">${t['hero.free']}</span>
