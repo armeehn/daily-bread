@@ -3,10 +3,11 @@
 Goal: the **editor** lives at a private `*.pages.dev` URL that asks for a login,
 while the **magazine** stays public on `ourdailybre.ad` (GitHub Pages, untouched).
 
-This branch (`studio`) is the deploy source. Serving it from the root already
-works: `studio.html` loads `db.js` and `assets/` by relative path, and
-`_redirects` sends the project root (`/`) to `/studio.html`, so the landing page
-is the editor.
+`main` is the deploy source. The root (`/`) serves the public magazine
+(`index.html`); the studio editor is served at `/studio` (Cloudflare Pages maps
+`studio.html` to the clean `/studio` URL, and `_redirects` makes it explicit).
+`studio.html` loads `db.js` and `assets/` by relative path, so it works from
+either URL. Gate the studio with Access on the `/studio` path (step 2).
 
 Everything below is done in the Cloudflare dashboard with your own account — no
 secrets live in this repo.
