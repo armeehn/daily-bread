@@ -1,7 +1,10 @@
-# Cloudflare Pages routing for db.ripostelabs.xyz
-# (Ignored by GitHub Pages; only affects the Cloudflare Pages deploy.)
+# Cloudflare routing for db.ripostelabs.xyz  (assets-only Worker; see wrangler.jsonc)
+# (Ignored by GitHub Pages; only affects the Cloudflare deploy.)
 #
-# Root serves the public magazine (index.html); the studio editor lives at
-# /studio. Pages already serves studio.html at the clean /studio URL, but we
-# make it explicit so the mapping survives any future default changes.
-/studio    /studio.html    200
+# No rules are needed:
+#   /        -> index.html   (the public magazine; served automatically)
+#   /studio  -> studio.html  (served automatically by html_handling = auto-trailing-slash)
+#
+# Do NOT add a `/studio  /studio.html  200` rewrite: html_handling redirects the
+# .html asset back to the clean /studio URL, so a rewrite creates an infinite
+# 307 redirect loop. Let the clean-URL handling serve studio.html at /studio.
