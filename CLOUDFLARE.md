@@ -4,12 +4,11 @@ Goal: the **editor** lives at a private Workers URL that asks for a login. The
 whole deploy is gated by Cloudflare Access, so every file (studio + engine) is
 protected before it loads.
 
-The site is served as **static assets** straight from the repo root (an
-"assets-only" Worker; there is no server script). `studio.html` loads `db.js` and
-`assets/` by relative path, and `_redirects` sends the project root (`/`) to
-`/studio.html`, so the landing page is the editor. Config lives in
-[`wrangler.jsonc`](./wrangler.jsonc); `.assetsignore` keeps repo-only files
-(docs, `tools/`) out of the upload.
+`main` is the deploy source. The root (`/`) serves the public magazine
+(`index.html`); the studio editor is served at `/studio` (Cloudflare Pages maps
+`studio.html` to the clean `/studio` URL, and `_redirects` makes it explicit).
+`studio.html` loads `db.js` and `assets/` by relative path, so it works from
+either URL. Gate the studio with Access on the `/studio` path (step 2).
 
 Everything below is done in the Cloudflare dashboard with your own account — no
 secrets live in this repo.

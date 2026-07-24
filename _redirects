@@ -1,3 +1,7 @@
-# Cloudflare Workers static assets: land the project root on the studio.
-# (Honoured by the Workers assets runtime; ignored by GitHub Pages.)
-/studio    /studio.html    302
+# Cloudflare Pages routing for db.ripostelabs.xyz
+# (Ignored by GitHub Pages; only affects the Cloudflare Pages deploy.)
+#
+# Root serves the public magazine (index.html); the studio editor lives at
+# /studio. Pages already serves studio.html at the clean /studio URL, but we
+# make it explicit so the mapping survives any future default changes.
+/studio    /studio.html    200
