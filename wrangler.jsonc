@@ -9,7 +9,9 @@
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
     // Serve the whole repo root. `studio.html` loads `db.js` and `assets/` by
-    // relative path; `_redirects` sends `/` to `/studio.html`.
+    // relative path. Root (/) serves the public magazine (index.html); the
+    // studio is served at the clean /studio URL by html_handling (default
+    // auto-trailing-slash). See _redirects for why no rewrite rule is used.
     "directory": ".",
     "not_found_handling": "404-page"
   },
