@@ -153,6 +153,8 @@
         <button data-w="full" class="on">Full</button>
         <button data-w="tab">Tablet</button>
         <button data-w="phone">Phone</button>
+        <button id="arrangeBtn" title="Drag elements to reposition; they snap to alignment guides. Double-click an element to reset it.">Arrange ⤢</button>
+        <button id="clearArrangeBtn" title="Reset every element to its default position" style="display:none">Clear layout</button>
         <button id="openTab">Open ↗</button>
       </div>
       <div class="frame-wrap"><iframe id="preview" title="Daily Bread preview"></iframe></div>
@@ -457,6 +459,136 @@ document.querySelectorAll(".pvbar button[data-w]").forEach(b=>{
 });
 $("#openTab").addEventListener("click",()=>{
   const w=window.open("","_blank"); w.document.open(); w.document.write(DB.render(model)); w.document.close();
+});
+
+/* ---------- Arrange mode: free-drag [data-mv] elements with alignment + snapping ----------
+   Elements tagged `data-mv` in DB.render become draggable inside the preview. We move
+   them with the CSS `translate` property (layout-neutral — no reflow, and it stacks on top
+   of any `transform:rotate` the element already has). Dragging snaps the element's edges and
+   centres to those of the other movable elements and to the text-column centre; guide lines
+   show the match. The offset {dx,dy} is written back to model.positions[key], so it bakes
+   into the published index.html via DB.render. Double-click an element to send it home. */
+const SNAP = 6;               // snap distance, px
+let arrangeOn = false;
+function mvPos(key){ model.positions = model.positions || {}; return model.positions[key] || {dx:0,dy:0}; }
+function setMvPos(key,dx,dy){
+  model.positions = model.positions || {};
+  dx = Math.round(dx); dy = Math.round(dy);
+  if(!dx && !dy) delete model.positions[key]; else model.positions[key] = {dx,dy};
+}
+function persistPositions(){ save(); setStatus("Saved ✓", false); }
+
+const MV_STYLE = `
+  [data-mv]{cursor:move; outline:1.5px dashed rgba(240,71,125,.85); outline-offset:3px}
+  [data-mv]:hover{outline-color:#12b795; outline-style:solid}
+  [data-mv].mv-drag{outline-color:#12b795; outline-style:solid}
+  body.mv-arrange a:not([data-mv]){pointer-events:none}
+  .mv-guide{position:fixed; background:#f0477d; z-index:2147483646; pointer-events:none}
+  .mv-guide.v{width:1px; top:0; bottom:0} .mv-guide.h{height:1px; left:0; right:0}
+  .mv-badge{position:fixed; z-index:2147483647; pointer-events:none; background:#1d1a17; color:#f6f1e7;
+    font:600 10px/1.35 'IBM Plex Mono',ui-monospace,monospace; letter-spacing:.04em; padding:2px 6px; white-space:nowrap}`;
+
+function ifDoc(){ try{ return $("#preview").contentDocument; }catch(e){ return null; } }
+
+function enterArrange(){
+  const doc = ifDoc(); if(!doc || !doc.body) return;
+  exitArrange(doc);                                   // idempotent re-attach after reloads
+  const st = doc.createElement("style"); st.id = "mv-style"; st.textContent = MV_STYLE;
+  doc.head.appendChild(st);
+  doc.body.classList.add("mv-arrange");
+  wireArrange(doc);
+}
+function exitArrange(docArg){
+  const doc = docArg || ifDoc(); if(!doc) return;
+  const st = doc.getElementById("mv-style"); if(st) st.remove();
+  doc.body && doc.body.classList.remove("mv-arrange");
+  clearGuides(doc);
+  if(doc.__mvWired){ doc.removeEventListener("pointerdown", doc.__mvDown, true);
+    doc.removeEventListener("pointermove", doc.__mvMove, true);
+    doc.removeEventListener("pointerup", doc.__mvUp, true);
+    doc.removeEventListener("dblclick", doc.__mvDbl, true); doc.__mvWired = false; }
+}
+function clearGuides(doc){ doc && doc.querySelectorAll(".mv-guide,.mv-badge").forEach(n=>n.remove()); }
+
+function wireArrange(doc){
+  if(doc.__mvWired) return;
+  let drag = null;
+
+  doc.__mvDown = e=>{
+    const el = e.target.closest && e.target.closest("[data-mv]");
+    if(!el || !arrangeOn) return;
+    e.preventDefault();
+    const key = el.getAttribute("data-mv"), base = mvPos(key);
+    // Static snap lines from every OTHER movable element (edges + centres),
+    // plus the centre X of the element's text column (.wrap).
+    const vlines = [], hlines = [];
+    doc.querySelectorAll("[data-mv]").forEach(o=>{
+      if(o===el) return; const r = o.getBoundingClientRect();
+      vlines.push(r.left, r.left + r.width/2, r.right);
+      hlines.push(r.top, r.top + r.height/2, r.bottom);
+    });
+    const wrap = el.closest(".wrap"); if(wrap){ const wr = wrap.getBoundingClientRect(); vlines.push(wr.left + wr.width/2); }
+    drag = { el, key, base, sx:e.clientX, sy:e.clientY, vlines, hlines, cur:base };
+    el.classList.add("mv-drag");
+    try{ el.setPointerCapture(e.pointerId); }catch(_){}
+  };
+  doc.__mvMove = e=>{
+    if(!drag) return;
+    let dx = drag.base.dx + (e.clientX - drag.sx), dy = drag.base.dy + (e.clientY - drag.sy);
+    drag.el.style.translate = dx+"px "+dy+"px";
+    const r = drag.el.getBoundingClientRect();
+    const cx = [r.left, r.left + r.width/2, r.right], cy = [r.top, r.top + r.height/2, r.bottom];
+    let bv=null; drag.vlines.forEach(x=> cx.forEach(c=>{ const d=x-c; if(Math.abs(d)<=SNAP && (!bv||Math.abs(d)<Math.abs(bv.d))) bv={d,x}; }));
+    let bh=null; drag.hlines.forEach(y=> cy.forEach(c=>{ const d=y-c; if(Math.abs(d)<=SNAP && (!bh||Math.abs(d)<Math.abs(bh.d))) bh={d,y}; }));
+    if(bv) dx += bv.d; if(bh) dy += bh.d;
+    if(bv||bh) drag.el.style.translate = dx+"px "+dy+"px";
+    drag.cur = {dx,dy};
+    drawGuides(doc, bv, bh, drag.el.getBoundingClientRect(), dx, dy);
+  };
+  doc.__mvUp = ()=>{
+    if(!drag) return;
+    drag.el.classList.remove("mv-drag"); clearGuides(doc);
+    setMvPos(drag.key, drag.cur.dx, drag.cur.dy); persistPositions();
+    drag = null;
+  };
+  doc.__mvDbl = e=>{
+    const el = e.target.closest && e.target.closest("[data-mv]");
+    if(!el || !arrangeOn) return;
+    e.preventDefault();
+    el.style.translate = ""; setMvPos(el.getAttribute("data-mv"), 0, 0); persistPositions();
+  };
+  doc.addEventListener("pointerdown", doc.__mvDown, true);
+  doc.addEventListener("pointermove", doc.__mvMove, true);
+  doc.addEventListener("pointerup", doc.__mvUp, true);
+  doc.addEventListener("dblclick", doc.__mvDbl, true);
+  doc.__mvWired = true;
+}
+
+function drawGuides(doc, bv, bh, rect, dx, dy){
+  clearGuides(doc);
+  if(bv){ const g=doc.createElement("div"); g.className="mv-guide v"; g.style.left=bv.x+"px"; doc.body.appendChild(g); }
+  if(bh){ const g=doc.createElement("div"); g.className="mv-guide h"; g.style.top=bh.y+"px"; doc.body.appendChild(g); }
+  const b=doc.createElement("div"); b.className="mv-badge";
+  b.textContent = "Δ "+Math.round(dx)+", "+Math.round(dy);
+  let bx = rect.left, by = rect.top - 22; if(by < 2) by = rect.bottom + 6;
+  b.style.left = Math.max(2, bx)+"px"; b.style.top = by+"px";
+  doc.body.appendChild(b);
+}
+
+// Re-attach after every preview reload (srcdoc is replaced on each edit / width change keeps it).
+$("#preview").addEventListener("load", ()=>{ if(arrangeOn) enterArrange(); });
+
+$("#arrangeBtn").addEventListener("click",()=>{
+  arrangeOn = !arrangeOn;
+  $("#arrangeBtn").classList.toggle("on", arrangeOn);
+  $("#clearArrangeBtn").style.display = arrangeOn ? "" : "none";
+  if(arrangeOn){ enterArrange(); toast("Arrange: drag elements — they snap to guides. Double-click one to reset it."); }
+  else exitArrange();
+});
+$("#clearArrangeBtn").addEventListener("click",()=>{
+  if(!confirm("Reset every element to its default position?")) return;
+  model.positions = {}; save(); renderPreview();   // reload re-enters arrange via the load hook
+  toast("Layout reset");
 });
 
 /* mobile tabs */
