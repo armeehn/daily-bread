@@ -1,0 +1,19 @@
+{
+  // Cloudflare Workers config for the Daily Bread Studio.
+  // The site is served as static assets from the repo root (an "assets-only"
+  // Worker; there is no server script). Deploy with `npx wrangler deploy`, or
+  // let the dashboard git integration build on push. See CLOUDFLARE.md.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "daily-bread-studio",
+  "compatibility_date": "2026-07-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    // Serve the whole repo root. `studio.html` loads `db.js` and `assets/` by
+    // relative path; `_redirects` sends `/` to `/studio.html`.
+    "directory": ".",
+    "not_found_handling": "404-page"
+  },
+  "observability": {
+    "enabled": true
+  }
+}
