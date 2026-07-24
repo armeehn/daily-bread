@@ -28,6 +28,7 @@ const LANGS = [
   {code:'es',      hreflang:'es',      endo:'Español',      en:'Spanish',              dir:'ltr'},
   {code:'it',      hreflang:'it',      endo:'Italiano',     en:'Italian',              dir:'ltr'},
   {code:'pl',      hreflang:'pl',      endo:'Polski',       en:'Polish',               dir:'ltr'},
+  {code:'la',      hreflang:'la',      endo:'Latina',       en:'Latin',                dir:'ltr'},
   {code:'zh-hans', hreflang:'zh-Hans', endo:'简体中文',      en:'Chinese (Simplified)', dir:'ltr'},
   {code:'zh-hant', hreflang:'zh-Hant', endo:'繁體中文',      en:'Chinese (Traditional)', dir:'ltr'},
   {code:'pa',      hreflang:'pa',      endo:'ਪੰਜਾਬੀ',        en:'Punjabi',              dir:'ltr'},
