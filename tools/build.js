@@ -749,6 +749,7 @@ ${mtnote(t, code, variant)}
     <div class="signoff" style="color:var(--pink);margin-top:4px">${t['footer.signoff']}</div>
     ${fswitch(t, code, variant)}
     <div class="colophon">${t['footer.colophon']}</div>
+    <div class="verify-note"><a href="/verify/">${t['footer.verify']}</a></div>
   </div>
   <div class="band" style="border-top:2px solid var(--bone)"></div>
 </footer>

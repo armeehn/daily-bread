@@ -1,0 +1,29 @@
+{
+  "issue": {
+    "id": "dailybread/1",
+    "number": "1",
+    "title": "Daily Bread №1 · Kelowna's Collapse",
+    "published_at": "2026-07-25T00:00:00Z",
+    "authors": ["Daily Bread", "Riposte Laboratories Inc."],
+    "origin": "https://dailybre.ad"
+  },
+  "note": "Editions must track the LANGS list in tools/build.js. Leaf order is the order below and is stable; append new editions, do not reorder.",
+  "editions": [
+    {"code": "en",      "endo": "English",      "path": "index.html",         "url": "/"},
+    {"code": "fr",      "endo": "Français",     "path": "fr/index.html",      "url": "/fr/"},
+    {"code": "es",      "endo": "Español",      "path": "es/index.html",      "url": "/es/"},
+    {"code": "it",      "endo": "Italiano",     "path": "it/index.html",      "url": "/it/"},
+    {"code": "pl",      "endo": "Polski",       "path": "pl/index.html",      "url": "/pl/"},
+    {"code": "la",      "endo": "Latina",       "path": "la/index.html",      "url": "/la/"},
+    {"code": "zh-hans", "endo": "简体中文",       "path": "zh-hans/index.html", "url": "/zh-hans/"},
+    {"code": "zh-hant", "endo": "繁體中文",       "path": "zh-hant/index.html", "url": "/zh-hant/"},
+    {"code": "pa",      "endo": "ਪੰਜਾਬੀ",         "path": "pa/index.html",      "url": "/pa/"},
+    {"code": "ko",      "endo": "한국어",         "path": "ko/index.html",      "url": "/ko/"},
+    {"code": "ja",      "endo": "日本語",         "path": "ja/index.html",      "url": "/ja/"},
+    {"code": "tl",      "endo": "Tagalog",      "path": "tl/index.html",      "url": "/tl/"},
+    {"code": "vi",      "endo": "Tiếng Việt",   "path": "vi/index.html",      "url": "/vi/"},
+    {"code": "hi",      "endo": "हिन्दी",          "path": "hi/index.html",      "url": "/hi/"},
+    {"code": "ar",      "endo": "العربية",        "path": "ar/index.html",      "url": "/ar/"},
+    {"code": "fa",      "endo": "فارسی",         "path": "fa/index.html",      "url": "/fa/"}
+  ]
+}
