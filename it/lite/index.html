@@ -225,9 +225,23 @@
   footer .fmeta{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap}
   footer .colophon{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#8d857a;
     border-top:1px solid rgba(246,241,231,.22);padding-top:20px;margin-top:8px;max-width:74ch;line-height:1.9}
-  footer .verify-note{font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-top:2px}
+  footer .verify-note{font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-top:2px;
+    display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
   footer .verify-note a{color:var(--teal);text-decoration:none;border-bottom:1px dotted rgba(18,183,149,.5);padding-bottom:1px}
   footer .verify-note a:hover{color:var(--bone);border-bottom-color:var(--bone)}
+  /* live self-verification badge: a coloured status dot + message, added by the
+     inline verifier the full editions carry (see tools/build.js verifyNote). */
+  footer .verify-note .np-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}
+  footer .verify-note .np-msg{color:#b7ad9e}
+  footer .verify-note.np-checking .np-dot{background:var(--orange);animation:npPulse 1.4s infinite}
+  footer .verify-note.np-ok   .np-dot{background:var(--teal)}
+  footer .verify-note.np-warn .np-dot{background:var(--orange)}
+  footer .verify-note.np-bad  .np-dot{background:var(--pink)}
+  footer .verify-note.np-ok   .np-msg{color:var(--teal)}
+  footer .verify-note.np-warn .np-msg{color:var(--orange)}
+  footer .verify-note.np-bad  .np-msg{color:var(--pink)}
+  @keyframes npPulse{50%{opacity:.35}}
+  @media (prefers-reduced-motion:reduce){footer .verify-note.np-checking .np-dot{animation:none}}
   .annot{margin-top:14px}
   .annot.right{text-align:right}
 
