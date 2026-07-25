@@ -38,6 +38,41 @@ The non-English strings are **unreviewed machine output**; a native pass is
 recommended before any official use. To (re)translate a language, hand an agent
 `tools/strings/en.json` + `tools/strings/TRANSLATE.md` and the target code.
 
+## Verified publishing — tamper-evidence
+
+Every language edition is signed with a key kept off the web server, recorded in
+an append-only [RFC 6962](https://www.rfc-editor.org/rfc/rfc6962) transparency
+log, and pinned to a public anchor. Readers can confirm — cryptographically —
+that the issue they are reading is the exact one Daily Bread published, and that
+the correction history is complete. It cannot make an article *true*; it proves
+only that the words are the ones that were published.
+
+- **[`/verify/`](verify/)** — a self-contained page that checks all sixteen
+  editions live in the browser (WebCrypto, no dependencies), plus a small
+  "Verified publishing ✓" link in every edition's footer that points to it.
+- **`.well-known/newsproof/`** — the public proof material: `publisher-key.json`,
+  `log-key.json`, `leaves.jsonl` (the full log), `sth.json`, `anchors.jsonl`,
+  `consistency.json`, `manifest.json`, and `proofs/<lang>.proof.json` per edition.
+- **[`verify/verify_standalone.py`](verify/verify_standalone.py)** — the real
+  check: a one-file offline verifier (standard library only, no `pip`) run against
+  a publisher fingerprint you obtained somewhere other than this site.
+
+The toolchain lives in [`tools/newsproof/`](tools/newsproof/) and is pure Python
+(Ed25519 is the RFC 8032 reference implementation — no packages to install). To
+re-sign after editing the issue:
+
+```sh
+node tools/build.js
+cd tools && python3 -m newsproof.dbproof sign
+python3 -m newsproof.dbproof anchor --via git --ref "git tag in <org>/daily-bread"
+```
+
+The private signing keys stay in `tools/newsproof/store/` (git-ignored) and must
+be moved offline for a real deployment. Read
+[`tools/newsproof/THREAT-MODEL.md`](tools/newsproof/THREAT-MODEL.md) before
+trusting any of it: the in-browser badge is convenience against third parties and
+accidents; the offline verifier is what holds against the publisher.
+
 ## Daily Bread Studio — edit & configure the magazine
 
 `studio.html` is a bespoke, self-contained editor for building and re-skinning

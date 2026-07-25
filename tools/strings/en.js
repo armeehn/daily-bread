@@ -174,6 +174,7 @@ module.exports = {
   'footer.issn': 'ISSN pending<br>№1 · Summer 2026',
   'footer.signoff': 'see you at the thaw ✕',
   'footer.colophon': 'Printed on unceded syilx Okanagan territory in a run of 500. Set in IBM Plex Mono and UnifrakturMaguntia. Errors are ours; corrections are yours; the leftover ink went into the stickers. · Parry. Riposte.',
+  'footer.verify': 'Verified publishing ✓ confirm this edition has not been altered',
 
   /* ---- i18n chrome ---- */
   'chrome.language': 'Language',
