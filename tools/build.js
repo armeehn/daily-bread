@@ -91,6 +91,155 @@ function labRows(t){
   return LABBOARD.map((j,i)=>`<div class="li"><span class="t">${esc(t['lab.'+i+'.t'])}</span><span class="end"><span class="statuschip" style="background:${j.c}">${esc(t['lab.'+i+'.s'])}</span></span></div>`).join('');
 }
 
+/* ============================================================================
+   feature art — the comic, the rip-out centrefold, and the sticker sheet.
+   All hand-built SVG in the house palette; no runtime JS, translatable captions.
+   ============================================================================ */
+const INK='#1d1a17', BONE='#f6f1e7', PINK='#f0477d', TEAL='#12b795', ORANGE='#fe9a0d', BREAD='#e4bd79';
+
+/* the bread golem — Daily Bread's mascot, reused in Crumbs and on a sticker */
+function golem(mood){
+  const eyes = mood==='shut'
+    ? `<path d="M39 65 h11 M66 65 h11" fill="none"/>`
+    : `<circle cx="45" cy="65" r="4.6" fill="${INK}" stroke="none"/><circle cx="72" cy="65" r="4.6" fill="${INK}" stroke="none"/>`;
+  const mouth = mood==='worry'
+    ? `<ellipse cx="58" cy="80" rx="7" ry="5" fill="${INK}" stroke="none"/>`
+    : `<path d="M49 79 q9 7 18 0" fill="none" stroke-width="2.6"/>`;
+  return `<g stroke="${INK}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 78 Q14 39 58 39 Q102 39 102 78 Q102 93 58 93 Q14 93 14 78 Z" fill="${BREAD}"/>
+    <path d="M26 51 q11 -8 21 0 M49 49 q11 -8 21 2 M72 53 q8 -6 15 2" fill="none" stroke-width="2.3"/>
+    ${eyes}${mouth}
+    <circle cx="58" cy="74" r="1.9" fill="${PINK}" stroke="none"/>
+  </g>`;
+}
+function bubble(x,y,w,txt){
+  return `<g><rect x="${x}" y="${y}" width="${w}" height="27" rx="13.5" fill="${BONE}" stroke="${INK}" stroke-width="2.5"/>`
+    +`<path d="M${x+18} ${y+25} l4 13 l11 -11 Z" fill="${BONE}" stroke="${INK}" stroke-width="2.5"/>`
+    +`<text x="${x+w/2}" y="${y+18}" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="${INK}">${esc(txt)}</text></g>`;
+}
+/* six panels of "Crumbs — a golem seeks housing" */
+function comicStrip(t){
+  const P = v => `<svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation">${v}</svg>`;
+  const p1 = P(`<path d="M50 116 L170 116 L158 140 L62 140 Z" fill="#cdb491" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>`
+    +`<line x1="50" y1="116" x2="170" y2="116" stroke="${INK}" stroke-width="3"/>`
+    +`<g transform="translate(52,22)">${golem('open')}</g>`
+    +`<text x="150" y="44" font-size="24" fill="${ORANGE}">✦</text><text x="178" y="74" font-size="15" fill="${PINK}">✦</text>`);
+  const p2 = P(`<g transform="translate(4,30)">${golem('worry')}</g>`
+    +`<g transform="rotate(-7 150 82)"><rect x="120" y="34" width="76" height="94" fill="${BONE}" stroke="${INK}" stroke-width="3"/>`
+    +`<text x="158" y="62" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-weight="700" font-size="17" fill="${PINK}">$2,100</text>`
+    +`<line x1="131" y1="76" x2="185" y2="76" stroke="${INK}" stroke-width="2"/><line x1="131" y1="90" x2="185" y2="90" stroke="${INK}" stroke-width="2"/>`
+    +`<line x1="131" y1="104" x2="171" y2="104" stroke="${INK}" stroke-width="2"/>`
+    +`<text x="158" y="122" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="${INK}">“cozy”</text></g>`);
+  let heads='';
+  for(let r=0;r<4;r++)for(let c=0;c<8;c++){
+    const x=20+c*25, y=44+r*26;
+    if(r===2&&c===5){ heads+=`<g transform="translate(${x-22},${y-20}) scale(0.42)">${golem('open')}</g>`; }
+    else { heads+=`<circle cx="${x}" cy="${y}" r="7" fill="${INK}"/><path d="M${x-8} ${y+22} q8 -13 16 0 Z" fill="${INK}"/>`; }
+  }
+  const p3 = P(heads+`<circle cx="145" cy="70" r="15" fill="none" stroke="${PINK}" stroke-width="2.5"/>`);
+  const p4 = P(`<g transform="translate(120,20)"><rect x="20" y="34" width="46" height="70" rx="6" fill="${INK}"/><circle cx="43" cy="24" r="16" fill="${INK}"/>`
+    +`<path d="M20 60 L2 44" stroke="${INK}" stroke-width="8" stroke-linecap="round"/><circle cx="0" cy="42" r="5" fill="${INK}"/></g>`
+    +`<g transform="translate(-6,54) scale(0.7)">${golem('worry')}</g>`
+    +bubble(60,16,148,esc(t['comic.bubble4'])));
+  const p5 = P(`<rect x="0" y="0" width="220" height="150" fill="#241f1a"/>`
+    +`<circle cx="176" cy="40" r="20" fill="${BONE}"/><circle cx="168" cy="36" r="20" fill="#241f1a"/>`
+    +`<rect x="44" y="70" width="10" height="54" fill="#5a4a34"/><ellipse cx="49" cy="66" rx="38" ry="27" fill="${ORANGE}" stroke="${INK}" stroke-width="2.5"/>`
+    +`<circle cx="36" cy="60" r="4" fill="${PINK}"/><circle cx="62" cy="72" r="4" fill="${PINK}"/>`
+    +`<g transform="translate(96,58) rotate(90 50 60)">${golem('shut')}</g>`
+    +`<text x="150" y="120" font-family="'Caveat',cursive" font-size="22" fill="${BONE}">zzz</text>`);
+  const p6 = P(`<g transform="translate(2,26)">${golem('open')}</g>`
+    +`<g transform="rotate(6 150 84)"><rect x="120" y="40" width="74" height="92" fill="${INK}"/>`
+    +`<text x="157" y="96" text-anchor="middle" font-family="'UnifrakturMaguntia',serif" font-size="42" fill="${PINK}">DB</text></g>`
+    +`<text x="120" y="34" font-size="19" fill="${PINK}">♥</text><text x="196" y="60" font-size="14" fill="${TEAL}">♥</text>`);
+  const panels = [[p1,'comic.p1c'],[p2,'comic.p2c'],[p3,'comic.p3c'],[p4,'comic.p4c'],[p5,'comic.p5c'],[p6,'comic.p6c']];
+  return panels.map(([svg,key],i)=>`<figure class="panel"><span class="pn">${String(i+1).padStart(2,'0')}</span><div class="art${i===4?' night':''}">${svg}</div><figcaption>${esc(t[key])}</figcaption></figure>`).join('');
+}
+
+/* the rip-out centrefold poster: "A Scene Isn't an Address" */
+function posterSVG(t){
+  let diamonds='';
+  for(let i=0;i<11;i++){ const c=[PINK,TEAL,ORANGE][i%3]; diamonds+=`<rect x="${i*62}" y="-13" width="26" height="26" transform="rotate(45 ${i*62+13} 0)" fill="${c}"/>`; }
+  let orchard='';
+  for(let i=0;i<9;i++){ const x=40+i*72; orchard+=`<rect x="${x-3}" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="${x}" cy="284" r="15" fill="${ORANGE}" stroke="${INK}" stroke-width="2"/>`; }
+  return `<svg class="poster-svg" viewBox="0 0 680 400" role="img" aria-label="${esc(t['art.posterA'])} ${esc(t['art.posterB'])}">`
+    +`<rect width="680" height="400" fill="${INK}"/>`
+    +`<g>${diamonds}</g>`
+    +`<circle cx="566" cy="128" r="58" fill="${PINK}"/><circle cx="546" cy="112" r="58" fill="${INK}"/>`
+    +`<path d="M0 306 L150 176 L300 306 Z" fill="#2a2620" stroke="${BONE}" stroke-width="2"/>`
+    +`<path d="M210 306 L400 156 L590 306 Z" fill="#211d18" stroke="${BONE}" stroke-width="2"/>`
+    +`<rect x="0" y="306" width="680" height="94" fill="${TEAL}"/>`
+    +`<path d="M0 330 q40 -10 80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0" fill="none" stroke="${BONE}" stroke-width="2" opacity="0.5"/>`
+    +`<g>${orchard}</g>`
+    +`<text x="46" y="150" font-family="'IBM Plex Mono',monospace" font-weight="800" font-size="62" letter-spacing="-2" fill="${BONE}">${esc(t['art.posterA'])}</text>`
+    +`<text x="46" y="224" font-family="'IBM Plex Mono',monospace" font-weight="800" font-size="62" letter-spacing="-2" fill="${PINK}">${esc(t['art.posterB'])}</text>`
+    +`<text x="46" y="360" font-family="'IBM Plex Mono',monospace" font-size="13" letter-spacing="3" fill="${INK}" font-weight="700">${esc(t['art.posterFoot']).toUpperCase()}</text>`
+    +`</svg>`;
+}
+/* three small gallery plates */
+function platesSVG(){
+  const facade = `<svg viewBox="0 0 200 150" role="presentation"><rect width="200" height="150" fill="${BONE}"/><rect x="30" y="26" width="140" height="112" fill="#2a2620" stroke="${INK}" stroke-width="3"/>`
+    +[36,86,136].map(y=>[44,90,136].map(x=>`<rect x="${x}" y="${y}" width="30" height="30" fill="${(x===90&&y===86)?PINK:'#4a423a'}" stroke="${INK}" stroke-width="2"/>`).join('')).join('')
+    +`<rect x="70" y="118" width="60" height="16" fill="${ORANGE}" transform="rotate(-4 100 126)"/></svg>`;
+  const lake = `<svg viewBox="0 0 200 150" role="presentation"><rect width="200" height="150" fill="${BONE}"/>`
+    +`<rect x="24" y="52" width="120" height="10" fill="#5a4a34"/><rect x="30" y="62" width="8" height="30" fill="#5a4a34"/><rect x="128" y="62" width="8" height="30" fill="#5a4a34"/>`
+    +[0,1,2,3].map(i=>`<path d="M0 ${86+i*16} q25 -9 50 0 t50 0 t50 0 t50 0" fill="none" stroke="${TEAL}" stroke-width="4"/>`).join('')
+    +`<rect x="0" y="120" width="200" height="30" fill="${TEAL}" opacity="0.9"/></svg>`;
+  const orchard = `<svg viewBox="0 0 200 150" role="presentation"><rect width="200" height="150" fill="${BONE}"/>`
+    +[30,70,110,150].map((x,i)=>`<rect x="${x-3}" y="70" width="6" height="52" fill="#3a2f22"/>`+(i%2?`<circle cx="${x}" cy="66" r="18" fill="${ORANGE}" stroke="${INK}" stroke-width="2.5"/>`:`<path d="M${x-14} 78 l14 -20 l14 20 Z" fill="none" stroke="${INK}" stroke-width="2.5"/>`)).join('')
+    +`<line x1="10" y1="122" x2="190" y2="122" stroke="${INK}" stroke-width="3"/></svg>`;
+  const items = [['art.plate1t','art.plate1by',facade],['art.plate2t','art.plate2by',lake],['art.plate3t','art.plate3by',orchard]];
+  return items;
+}
+/* the line-art "Colour Your Own Collapse" page */
+function colourSVG(){
+  let trees='';
+  for(let i=0;i<6;i++){ const x=70+i*95; trees+=`<rect x="${x-4}" y="150" width="8" height="40" fill="none" stroke="${INK}" stroke-width="2.5"/><circle cx="${x}" cy="140" r="26" fill="none" stroke="${INK}" stroke-width="2.5"/>`; }
+  return `<svg class="colour-svg" viewBox="0 0 640 240" role="img" aria-label="Colouring page: an orchard under a sun, drawn in outline to colour in">`
+    +`<rect width="640" height="240" fill="${BONE}"/>`
+    +`<circle cx="560" cy="60" r="34" fill="none" stroke="${INK}" stroke-width="2.5"/>`
+    +Array.from({length:8},(_,i)=>{const a=i*Math.PI/4;return `<line x1="${560+Math.cos(a)*42}" y1="${60+Math.sin(a)*42}" x2="${560+Math.cos(a)*52}" y2="${60+Math.sin(a)*52}" stroke="${INK}" stroke-width="2.5"/>`}).join('')
+    +`<path d="M0 190 q160 -34 320 0 t320 0" fill="none" stroke="${INK}" stroke-width="2.5"/>`
+    +trees
+    +`<rect x="250" y="150" width="80" height="60" fill="none" stroke="${INK}" stroke-width="2.5"/><path d="M250 150 l40 -30 l40 30" fill="none" stroke="${INK}" stroke-width="2.5"/>`
+    +`<text x="268" y="188" font-family="'IBM Plex Mono',monospace" font-size="11" fill="${INK}">FOR LEASE</text>`
+    +`<text x="24" y="34" font-family="'Caveat',cursive" font-size="26" fill="${INK}">colour me →</text>`
+    +`<line x1="0" y1="220" x2="640" y2="220" stroke="${INK}" stroke-width="1.5" stroke-dasharray="8 6"/></svg>`;
+}
+
+/* the twelve-sticker "Peel Me" sheet (printable) */
+function stickerSheet(t){
+  const face = `<svg viewBox="0 0 116 108" role="presentation"><g transform="translate(4,4)">${golem('open')}</g></svg>`;
+  const mountain = `<svg viewBox="0 0 100 80" role="presentation"><path d="M6 60 L34 22 L58 60 Z" fill="#2a2620"/><path d="M40 60 L66 30 L94 60 Z" fill="${INK}"/><circle cx="80" cy="24" r="10" fill="${PINK}"/><rect x="0" y="60" width="100" height="14" fill="${TEAL}"/></svg>`;
+  const drop = `<svg viewBox="0 0 80 96" role="presentation"><path d="M40 6 C40 6 70 46 70 66 A30 30 0 1 1 10 66 C10 46 40 6 40 6 Z" fill="${TEAL}" stroke="${INK}" stroke-width="3"/><path d="M28 62 a12 12 0 0 0 12 12" fill="none" stroke="${BONE}" stroke-width="3"/></svg>`;
+  const recycle = `<svg viewBox="0 0 96 96" role="presentation"><g fill="none" stroke="${TEAL}" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">`
+    +`<path d="M48 20 L64 46 M64 46 L54 44 M64 46 L62 36"/><path d="M70 60 L40 60 M40 60 L48 66 M40 60 L48 54" transform="rotate(120 48 48)"/><path d="M70 60 L40 60 M40 60 L48 66 M40 60 L48 54" transform="rotate(240 48 48)"/></g></svg>`;
+  // kinds: g=graphic svg + label under · s=text stamp · q=big quote · m=blackletter monogram
+  const S = [
+    {k:'g', c:PINK,   svg:face,     key:'stickers.s1'},
+    {k:'s', c:PINK,   key:'stickers.s2'},
+    {k:'s', c:ORANGE, key:'stickers.s3'},
+    {k:'g', c:INK,    svg:mountain, key:'stickers.s4'},
+    {k:'q', c:TEAL,   key:'stickers.s5'},
+    {k:'m', c:INK,    key:'stickers.s6'},
+    {k:'g', c:TEAL,   svg:recycle,  key:'stickers.s7'},
+    {k:'g', c:TEAL,   svg:drop,     key:'stickers.s8'},
+    {k:'s', c:INK,    key:'stickers.s9'},
+    {k:'s', c:PINK,   key:'stickers.s10'},
+    {k:'s', c:ORANGE, key:'stickers.s11'},
+    {k:'q', c:INK,    key:'stickers.s12'},
+  ];
+  const cell = (d,i)=>{
+    const rot = ['-2.5deg','1.5deg','-1deg','2.5deg','-2deg','1deg'][i%6];
+    let inner;
+    if(d.k==='g') inner = `<div class="ic">${d.svg}</div><span class="lab" style="color:${d.c}">${esc(t[d.key])}</span>`;
+    else if(d.k==='m') inner = `<span class="mono">DB</span><span class="lab">${esc(t[d.key])}</span>`;
+    else if(d.k==='q') inner = `<span class="quote" style="color:${d.c}">${esc(t[d.key])}</span>`;
+    else inner = `<span class="stampbadge" style="border-color:${d.c};color:${d.c}">${esc(t[d.key])}</span>`;
+    return `<div class="sticker k-${d.k}" style="--rot:${rot}">${inner}</div>`;
+  };
+  return S.map(cell).join('');
+}
+
 /* ---- shared chrome ---- */
 function url(code){ return code === 'en' ? '/' : '/' + code + '/'; }
 function langpick(t, code){
@@ -148,10 +297,13 @@ ${STYLE}
       <a href="#contents">${esc(t['nav.contents'])}</a>
       <a href="#history">${esc(t['nav.history'])}</a>
       <a href="#voices">${esc(t['nav.voices'])}</a>
+      <a href="#comics">${esc(t['nav.comics'])}</a>
+      <a href="#art">${esc(t['nav.art'])}</a>
       <a href="#calendar">${esc(t['nav.calendar'])}</a>
       <a href="#directory">${esc(t['nav.directory'])}</a>
       <a href="#submit">${esc(t['nav.submit'])}</a>
       <a href="#lab">${esc(t['nav.lab'])}</a>
+      <a href="#stickers">${esc(t['nav.stickers'])}</a>
     </nav>
     ${langpick(t, code)}
   </div>
@@ -321,6 +473,53 @@ ${mtnote(t, code)}
   </div>
 </div>
 
+<!-- ============ COMICS · CRUMBS ============ -->
+<section id="comics" class="sec" style="background:var(--paper2)">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.08</span><span class="tag">${t['comic.tag']}</span></div>
+    <h2 class="display">${t['comic.h']}<span class="dot">.</span></h2>
+    <p class="dek">${t['comic.dek']}</p>
+    <div style="margin-top:16px"><span class="kicker orange">${t['comic.credit']}</span></div>
+    <div class="comic-strip">${comicStrip(t)}</div>
+    <p class="meta" style="margin-top:24px;line-height:1.9">${t['comic.foot']}</p>
+  </div>
+</section>
+
+<div class="band harl br"></div>
+
+<!-- ============ ART · THE WALL (rip-out centrefold) ============ -->
+<section id="art" class="sec field-ink">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.11</span><span class="tag" style="color:#b7ad9e">${t['art.tag']}</span></div>
+    <div class="split center">
+      <div>
+        <h2 class="display">${t['art.h']}</h2>
+        <p class="dek" style="color:#cfc6b6">${t['art.dek']}</p>
+        <div class="annot"><span class="scribble teal">${t['art.annot']}</span></div>
+      </div>
+      <div style="text-align:right"><span class="kicker pink">${t['art.posterKicker']}</span></div>
+    </div>
+    <figure class="centrefold">
+      <span class="tearstrip" aria-hidden="true">${t['art.tear']}</span>
+      ${posterSVG(t)}
+    </figure>
+    <div class="split" style="margin-top:46px">
+      <div>
+        <span class="kicker">${t['art.plateKicker']}</span>
+        <div class="plate-row">${platesSVG().map(([tk,bk,svg])=>`<figure class="plate">${svg}<figcaption><b>${esc(t[tk])}</b><span>${esc(t[bk])}</span></figcaption></figure>`).join('')}</div>
+      </div>
+      <div class="card colour-card">
+        <div class="hd pink"><span>${t['art.colourStamp']}</span></div>
+        <div class="bd">
+          <h3 class="colour-h">${t['art.colourHd']}</h3>
+          ${colourSVG()}
+          <p style="font-size:14px;line-height:1.7;margin-top:14px">${t['art.colourBody']}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ CALENDAR ============ -->
 <section id="calendar" class="sec">
   <div class="wrap">
@@ -454,6 +653,30 @@ ${mtnote(t, code)}
         <p class="meta" style="margin-top:14px;line-height:1.7">${t['lab.tour']}</p>
       </div>
     </div>
+  </div>
+</section>
+
+<div class="band harl br"></div>
+
+<!-- ============ STICKERS · PEEL ME (printable sheet) ============ -->
+<section id="stickers" class="sec stickers-sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.24</span><span class="tag">${t['stickers.tag']}</span></div>
+    <div class="split center">
+      <div>
+        <h2 class="display">${t['stickers.h']}<span class="dot" style="color:var(--teal)">.</span></h2>
+        <p class="dek">${t['stickers.dek']}</p>
+      </div>
+      <div class="print-cta">
+        <button type="button" class="printbtn" onclick="window.print()">${t['stickers.print']} ⎙</button>
+        <span class="fine">${t['stickers.printHint']}</span>
+      </div>
+    </div>
+    <div class="card sheet">
+      <div class="hd"><span>${t['stickers.sheetHd']}</span><span class="r">${t['stickers.sheetMeta']}</span></div>
+      <div class="bd"><div class="sticker-grid">${stickerSheet(t)}</div></div>
+    </div>
+    <p class="meta" style="margin-top:18px;line-height:1.9">${t['stickers.foot']}</p>
   </div>
 </section>
 
