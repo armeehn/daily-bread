@@ -8,15 +8,17 @@ Canada). The voice is warm, wry, defiant, and literary; it is activist small-pre
 copy, not corporate marketing. Keep that register.
 
 ## Task
-1. Read `/home/user/daily-bread-i18n/tools/strings/en.json` — a flat JSON object,
-   `key → English string`, 245 keys.
-2. Produce a JSON object with the **exact same 245 keys**, every value translated
+1. Read `tools/strings/en.json` — a flat JSON object, `key → English string`.
+   It is regenerated from `en.js` on every `node tools/build.js` run, so it is
+   always the current, complete key set (do not hand-edit it).
+2. Produce a JSON object with the **exact same keys**, every value translated
    into the target language.
-3. Write it to `/home/user/daily-bread-i18n/tools/strings/<CODE>.json` as valid,
-   UTF-8, pretty-printed JSON (2-space indent).
+3. Write it to `tools/strings/<CODE>.json` as valid, UTF-8, pretty-printed JSON
+   (2-space indent).
 4. Verify before finishing: `JSON.parse` succeeds and the object has exactly the
-   same 245 keys as en.json (none added or dropped). A quick `node -e` check is
-   ideal.
+   same keys as en.json (none added or dropped). A quick `node -e` check is ideal.
+   The build prints an `i18n coverage` report and any key you miss falls back to
+   English; run `node tools/build.js --strict` to make missing keys fail the build.
 
 ## Preservation rules (the page breaks if these are altered)
 - Keep every **key** byte-identical.
