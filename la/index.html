@@ -61,8 +61,14 @@
   .kicker.pink{background:var(--pink);color:var(--bone)}
   .kicker.teal{background:var(--teal);color:var(--bone)}
   .kicker.orange{background:var(--orange);color:var(--ink)}
-  .display{font-size:clamp(32px,5.4vw,54px);line-height:.96;font-weight:800;
-    text-transform:uppercase;letter-spacing:-.015em}
+  /* .display headings are fitted per language at build time: --fit caps the
+     font so the translated headline holds the same line count as English, and
+     --dl reserves that many lines (viewport-driven, so identical across
+     languages) — the block below every headline lands at the same place.
+     Both fall back gracefully when unset (English full-width headings). */
+  .display{font-size:min(clamp(32px,5.4vw,54px),var(--fit,999px));line-height:.96;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.015em;text-wrap:balance;overflow-wrap:break-word;
+    min-height:calc(var(--dl,1) * .96 * clamp(32px,5.4vw,54px))}
   .display .dot{color:var(--pink)}
   .frak{font-family:'UnifrakturMaguntia',serif;font-weight:400;line-height:.9}
   .dek{font-size:15.5px;line-height:1.7;max-width:62ch;color:#3a352e;margin-top:14px}
@@ -168,7 +174,8 @@
   /* ---------- reports ---------- */
   .report{display:flex;flex-direction:column;height:100%}
   .report .bd{display:flex;flex-direction:column;flex:1}
-  .report h3{font-size:clamp(20px,2.5vw,25px);line-height:1.06;font-weight:800;text-transform:uppercase;margin:0 0 12px}
+  .report h3{font-size:min(clamp(20px,2.5vw,25px),var(--fit,999px));line-height:1.06;font-weight:800;
+    text-transform:uppercase;margin:0 0 12px;text-wrap:balance;overflow-wrap:break-word}
   .report p{font-size:14px;line-height:1.62;margin:0}
   .pull{border-left:6px solid var(--pink);padding:8px 0 8px 15px;font-size:17px;line-height:1.34;
     font-weight:600;font-style:italic;margin-top:auto;padding-top:16px}
@@ -182,7 +189,8 @@
   @media(max-width:560px){.stats{grid-template-columns:1fr}}
 
   /* ---------- quote band ---------- */
-  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;max-width:20ch}
+  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;
+    max-width:22ch;text-wrap:balance;overflow-wrap:break-word}
   .bigquote .mk{color:var(--pink);font-style:normal}
   .attrib{font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:22px;color:#b7ad9e}
 
@@ -378,7 +386,7 @@
     <div class="rule" style="margin-bottom:34px"></div>
     <div class="split">
       <div>
-        <h2 class="display">Noster Cotidianus<br>Pavor</h2>
+        <h2 class="display" style="--fit:36px;--dl:2">Noster Cotidianus<br>Pavor</h2>
         <div class="prose justify" style="margin-top:22px">
           <p><span class="drop">SALVE.</span> Primum numerum commentariorum queer invenisti in urbe quae nobis semper dicit se nullos habere. Kelowna historiam queer habet, pueros queer, senes queer, pistores et scribas queer; quod ei defuit est charta quae hoc clara voce dicat.</p>
           <p>Hic numerus de ruina est: pomaria, loca spectaculorum, calculus mercedis, frequentia in ponte. Non quod fatum extremum canimus, sed quod hic res statuto tempore dilabuntur, et tempus nominare primum est reficiendi opus.</p>
@@ -412,7 +420,7 @@
 <section id="contents" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.01</span><span class="tag">// index · tabula / 48 pp</span></div>
-    <h2 class="display">Index<span class="dot">.</span></h2>
+    <h2 class="display" style="--fit:54px;--dl:1">Index<span class="dot">.</span></h2>
     <p class="dek">Duodecim adiutores №1 fecerunt: scriptores annos 17–74 nati, duo photographi, unus pictor comicus, unus corrector patientissimus. Omne nomen locale est. Omnis merces soluta est antequam typographus.</p>
     <div class="card" style="margin-top:30px">
       <div class="hd"><span>Tabula / 48 pp</span><span class="r">DB-TOC</span></div>
@@ -427,7 +435,7 @@
     <div class="sechead"><span class="no">Sec.02</span><span class="tag">// historia · ante pontem</span></div>
     <div class="split">
       <div>
-        <h2 class="display">Historia<br>Proterva</h2>
+        <h2 class="display" style="--fit:54px;--dl:2">Historia<br>Proterva</h2>
         <div class="prose justify" style="margin-top:22px">
           <p>Vallis se bis vendidit: primum ut Eden, deinde ut bona pretiosa. Pomorum cultores tam saepe decoxerunt ut horrea propriam pecuniam chartaceam cuderent; cum poma perierunt, promissum sol otii factus est; cum otiosi pretiis lectores expulerunt, promissum cenacula ad lacum facta sunt. Quisque actus eodem modo desiit: qui laborem faciebant procul ab aqua magis magisque habitabant.</p>
           <p>Historia queer per omnia intexta est: aulae saltatoriae noctibus non publicis, retia amicitiae quae etiam indices habitationis erant, communitas quae superfuit utilis et tacita manendo donec ei non iam necesse fuit.</p>
@@ -450,26 +458,26 @@
 <section id="voices" class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">// sedes vocum iuvenum · non recognita. non emendata. recta.</span></div>
-    <h2 class="display">Voces Iuvenum</h2>
+    <h2 class="display" style="--fit:54px;--dl:1">Voces Iuvenum</h2>
     <p class="dek" style="color:#cfc6b6">Tres relationes ex agro a scriptoribus qui suffragium ferre nondum possunt sed calculum mercedis iam facere possunt. Eos remuneravimus; verbum non tetigimus.</p>
     <div class="thirds" style="margin-top:34px">
       <div class="card report"><div class="hd pink"><span>Relatio 01</span><span>Annos 19 · Habitatio</span></div>
         <div class="bd">
-          <h3>Nemo Meae Aetatis Manere Potest</h3>
+          <h3 style="--fit:25px">Nemo Meae Aetatis Manere Potest</h3>
           <p>Duobus operibus laboro et cubiculum duplex cum tribus hominibus partior, et ego felix exemplum sum. Colloquium nostri gregis lenta valedictionis celebratio est: Vernon, Calgary, cella materna in Surrey.</p>
           <div class="pull">«Omnis inspectio quadraginta homines profunda est et unus semper flet.»</div>
         </div>
       </div>
       <div class="card report"><div class="hd orange"><span>Relatio 02</span><span>Annos 22 · Confessio</span></div>
         <div class="bd">
-          <h3>Palam apud Horreum</h3>
+          <h3 style="--fit:25px">Palam apud Horreum</h3>
           <p>Me palam feci in convivio silvestri in Glenmore et pessimum quod accidit fuit quod quidam nomine Tyler dixit «bene» et rogavit num eum domum veherem. Non paradisus, non infernus, tantum parva urbs celerius quam eius curia discens.</p>
           <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange);border:0;padding-left:0">geographia est ultimum latibulum</div>
         </div>
       </div>
       <div class="card report"><div class="hd teal"><span>Relatio 03</span><span>Annos 17 · Tempus incendiorum</span></div>
         <div class="bd">
-          <h3>Bis Fugi Nec Suffragium Ferre Possum</h3>
+          <h3 style="--fit:25px">Bis Fugi Nec Suffragium Ferre Possum</h3>
           <p>Imagines pueritiae meae per annos fumi digestae sunt. Currum oneravimus anno 2021 et iterum anno 2023, et utroque tempore adulti per radiophonium id sine exemplo appellaverunt. Exemplum habet.</p>
           <div class="pull teal">«Exemplum ego sum.»</div>
         </div>
@@ -484,7 +492,7 @@
     <div class="split center">
       <div>
         <span class="kicker pink">10 · Res praesentes</span>
-        <h2 class="display" style="margin-top:16px">Index Exspectantium</h2>
+        <h2 class="display" style="--fit:33px;--dl:1;margin-top:16px">Index Exspectantium</h2>
         <p class="dek">Curam medicam queer peritam in Central Okanagan quaerere est opus partiarium sine emolumentis. Omne valetudinarium pro te vocavimus; omnes quos attigimus idem triangulum descripserunt: telephoni ludum, delegationis moras, et viam longam.</p>
       </div>
       <div class="stats">
@@ -510,7 +518,7 @@
 <section id="comics" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.08</span><span class="tag">// crumbs · ep.1 · a golem seeks housing</span></div>
-    <h2 class="display">Crumbs<span class="dot">.</span></h2>
+    <h2 class="display" style="--fit:54px;--dl:1">Crumbs<span class="dot">.</span></h2>
     <p class="dek">Our guest strip. Six panels, one loaf, zero vacancies. The slot is open, it pays, and the only brief is: make us laugh about the thing that isn't funny.</p>
     <div style="margin-top:16px"><span class="kicker orange">Ep.1 · pencils, ink & crumbs by open call</span></div>
     <div class="comic-strip"><figure class="panel"><span class="pn">01</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><path d="M50 116 L170 116 L158 140 L62 140 Z" fill="#cdb491" stroke="#1d1a17" stroke-width="3" stroke-linejoin="round"/><line x1="50" y1="116" x2="170" y2="116" stroke="#1d1a17" stroke-width="3"/><g transform="translate(52,22)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
@@ -556,7 +564,7 @@
     <div class="sechead"><span class="no">Sec.11</span><span class="tag" style="color:#b7ad9e">// the wall · rip-out centrefold · pull gently</span></div>
     <div class="split center">
       <div>
-        <h2 class="display">The Wall</h2>
+        <h2 class="display" style="--fit:54px;--dl:1">The Wall</h2>
         <p class="dek" style="color:#cfc6b6">The centrefold is a poster. Tear it out along the gutter and put it where a landlord can see it. This issue's wall belongs to the scene that refuses to be an address.</p>
         <div class="annot"><span class="scribble teal">yes — actually rip it</span></div>
       </div>
@@ -589,7 +597,7 @@
     <div class="sechead"><span class="no">Sec.14</span><span class="tag">// calendarium · aug–oct 2026 · exscinde + in refrigeratorium</span></div>
     <div class="split">
       <div>
-        <h2 class="display">Calendarium<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:50px;--dl:1">Calendarium<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">Indices gratuiti sunt; scribe ante diem 15. Optiones sobriae et omnibus aetatibus signo ◦ notatae.</p>
         <div class="card" style="margin-top:24px">
           <div class="hd"><span>Aug — Oct 2026</span><span class="r">Exscinde + in refrigeratorium</span></div>
@@ -654,7 +662,7 @@
     <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">// submissiones · №2 — «gelu solutum»</span></div>
     <div class="split">
       <div>
-        <h2 class="display">Micis Id<br>Conspurca<span class="dot">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:2">Micis Id<br>Conspurca<span class="dot">.</span></h2>
         <p class="dek" style="color:#cfc6b6">Fabula in partes divisa, media pagina aperta, sedes vocum iuvenum, directorium quod recens manet: №1 primum exemplar est communitatis se esse arguentis. №2 est «Gelu Solutum» — quod redit. Furorem tuum et culinae praecepta nobis mitte.</p>
         <div style="margin-top:26px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
           <a href="mailto:hello@dailybread.example?subject=WALL" class="stamp pink">hello@dailybread.example</a>
@@ -695,7 +703,7 @@
       <div>
         <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:min(280px,80%)">
         <div class="meta" style="letter-spacing:.45em;margin-top:10px">Laboratories Inc.</div>
-        <h2 class="display" style="margin-top:22px">Ex Officina</h2>
+        <h2 class="display" style="--fit:54px;--dl:1;margin-top:22px">Ex Officina</h2>
         <div class="prose justify" style="margin-top:18px">
           <p>Plena professio, grandibus litteris impressa: hi commentarii a Riposte Laboratories subventi sunt, officina Kelownensi quae detrimento repugnat plastico redivivo in formas iniecto et vi modulari ex cellulis recuperatis. Quod hic fabricamus communicamus, in isdem paginis, eadem voce qua ceteri omnes.</p>
           <p>Pactum, scriptum: Officina typographo solvit et duas paginas accipit. Redactores lectoribus respondent, non patrono. Si id umquam mutabitur, pagina coloranda te certiorem faciet.</p>
@@ -727,7 +735,7 @@
     <div class="sechead"><span class="no">Sec.24</span><span class="tag">// peel me · sticker sheet · the leftover ink went here</span></div>
     <div class="split center">
       <div>
-        <h2 class="display">Peel Me<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:1">Peel Me<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">The leftover ink went here. Print the page, cut along the dashes, and put the valley on your water bottle. Twelve stickers; no two collapses alike.</p>
       </div>
       <div class="print-cta">

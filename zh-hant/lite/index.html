@@ -57,8 +57,14 @@
   .kicker.pink{background:var(--pink);color:var(--bone)}
   .kicker.teal{background:var(--teal);color:var(--bone)}
   .kicker.orange{background:var(--orange);color:var(--ink)}
-  .display{font-size:clamp(32px,5.4vw,54px);line-height:.96;font-weight:800;
-    text-transform:uppercase;letter-spacing:-.015em}
+  /* .display headings are fitted per language at build time: --fit caps the
+     font so the translated headline holds the same line count as English, and
+     --dl reserves that many lines (viewport-driven, so identical across
+     languages) — the block below every headline lands at the same place.
+     Both fall back gracefully when unset (English full-width headings). */
+  .display{font-size:min(clamp(32px,5.4vw,54px),var(--fit,999px));line-height:.96;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.015em;text-wrap:balance;overflow-wrap:break-word;
+    min-height:calc(var(--dl,1) * .96 * clamp(32px,5.4vw,54px))}
   .display .dot{color:var(--pink)}
   .frak{font-family:'UnifrakturMaguntia',serif;font-weight:400;line-height:.9}
   .dek{font-size:15.5px;line-height:1.7;max-width:62ch;color:#3a352e;margin-top:14px}
@@ -164,7 +170,8 @@
   /* ---------- reports ---------- */
   .report{display:flex;flex-direction:column;height:100%}
   .report .bd{display:flex;flex-direction:column;flex:1}
-  .report h3{font-size:clamp(20px,2.5vw,25px);line-height:1.06;font-weight:800;text-transform:uppercase;margin:0 0 12px}
+  .report h3{font-size:min(clamp(20px,2.5vw,25px),var(--fit,999px));line-height:1.06;font-weight:800;
+    text-transform:uppercase;margin:0 0 12px;text-wrap:balance;overflow-wrap:break-word}
   .report p{font-size:14px;line-height:1.62;margin:0}
   .pull{border-left:6px solid var(--pink);padding:8px 0 8px 15px;font-size:17px;line-height:1.34;
     font-weight:600;font-style:italic;margin-top:auto;padding-top:16px}
@@ -178,7 +185,8 @@
   @media(max-width:560px){.stats{grid-template-columns:1fr}}
 
   /* ---------- quote band ---------- */
-  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;max-width:20ch}
+  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;
+    max-width:22ch;text-wrap:balance;overflow-wrap:break-word}
   .bigquote .mk{color:var(--pink);font-style:normal}
   .attrib{font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:22px;color:#b7ad9e}
 
@@ -461,7 +469,7 @@
     <div class="rule" style="margin-bottom:34px"></div>
     <div class="split">
       <div>
-        <h2 class="display">我們的每日<br>惶惶</h2>
+        <h2 class="display" style="--fit:54px;--dl:2">我們的每日<br>惶惶</h2>
         <div class="prose justify" style="margin-top:22px">
           <p><span class="drop">嗨。</span>你翻開了一本酷兒雜誌的創刊號，而這座城市一直告訴我們它沒有酷兒。Kelowna 有酷兒的歷史、酷兒的孩子、酷兒的長者、酷兒的麵包師與公務員；它缺的，是一張敢大聲說出來的紙。</p>
           <p>本期談的是崩塌：果園、場館、房租的算術、過橋的車陣。不是因為我們是末日論者，而是因為這裡的東西總是按時瓦解，而點破這個時間表，正是修補的第一步。</p>
@@ -495,7 +503,7 @@
 <section id="contents" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.01</span><span class="tag">// 目錄 · 清單／48 pp</span></div>
-    <h2 class="display">目錄<span class="dot">.</span></h2>
+    <h2 class="display" style="--fit:54px;--dl:1">目錄<span class="dot">.</span></h2>
     <p class="dek">十二位供稿人成就了 №1：17–74 歲的作者、兩位攝影師、一位漫畫家、一位極有耐性的校對。每一則署名都是本地人。每一筆稿費都趕在印刷廠之前付清。</p>
     <div class="card" style="margin-top:30px">
       <div class="hd"><span>清單／48 pp</span><span class="r">DB-TOC</span></div>
@@ -510,7 +518,7 @@
     <div class="sechead"><span class="no">Sec.02</span><span class="tag">// 歷史 · 過橋之前</span></div>
     <div class="split">
       <div>
-        <h2 class="display">一部無禮的<br>歷史</h2>
+        <h2 class="display" style="--fit:54px;--dl:2">一部無禮的<br>歷史</h2>
         <div class="prose justify" style="margin-top:22px">
           <p>這片河谷把自己賣了兩次：先當伊甸園，再當投資標的。果農破產得太頻繁，包裝廠索性自印代用券；果樹死了，賣點就變成退休的陽光；退休者把採果工人擠出市場後，賣點又變成湖畔閣樓。每一幕的收場都一樣：幹活的人住得離水越來越遠。</p>
           <p>酷兒的歷史編織在這一切之中：有非官方之夜的舞廳、身兼租屋名單的友誼網絡、一個靠著實用又安靜而存活的圈子，直到它不必再安靜。</p>
@@ -533,26 +541,26 @@
 <section id="voices" class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">// 青年之聲部門 · 未審。未編。正確。</span></div>
-    <h2 class="display">青年之聲</h2>
+    <h2 class="display" style="--fit:54px;--dl:1">青年之聲</h2>
     <p class="dek" style="color:#cfc6b6">三份來自作者的現場報導：他們還不能投票，卻已經會算房租的帳。我們付了稿費；一個字都沒動。</p>
     <div class="thirds" style="margin-top:34px">
       <div class="card report"><div class="hd pink"><span>報導 01</span><span>19 歲 · 住房</span></div>
         <div class="bd">
-          <h3>我這年紀的人沒一個留得起</h3>
+          <h3 style="--fit:25px">我這年紀的人沒一個留得起</h3>
           <p>我打兩份工，跟三個人合租一間兩房，而我還算是成功案例。我的群組聊天是一場慢動作的告別派對：Vernon、Calgary、Surrey 老媽的地下室。</p>
           <div class="pull">「每次看房都擠了四十個人，其中總有一個在哭。」</div>
         </div>
       </div>
       <div class="card report"><div class="hd orange"><span>報導 02</span><span>22 歲 · 出櫃</span></div>
         <div class="bd">
-          <h3>在包裝廠出櫃</h3>
+          <h3 style="--fit:25px">在包裝廠出櫃</h3>
           <p>我在 Glenmore 的一場野地派對上出櫃，最糟的下場是一個叫 Tyler 的傢伙說了聲「酷」，然後問我能不能載他回家。不是天堂，不是地獄，只是一座學得比市議會快的小城。</p>
           <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange);border:0;padding-left:0">地理是最後一個櫃子</div>
         </div>
       </div>
       <div class="card report"><div class="hd teal"><span>報導 03</span><span>17 歲 · 火季</span></div>
         <div class="bd">
-          <h3>我撤離過兩次，卻還不能投票</h3>
+          <h3 style="--fit:25px">我撤離過兩次，卻還不能投票</h3>
           <p>我的童年照片是按煙年分類的。我們在 2021 年打包上車，2023 年又一次，兩次收音機裡的大人都稱之為「史無前例」。它有前例。</p>
           <div class="pull teal">「我就是那個前例。」</div>
         </div>
@@ -567,7 +575,7 @@
     <div class="split center">
       <div>
         <span class="kicker pink">10 · 當前議題</span>
-        <h2 class="display" style="margin-top:16px">候補名單</h2>
+        <h2 class="display" style="--fit:54px;--dl:1;margin-top:16px">候補名單</h2>
         <p class="dek">在 Central Okanagan 想找到懂酷兒的醫療，是一份沒有福利的兼職。我們替你打過每一間診所的電話；每一個接通的人，描述的都是同一個三角：電話捉迷藏、轉診的煉獄，還有一條公路。</p>
       </div>
       <div class="stats">
@@ -593,7 +601,7 @@
 <section id="comics" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.08</span><span class="tag">// crumbs · ep.1 · a golem seeks housing</span></div>
-    <h2 class="display">Crumbs<span class="dot">.</span></h2>
+    <h2 class="display" style="--fit:54px;--dl:1">Crumbs<span class="dot">.</span></h2>
     <p class="dek">Our guest strip. Six panels, one loaf, zero vacancies. The slot is open, it pays, and the only brief is: make us laugh about the thing that isn't funny.</p>
     <div style="margin-top:16px"><span class="kicker orange">Ep.1 · pencils, ink & crumbs by open call</span></div>
     <div class="comic-strip"><figure class="panel"><span class="pn">01</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><path d="M50 116 L170 116 L158 140 L62 140 Z" fill="#cdb491" stroke="#1d1a17" stroke-width="3" stroke-linejoin="round"/><line x1="50" y1="116" x2="170" y2="116" stroke="#1d1a17" stroke-width="3"/><g transform="translate(52,22)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
@@ -639,7 +647,7 @@
     <div class="sechead"><span class="no">Sec.11</span><span class="tag" style="color:#b7ad9e">// the wall · rip-out centrefold · pull gently</span></div>
     <div class="split center">
       <div>
-        <h2 class="display">The Wall</h2>
+        <h2 class="display" style="--fit:54px;--dl:1">The Wall</h2>
         <p class="dek" style="color:#cfc6b6">The centrefold is a poster. Tear it out along the gutter and put it where a landlord can see it. This issue's wall belongs to the scene that refuses to be an address.</p>
         <div class="annot"><span class="scribble teal">yes — actually rip it</span></div>
       </div>
@@ -672,7 +680,7 @@
     <div class="sechead"><span class="no">Sec.14</span><span class="tag">// 行事曆 · aug–oct 2026 · 剪下＋貼冰箱</span></div>
     <div class="split">
       <div>
-        <h2 class="display">行事曆<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:1">行事曆<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">刊登免費；請於 15 日前來信。清醒場與全年齡場以 ◦ 標示。</p>
         <div class="card" style="margin-top:24px">
           <div class="hd"><span>Aug — Oct 2026</span><span class="r">剪下＋貼冰箱</span></div>
@@ -737,7 +745,7 @@
     <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">// 投稿 · №2——「解凍」</span></div>
     <div class="split">
       <div>
-        <h2 class="display">沾上你的<br>碎屑<span class="dot">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:2">沾上你的<br>碎屑<span class="dot">.</span></h2>
         <p class="dek" style="color:#cfc6b6">連載小說、一整幅開放跨頁、一個青年之聲部門、一份持續更新的資源名錄：№1 是一個圈子辯稱自己存在的初稿。№2 是「解凍」——那些回來的東西。把你的怒火和食譜寄給我們。</p>
         <div style="margin-top:26px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
           <a href="mailto:hello@dailybread.example?subject=WALL" class="stamp pink">hello@dailybread.example</a>
@@ -778,7 +786,7 @@
       <div>
         <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:min(280px,80%)">
         <div class="meta" style="letter-spacing:.45em;margin-top:10px">Laboratories Inc.</div>
-        <h2 class="display" style="margin-top:22px">來自實驗室</h2>
+        <h2 class="display" style="--fit:54px;--dl:1;margin-top:22px">來自實驗室</h2>
         <div class="prose justify" style="margin-top:18px">
           <p>完整揭露，放大印刷：本雜誌由 Riposte Laboratories 資助，這是一家 Kelowna 的機構，用回收塑膠射出成型與回收電芯模組化電力反擊浪費。我們在同樣的頁面、以和其他人同樣的音量，分享我們正在打造的東西。</p>
           <p>白紙黑字的協議：實驗室付印刷費，換得兩頁。編輯對讀者負責，不對資助方。若這一點哪天變了，塗色頁會讓你知道。</p>
@@ -810,7 +818,7 @@
     <div class="sechead"><span class="no">Sec.24</span><span class="tag">// peel me · sticker sheet · the leftover ink went here</span></div>
     <div class="split center">
       <div>
-        <h2 class="display">Peel Me<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:1">Peel Me<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">The leftover ink went here. Print the page, cut along the dashes, and put the valley on your water bottle. Twelve stickers; no two collapses alike.</p>
       </div>
       <div class="print-cta">
