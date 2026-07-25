@@ -1,0 +1,86 @@
+  /* ==========================================================================
+     Daily Bread · lightweight-variant overrides
+     --------------------------------------------------------------------------
+     Layered AFTER style.css on the Lite and E-ink renderings. The full page is
+     unchanged; these variants reuse the same markup + strings, drop the web
+     fonts, and strip the heavy chrome (glows, hard offset shadows, checker /
+     harlequin bands) for low-bandwidth reading. E-ink additionally collapses
+     the pink / orange / teal accents to pure ink via the token set, then mops
+     up the hand-coded hexes the tokens can't reach.  Every rule is scoped to
+     html.v-lite / html.v-eink, so it only ever touches an alt page.
+     Generated with the page; edit tools/build.js + this file, then rebuild.
+     ========================================================================== */
+
+  /* ---------- shared: strip the expensive decoration ---------- */
+  .v-lite .hero .glow,.v-eink .hero .glow{display:none}
+  .v-lite .card,.v-eink .card,
+  .v-lite .stat,.v-eink .stat,
+  .v-lite .panel,.v-eink .panel,
+  .v-lite .plate,.v-eink .plate,
+  .v-lite .field-ink .card,.v-eink .field-ink .card,
+  .v-lite .cover-frame,.v-eink .cover-frame,
+  .v-lite .centrefold .poster-svg,.v-eink .centrefold .poster-svg,
+  .v-lite .printbtn,.v-eink .printbtn{box-shadow:none}
+  .v-lite .cover-frame,.v-eink .cover-frame{border-width:2px}
+
+  /* bands: the conic checker / harlequin fills become plain rules */
+  .v-lite .band,.v-eink .band{height:0;background:none;border-top:2px solid var(--ink);margin:0}
+  .v-lite .hero .band,.v-eink .hero .band{border-top-color:var(--bone)}
+
+  /* tighter vertical rhythm; the giant fallback mast needs reining in */
+  .v-lite .sec,.v-eink .sec{padding:56px 0}
+  .v-lite .sec.tight,.v-eink .sec.tight{padding:44px 0}
+  .v-lite .hero-grid,.v-eink .hero-grid{padding:48px 0 60px;gap:40px}
+  .v-lite .hero .mast,.v-eink .hero .mast{font-size:clamp(52px,11vw,104px)}
+
+  /* ---------- version switch (base look lives in style.css) ---------- */
+  .v-lite header.top .vswitch a:hover,.v-eink header.top .vswitch a:hover{color:var(--pink)}
+
+  /* ==========================================================================
+     E-INK · pure monochrome, high contrast, no motion
+     Redefining the palette tokens collapses every var()-driven accent — chips,
+     kickers, rules, borders, inline style="color:var(--pink)" — to black on
+     white in one move. The !important rules below reach the hand-coded hexes
+     (SVG art, sticker inks) and the dark-field text that would otherwise vanish.
+     ========================================================================== */
+  html.v-eink{
+    --ink:#000; --bone:#fff; --panel:#fff; --paper2:#fff; --dark:#000; --muted:#444;
+    --pink:#000; --teal:#000; --orange:#000;
+    --checker:none; --checker-inv:none; --harlequin:none;
+  }
+  .v-eink body{font-size:17px}
+  .v-eink *{animation:none!important;transition:none!important;box-shadow:none!important;text-shadow:none!important}
+  .v-eink a{text-decoration:underline}
+  .v-eink ::selection{background:#000;color:#fff}
+
+  /* chips / kickers / coloured card headers — force ink-on-paper both ways */
+  .v-eink .pgchip,.v-eink .statuschip{background:#000!important;color:#fff!important}
+  .v-eink .kicker{background:#000!important;color:#fff!important}
+  .v-eink .card>.hd.pink,.v-eink .card>.hd.teal,.v-eink .card>.hd.orange{background:#000!important;color:#fff!important}
+  .v-eink .mtnote{background:#fff!important;color:#000!important;border-color:#000!important}
+
+  /* dark fields: keep the black ground, make the accents legible in white */
+  .v-eink .field-ink .card{background:#000!important;border-color:#fff!important;color:#fff!important}
+  .v-eink .field-ink .card>.hd{background:#000!important;color:#fff!important;border-color:#fff!important}
+  .v-eink .field-ink a{color:#fff!important}
+  .v-eink .field-ink .scribble{color:#fff!important}
+  .v-eink .field-ink .report .pull{color:#fff!important;border-color:#fff!important}
+  .v-eink .bigquote .mk{color:#fff!important}
+  .v-eink footer .signoff{color:#fff!important}
+  .v-eink .plate{background:#000!important;border-color:#fff!important}
+
+  /* stamps: transparent-on-dark would disappear; light them on ink fields */
+  .v-eink .hero .stamp,.v-eink .field-ink .stamp{border-color:#fff!important;color:#fff!important}
+  .v-eink .hero .stamp.free{border-color:#000!important;color:#000!important}
+
+  /* sticker inks are hand-coded hex; pin them to black */
+  .v-eink .sticker .lab,.v-eink .sticker .quote{color:#000!important}
+  .v-eink .sticker .stampbadge{border-color:#000!important;color:#000!important}
+
+  /* colour art can't be tokenised; render it as the e-ink screen would — grey */
+  .v-eink .cover-frame img,
+  .v-eink .panel .art svg,
+  .v-eink .centrefold .poster-svg,
+  .v-eink .plate svg,
+  .v-eink .colour-svg,
+  .v-eink .sticker .ic svg{filter:grayscale(1)}
