@@ -310,6 +310,13 @@ function page(code, variant){
   const L = LANGS.find(l=>l.code===code);
   const rtl = L.dir === 'rtl';
   const htmlCls = V.cls ? ` class="${V.cls}"` : '';
+  /* e-ink ships a pre-dithered 1-bit cover (Floyd–Steinberg) instead of the
+     colour JPEG: a continuous-tone photo would be hard-thresholded to blotches
+     by a 1-bit panel, and CSS grayscale() does not dither. Regenerate the asset
+     with tools/dither-cover.sh. full / lite keep the JPEG. */
+  const cover = variant==='eink'
+    ? { src:'/assets/cover-eink.png', w:800,  h:1200 }
+    : { src:'/assets/cover.jpg',      w:1000, h:1500 };
   /* full loads the three web fonts; the lightweight variants ship system-only */
   const fonts = variant==='full'
     ? `<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -383,7 +390,7 @@ ${mtnote(t, code, variant)}
       <div class="cover-wrap">
         <span class="tab">${t['hero.sheet']}</span>
         <div class="cover-frame">
-          <img src="/assets/cover.jpg" alt="${esc(t['hero.coverAlt'])}" width="1000" height="1500">
+          <img src="${cover.src}" alt="${esc(t['hero.coverAlt'])}" width="${cover.w}" height="${cover.h}">
           <div class="cap"><span>${t['hero.capA']}</span><span>${t['hero.capB']}</span></div>
         </div>
         <span class="stamp free">${t['hero.free']}</span>
