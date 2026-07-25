@@ -1,9 +1,10 @@
 /* ============================================================================
    Daily Bread · multilingual static-site generator
    ----------------------------------------------------------------------------
-   Emits the magazine home page in 15 languages (English + the 12 the Government
-   of BC officially supports, plus Italian and Polish), matching the language set
-   and chrome of the sibling ripostelabs.xyz site.
+   Emits the magazine home page in 16 languages (English + the 12 the Government
+   of BC officially supports, plus Italian, Polish and Latin), each in three
+   renderings — full / lite / e-ink — matching the language set and lightweight
+   variants of the sibling ripostelabs.xyz site.
 
    Source of truth:
      tools/strings/en.js         English strings (one key = one unit)
@@ -11,15 +12,30 @@
      tools/assets/style.css      the page stylesheet (inlined into <head>)
      assets/                      cover.jpg + riposte-logo.svg (served from /assets)
 
-   URL scheme: English at root ("/"), every other language under "/<lang>/".
-   Run:  node tools/build.js            (build all languages)
-         node tools/build.js fr         (build one language)
-         node tools/build.js --clean    (remove generated language dirs first)
+   URL scheme: English full at root ("/"); other languages under "/<lang>/";
+   the lite / e-ink renderings add a "/lite/" or "/eink/" segment, e.g. "/lite/",
+   "/eink/", "/fr/lite/", "/ar/eink/".
+   Run:  node tools/build.js            (build all languages × all renderings)
+         node tools/build.js fr         (one language, all renderings)
+         node tools/build.js eink       (one rendering, all languages)
+         node tools/build.js fr eink    (one language + one rendering)
+         node tools/build.js --clean    (remove generated dirs first)
    ============================================================================ */
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const STYLE = fs.readFileSync(path.join(__dirname, 'assets', 'style.css'), 'utf8');
+const ALT = fs.readFileSync(path.join(__dirname, 'assets', 'alt.css'), 'utf8');
+
+/* ---- renderings: the full page + two lightweight variants ----
+   full  = the rich, web-font, colour edition (served at the page root)
+   lite  = same content, no web fonts, decoration stripped, colour kept
+   eink  = lite + monochrome, high-contrast, motion-free (for e-readers)     */
+const VARIANTS = [
+  {id:'full', cls:'',        seg:''},
+  {id:'lite', cls:'v-lite',  seg:'lite'},
+  {id:'eink', cls:'v-eink',  seg:'eink'},
+];
 
 /* ---- languages (code = dir name; hreflang = BCP-47; dir = ltr|rtl) ---- */
 const LANGS = [
@@ -241,33 +257,73 @@ function stickerSheet(t){
 }
 
 /* ---- shared chrome ---- */
-function url(code){ return code === 'en' ? '/' : '/' + code + '/'; }
-function langpick(t, code){
+/* url("fr","lite") -> "/fr/lite/" · url("en","full") -> "/" · url("en","lite") -> "/lite/" */
+function url(code, variant){
+  const seg = (VARIANTS.find(v=>v.id===variant) || VARIANTS[0]).seg;
+  const base = code === 'en' ? '/' : '/' + code + '/';
+  return seg ? base + seg + '/' : base;
+}
+function langpick(t, code, variant){
   const cur = LANGS.find(l=>l.code===code);
   const items = LANGS.map(l=>{
     const c = l.code===code ? ' aria-current="true"' : '';
-    return `<a href="${url(l.code)}" hreflang="${l.hreflang}" lang="${l.hreflang}"${l.dir==='rtl'?' dir="rtl"':''}${c}><span class="endo">${l.endo}</span><span class="en">${l.en}</span></a>`;
+    return `<a href="${url(l.code, variant)}" hreflang="${l.hreflang}" lang="${l.hreflang}"${l.dir==='rtl'?' dir="rtl"':''}${c}><span class="endo">${l.endo}</span><span class="en">${l.en}</span></a>`;
   }).join('');
   return `<details class="langpick"><summary aria-label="${esc(t['chrome.language'])}"><span class="globe" aria-hidden="true">\u{1F310}</span> ${cur.endo} <span class="car" aria-hidden="true">▾</span></summary><div class="langmenu">${items}</div></details>`;
 }
-function hreflangs(){
-  const links = LANGS.map(l=>`<link rel="alternate" hreflang="${l.hreflang}" href="${ORIGIN}${url(l.code)}">`);
-  links.push(`<link rel="alternate" hreflang="x-default" href="${ORIGIN}${url('en')}">`);
+/* rendering switch — same language, hop between full / lite / e-ink */
+function vswitch(t, code, variant){
+  const key = {full:'chrome.verFull', lite:'chrome.verLite', eink:'chrome.verEink'};
+  const items = VARIANTS.map(v=>{
+    const cur = v.id===variant ? ' aria-current="true"' : '';
+    return `<a href="${url(code, v.id)}"${cur}>${esc(t[key[v.id]])}</a>`;
+  }).join('');
+  return `<nav class="vswitch" aria-label="${esc(t['chrome.rendering'])}">${items}</nav>`;
+}
+function fswitch(t, code, variant){
+  const key = {full:'chrome.verFull', lite:'chrome.verLite', eink:'chrome.verEink'};
+  const items = VARIANTS.map(v=>{
+    const cur = v.id===variant ? ' aria-current="true"' : '';
+    return `<a href="${url(code, v.id)}"${cur}>${esc(t[key[v.id]])}</a>`;
+  }).join(' · ');
+  return `<div class="fswitch">${esc(t['chrome.altVersions'])}: ${items}</div>`;
+}
+function hreflangs(variant){
+  const links = LANGS.map(l=>`<link rel="alternate" hreflang="${l.hreflang}" href="${ORIGIN}${url(l.code, variant)}">`);
+  links.push(`<link rel="alternate" hreflang="x-default" href="${ORIGIN}${url('en', variant)}">`);
   return links.join('\n');
 }
-function mtnote(t, code){
-  return code==='en' ? '' : `<div class="mtnote">${t['chrome.mtnote']}</div>`;
+function mtnote(t, code, variant){
+  if(code==='en') return '';
+  /* point the "read the English edition" link at the same rendering */
+  const note = t['chrome.mtnote'].replace('href="/"', `href="${url('en', variant)}"`);
+  return `<div class="mtnote">${note}</div>`;
 }
 
 /* ============================================================================
    page
    ============================================================================ */
-function page(code){
+function page(code, variant){
+  variant = variant || 'full';
+  const V = VARIANTS.find(v=>v.id===variant) || VARIANTS[0];
   const t = loadStrings(code);
   const L = LANGS.find(l=>l.code===code);
   const rtl = L.dir === 'rtl';
+  const htmlCls = V.cls ? ` class="${V.cls}"` : '';
+  /* full loads the three web fonts; the lightweight variants ship system-only */
+  const fonts = variant==='full'
+    ? `<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">`
+    : '';
+  /* full advertises the lighter renderings to data-saver / monochrome clients */
+  const hints = variant==='full'
+    ? `<link rel="alternate" media="(prefers-reduced-data: reduce)" href="${url(code,'lite')}">
+<link rel="alternate" media="(monochrome)" href="${url(code,'eink')}">`
+    : '';
+  const css = variant==='full' ? STYLE : STYLE + '\n' + ALT;
   return `<!DOCTYPE html>
-<html lang="${L.hreflang}"${rtl?' dir="rtl"':''}>
+<html lang="${L.hreflang}"${rtl?' dir="rtl"':''}${htmlCls}>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -277,13 +333,11 @@ function page(code){
 <meta property="og:description" content="${esc(t['meta.ogDesc'])}">
 <meta property="og:image" content="/assets/cover.jpg">
 <meta property="og:type" content="website">
-<link rel="canonical" href="${ORIGIN}${url(code)}">
-${hreflangs()}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link rel="canonical" href="${ORIGIN}${url(code, variant)}">
+${hreflangs(variant)}${hints ? '\n'+hints : ''}
+${fonts}
 <style>
-${STYLE}
+${css}
 </style>
 </head>
 <body>
@@ -305,10 +359,11 @@ ${STYLE}
       <a href="#lab">${esc(t['nav.lab'])}</a>
       <a href="#stickers">${esc(t['nav.stickers'])}</a>
     </nav>
-    ${langpick(t, code)}
+    ${vswitch(t, code, variant)}
+    ${langpick(t, code, variant)}
   </div>
 </header>
-${mtnote(t, code)}
+${mtnote(t, code, variant)}
 
 <!-- ============ HERO ============ -->
 <div class="hero">
@@ -692,6 +747,7 @@ ${mtnote(t, code)}
       <div class="meta" style="line-height:1.7;text-align:left">${t['footer.issn']}</div>
     </div>
     <div class="signoff" style="color:var(--pink);margin-top:4px">${t['footer.signoff']}</div>
+    ${fswitch(t, code, variant)}
     <div class="colophon">${t['footer.colophon']}</div>
   </div>
   <div class="band" style="border-top:2px solid var(--bone)"></div>
@@ -705,19 +761,24 @@ ${mtnote(t, code)}
 /* ============================================================================
    write + sitemap + main
    ============================================================================ */
-function outPath(code){
-  return code === 'en' ? path.join(ROOT, 'index.html') : path.join(ROOT, code, 'index.html');
+function outPath(code, variant){
+  const seg = (VARIANTS.find(v=>v.id===variant) || VARIANTS[0]).seg;
+  const dir = code === 'en' ? ROOT : path.join(ROOT, code);
+  return seg ? path.join(dir, seg, 'index.html') : path.join(dir, 'index.html');
 }
 function write(file, html){
   fs.mkdirSync(path.dirname(file), {recursive:true});
   fs.writeFileSync(file, html);
 }
 function emitSitemap(){
-  const urls = LANGS.map(L=>{
-    const alts = LANGS.map(l=>`    <xhtml:link rel="alternate" hreflang="${l.hreflang}" href="${ORIGIN}${url(l.code)}"/>`).join('\n')
-      + `\n    <xhtml:link rel="alternate" hreflang="x-default" href="${ORIGIN}${url('en')}"/>`;
-    return `  <url>\n    <loc>${ORIGIN}${url(L.code)}</loc>\n${alts}\n  </url>`;
-  });
+  const urls = [];
+  for(const V of VARIANTS){
+    for(const L of LANGS){
+      const alts = LANGS.map(l=>`    <xhtml:link rel="alternate" hreflang="${l.hreflang}" href="${ORIGIN}${url(l.code, V.id)}"/>`).join('\n')
+        + `\n    <xhtml:link rel="alternate" hreflang="x-default" href="${ORIGIN}${url('en', V.id)}"/>`;
+      urls.push(`  <url>\n    <loc>${ORIGIN}${url(L.code, V.id)}</loc>\n${alts}\n  </url>`);
+    }
+  }
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n`+
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n`+
     urls.join('\n')+`\n</urlset>\n`;
@@ -725,23 +786,35 @@ function emitSitemap(){
   console.log('wrote sitemap.xml:', urls.length, 'urls');
 }
 function clean(){
+  /* remove every generated language dir, plus the root-level lite/ + eink/ */
   for(const L of LANGS){
     if(L.code==='en') continue;
     const d = path.join(ROOT, L.code);
     if(fs.existsSync(d)){ fs.rmSync(d, {recursive:true, force:true}); console.log('removed', L.code+'/'); }
   }
+  for(const V of VARIANTS){
+    if(!V.seg) continue;
+    const d = path.join(ROOT, V.seg);
+    if(fs.existsSync(d)){ fs.rmSync(d, {recursive:true, force:true}); console.log('removed', V.seg+'/'); }
+  }
 }
 function main(){
   const args = process.argv.slice(2);
   if(args.includes('--clean')) clean();
-  const only = args.find(a=>!a.startsWith('--')) || null;
+  /* positional args (any order): a language code and/or a variant id */
+  const pos = args.filter(a=>!a.startsWith('--'));
+  const onlyLang = pos.find(a=>LANGS.some(l=>l.code===a)) || null;
+  const onlyVar = pos.find(a=>VARIANTS.some(v=>v.id===a)) || null;
   let n = 0;
-  for(const L of LANGS){
-    if(only && L.code !== only) continue;
-    write(outPath(L.code), page(L.code)); n++;
-    console.log('built', L.code);
+  for(const V of VARIANTS){
+    if(onlyVar && V.id !== onlyVar) continue;
+    for(const L of LANGS){
+      if(onlyLang && L.code !== onlyLang) continue;
+      write(outPath(L.code, V.id), page(L.code, V.id)); n++;
+    }
+    console.log('built', V.id, '·', (onlyLang || LANGS.length+' languages'));
   }
-  if(!only) emitSitemap();
+  if(!onlyLang && !onlyVar) emitSitemap();
   console.log('done:', n, 'files');
 }
 main();

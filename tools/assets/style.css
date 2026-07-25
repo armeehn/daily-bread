@@ -237,6 +237,18 @@
     @page{margin:12mm}
   }
 
+  /* ---------- rendering switch (Full / Lite / E-ink) ---------- */
+  header.top .vswitch{order:2;display:flex;border:2px solid var(--bone);font-size:10px;
+    letter-spacing:.12em;text-transform:uppercase}
+  header.top .vswitch a{color:var(--bone);padding:5px 9px;border-inline-start:1px dashed var(--bone);white-space:nowrap}
+  header.top .vswitch a:first-child{border-inline-start:0}
+  header.top .vswitch a[aria-current]{background:var(--bone);color:var(--ink);font-weight:700}
+  header.top .vswitch a:hover{color:var(--pink)}
+  header.top .vswitch a[aria-current]:hover{color:var(--ink)}
+  footer .fswitch{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8d857a;margin-top:2px}
+  footer .fswitch a{color:var(--bone);text-decoration:underline;margin:0 2px}
+  footer .fswitch a[aria-current]{color:var(--pink);text-decoration:none;font-weight:700}
+
   /* ---------- i18n chrome: language picker + MT notice ---------- */
   header.top .bar .langpick{position:relative;order:2;margin-inline-start:auto;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
   .langpick>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;color:var(--bone);padding:4px 2px}
