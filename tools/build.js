@@ -57,7 +57,7 @@ const LANGS = [
   {code:'fa',      hreflang:'fa',      endo:'فارسی',         en:'Farsi',                dir:'rtl'},
 ];
 
-const ORIGIN = 'https://dailybre.ad';
+const ORIGIN = 'https://ourdailybre.ad';
 
 /* ---- string loading (translation falls back to English per key) ---- */
 const EN = require('./strings/en.js');

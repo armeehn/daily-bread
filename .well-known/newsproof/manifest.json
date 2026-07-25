@@ -9,13 +9,13 @@
       "Daily Bread",
       "Riposte Laboratories Inc."
     ],
-    "origin": "https://dailybre.ad"
+    "origin": "https://ourdailybre.ad"
   },
   "publisher_key_id": "dc93d30cf93f629a",
   "log_key_id": "ca8f1397d1cf96dd",
   "tree_size": 16,
-  "root_sha256": "514977f0ff5610a2a83e90759e1125977f9aa30f5f55dbcb04bea89c923ceb91",
-  "sth_timestamp": "2026-07-25T06:00:14Z",
+  "root_sha256": "5224f77ef9170edcf3537931ac58fa9a459a803ffcc0210215423450e8cd4ece",
+  "sth_timestamp": "2026-07-25T13:51:19Z",
   "editions": [
     {
       "code": "en",
