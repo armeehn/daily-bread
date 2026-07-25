@@ -363,10 +363,10 @@ function page(code, variant){
   const L = LANGS.find(l=>l.code===code);
   const rtl = L.dir === 'rtl';
   const htmlCls = V.cls ? ` class="${V.cls}"` : '';
-  /* e-ink ships a pre-dithered 1-bit cover (Floyd–Steinberg) instead of the
-     colour JPEG: a continuous-tone photo would be hard-thresholded to blotches
-     by a 1-bit panel, and CSS grayscale() does not dither. Regenerate the asset
-     with tools/dither-cover.sh. full / lite keep the JPEG. */
+  /* e-ink ships a pre-dithered 1-bit cover (an AM halftone / newsprint screen)
+     instead of the colour JPEG: a continuous-tone photo would be hard-thresholded
+     to blotches by a 1-bit panel, and CSS grayscale() does not dither. Regenerate
+     the asset with tools/dither-cover.sh. full / lite keep the JPEG. */
   const cover = variant==='eink'
     ? { src:'/assets/cover-eink.png', w:800,  h:1200 }
     : { src:'/assets/cover.jpg',      w:1000, h:1500 };
