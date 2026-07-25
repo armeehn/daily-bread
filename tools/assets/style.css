@@ -92,9 +92,9 @@
 
   /* ---------- top bar ---------- */
   header.top{position:sticky;top:0;z-index:60;background:var(--ink);color:var(--bone);border-bottom:2px solid var(--bone)}
-  header.top .bar{display:flex;align-items:center;gap:18px;height:46px}
-  header.top .brand{font-family:'UnifrakturMaguntia',serif;font-size:22px;line-height:1}
-  header.top nav{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
+  header.top .bar{display:flex;align-items:center;flex-wrap:wrap;gap:6px 18px;min-height:46px;padding:6px 0}
+  header.top .brand{font-family:'UnifrakturMaguntia',serif;font-size:22px;line-height:1;order:1}
+  header.top nav{order:3;flex-basis:100%;display:flex;gap:10px 18px;flex-wrap:wrap;padding-bottom:2px}
   header.top nav a{color:var(--bone);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
   header.top nav a:hover{color:var(--pink)}
   @media(max-width:760px){header.top nav{display:none}}
@@ -238,7 +238,7 @@
   }
 
   /* ---------- i18n chrome: language picker + MT notice ---------- */
-  header.top .bar .langpick{position:relative;margin-left:14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  header.top .bar .langpick{position:relative;order:2;margin-inline-start:auto;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
   .langpick>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;color:var(--bone);padding:4px 2px}
   .langpick>summary::-webkit-details-marker{display:none}
   .langpick>summary .globe{font-size:13px}
@@ -258,7 +258,6 @@
   .mtnote{background:var(--orange);color:var(--ink);font-size:11px;letter-spacing:.02em;
     text-align:center;padding:8px 16px;line-height:1.55;border-bottom:2px solid var(--ink)}
   .mtnote a{color:var(--ink);text-decoration:underline;font-weight:700}
-  @media(max-width:760px){header.top .bar .langpick{margin-left:auto}}
   /* RTL adjustments for machine-translated Arabic / Farsi */
   [dir="rtl"] .dropcap::first-letter{float:right;padding:6px 0 0 12px}
   [dir="rtl"] .pull{border-left:0;border-right:6px solid var(--pink);padding-left:0;padding-right:15px}
