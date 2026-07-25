@@ -26,8 +26,14 @@
   .kicker.pink{background:var(--pink);color:var(--bone)}
   .kicker.teal{background:var(--teal);color:var(--bone)}
   .kicker.orange{background:var(--orange);color:var(--ink)}
-  .display{font-size:clamp(32px,5.4vw,54px);line-height:.96;font-weight:800;
-    text-transform:uppercase;letter-spacing:-.015em}
+  /* .display headings are fitted per language at build time: --fit caps the
+     font so the translated headline holds the same line count as English, and
+     --dl reserves that many lines (viewport-driven, so identical across
+     languages) — the block below every headline lands at the same place.
+     Both fall back gracefully when unset (English full-width headings). */
+  .display{font-size:min(clamp(32px,5.4vw,54px),var(--fit,999px));line-height:.96;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.015em;text-wrap:balance;overflow-wrap:break-word;
+    min-height:calc(var(--dl,1) * .96 * clamp(32px,5.4vw,54px))}
   .display .dot{color:var(--pink)}
   .frak{font-family:'UnifrakturMaguntia',serif;font-weight:400;line-height:.9}
   .dek{font-size:15.5px;line-height:1.7;max-width:62ch;color:#3a352e;margin-top:14px}
@@ -133,7 +139,8 @@
   /* ---------- reports ---------- */
   .report{display:flex;flex-direction:column;height:100%}
   .report .bd{display:flex;flex-direction:column;flex:1}
-  .report h3{font-size:clamp(20px,2.5vw,25px);line-height:1.06;font-weight:800;text-transform:uppercase;margin:0 0 12px}
+  .report h3{font-size:min(clamp(20px,2.5vw,25px),var(--fit,999px));line-height:1.06;font-weight:800;
+    text-transform:uppercase;margin:0 0 12px;text-wrap:balance;overflow-wrap:break-word}
   .report p{font-size:14px;line-height:1.62;margin:0}
   .pull{border-left:6px solid var(--pink);padding:8px 0 8px 15px;font-size:17px;line-height:1.34;
     font-weight:600;font-style:italic;margin-top:auto;padding-top:16px}
@@ -147,7 +154,8 @@
   @media(max-width:560px){.stats{grid-template-columns:1fr}}
 
   /* ---------- quote band ---------- */
-  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;max-width:20ch}
+  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;
+    max-width:22ch;text-wrap:balance;overflow-wrap:break-word}
   .bigquote .mk{color:var(--pink);font-style:normal}
   .attrib{font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:22px;color:#b7ad9e}
 

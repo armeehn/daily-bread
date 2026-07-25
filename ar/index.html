@@ -61,8 +61,14 @@
   .kicker.pink{background:var(--pink);color:var(--bone)}
   .kicker.teal{background:var(--teal);color:var(--bone)}
   .kicker.orange{background:var(--orange);color:var(--ink)}
-  .display{font-size:clamp(32px,5.4vw,54px);line-height:.96;font-weight:800;
-    text-transform:uppercase;letter-spacing:-.015em}
+  /* .display headings are fitted per language at build time: --fit caps the
+     font so the translated headline holds the same line count as English, and
+     --dl reserves that many lines (viewport-driven, so identical across
+     languages) — the block below every headline lands at the same place.
+     Both fall back gracefully when unset (English full-width headings). */
+  .display{font-size:min(clamp(32px,5.4vw,54px),var(--fit,999px));line-height:.96;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.015em;text-wrap:balance;overflow-wrap:break-word;
+    min-height:calc(var(--dl,1) * .96 * clamp(32px,5.4vw,54px))}
   .display .dot{color:var(--pink)}
   .frak{font-family:'UnifrakturMaguntia',serif;font-weight:400;line-height:.9}
   .dek{font-size:15.5px;line-height:1.7;max-width:62ch;color:#3a352e;margin-top:14px}
@@ -168,7 +174,8 @@
   /* ---------- reports ---------- */
   .report{display:flex;flex-direction:column;height:100%}
   .report .bd{display:flex;flex-direction:column;flex:1}
-  .report h3{font-size:clamp(20px,2.5vw,25px);line-height:1.06;font-weight:800;text-transform:uppercase;margin:0 0 12px}
+  .report h3{font-size:min(clamp(20px,2.5vw,25px),var(--fit,999px));line-height:1.06;font-weight:800;
+    text-transform:uppercase;margin:0 0 12px;text-wrap:balance;overflow-wrap:break-word}
   .report p{font-size:14px;line-height:1.62;margin:0}
   .pull{border-left:6px solid var(--pink);padding:8px 0 8px 15px;font-size:17px;line-height:1.34;
     font-weight:600;font-style:italic;margin-top:auto;padding-top:16px}
@@ -182,7 +189,8 @@
   @media(max-width:560px){.stats{grid-template-columns:1fr}}
 
   /* ---------- quote band ---------- */
-  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;max-width:20ch}
+  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;
+    max-width:22ch;text-wrap:balance;overflow-wrap:break-word}
   .bigquote .mk{color:var(--pink);font-style:normal}
   .attrib{font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:22px;color:#b7ad9e}
 
@@ -378,7 +386,7 @@
     <div class="rule" style="margin-bottom:34px"></div>
     <div class="split">
       <div>
-        <h2 class="display">خبزنا<br>اليومي المُرّ</h2>
+        <h2 class="display" style="--fit:54px;--dl:2">خبزنا<br>اليومي المُرّ</h2>
         <div class="prose justify" style="margin-top:22px">
           <p><span class="drop">مرحباً.</span> لقد عثرت على العدد الأول من مجلة كويرية في مدينة لا تكفّ عن إخبارنا أنها لا تملك واحدة. كيلونا فيها تاريخ كويري، وأطفال كوير، وكبار سنّ كوير، وخبّازون وموظفون كوير؛ ما لم يكن فيها هو ورق يقول ذلك بصوت عالٍ.</p>
           <p>هذا العدد عن الانهيار: البساتين، والقاعات، وحساب الإيجار، وازدحام الجسر. ليس لأننا متشائمون، بل لأن الأشياء تتهاوى هنا في مواعيدها، وتسمية الموعد هو أول فعل من أفعال الترميم.</p>
@@ -412,7 +420,7 @@
 <section id="contents" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.01</span><span class="tag">// المحتويات · البيان / 48 pp</span></div>
-    <h2 class="display">المحتويات<span class="dot">.</span></h2>
+    <h2 class="display" style="--fit:54px;--dl:1">المحتويات<span class="dot">.</span></h2>
     <p class="dek">اثنا عشر مساهماً صنعوا العدد №1: كتّاب تتراوح أعمارهم بين 17–74، ومصوّران، ورسّام كاريكاتير واحد، ومدقّق لغوي صبور جداً. كل توقيع محلّي. كل أجرٍ دُفع قبل أن يُدفع للمطبعة.</p>
     <div class="card" style="margin-top:30px">
       <div class="hd"><span>البيان / 48 pp</span><span class="r">DB-TOC</span></div>
@@ -427,7 +435,7 @@
     <div class="sechead"><span class="no">Sec.02</span><span class="tag">// التاريخ · قبل الجسر</span></div>
     <div class="split">
       <div>
-        <h2 class="display">تاريخٌ<br>وقح</h2>
+        <h2 class="display" style="--fit:54px;--dl:2">تاريخٌ<br>وقح</h2>
         <div class="prose justify" style="margin-top:22px">
           <p>باعت الوادي نفسه مرّتين: أولاً كجنّة عدن، ثم كأصلٍ رأسمالي. أفلس مزارعو الفاكهة كثيراً حتى طبعت معامل التعليب عملتها الخاصة؛ حين ماتت الفاكهة، صار العرض شمس التقاعد؛ وحين طرد المتقاعدون القطّافين بغلاء الأسعار، صار العرض شققاً على ضفاف البحيرة. انتهى كل فصلٍ بالطريقة نفسها، إذ صار من يقومون بالعمل يسكنون أبعد فأبعد عن الماء.</p>
           <p>التاريخ الكويري متضفّرٌ في هذا كله: صالات رقصٍ بليالٍ غير رسمية، وشبكات صداقةٍ عملت أيضاً كقوائم سكن، ومشهدٌ نجا بأن كان نافعاً وهادئاً إلى أن لم يعد مضطراً لذلك.</p>
@@ -450,26 +458,26 @@
 <section id="voices" class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">// مكتب الأصوات الشابة · غير مراجَعة. غير محرَّرة. صحيحة.</span></div>
-    <h2 class="display">أصوات شابة</h2>
+    <h2 class="display" style="--fit:54px;--dl:1">أصوات شابة</h2>
     <p class="dek" style="color:#cfc6b6">ثلاثة تقارير ميدانية من كتّاب لا يحقّ لهم التصويت بعد لكنهم يجيدون حساب الإيجار سلفاً. دفعنا لهم؛ ولم نمسّ كلمة.</p>
     <div class="thirds" style="margin-top:34px">
       <div class="card report"><div class="hd pink"><span>التقرير 01</span><span>العمر 19 · سكن</span></div>
         <div class="bd">
-          <h3>لا أحد في عمري يقدر على البقاء</h3>
+          <h3 style="--fit:25px">لا أحد في عمري يقدر على البقاء</h3>
           <p>أعمل في وظيفتين وأتقاسم شقة بغرفتَي نوم مع ثلاثة أشخاص، وأنا قصة النجاح. مجموعة محادثتي حفلة وداعٍ بالتصوير البطيء: فيرنون، كالغاري، قبو أمّي في سَري.</p>
           <div class="pull">"كل معاينةٍ يحضرها أربعون شخصاً وواحدٌ منهم يبكي دائماً."</div>
         </div>
       </div>
       <div class="card report"><div class="hd orange"><span>التقرير 02</span><span>العمر 22 · الإفصاح</span></div>
         <div class="bd">
-          <h3>أفصحتُ في معمل التعليب</h3>
+          <h3 style="--fit:25px">أفصحتُ في معمل التعليب</h3>
           <p>أفصحتُ عن نفسي في حفلة بالغابة في غلينمور، وكان أسوأ ما حدث أن شاباً اسمه تايلر قال "رائع" ثم سألني إن كنت أستطيع توصيله إلى بيته. لا جنّة ولا جحيم، مجرّد مدينة صغيرة تتعلّم أسرع من مجلس بلديّتها.</p>
           <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange);border:0;padding-left:0">الجغرافيا هي الخزانة الأخيرة</div>
         </div>
       </div>
       <div class="card report"><div class="hd teal"><span>التقرير 03</span><span>العمر 17 · موسم الحرائق</span></div>
         <div class="bd">
-          <h3>أُخليتُ مرّتين ولا يحقّ لي التصويت بعد</h3>
+          <h3 style="--fit:25px">أُخليتُ مرّتين ولا يحقّ لي التصويت بعد</h3>
           <p>صور طفولتي مرتّبة حسب سنة الدخان. حزمنا السيارة في 2021 ثم مجدداً في 2023، وفي المرّتين وصفها الكبار في الراديو بأنها غير مسبوقة. لها سابقة.</p>
           <div class="pull teal">"أنا السابقة."</div>
         </div>
@@ -484,7 +492,7 @@
     <div class="split center">
       <div>
         <span class="kicker pink">10 · قضايا راهنة</span>
-        <h2 class="display" style="margin-top:16px">قائمة الانتظار</h2>
+        <h2 class="display" style="--fit:44px;--dl:1;margin-top:16px">قائمة الانتظار</h2>
         <p class="dek">محاولة إيجاد رعاية صحية مؤهَّلة كويرياً في وسط أوكاناغان وظيفة بدوام جزئي بلا مزايا. اتصلنا بكل عيادة كي لا تضطرّ أنت؛ ووصف كل من تواصلنا معه المثلّث نفسه: مطاردة هاتفية، ومتاهة إحالات، وطريق سريع.</p>
       </div>
       <div class="stats">
@@ -510,7 +518,7 @@
 <section id="comics" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.08</span><span class="tag">// crumbs · ep.1 · a golem seeks housing</span></div>
-    <h2 class="display">Crumbs<span class="dot">.</span></h2>
+    <h2 class="display" style="--fit:54px;--dl:1">Crumbs<span class="dot">.</span></h2>
     <p class="dek">Our guest strip. Six panels, one loaf, zero vacancies. The slot is open, it pays, and the only brief is: make us laugh about the thing that isn't funny.</p>
     <div style="margin-top:16px"><span class="kicker orange">Ep.1 · pencils, ink & crumbs by open call</span></div>
     <div class="comic-strip"><figure class="panel"><span class="pn">01</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><path d="M50 116 L170 116 L158 140 L62 140 Z" fill="#cdb491" stroke="#1d1a17" stroke-width="3" stroke-linejoin="round"/><line x1="50" y1="116" x2="170" y2="116" stroke="#1d1a17" stroke-width="3"/><g transform="translate(52,22)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
@@ -556,7 +564,7 @@
     <div class="sechead"><span class="no">Sec.11</span><span class="tag" style="color:#b7ad9e">// the wall · rip-out centrefold · pull gently</span></div>
     <div class="split center">
       <div>
-        <h2 class="display">The Wall</h2>
+        <h2 class="display" style="--fit:54px;--dl:1">The Wall</h2>
         <p class="dek" style="color:#cfc6b6">The centrefold is a poster. Tear it out along the gutter and put it where a landlord can see it. This issue's wall belongs to the scene that refuses to be an address.</p>
         <div class="annot"><span class="scribble teal">yes — actually rip it</span></div>
       </div>
@@ -589,7 +597,7 @@
     <div class="sechead"><span class="no">Sec.14</span><span class="tag">// التقويم · aug–oct 2026 · قصّ + الثلاجة</span></div>
     <div class="split">
       <div>
-        <h2 class="display">التقويم<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:1">التقويم<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">الإدراج مجاني؛ راسِلنا قبل الـ15. الخيارات الخالية من الكحول ولكل الأعمار مؤشَّرة بـ ◦.</p>
         <div class="card" style="margin-top:24px">
           <div class="hd"><span>Aug — Oct 2026</span><span class="r">قصّ + الثلاجة</span></div>
@@ -654,7 +662,7 @@
     <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">// المشاركات · №2 — "الذوبان"</span></div>
     <div class="split">
       <div>
-        <h2 class="display">املأه<br>بالفتات<span class="dot">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:2">املأه<br>بالفتات<span class="dot">.</span></h2>
         <p class="dek" style="color:#cfc6b6">قصص مسلسلة، وصفحةٌ وسطى مفتوحة، ومكتب أصواتٍ شابة، ودليلٌ يبقى محدَّثاً: العدد №1 مسوّدة أولى لمشهدٍ يجادل بأنه موجود. العدد №2 هو "الذوبان" — ما الذي يعود. أرسل لنا غضبك ووصفاتك.</p>
         <div style="margin-top:26px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
           <a href="mailto:hello@dailybread.example?subject=WALL" class="stamp pink">hello@dailybread.example</a>
@@ -695,7 +703,7 @@
       <div>
         <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:min(280px,80%)">
         <div class="meta" style="letter-spacing:.45em;margin-top:10px">Laboratories Inc.</div>
-        <h2 class="display" style="margin-top:22px">من المختبر</h2>
+        <h2 class="display" style="--fit:54px;--dl:1;margin-top:22px">من المختبر</h2>
         <div class="prose justify" style="margin-top:18px">
           <p>إفصاحٌ كامل، مطبوعٌ بحجم كبير: هذه المجلة مموّلة من Riposte Laboratories، مشغلٌ في كيلونا يشنّ هجوماً مضادّاً على الهدر بحقن قوالب البلاستيك المُعاد تدويره والطاقة النمطية من خلايا مُستصلَحة. نشارككم ما نبنيه هنا، في الصفحات نفسها، وبالصوت نفسه كأيّ أحدٍ آخر.</p>
           <p>الاتفاق، مكتوباً: المختبر يدفع للمطبعة ويحصل على صفحتين. المحرّرون يجيبون للقرّاء، لا للمموِّل. وإن تغيّر ذلك يوماً، فصفحة التلوين ستُعلِمك.</p>
@@ -727,7 +735,7 @@
     <div class="sechead"><span class="no">Sec.24</span><span class="tag">// peel me · sticker sheet · the leftover ink went here</span></div>
     <div class="split center">
       <div>
-        <h2 class="display">Peel Me<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:1">Peel Me<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">The leftover ink went here. Print the page, cut along the dashes, and put the valley on your water bottle. Twelve stickers; no two collapses alike.</p>
       </div>
       <div class="print-cta">
