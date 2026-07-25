@@ -129,12 +129,31 @@
 
   /* ---------- top bar ---------- */
   header.top{position:sticky;top:0;z-index:60;background:var(--ink);color:var(--bone);border-bottom:2px solid var(--bone)}
-  header.top .bar{display:flex;align-items:center;flex-wrap:wrap;gap:6px 18px;min-height:46px;padding:6px 0}
-  header.top .brand{font-family:'UnifrakturMaguntia',serif;font-size:22px;line-height:1;order:1}
-  header.top nav{order:3;flex-basis:100%;display:flex;gap:10px 18px;flex-wrap:wrap;padding-bottom:2px}
-  header.top nav a{color:var(--bone);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
-  header.top nav a:hover{color:var(--pink)}
-  @media(max-width:760px){header.top nav{display:none}}
+  header.top .bar{display:flex;align-items:stretch;flex-wrap:wrap;gap:0;min-height:54px}
+  /* brand lockup: blackletter mark + dashed interior rule + spec-sheet titleblock */
+  header.top .brand{order:1;display:flex;align-items:center;text-decoration:none;color:var(--bone);
+    padding:7px 0;margin-inline-end:22px}
+  header.top .brand:hover{color:var(--bone)}
+  header.top .brand .mark{font-family:'UnifrakturMaguntia',serif;font-size:30px;line-height:.9;
+    white-space:nowrap;padding-inline-end:15px}
+  header.top .brand .lock{display:flex;flex-direction:column;justify-content:center;gap:4px;
+    padding-inline-start:15px;border-inline-start:1px dashed rgba(246,241,231,.5)}
+  header.top .brand .lab{font-size:9px;letter-spacing:.17em;text-transform:uppercase;line-height:1.2;
+    color:#cfc6b6;max-width:24ch}
+  header.top .brand .doc{font-size:9px;letter-spacing:.16em;text-transform:uppercase;line-height:1;
+    color:var(--pink);direction:ltr;unicode-bidi:isolate}
+  header.top .brand:hover .doc{color:var(--teal)}
+  /* dashed form-rule bridging the brand block and the switch (spec-sheet motif) */
+  header.top .toprule{order:2;flex:1 1 auto;align-self:stretch;position:relative;min-width:24px}
+  header.top .toprule::before{content:"";position:absolute;left:2px;right:2px;top:50%;
+    border-top:2px dashed rgba(246,241,231,.26)}
+  header.top nav.mainnav{order:5;flex-basis:100%;display:flex;gap:10px 18px;flex-wrap:wrap;
+    padding:9px 0 3px;margin-top:4px;border-top:1px dashed rgba(246,241,231,.26)}
+  header.top nav.mainnav a{color:var(--bone);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  header.top nav.mainnav a:hover{color:var(--pink)}
+  @media(max-width:760px){header.top nav.mainnav{display:none}
+    header.top .toprule{display:none}
+    header.top .brand{margin-inline-end:auto}}
 
   /* ---------- hero ---------- */
   .hero{background:var(--ink);color:var(--bone);position:relative;overflow:hidden}
@@ -280,7 +299,7 @@
   }
 
   /* ---------- rendering switch (Full / Lite / E-ink) ---------- */
-  header.top .vswitch{order:2;display:flex;border:2px solid var(--bone);font-size:10px;
+  header.top .vswitch{order:3;align-self:center;display:flex;border:2px solid var(--bone);font-size:10px;
     letter-spacing:.12em;text-transform:uppercase}
   header.top .vswitch a{color:var(--bone);padding:5px 9px;border-inline-start:1px dashed var(--bone);white-space:nowrap}
   header.top .vswitch a:first-child{border-inline-start:0}
@@ -292,7 +311,7 @@
   footer .fswitch a[aria-current]{color:var(--pink);text-decoration:none;font-weight:700}
 
   /* ---------- i18n chrome: language picker + MT notice ---------- */
-  header.top .bar .langpick{position:relative;order:2;margin-inline-start:auto;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  header.top .bar .langpick{position:relative;order:4;align-self:center;margin-inline-start:16px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
   .langpick>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;color:var(--bone);padding:4px 2px}
   .langpick>summary::-webkit-details-marker{display:none}
   .langpick>summary .globe{font-size:13px}
@@ -357,6 +376,11 @@
 
   /* ---------- version switch (base look lives in style.css) ---------- */
   .v-lite header.top .vswitch a:hover,.v-eink header.top .vswitch a:hover{color:var(--pink)}
+  /* brand titleblock: the pink doc number would collapse to #000 on the dark
+     e-ink bar (invisible); keep it and the interior rule at full paper contrast */
+  .v-eink header.top .brand .doc{color:#fff!important}
+  .v-eink header.top .brand .lock{border-inline-start-color:#fff!important}
+  .v-eink header.top .toprule::before{border-top-color:#fff!important;opacity:.4}
 
   /* ==========================================================================
      E-INK · pure monochrome, high contrast, no motion
@@ -414,8 +438,15 @@
 <!-- ============ TOP BAR ============ -->
 <header class="top">
   <div class="wrap bar">
-    <span class="brand">Daily&nbsp;Bread</span>
-    <nav>
+    <a class="brand" href="/es/lite/">
+      <span class="mark">Daily&nbsp;Bread</span>
+      <span class="lock">
+        <span class="lab">Una revista queer para el Okanagan</span>
+        <span class="doc">DB-001 &middot; N&ordm;1</span>
+      </span>
+    </a>
+    <span class="toprule" aria-hidden="true"></span>
+    <nav class="mainnav">
       <a href="#letter">Carta</a>
       <a href="#contents">Contenido</a>
       <a href="#history">Historia</a>
