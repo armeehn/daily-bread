@@ -102,6 +102,13 @@
   .item .mini.del:hover{background:var(--pink);border-color:var(--pink)}
   .item > .ibody{padding:9px 10px}
   .item.str > .ibody{padding:7px 8px}
+  /* string-list rows append a bare input/textarea (no .field wrapper), so give
+     them the same full-width styling as fields — otherwise a long body paragraph
+     is trapped in the browser's default ~20-col × 2-row box and clips out of view */
+  .item > .ibody > input[type=text],.item > .ibody > textarea{width:100%;background:#fff;
+    border:1.5px solid var(--line);padding:7px 9px;line-height:1.5}
+  .item > .ibody > input[type=text]:focus,.item > .ibody > textarea:focus{outline:0;border-color:var(--pink)}
+  .item > .ibody > textarea{resize:vertical;min-height:60px}
   .additem{border:1.5px dashed var(--ink);background:transparent;width:100%;padding:8px;
     cursor:pointer;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink)}
   .additem:hover{background:var(--ink);color:var(--bone)}
