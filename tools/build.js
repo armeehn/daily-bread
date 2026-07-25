@@ -405,8 +405,15 @@ ${css}
 <!-- ============ TOP BAR ============ -->
 <header class="top">
   <div class="wrap bar">
-    <span class="brand">Daily&nbsp;Bread</span>
-    <nav>
+    <a class="brand" href="${url(code, variant)}">
+      <span class="mark">Daily&nbsp;Bread</span>
+      <span class="lock">
+        <span class="lab">${esc(t['hero.tagline'])}</span>
+        <span class="doc">DB-001 &middot; N&ordm;1</span>
+      </span>
+    </a>
+    <span class="toprule" aria-hidden="true"></span>
+    <nav class="mainnav">
       <a href="#letter">${esc(t['nav.letter'])}</a>
       <a href="#contents">${esc(t['nav.contents'])}</a>
       <a href="#history">${esc(t['nav.history'])}</a>
