@@ -832,7 +832,8 @@ ${mtnote(t, code, variant)}
         <p class="dek">${t['stickers.dek']}</p>
       </div>
       <div class="print-cta">
-        <button type="button" class="printbtn" onclick="window.print()">${t['stickers.print']} ⎙</button>
+        <button type="button" class="printbtn" onclick="document.body.classList.add('print-stickers');window.print()">${t['stickers.print']} ⎙</button>
+        <button type="button" class="printbtn ghost" onclick="document.body.classList.remove('print-stickers');window.print()">${t['stickers.printFull']} ⎙</button>
         <span class="fine">${t['stickers.printHint']}</span>
       </div>
     </div>
@@ -862,6 +863,9 @@ ${mtnote(t, code, variant)}
   </div>
   <div class="band" style="border-top:2px solid var(--bone)"></div>
 </footer>
+
+<!-- reset the sticker-sheet print mode after printing so Ctrl/⌘+P always yields the whole issue -->
+<script>addEventListener('afterprint',function(){document.body.classList.remove('print-stickers')});</script>
 
 </body>
 </html>
