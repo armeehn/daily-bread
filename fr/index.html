@@ -61,8 +61,14 @@
   .kicker.pink{background:var(--pink);color:var(--bone)}
   .kicker.teal{background:var(--teal);color:var(--bone)}
   .kicker.orange{background:var(--orange);color:var(--ink)}
-  .display{font-size:clamp(32px,5.4vw,54px);line-height:.96;font-weight:800;
-    text-transform:uppercase;letter-spacing:-.015em}
+  /* .display headings are fitted per language at build time: --fit caps the
+     font so the translated headline holds the same line count as English, and
+     --dl reserves that many lines (viewport-driven, so identical across
+     languages) — the block below every headline lands at the same place.
+     Both fall back gracefully when unset (English full-width headings). */
+  .display{font-size:min(clamp(32px,5.4vw,54px),var(--fit,999px));line-height:.96;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.015em;text-wrap:balance;overflow-wrap:break-word;
+    min-height:calc(var(--dl,1) * .96 * clamp(32px,5.4vw,54px))}
   .display .dot{color:var(--pink)}
   .frak{font-family:'UnifrakturMaguntia',serif;font-weight:400;line-height:.9}
   .dek{font-size:15.5px;line-height:1.7;max-width:62ch;color:#3a352e;margin-top:14px}
@@ -168,7 +174,8 @@
   /* ---------- reports ---------- */
   .report{display:flex;flex-direction:column;height:100%}
   .report .bd{display:flex;flex-direction:column;flex:1}
-  .report h3{font-size:clamp(20px,2.5vw,25px);line-height:1.06;font-weight:800;text-transform:uppercase;margin:0 0 12px}
+  .report h3{font-size:min(clamp(20px,2.5vw,25px),var(--fit,999px));line-height:1.06;font-weight:800;
+    text-transform:uppercase;margin:0 0 12px;text-wrap:balance;overflow-wrap:break-word}
   .report p{font-size:14px;line-height:1.62;margin:0}
   .pull{border-left:6px solid var(--pink);padding:8px 0 8px 15px;font-size:17px;line-height:1.34;
     font-weight:600;font-style:italic;margin-top:auto;padding-top:16px}
@@ -182,7 +189,8 @@
   @media(max-width:560px){.stats{grid-template-columns:1fr}}
 
   /* ---------- quote band ---------- */
-  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;max-width:20ch}
+  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;
+    max-width:22ch;text-wrap:balance;overflow-wrap:break-word}
   .bigquote .mk{color:var(--pink);font-style:normal}
   .attrib{font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:22px;color:#b7ad9e}
 
@@ -378,7 +386,7 @@
     <div class="rule" style="margin-bottom:34px"></div>
     <div class="split">
       <div>
-        <h2 class="display">Notre effroi<br>quotidien</h2>
+        <h2 class="display" style="--fit:52px;--dl:2">Notre effroi<br>quotidien</h2>
         <div class="prose justify" style="margin-top:22px">
           <p><span class="drop">SALUT.</span> Vous avez trouvé le premier numéro d'un magazine queer dans une ville qui n'arrête pas de nous dire qu'elle n'en a pas. Kelowna a une histoire queer, des jeunes queers, des aînés queers, des boulangers et des bureaucrates queers ; ce qui lui a manqué, c'est du papier qui le dise tout haut.</p>
           <p>Ce numéro parle d'effondrement : les vergers, les salles, l'arithmétique du loyer, la circulation sur le pont. Non pas parce que nous sommes des oiseaux de malheur, mais parce qu'ici les choses tombent en morceaux à date fixe, et nommer le calendrier est le premier geste de la réparation.</p>
@@ -412,7 +420,7 @@
 <section id="contents" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.01</span><span class="tag">// sommaire · manifeste / 48 pp</span></div>
-    <h2 class="display">Sommaire<span class="dot">.</span></h2>
+    <h2 class="display" style="--fit:54px;--dl:1">Sommaire<span class="dot">.</span></h2>
     <p class="dek">Douze contributeurs ont fait le №1 : des plumes de 17 à 74 ans, deux photographes, un dessinateur, une correctrice très patiente. Chaque signature est locale. Chaque cachet a été payé avant l'imprimeur.</p>
     <div class="card" style="margin-top:30px">
       <div class="hd"><span>Manifeste / 48 pp</span><span class="r">DB-TOC</span></div>
@@ -427,7 +435,7 @@
     <div class="sechead"><span class="no">Sec.02</span><span class="tag">// histoire · avant le pont</span></div>
     <div class="split">
       <div>
-        <h2 class="display">Une histoire<br>impertinente</h2>
+        <h2 class="display" style="--fit:52px;--dl:2">Une histoire<br>impertinente</h2>
         <div class="prose justify" style="margin-top:22px">
           <p>La vallée s'est vendue deux fois : d'abord comme Éden, puis comme placement. Les vergers ont fait faillite si souvent que les entrepôts de fruits imprimaient leur propre monnaie de nécessité ; quand les fruits sont morts, l'argumentaire est devenu le soleil de la retraite ; quand les retraités ont chassé les cueilleurs par les prix, l'argumentaire est devenu les lofts au bord du lac. Chaque acte s'est terminé de la même façon : ceux qui faisaient le travail vivaient toujours plus loin de l'eau.</p>
           <p>L'histoire queer est tressée à travers tout cela : des salles de danse aux soirées officieuses, des réseaux d'amitié qui servaient aussi de listes de logement, une scène qui a survécu en se rendant utile et discrète jusqu'à ce qu'elle n'ait plus à l'être.</p>
@@ -450,26 +458,26 @@
 <section id="voices" class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">// pupitre des jeunes voix · non relu. non corrigé. juste.</span></div>
-    <h2 class="display">Jeunes voix</h2>
+    <h2 class="display" style="--fit:54px;--dl:1">Jeunes voix</h2>
     <p class="dek" style="color:#cfc6b6">Trois reportages de plumes qui ne peuvent pas encore voter mais savent déjà faire l'arithmétique du loyer. Nous les avons payées ; nous n'avons pas touché un mot.</p>
     <div class="thirds" style="margin-top:34px">
       <div class="card report"><div class="hd pink"><span>Reportage 01</span><span>19 ans · Logement</span></div>
         <div class="bd">
-          <h3>Personne de mon âge n'a les moyens de rester</h3>
+          <h3 style="--fit:24px">Personne de mon âge n'a les moyens de rester</h3>
           <p>J'ai deux boulots et je partage un deux-pièces avec trois personnes, et je suis celui qui a réussi. Mon groupe de discussion est une fête d'adieu au ralenti : Vernon, Calgary, le sous-sol de maman à Surrey.</p>
           <div class="pull">« Chaque visite attire quarante personnes et il y en a toujours une qui pleure. »</div>
         </div>
       </div>
       <div class="card report"><div class="hd orange"><span>Reportage 02</span><span>22 ans · Coming out</span></div>
         <div class="bd">
-          <h3>Sorti du placard à l'entrepôt de fruits</h3>
+          <h3 style="--fit:25px">Sorti du placard à l'entrepôt de fruits</h3>
           <p>J'ai fait mon coming out à un bush party à Glenmore et le pire qui soit arrivé, c'est qu'un gars nommé Tyler a dit « cool » et m'a demandé de le ramener chez lui. Ni paradis, ni enfer, juste une petite ville qui apprend plus vite que son conseil municipal.</p>
           <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange);border:0;padding-left:0">la géographie est le dernier placard</div>
         </div>
       </div>
       <div class="card report"><div class="hd teal"><span>Reportage 03</span><span>17 ans · Saison des feux</span></div>
         <div class="bd">
-          <h3>J'ai été évacué deux fois et je ne peux pas encore voter</h3>
+          <h3 style="--fit:19px">J'ai été évacué deux fois et je ne peux pas encore voter</h3>
           <p>Les photos de mon enfance sont classées par année de fumée. Nous avons fait la valise en 2021 puis encore en 2023, et les deux fois les adultes à la radio ont parlé de situation sans précédent. Il y a un précédent.</p>
           <div class="pull teal">« Le précédent, c'est moi. »</div>
         </div>
@@ -484,7 +492,7 @@
     <div class="split center">
       <div>
         <span class="kicker pink">10 · Enjeux du moment</span>
-        <h2 class="display" style="margin-top:16px">La liste d'attente</h2>
+        <h2 class="display" style="--fit:34px;--dl:1;margin-top:16px">La liste d'attente</h2>
         <p class="dek">Trouver des soins de santé compétents en matière queer dans le Central Okanagan est un emploi à temps partiel sans avantages sociaux. Nous avons téléphoné à chaque clinique pour vous épargner la peine ; tous ceux que nous avons joints décrivaient le même triangle : parties de téléphone, limbes des orientations et une autoroute.</p>
       </div>
       <div class="stats">
@@ -510,7 +518,7 @@
 <section id="comics" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.08</span><span class="tag">// crumbs · ep.1 · a golem seeks housing</span></div>
-    <h2 class="display">Crumbs<span class="dot">.</span></h2>
+    <h2 class="display" style="--fit:54px;--dl:1">Crumbs<span class="dot">.</span></h2>
     <p class="dek">Our guest strip. Six panels, one loaf, zero vacancies. The slot is open, it pays, and the only brief is: make us laugh about the thing that isn't funny.</p>
     <div style="margin-top:16px"><span class="kicker orange">Ep.1 · pencils, ink & crumbs by open call</span></div>
     <div class="comic-strip"><figure class="panel"><span class="pn">01</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><path d="M50 116 L170 116 L158 140 L62 140 Z" fill="#cdb491" stroke="#1d1a17" stroke-width="3" stroke-linejoin="round"/><line x1="50" y1="116" x2="170" y2="116" stroke="#1d1a17" stroke-width="3"/><g transform="translate(52,22)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
@@ -556,7 +564,7 @@
     <div class="sechead"><span class="no">Sec.11</span><span class="tag" style="color:#b7ad9e">// the wall · rip-out centrefold · pull gently</span></div>
     <div class="split center">
       <div>
-        <h2 class="display">The Wall</h2>
+        <h2 class="display" style="--fit:54px;--dl:1">The Wall</h2>
         <p class="dek" style="color:#cfc6b6">The centrefold is a poster. Tear it out along the gutter and put it where a landlord can see it. This issue's wall belongs to the scene that refuses to be an address.</p>
         <div class="annot"><span class="scribble teal">yes — actually rip it</span></div>
       </div>
@@ -589,7 +597,7 @@
     <div class="sechead"><span class="no">Sec.14</span><span class="tag">// le calendrier · août–oct 2026 · à découper + sur le frigo</span></div>
     <div class="split">
       <div>
-        <h2 class="display">Le calendrier<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:43px;--dl:1">Le calendrier<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">Les annonces sont gratuites ; écrivez-nous avant le 15. Les options sans alcool et tous âges sont marquées ◦.</p>
         <div class="card" style="margin-top:24px">
           <div class="hd"><span>Août — Oct 2026</span><span class="r">À découper + sur le frigo</span></div>
@@ -654,7 +662,7 @@
     <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">// propositions · №2 — « le dégel »</span></div>
     <div class="split">
       <div>
-        <h2 class="display">Laissez-y<br>des miettes<span class="dot">.</span></h2>
+        <h2 class="display" style="--fit:50px;--dl:2">Laissez-y<br>des miettes<span class="dot">.</span></h2>
         <p class="dek" style="color:#cfc6b6">De la fiction en feuilleton, un double page central ouvert, un pupitre des jeunes voix, un répertoire qui reste à jour : le №1 est le premier jet d'une scène qui plaide pour son existence. Le №2, c'est « Le dégel » : ce qui revient. Envoyez-nous votre fureur et vos recettes.</p>
         <div style="margin-top:26px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
           <a href="mailto:hello@dailybread.example?subject=WALL" class="stamp pink">hello@dailybread.example</a>
@@ -695,7 +703,7 @@
       <div>
         <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:min(280px,80%)">
         <div class="meta" style="letter-spacing:.45em;margin-top:10px">Laboratories Inc.</div>
-        <h2 class="display" style="margin-top:22px">Depuis le Labo</h2>
+        <h2 class="display" style="--fit:44px;--dl:1;margin-top:22px">Depuis le Labo</h2>
         <div class="prose justify" style="margin-top:18px">
           <p>Divulgation complète, imprimée en grand : ce magazine est financé par Riposte Laboratories, une équipe de Kelowna qui contre-attaque le gaspillage à coups de moulage par injection de plastique recyclé et d'énergie modulaire à cellules récupérées. Nous partageons ce que nous fabriquons ici, dans les mêmes pages, au même volume que tout le monde.</p>
           <p>L'entente, par écrit : le Labo paie l'imprimeur et obtient deux pages. La rédaction répond aux lecteurs, pas au bailleur de fonds. Si cela change un jour, la page à colorier vous le fera savoir.</p>
@@ -727,7 +735,7 @@
     <div class="sechead"><span class="no">Sec.24</span><span class="tag">// peel me · sticker sheet · the leftover ink went here</span></div>
     <div class="split center">
       <div>
-        <h2 class="display">Peel Me<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:1">Peel Me<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">The leftover ink went here. Print the page, cut along the dashes, and put the valley on your water bottle. Twelve stickers; no two collapses alike.</p>
       </div>
       <div class="print-cta">

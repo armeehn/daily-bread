@@ -57,8 +57,14 @@
   .kicker.pink{background:var(--pink);color:var(--bone)}
   .kicker.teal{background:var(--teal);color:var(--bone)}
   .kicker.orange{background:var(--orange);color:var(--ink)}
-  .display{font-size:clamp(32px,5.4vw,54px);line-height:.96;font-weight:800;
-    text-transform:uppercase;letter-spacing:-.015em}
+  /* .display headings are fitted per language at build time: --fit caps the
+     font so the translated headline holds the same line count as English, and
+     --dl reserves that many lines (viewport-driven, so identical across
+     languages) — the block below every headline lands at the same place.
+     Both fall back gracefully when unset (English full-width headings). */
+  .display{font-size:min(clamp(32px,5.4vw,54px),var(--fit,999px));line-height:.96;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.015em;text-wrap:balance;overflow-wrap:break-word;
+    min-height:calc(var(--dl,1) * .96 * clamp(32px,5.4vw,54px))}
   .display .dot{color:var(--pink)}
   .frak{font-family:'UnifrakturMaguntia',serif;font-weight:400;line-height:.9}
   .dek{font-size:15.5px;line-height:1.7;max-width:62ch;color:#3a352e;margin-top:14px}
@@ -164,7 +170,8 @@
   /* ---------- reports ---------- */
   .report{display:flex;flex-direction:column;height:100%}
   .report .bd{display:flex;flex-direction:column;flex:1}
-  .report h3{font-size:clamp(20px,2.5vw,25px);line-height:1.06;font-weight:800;text-transform:uppercase;margin:0 0 12px}
+  .report h3{font-size:min(clamp(20px,2.5vw,25px),var(--fit,999px));line-height:1.06;font-weight:800;
+    text-transform:uppercase;margin:0 0 12px;text-wrap:balance;overflow-wrap:break-word}
   .report p{font-size:14px;line-height:1.62;margin:0}
   .pull{border-left:6px solid var(--pink);padding:8px 0 8px 15px;font-size:17px;line-height:1.34;
     font-weight:600;font-style:italic;margin-top:auto;padding-top:16px}
@@ -178,7 +185,8 @@
   @media(max-width:560px){.stats{grid-template-columns:1fr}}
 
   /* ---------- quote band ---------- */
-  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;max-width:20ch}
+  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;
+    max-width:22ch;text-wrap:balance;overflow-wrap:break-word}
   .bigquote .mk{color:var(--pink);font-style:normal}
   .attrib{font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:22px;color:#b7ad9e}
 
@@ -461,7 +469,7 @@
     <div class="rule" style="margin-bottom:34px"></div>
     <div class="split">
       <div>
-        <h2 class="display">私たちの日々の<br>おそれ</h2>
+        <h2 class="display" style="--fit:44px;--dl:2">私たちの日々の<br>おそれ</h2>
         <div class="prose justify" style="margin-top:22px">
           <p><span class="drop">HI.</span> あなたは、そんなものは存在しないと言い続けてくる街で、クィア・マガジンの創刊号を見つけました。ケロウナにはクィアの歴史があり、クィアの子どもたちがいて、クィアの年長者がいて、クィアのパン職人も役人もいる。なかったのは、それを声に出して言う紙だけです。</p>
           <p>この号のテーマは崩壊です。果樹園、会場、家賃の計算、橋の渋滞。私たちが破滅論者だからではなく、ここでは物事が予定どおりに崩れ落ちていくからで、その予定表に名前をつけることが、修復の最初の一手だからです。</p>
@@ -495,7 +503,7 @@
 <section id="contents" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.01</span><span class="tag">// 目次 · 積荷目録 / 48 pp</span></div>
-    <h2 class="display">目次<span class="dot">.</span></h2>
+    <h2 class="display" style="--fit:54px;--dl:1">目次<span class="dot">.</span></h2>
     <p class="dek">№1 は十二人の寄稿者が作りました。17–74歳の書き手たち、写真家二人、漫画家一人、そしてとても辛抱強い校正者一人。すべての署名は地元のもの。すべての原稿料は、印刷所への支払いより先に払われました。</p>
     <div class="card" style="margin-top:30px">
       <div class="hd"><span>積荷目録 / 48 pp</span><span class="r">DB-TOC</span></div>
@@ -510,7 +518,7 @@
     <div class="sechead"><span class="no">Sec.02</span><span class="tag">// 歴史 · 橋がかかる前</span></div>
     <div class="split">
       <div>
-        <h2 class="display">無礼な<br>歴史</h2>
+        <h2 class="display" style="--fit:54px;--dl:2">無礼な<br>歴史</h2>
         <div class="prose justify" style="margin-top:22px">
           <p>この谷は自らを二度売りました。まずはエデンとして、次は資産として。果樹農家はあまりに頻繁に破産したので、選果場は独自の代用貨幣を刷ったほど。果樹が死ぬと、売り文句は引退後の陽光になった。引退者が摘み手たちを締め出す家賃をつけると、売り文句は湖畔のロフトになった。どの幕も同じ結末で終わる。働いた人々が、水からますます遠い場所に住むことになるのです。</p>
           <p>クィアの歴史は、そのすべてに編み込まれています。非公式の夜を持つダンスホール、住宅リストを兼ねた友人のネットワーク、役に立ち静かでいることで生き延び、そうする必要がなくなるまで続いたシーン。</p>
@@ -533,26 +541,26 @@
 <section id="voices" class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">// ヤング・ヴォイセズ編集室 · 未査読。未編集。正確。</span></div>
-    <h2 class="display">ヤング・ヴォイセズ</h2>
+    <h2 class="display" style="--fit:54px;--dl:1">ヤング・ヴォイセズ</h2>
     <p class="dek" style="color:#cfc6b6">まだ投票はできないけれど、家賃の計算はもうできる書き手たちからの、三本の現場報告。私たちは彼らに原稿料を払い、一言たりとも手を加えませんでした。</p>
     <div class="thirds" style="margin-top:34px">
       <div class="card report"><div class="hd pink"><span>報告 01</span><span>19歳 · 住宅</span></div>
         <div class="bd">
-          <h3>同世代の誰もここに留まる余裕がない</h3>
+          <h3 style="--fit:25px">同世代の誰もここに留まる余裕がない</h3>
           <p>私は仕事を二つ掛け持ちして、三人と2ベッドルームを分け合っていて、それでも成功例のほうです。私のグループチャットは、スローモーションのお別れ会。ヴァーノン、カルガリー、サレーの実家の地下室へと。</p>
           <div class="pull">「どの内見も四十人待ちで、そのうち一人はいつも泣いている。」</div>
         </div>
       </div>
       <div class="card report"><div class="hd orange"><span>報告 02</span><span>22歳 · カミングアウト</span></div>
         <div class="bd">
-          <h3>選果場でのカミングアウト</h3>
+          <h3 style="--fit:25px">選果場でのカミングアウト</h3>
           <p>私はグレンモアの野外パーティーでカミングアウトして、起きた最悪のことは、タイラーという名の男が「いいね」と言って、家まで送ってくれないかと頼んできたことでした。楽園でも地獄でもなく、ただ市議会よりも速く学んでいる小さな街。</p>
           <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange);border:0;padding-left:0">地理こそ最後のクローゼット</div>
         </div>
       </div>
       <div class="card report"><div class="hd teal"><span>報告 03</span><span>17歳 · 火災シーズン</span></div>
         <div class="bd">
-          <h3>私は二度避難した、そしてまだ投票できない</h3>
+          <h3 style="--fit:25px">私は二度避難した、そしてまだ投票できない</h3>
           <p>私の子ども時代の写真は、煙の年ごとに整理されています。2021年に車に荷物を積み、2023年にもまた積んだ。どちらのときも、ラジオの中の大人たちはそれを前例がないと呼びました。前例はあります。</p>
           <div class="pull teal">「私がその前例です。」</div>
         </div>
@@ -567,7 +575,7 @@
     <div class="split center">
       <div>
         <span class="kicker pink">10 · いま抱えている問題</span>
-        <h2 class="display" style="margin-top:16px">順番待ちリスト</h2>
+        <h2 class="display" style="--fit:44px;--dl:1;margin-top:16px">順番待ちリスト</h2>
         <p class="dek">セントラル・オカナガンでクィアに理解のある医療を探すのは、手当のつかないパートタイムの仕事です。あなたが電話せずに済むよう、私たちがすべての診療所に電話しました。連絡がついた誰もが、同じ三角形について語りました。電話のたらい回し、紹介の宙ぶらりん、そして一本のハイウェイ。</p>
       </div>
       <div class="stats">
@@ -593,7 +601,7 @@
 <section id="comics" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.08</span><span class="tag">// crumbs · ep.1 · a golem seeks housing</span></div>
-    <h2 class="display">Crumbs<span class="dot">.</span></h2>
+    <h2 class="display" style="--fit:54px;--dl:1">Crumbs<span class="dot">.</span></h2>
     <p class="dek">Our guest strip. Six panels, one loaf, zero vacancies. The slot is open, it pays, and the only brief is: make us laugh about the thing that isn't funny.</p>
     <div style="margin-top:16px"><span class="kicker orange">Ep.1 · pencils, ink & crumbs by open call</span></div>
     <div class="comic-strip"><figure class="panel"><span class="pn">01</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><path d="M50 116 L170 116 L158 140 L62 140 Z" fill="#cdb491" stroke="#1d1a17" stroke-width="3" stroke-linejoin="round"/><line x1="50" y1="116" x2="170" y2="116" stroke="#1d1a17" stroke-width="3"/><g transform="translate(52,22)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
@@ -639,7 +647,7 @@
     <div class="sechead"><span class="no">Sec.11</span><span class="tag" style="color:#b7ad9e">// the wall · rip-out centrefold · pull gently</span></div>
     <div class="split center">
       <div>
-        <h2 class="display">The Wall</h2>
+        <h2 class="display" style="--fit:54px;--dl:1">The Wall</h2>
         <p class="dek" style="color:#cfc6b6">The centrefold is a poster. Tear it out along the gutter and put it where a landlord can see it. This issue's wall belongs to the scene that refuses to be an address.</p>
         <div class="annot"><span class="scribble teal">yes — actually rip it</span></div>
       </div>
@@ -672,7 +680,7 @@
     <div class="sechead"><span class="no">Sec.14</span><span class="tag">// カレンダー · 2026年8月–10月 · 切り取って冷蔵庫へ</span></div>
     <div class="split">
       <div>
-        <h2 class="display">カレンダー<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:1">カレンダー<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">掲載は無料。15日までにメールを。しらふ向け・全年齢向けの選択肢は ◦ で表示。</p>
         <div class="card" style="margin-top:24px">
           <div class="hd"><span>2026年8月 — 10月</span><span class="r">切り取って冷蔵庫へ</span></div>
@@ -737,7 +745,7 @@
     <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">// 投稿 · №2 —「雪解け」</span></div>
     <div class="split">
       <div>
-        <h2 class="display">パン屑を<br>こぼして<span class="dot">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:2">パン屑を<br>こぼして<span class="dot">.</span></h2>
         <p class="dek" style="color:#cfc6b6">連載小説、開かれた見開き、ヤング・ヴォイセズ編集室、最新であり続けるディレクトリ。№1 は、自らの存在を主張するシーンの最初の草稿です。№2 は「雪解け」— 戻ってくるもの。あなたの怒りとレシピを送ってください。</p>
         <div style="margin-top:26px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
           <a href="mailto:hello@dailybread.example?subject=WALL" class="stamp pink">hello@dailybread.example</a>
@@ -778,7 +786,7 @@
       <div>
         <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:min(280px,80%)">
         <div class="meta" style="letter-spacing:.45em;margin-top:10px">Laboratories Inc.</div>
-        <h2 class="display" style="margin-top:22px">ラボより</h2>
+        <h2 class="display" style="--fit:54px;--dl:1;margin-top:22px">ラボより</h2>
         <div class="prose justify" style="margin-top:18px">
           <p>包み隠さず、大きく刷ります。このマガジンは Riposte Laboratories の出資によるものです。ケロウナの一団で、再生プラスチックの射出成形と再生セルによるモジュール電源で無駄に反撃しています。私たちがここで作っているものを、同じ誌面で、他の誰とも同じ音量で共有します。</p>
           <p>書面での取り決めはこうです。ラボが印刷代を払い、二ページを得る。編集部は出資者ではなく読者に対して責任を負う。もしそれが変わることがあれば、塗り絵のページがお知らせします。</p>
@@ -810,7 +818,7 @@
     <div class="sechead"><span class="no">Sec.24</span><span class="tag">// peel me · sticker sheet · the leftover ink went here</span></div>
     <div class="split center">
       <div>
-        <h2 class="display">Peel Me<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:1">Peel Me<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">The leftover ink went here. Print the page, cut along the dashes, and put the valley on your water bottle. Twelve stickers; no two collapses alike.</p>
       </div>
       <div class="print-cta">
