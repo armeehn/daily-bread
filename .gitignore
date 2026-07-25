@@ -7,3 +7,10 @@ package-lock.json
 .wrangler/
 .dev.vars*
 !.dev.vars.example
+
+# newsproof — private signing keys never belong in the repo or on the server.
+# The public keys live in .well-known/newsproof/ (committed); the seeds stay
+# offline. Python bytecode caches are noise.
+tools/newsproof/store/
+__pycache__/
+*.pyc

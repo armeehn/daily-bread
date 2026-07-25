@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verify · Daily Bread №1 · tamper-evidence</title>
+<meta name="description" content="Cryptographically verify that every language edition of Daily Bread №1 is the exact issue that was published, signed with an offline key and recorded in an append-only transparency log.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://ourdailybre.ad/verify/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1d1a17; --bone:#f6f1e7; --panel:#eae4d6; --paper2:#efe9db;
+    --muted:#8d857a; --pink:#f0477d; --teal:#12b795; --orange:#fe9a0d;
+    --maxw:940px;
+    --checker:repeating-conic-gradient(var(--ink) 0% 25%,var(--bone) 0% 50%) 0 0/16px 16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bone);color:var(--ink);
+    font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+  .rule{border:0;border-top:2px solid var(--ink);margin:0}
+  .band{height:16px;background:var(--checker)}
+
+  /* header */
+  header{border-bottom:2px solid var(--ink)}
+  .top{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+    padding:14px 0;flex-wrap:wrap}
+  .top .mast{font-family:'UnifrakturMaguntia',serif;font-size:34px;line-height:1;letter-spacing:.5px}
+  .top .kick{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted)}
+  .sechead{display:flex;align-items:center;gap:12px;padding:16px 0 8px}
+  .sechead .no{font-weight:700;font-size:12px;letter-spacing:.2em;background:var(--ink);color:var(--bone);
+    padding:3px 8px}
+  .sechead .tag{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  h1{font-size:26px;line-height:1.15;margin:10px 0 6px;letter-spacing:-.01em}
+  .lede{max-width:66ch;color:#3a352e;margin:0 0 6px}
+
+  /* banner */
+  .banner{display:flex;gap:14px;align-items:flex-start;border:2px solid var(--ink);
+    padding:16px 18px;margin:18px 0;background:var(--panel)}
+  .banner .dot{width:14px;height:14px;border-radius:50%;flex:none;margin-top:4px;background:var(--muted);
+    box-shadow:0 0 0 3px rgba(0,0,0,.06)}
+  .banner.pending .dot{background:var(--orange)}
+  .banner.ok{background:#e7f6ef;border-color:#0e7a5f}
+  .banner.ok .dot{background:var(--teal)}
+  .banner.warn{background:#fbf0da;border-color:#b6791a}
+  .banner.warn .dot{background:var(--orange)}
+  .banner.bad{background:#fbe4e9;border-color:#c31d4c}
+  .banner.bad .dot{background:var(--pink)}
+  .banner .b-title{font-weight:700;font-size:16px}
+  .banner .b-note{color:#3a352e;font-size:13.5px;margin-top:3px;max-width:70ch}
+
+  /* spec box */
+  .spec{border:2px solid var(--ink);margin:18px 0}
+  .spec .sh{display:flex;justify-content:space-between;border-bottom:2px solid var(--ink);
+    padding:8px 12px;font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+  .spec .sh .rl{color:var(--pink);font-weight:700}
+  .spec dl{display:grid;grid-template-columns:auto 1fr;gap:0;margin:0}
+  .spec dt{padding:8px 12px;border-bottom:1px dashed rgba(29,26,23,.28);font-size:11px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--paper2)}
+  .spec dd{padding:8px 12px;border-bottom:1px dashed rgba(29,26,23,.28);margin:0;
+    word-break:break-all;font-size:13px}
+  .spec dt:last-of-type,.spec dd:last-of-type{border-bottom:0}
+
+  /* editions list */
+  #np-list{border:2px solid var(--ink);margin:8px 0 4px}
+  .ed{border-bottom:1px solid rgba(29,26,23,.2)}
+  .ed:last-child{border-bottom:0}
+  .ed-head{width:100%;display:grid;grid-template-columns:16px 1fr auto auto auto 16px;
+    align-items:center;gap:12px;background:none;border:0;cursor:pointer;text-align:left;
+    padding:11px 14px;font:inherit;color:inherit}
+  .ed-head:hover{background:var(--paper2)}
+  .ed-head .dot{width:11px;height:11px;border-radius:50%;background:var(--muted)}
+  .ed.ok .dot{background:var(--teal)} .ed.warn .dot{background:var(--orange)} .ed.bad .dot{background:var(--pink)}
+  .ed-head .lang{font-weight:600}
+  .ed-head .code{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+  .ed-head .state{font-size:12px;letter-spacing:.06em}
+  .ed.ok .state{color:#0e7a5f} .ed.warn .state{color:#a4650f} .ed.bad .state{color:#c31d4c}
+  .ed-head .v{font-size:11px;color:var(--muted)}
+  .ed-head .chev{color:var(--muted);transition:transform .15s}
+  .ed.open .ed-head .chev{transform:rotate(90deg)}
+  .ed-body{display:none;padding:2px 14px 14px 42px;background:var(--paper2)}
+  .ed.open .ed-body{display:block}
+  ul.checks{list-style:none;margin:8px 0;padding:0;font-size:13px}
+  ul.checks li{padding:2px 0}
+  ul.checks li.pass:before{content:"PASS";color:#0e7a5f;font-weight:700;margin-right:8px;font-size:11px}
+  ul.checks li.fail:before{content:"FAIL";color:#c31d4c;font-weight:700;margin-right:8px;font-size:11px}
+  ul.checks .detail{color:var(--muted)}
+  .ed-body .links{font-size:12px;margin-top:8px}
+  .ed-body .links a{color:var(--teal)}
+
+  /* prose blocks */
+  section.blk{padding:8px 0 4px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:8px}
+  @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+  .col h3{font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 6px}
+  .col.def h3{color:var(--teal)} .col.undef h3{color:var(--pink)}
+  .col ul{margin:0;padding-left:18px} .col li{margin:4px 0;font-size:13.5px;color:#3a352e}
+  pre{background:var(--ink);color:var(--bone);padding:14px 16px;overflow:auto;font-size:12.5px;
+    line-height:1.7;border:2px solid var(--ink)}
+  code{background:var(--panel);padding:1px 5px}
+  .note{font-size:12.5px;color:var(--muted);max-width:74ch}
+
+  footer{border-top:2px solid var(--ink);margin-top:26px}
+  footer .inner{padding:22px 0;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  footer a{color:var(--teal);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="band"></div>
+<header>
+  <div class="wrap top">
+    <div>
+      <div class="mast">Daily Bread</div>
+      <div class="kick">Verified Publishing</div>
+    </div>
+    <div class="kick">Sec.00 // tamper-evidence · newsproof v1</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="sechead"><span class="no">SEC.00</span><span class="tag">// what you are looking at</span></div>
+  <h1>Is this really the issue Daily Bread published?</h1>
+  <p class="lede">Every language edition of Issue №1 is signed with a key kept off the
+  web server, recorded in an append-only transparency log, and pinned to a public
+  anchor. This page checks all of that live, in your browser, for all sixteen
+  editions. Nothing here can make an article <em>true</em>; it can only prove the
+  words are the ones that were published, and that the edit history is complete.</p>
+
+  <div id="np-banner" class="banner pending">
+    <span class="dot"></span>
+    <div>
+      <div class="b-title">Loading proofs…</div>
+      <div class="b-note"></div>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="sh"><span>Publisher identity &amp; log state</span><span class="rl">RL-VER-001</span></div>
+    <dl>
+      <dt>Publisher key</dt><dd id="fp-pub">…</dd>
+      <dt>Log key</dt><dd id="fp-log">…</dd>
+      <dt>Tree size</dt><dd id="fp-size">…</dd>
+      <dt>Root (SHA-256)</dt><dd id="fp-root">…</dd>
+      <dt>Public anchor</dt><dd id="fp-anchor">…</dd>
+    </dl>
+  </div>
+  <p class="note">Pin the publisher fingerprint above by comparing it with a copy you
+  got somewhere other than this website — a printed masthead, a verified profile.
+  On your first visit, a key fetched from this site alone proves nothing about who
+  runs it.</p>
+
+  <div class="sechead"><span class="no">SEC.01</span><span class="tag">// the sixteen editions</span></div>
+  <div id="np-list"><p style="padding:14px">Verifying…</p></div>
+  <p class="note">Click any edition to see all seven checks. Each proof bundle is a
+  self-contained <code>proof.json</code> you can download and verify offline.</p>
+
+  <div class="sechead"><span class="no">SEC.02</span><span class="tag">// what this proves, and what it does not</span></div>
+  <div class="grid2">
+    <div class="col def">
+      <h3>Defended</h3>
+      <ul>
+        <li>Tampering by anyone who is not the publisher — a hacked host, a bad CDN edge, a poisoned cache, an intercepting proxy. None hold the publisher key.</li>
+        <li>Silent revision by the publisher: a corrected edition supersedes the old one, but the old one stays in the log forever.</li>
+        <li>Backdating: the publish time is inside the signature and the anchored tree head fixes it in real time.</li>
+      </ul>
+    </div>
+    <div class="col undef">
+      <h3>Not defended</h3>
+      <ul>
+        <li>A publisher who lies from the start. A signed fabrication is still a fabrication; signing attests authorship, not accuracy.</li>
+        <li>This badge, against the publisher. It ships from the same site as the magazine. The real check is the offline verifier below.</li>
+        <li>Theft of the publisher key, and anything a court can compel. Cryptography does not reach those.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sechead"><span class="no">SEC.03</span><span class="tag">// verify it yourself, offline</span></div>
+  <p class="lede">The honest check is one you run with a verifier you did not get from
+  us, against a fingerprint you obtained elsewhere. It needs only Python 3 — no
+  packages to install.</p>
+  <pre>curl -O https://ourdailybre.ad/verify/verify_standalone.py
+curl -O https://ourdailybre.ad/.well-known/newsproof/publisher-key.json
+curl -O https://ourdailybre.ad/.well-known/newsproof/log-key.json
+curl -O https://ourdailybre.ad/.well-known/newsproof/anchors.jsonl
+curl -O https://ourdailybre.ad/.well-known/newsproof/consistency.json
+curl -O https://ourdailybre.ad/.well-known/newsproof/proofs/en.proof.json
+
+python3 verify_standalone.py en.proof.json \
+    --publisher-key publisher-key.json --log-key log-key.json \
+    --anchors anchors.jsonl --consistency consistency.json</pre>
+  <p class="note">The log's leaves are served in full at
+  <a href="/.well-known/newsproof/leaves.jsonl"><code>/.well-known/newsproof/leaves.jsonl</code></a>.
+  Anyone can mirror them and check, over time, that history was only added to and
+  never rewritten. A log nobody mirrors is a log that could quietly be replaced;
+  please mirror it.</p>
+</main>
+
+<div class="band"></div>
+<footer>
+  <div class="wrap inner">
+    <span>Daily Bread №1 · Kelowna's Collapse</span>
+    <span><a href="/">← back to the magazine</a> · <a href="/.well-known/newsproof/manifest.json">manifest.json</a></span>
+  </div>
+</footer>
+<script src="/verify/verify.js"></script>
+</body>
+</html>

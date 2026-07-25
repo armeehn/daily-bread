@@ -1,0 +1,149 @@
+{
+  "schema": "newsproof/v1/manifest",
+  "issue": {
+    "id": "dailybread/1",
+    "number": "1",
+    "title": "Daily Bread \u21161 \u00b7 Kelowna's Collapse",
+    "published_at": "2026-07-25T00:00:00Z",
+    "authors": [
+      "Daily Bread",
+      "Riposte Laboratories Inc."
+    ],
+    "origin": "https://ourdailybre.ad"
+  },
+  "publisher_key_id": "dc93d30cf93f629a",
+  "log_key_id": "ca8f1397d1cf96dd",
+  "tree_size": 16,
+  "root_sha256": "5224f77ef9170edcf3537931ac58fa9a459a803ffcc0210215423450e8cd4ece",
+  "sth_timestamp": "2026-07-25T13:51:19Z",
+  "editions": [
+    {
+      "code": "en",
+      "endo": "English",
+      "url": "/",
+      "proof": "proofs/en.proof.json",
+      "version": 1,
+      "leaf_index": 0
+    },
+    {
+      "code": "fr",
+      "endo": "Fran\u00e7ais",
+      "url": "/fr/",
+      "proof": "proofs/fr.proof.json",
+      "version": 1,
+      "leaf_index": 1
+    },
+    {
+      "code": "es",
+      "endo": "Espa\u00f1ol",
+      "url": "/es/",
+      "proof": "proofs/es.proof.json",
+      "version": 1,
+      "leaf_index": 2
+    },
+    {
+      "code": "it",
+      "endo": "Italiano",
+      "url": "/it/",
+      "proof": "proofs/it.proof.json",
+      "version": 1,
+      "leaf_index": 3
+    },
+    {
+      "code": "pl",
+      "endo": "Polski",
+      "url": "/pl/",
+      "proof": "proofs/pl.proof.json",
+      "version": 1,
+      "leaf_index": 4
+    },
+    {
+      "code": "la",
+      "endo": "Latina",
+      "url": "/la/",
+      "proof": "proofs/la.proof.json",
+      "version": 1,
+      "leaf_index": 5
+    },
+    {
+      "code": "zh-hans",
+      "endo": "\u7b80\u4f53\u4e2d\u6587",
+      "url": "/zh-hans/",
+      "proof": "proofs/zh-hans.proof.json",
+      "version": 1,
+      "leaf_index": 6
+    },
+    {
+      "code": "zh-hant",
+      "endo": "\u7e41\u9ad4\u4e2d\u6587",
+      "url": "/zh-hant/",
+      "proof": "proofs/zh-hant.proof.json",
+      "version": 1,
+      "leaf_index": 7
+    },
+    {
+      "code": "pa",
+      "endo": "\u0a2a\u0a70\u0a1c\u0a3e\u0a2c\u0a40",
+      "url": "/pa/",
+      "proof": "proofs/pa.proof.json",
+      "version": 1,
+      "leaf_index": 8
+    },
+    {
+      "code": "ko",
+      "endo": "\ud55c\uad6d\uc5b4",
+      "url": "/ko/",
+      "proof": "proofs/ko.proof.json",
+      "version": 1,
+      "leaf_index": 9
+    },
+    {
+      "code": "ja",
+      "endo": "\u65e5\u672c\u8a9e",
+      "url": "/ja/",
+      "proof": "proofs/ja.proof.json",
+      "version": 1,
+      "leaf_index": 10
+    },
+    {
+      "code": "tl",
+      "endo": "Tagalog",
+      "url": "/tl/",
+      "proof": "proofs/tl.proof.json",
+      "version": 1,
+      "leaf_index": 11
+    },
+    {
+      "code": "vi",
+      "endo": "Ti\u1ebfng Vi\u1ec7t",
+      "url": "/vi/",
+      "proof": "proofs/vi.proof.json",
+      "version": 1,
+      "leaf_index": 12
+    },
+    {
+      "code": "hi",
+      "endo": "\u0939\u093f\u0928\u094d\u0926\u0940",
+      "url": "/hi/",
+      "proof": "proofs/hi.proof.json",
+      "version": 1,
+      "leaf_index": 13
+    },
+    {
+      "code": "ar",
+      "endo": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629",
+      "url": "/ar/",
+      "proof": "proofs/ar.proof.json",
+      "version": 1,
+      "leaf_index": 14
+    },
+    {
+      "code": "fa",
+      "endo": "\u0641\u0627\u0631\u0633\u06cc",
+      "url": "/fa/",
+      "proof": "proofs/fa.proof.json",
+      "version": 1,
+      "leaf_index": 15
+    }
+  ]
+}

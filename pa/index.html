@@ -9,24 +9,26 @@
 <meta property="og:description" content="ਓਕਾਨਾਗਨ ਲਈ ਇੱਕ ਕੁਈਰ ਰਸਾਲਾ। ਮੁਫ਼ਤ / PWYC। ਅੰਕ №1, ਗਰਮੀਆਂ 2026।">
 <meta property="og:image" content="/assets/cover.jpg">
 <meta property="og:type" content="website">
-<link rel="canonical" href="https://dailybre.ad/pa/">
-<link rel="alternate" hreflang="en" href="https://dailybre.ad/">
-<link rel="alternate" hreflang="fr" href="https://dailybre.ad/fr/">
-<link rel="alternate" hreflang="es" href="https://dailybre.ad/es/">
-<link rel="alternate" hreflang="it" href="https://dailybre.ad/it/">
-<link rel="alternate" hreflang="pl" href="https://dailybre.ad/pl/">
-<link rel="alternate" hreflang="la" href="https://dailybre.ad/la/">
-<link rel="alternate" hreflang="zh-Hans" href="https://dailybre.ad/zh-hans/">
-<link rel="alternate" hreflang="zh-Hant" href="https://dailybre.ad/zh-hant/">
-<link rel="alternate" hreflang="pa" href="https://dailybre.ad/pa/">
-<link rel="alternate" hreflang="ko" href="https://dailybre.ad/ko/">
-<link rel="alternate" hreflang="ja" href="https://dailybre.ad/ja/">
-<link rel="alternate" hreflang="tl" href="https://dailybre.ad/tl/">
-<link rel="alternate" hreflang="vi" href="https://dailybre.ad/vi/">
-<link rel="alternate" hreflang="hi" href="https://dailybre.ad/hi/">
-<link rel="alternate" hreflang="ar" href="https://dailybre.ad/ar/">
-<link rel="alternate" hreflang="fa" href="https://dailybre.ad/fa/">
-<link rel="alternate" hreflang="x-default" href="https://dailybre.ad/">
+<link rel="canonical" href="https://ourdailybre.ad/pa/">
+<link rel="alternate" hreflang="en" href="https://ourdailybre.ad/">
+<link rel="alternate" hreflang="fr" href="https://ourdailybre.ad/fr/">
+<link rel="alternate" hreflang="es" href="https://ourdailybre.ad/es/">
+<link rel="alternate" hreflang="it" href="https://ourdailybre.ad/it/">
+<link rel="alternate" hreflang="pl" href="https://ourdailybre.ad/pl/">
+<link rel="alternate" hreflang="la" href="https://ourdailybre.ad/la/">
+<link rel="alternate" hreflang="zh-Hans" href="https://ourdailybre.ad/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://ourdailybre.ad/zh-hant/">
+<link rel="alternate" hreflang="pa" href="https://ourdailybre.ad/pa/">
+<link rel="alternate" hreflang="ko" href="https://ourdailybre.ad/ko/">
+<link rel="alternate" hreflang="ja" href="https://ourdailybre.ad/ja/">
+<link rel="alternate" hreflang="tl" href="https://ourdailybre.ad/tl/">
+<link rel="alternate" hreflang="vi" href="https://ourdailybre.ad/vi/">
+<link rel="alternate" hreflang="hi" href="https://ourdailybre.ad/hi/">
+<link rel="alternate" hreflang="ar" href="https://ourdailybre.ad/ar/">
+<link rel="alternate" hreflang="fa" href="https://ourdailybre.ad/fa/">
+<link rel="alternate" hreflang="x-default" href="https://ourdailybre.ad/">
+<link rel="alternate" media="(prefers-reduced-data: reduce)" href="/pa/lite/">
+<link rel="alternate" media="(monochrome)" href="/pa/eink/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
@@ -59,8 +61,14 @@
   .kicker.pink{background:var(--pink);color:var(--bone)}
   .kicker.teal{background:var(--teal);color:var(--bone)}
   .kicker.orange{background:var(--orange);color:var(--ink)}
-  .display{font-size:clamp(32px,5.4vw,54px);line-height:.96;font-weight:800;
-    text-transform:uppercase;letter-spacing:-.015em}
+  /* .display headings are fitted per language at build time: --fit caps the
+     font so the translated headline holds the same line count as English, and
+     --dl reserves that many lines (viewport-driven, so identical across
+     languages) — the block below every headline lands at the same place.
+     Both fall back gracefully when unset (English full-width headings). */
+  .display{font-size:min(clamp(32px,5.4vw,54px),var(--fit,999px));line-height:.96;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.015em;text-wrap:balance;overflow-wrap:break-word;
+    min-height:calc(var(--dl,1) * .96 * clamp(32px,5.4vw,54px))}
   .display .dot{color:var(--pink)}
   .frak{font-family:'UnifrakturMaguntia',serif;font-weight:400;line-height:.9}
   .dek{font-size:15.5px;line-height:1.7;max-width:62ch;color:#3a352e;margin-top:14px}
@@ -125,9 +133,9 @@
 
   /* ---------- top bar ---------- */
   header.top{position:sticky;top:0;z-index:60;background:var(--ink);color:var(--bone);border-bottom:2px solid var(--bone)}
-  header.top .bar{display:flex;align-items:center;gap:18px;height:46px}
-  header.top .brand{font-family:'UnifrakturMaguntia',serif;font-size:22px;line-height:1}
-  header.top nav{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
+  header.top .bar{display:flex;align-items:center;flex-wrap:wrap;gap:6px 18px;min-height:46px;padding:6px 0}
+  header.top .brand{font-family:'UnifrakturMaguntia',serif;font-size:22px;line-height:1;order:1}
+  header.top nav{order:3;flex-basis:100%;display:flex;gap:10px 18px;flex-wrap:wrap;padding-bottom:2px}
   header.top nav a{color:var(--bone);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
   header.top nav a:hover{color:var(--pink)}
   @media(max-width:760px){header.top nav{display:none}}
@@ -166,7 +174,8 @@
   /* ---------- reports ---------- */
   .report{display:flex;flex-direction:column;height:100%}
   .report .bd{display:flex;flex-direction:column;flex:1}
-  .report h3{font-size:clamp(20px,2.5vw,25px);line-height:1.06;font-weight:800;text-transform:uppercase;margin:0 0 12px}
+  .report h3{font-size:min(clamp(20px,2.5vw,25px),var(--fit,999px));line-height:1.06;font-weight:800;
+    text-transform:uppercase;margin:0 0 12px;text-wrap:balance;overflow-wrap:break-word}
   .report p{font-size:14px;line-height:1.62;margin:0}
   .pull{border-left:6px solid var(--pink);padding:8px 0 8px 15px;font-size:17px;line-height:1.34;
     font-weight:600;font-style:italic;margin-top:auto;padding-top:16px}
@@ -180,7 +189,8 @@
   @media(max-width:560px){.stats{grid-template-columns:1fr}}
 
   /* ---------- quote band ---------- */
-  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;max-width:20ch}
+  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;
+    max-width:22ch;text-wrap:balance;overflow-wrap:break-word}
   .bigquote .mk{color:var(--pink);font-style:normal}
   .attrib{font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:22px;color:#b7ad9e}
 
@@ -200,11 +210,93 @@
   footer .fmeta{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap}
   footer .colophon{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#8d857a;
     border-top:1px solid rgba(246,241,231,.22);padding-top:20px;margin-top:8px;max-width:74ch;line-height:1.9}
+  footer .verify-note{font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-top:2px}
+  footer .verify-note a{color:var(--teal);text-decoration:none;border-bottom:1px dotted rgba(18,183,149,.5);padding-bottom:1px}
+  footer .verify-note a:hover{color:var(--bone);border-bottom-color:var(--bone)}
   .annot{margin-top:14px}
   .annot.right{text-align:right}
 
+  /* ---------- Sec.08 · comic "Crumbs" ---------- */
+  .comic-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:30px}
+  @media(max-width:860px){.comic-strip{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.comic-strip{grid-template-columns:1fr}}
+  .panel{position:relative;border:2px solid var(--ink);background:var(--bone);
+    box-shadow:6px 6px 0 var(--ink);display:flex;flex-direction:column}
+  .panel .pn{position:absolute;top:-2px;left:-2px;z-index:2;background:var(--ink);color:var(--bone);
+    font-size:10px;font-weight:700;letter-spacing:.12em;padding:3px 7px}
+  .panel .art{border-bottom:2px solid var(--ink);background:var(--bone);aspect-ratio:220/150;overflow:hidden}
+  .panel .art.night{background:#241f1a}
+  .panel .art svg{width:100%;height:100%;display:block}
+  .panel figcaption{padding:12px 14px;font-size:13px;line-height:1.5;flex:1}
+
+  /* ---------- Sec.11 · art "The Wall" (centrefold) ---------- */
+  .centrefold{margin-top:26px}
+  .centrefold .tearstrip{display:block;text-align:center;font-size:9.5px;letter-spacing:.3em;
+    text-transform:uppercase;color:#b7ad9e;padding:8px 0;border-top:2px dashed rgba(246,241,231,.45);position:relative}
+  .centrefold .tearstrip::before{content:"\2702";position:absolute;left:2px;top:1px;font-size:14px;color:#b7ad9e}
+  .centrefold .poster-svg{width:100%;height:auto;display:block;border:3px solid var(--bone);
+    box-shadow:12px 12px 0 rgba(240,71,125,.85)}
+  @media(max-width:860px){.centrefold .poster-svg{box-shadow:8px 8px 0 rgba(240,71,125,.85)}}
+  .plate-row{display:grid;grid-template-columns:1fr;gap:16px;margin-top:16px}
+  .plate{border:2px solid var(--bone);background:#26221e;box-shadow:6px 6px 0 rgba(246,241,231,.85);
+    display:flex;align-items:center;gap:14px;padding:10px}
+  .plate svg{width:104px;height:78px;flex:none;border:2px solid var(--bone)}
+  .plate figcaption b{display:block;text-transform:uppercase;letter-spacing:.02em;font-size:14px;line-height:1.2}
+  .plate figcaption span{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#b7ad9e;margin-top:4px}
+  .colour-card .colour-h{font-size:21px;font-weight:800;text-transform:uppercase;line-height:1.05;margin-bottom:12px}
+  .colour-svg{width:100%;height:auto;display:block;border:2px solid var(--ink);background:var(--bone)}
+
+  /* ---------- Sec.24 · sticker sheet "Peel Me" ---------- */
+  .stickers-sec{background:var(--bone)}
+  .print-cta{display:flex;flex-direction:column;align-items:flex-end;gap:9px;text-align:right}
+  @media(max-width:860px){.print-cta{align-items:flex-start;text-align:left}}
+  .printbtn{font-family:inherit;cursor:pointer;background:var(--ink);color:var(--bone);border:2px solid var(--ink);
+    box-shadow:5px 5px 0 var(--pink);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:11px 18px}
+  .printbtn:hover{background:var(--pink);border-color:var(--pink);box-shadow:5px 5px 0 var(--ink)}
+  .printbtn:active{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--ink)}
+  .card.sheet{margin-top:30px}
+  .sticker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  @media(max-width:760px){.sticker-grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:480px){.sticker-grid{grid-template-columns:repeat(2,1fr)}}
+  .sticker{aspect-ratio:1/1;border:2px dashed rgba(29,26,23,.5);margin:-1px;background:var(--bone);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:12px;position:relative}
+  .sticker>*{transform:rotate(var(--rot))}
+  .sticker .ic{width:66px;height:62px;display:flex;align-items:center;justify-content:center}
+  .sticker .ic svg{width:100%;height:100%}
+  .sticker .lab{font-size:10.5px;font-weight:700;letter-spacing:.04em;line-height:1.15;text-transform:uppercase;color:var(--ink)}
+  .sticker .mono{font-family:'UnifrakturMaguntia',serif;font-size:46px;line-height:.78;color:var(--ink)}
+  .sticker .quote{font-size:15px;font-weight:700;font-style:italic;line-height:1.14}
+  .sticker .stampbadge{border:2.5px solid var(--ink);padding:8px 10px;font-size:11px;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;line-height:1.18}
+
+  /* ---------- print: the sticker sheet becomes the whole page ---------- */
+  @media print{
+    body{background:#fff}
+    body > *{display:none !important}
+    #stickers{display:block !important;padding:0 !important}
+    #stickers .wrap{padding:0 !important;max-width:none}
+    #stickers .sechead,#stickers .split,#stickers > .wrap > .meta,.card.sheet > .hd{display:none !important}
+    .card.sheet{border:0 !important;box-shadow:none !important;margin:0 !important}
+    .card.sheet > .bd{padding:0 !important}
+    .sticker-grid{grid-template-columns:repeat(3,1fr) !important}
+    .sticker{border:1px dashed #888 !important;box-shadow:none !important;break-inside:avoid}
+    @page{margin:12mm}
+  }
+
+  /* ---------- rendering switch (Full / Lite / E-ink) ---------- */
+  header.top .vswitch{order:2;display:flex;border:2px solid var(--bone);font-size:10px;
+    letter-spacing:.12em;text-transform:uppercase}
+  header.top .vswitch a{color:var(--bone);padding:5px 9px;border-inline-start:1px dashed var(--bone);white-space:nowrap}
+  header.top .vswitch a:first-child{border-inline-start:0}
+  header.top .vswitch a[aria-current]{background:var(--bone);color:var(--ink);font-weight:700}
+  header.top .vswitch a:hover{color:var(--pink)}
+  header.top .vswitch a[aria-current]:hover{color:var(--ink)}
+  footer .fswitch{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8d857a;margin-top:2px}
+  footer .fswitch a{color:var(--bone);text-decoration:underline;margin:0 2px}
+  footer .fswitch a[aria-current]{color:var(--pink);text-decoration:none;font-weight:700}
+
   /* ---------- i18n chrome: language picker + MT notice ---------- */
-  header.top .bar .langpick{position:relative;margin-left:14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  header.top .bar .langpick{position:relative;order:2;margin-inline-start:auto;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
   .langpick>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;color:var(--bone);padding:4px 2px}
   .langpick>summary::-webkit-details-marker{display:none}
   .langpick>summary .globe{font-size:13px}
@@ -224,7 +316,6 @@
   .mtnote{background:var(--orange);color:var(--ink);font-size:11px;letter-spacing:.02em;
     text-align:center;padding:8px 16px;line-height:1.55;border-bottom:2px solid var(--ink)}
   .mtnote a{color:var(--ink);text-decoration:underline;font-weight:700}
-  @media(max-width:760px){header.top .bar .langpick{margin-left:auto}}
   /* RTL adjustments for machine-translated Arabic / Farsi */
   [dir="rtl"] .dropcap::first-letter{float:right;padding:6px 0 0 12px}
   [dir="rtl"] .pull{border-left:0;border-right:6px solid var(--pink);padding-left:0;padding-right:15px}
@@ -246,11 +337,15 @@
       <a href="#contents">ਤਤਕਰਾ</a>
       <a href="#history">ਇਤਿਹਾਸ</a>
       <a href="#voices">ਆਵਾਜ਼ਾਂ</a>
+      <a href="#comics">Comics</a>
+      <a href="#art">Art</a>
       <a href="#calendar">ਕੈਲੰਡਰ</a>
       <a href="#directory">ਡਾਇਰੈਕਟਰੀ</a>
       <a href="#submit">ਭੇਜੋ</a>
       <a href="#lab">ਦਿ ਲੈਬ</a>
+      <a href="#stickers">Stickers</a>
     </nav>
+    <nav class="vswitch" aria-label="Rendering"><a href="/pa/" aria-current="true">Full</a><a href="/pa/lite/">Lite</a><a href="/pa/eink/">E-ink</a></nav>
     <details class="langpick"><summary aria-label="ਭਾਸ਼ਾ"><span class="globe" aria-hidden="true">🌐</span> ਪੰਜਾਬੀ <span class="car" aria-hidden="true">▾</span></summary><div class="langmenu"><a href="/" hreflang="en" lang="en"><span class="endo">English</span><span class="en">English</span></a><a href="/fr/" hreflang="fr" lang="fr"><span class="endo">Français</span><span class="en">French</span></a><a href="/es/" hreflang="es" lang="es"><span class="endo">Español</span><span class="en">Spanish</span></a><a href="/it/" hreflang="it" lang="it"><span class="endo">Italiano</span><span class="en">Italian</span></a><a href="/pl/" hreflang="pl" lang="pl"><span class="endo">Polski</span><span class="en">Polish</span></a><a href="/la/" hreflang="la" lang="la"><span class="endo">Latina</span><span class="en">Latin</span></a><a href="/zh-hans/" hreflang="zh-Hans" lang="zh-Hans"><span class="endo">简体中文</span><span class="en">Chinese (Simplified)</span></a><a href="/zh-hant/" hreflang="zh-Hant" lang="zh-Hant"><span class="endo">繁體中文</span><span class="en">Chinese (Traditional)</span></a><a href="/pa/" hreflang="pa" lang="pa" aria-current="true"><span class="endo">ਪੰਜਾਬੀ</span><span class="en">Punjabi</span></a><a href="/ko/" hreflang="ko" lang="ko"><span class="endo">한국어</span><span class="en">Korean</span></a><a href="/ja/" hreflang="ja" lang="ja"><span class="endo">日本語</span><span class="en">Japanese</span></a><a href="/tl/" hreflang="tl" lang="tl"><span class="endo">Tagalog</span><span class="en">Tagalog</span></a><a href="/vi/" hreflang="vi" lang="vi"><span class="endo">Tiếng Việt</span><span class="en">Vietnamese</span></a><a href="/hi/" hreflang="hi" lang="hi"><span class="endo">हिन्दी</span><span class="en">Hindi</span></a><a href="/ar/" hreflang="ar" lang="ar" dir="rtl"><span class="endo">العربية</span><span class="en">Arabic</span></a><a href="/fa/" hreflang="fa" lang="fa" dir="rtl"><span class="endo">فارسی</span><span class="en">Farsi</span></a></div></details>
   </div>
 </header>
@@ -291,7 +386,7 @@
     <div class="rule" style="margin-bottom:34px"></div>
     <div class="split">
       <div>
-        <h2 class="display">ਸਾਡਾ ਰੋਜ਼ਾਨਾ<br>ਖ਼ੌਫ਼</h2>
+        <h2 class="display" style="--fit:54px;--dl:2">ਸਾਡਾ ਰੋਜ਼ਾਨਾ<br>ਖ਼ੌਫ਼</h2>
         <div class="prose justify" style="margin-top:22px">
           <p><span class="drop">HI.</span> ਤੁਹਾਨੂੰ ਇੱਕ ਕੁਈਰ ਰਸਾਲੇ ਦਾ ਪਹਿਲਾ ਅੰਕ ਓਸ ਸ਼ਹਿਰ ਵਿੱਚ ਲੱਭਾ ਜੋ ਸਾਨੂੰ ਵਾਰ-ਵਾਰ ਕਹਿੰਦਾ ਹੈ ਕਿ ਇੱਥੇ ਕੋਈ ਕੁਈਰ ਹੈ ਹੀ ਨਹੀਂ। ਕੈਲੋਨਾ ਦਾ ਆਪਣਾ ਕੁਈਰ ਇਤਿਹਾਸ ਹੈ, ਕੁਈਰ ਬੱਚੇ, ਕੁਈਰ ਬਜ਼ੁਰਗ, ਕੁਈਰ ਬੇਕਰ ਤੇ ਬਾਬੂ ਹਨ; ਜੋ ਨਹੀਂ ਸੀ ਓਹ ਸੀ ਕਾਗਜ਼ ਜੋ ਇਹ ਗੱਲ ਉੱਚੀ ਆਵਾਜ਼ ਵਿੱਚ ਆਖੇ।</p>
           <p>ਇਹ ਅੰਕ ਢਹਿਢੇਰੀ ਬਾਰੇ ਹੈ: ਬਾਗ਼, ਥੇਟਰ-ਥਾਵਾਂ, ਕਿਰਾਏ ਦਾ ਹਿਸਾਬ, ਪੁਲ ਦੀ ਭੀੜ। ਇਸ ਲਈ ਨਹੀਂ ਕਿ ਅਸੀਂ ਨਿਰਾਸ਼ਾਵਾਦੀ ਹਾਂ, ਸਗੋਂ ਇਸ ਲਈ ਕਿ ਇੱਥੇ ਚੀਜ਼ਾਂ ਵਕਤ ਸਿਰ ਢਹਿ ਜਾਂਦੀਆਂ ਹਨ, ਤੇ ਓਸ ਵਕਤ ਨੂੰ ਨਾਮ ਦੇਣਾ ਹੀ ਮੁਰੰਮਤ ਦਾ ਪਹਿਲਾ ਕੰਮ ਹੈ।</p>
@@ -325,7 +420,7 @@
 <section id="contents" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.01</span><span class="tag">// ਤਤਕਰਾ · ਸੂਚੀ / 48 pp</span></div>
-    <h2 class="display">ਤਤਕਰਾ<span class="dot">.</span></h2>
+    <h2 class="display" style="--fit:54px;--dl:1">ਤਤਕਰਾ<span class="dot">.</span></h2>
     <p class="dek">ਬਾਰਾਂ ਯੋਗਦਾਨੀਆਂ ਨੇ №1 ਬਣਾਇਆ: 17–74 ਉਮਰ ਦੇ ਲੇਖਕ, ਦੋ ਫ਼ੋਟੋਗ੍ਰਾਫ਼ਰ, ਇੱਕ ਕਾਰਟੂਨਿਸਟ, ਇੱਕ ਬੜਾ ਸਬਰ ਵਾਲਾ ਪਰੂਫ਼ਰੀਡਰ। ਹਰ ਬਾਈਲਾਈਨ ਸਥਾਨਕ ਹੈ। ਹਰ ਫ਼ੀਸ ਪ੍ਰਿੰਟਰ ਤੋਂ ਪਹਿਲਾਂ ਅਦਾ ਹੋਈ।</p>
     <div class="card" style="margin-top:30px">
       <div class="hd"><span>ਸੂਚੀ / 48 pp</span><span class="r">DB-TOC</span></div>
@@ -340,7 +435,7 @@
     <div class="sechead"><span class="no">Sec.02</span><span class="tag">// ਇਤਿਹਾਸ · ਪੁਲ ਤੋਂ ਪਹਿਲਾਂ</span></div>
     <div class="split">
       <div>
-        <h2 class="display">ਇੱਕ ਬੇਬਾਕ<br>ਇਤਿਹਾਸ</h2>
+        <h2 class="display" style="--fit:54px;--dl:2">ਇੱਕ ਬੇਬਾਕ<br>ਇਤਿਹਾਸ</h2>
         <div class="prose justify" style="margin-top:22px">
           <p>ਵਾਦੀ ਨੇ ਆਪਣੇ ਆਪ ਨੂੰ ਦੋ ਵਾਰ ਵੇਚਿਆ: ਪਹਿਲਾਂ ਸਵਰਗ ਵਜੋਂ, ਫਿਰ ਜਾਇਦਾਦ ਵਜੋਂ। ਫਲਾਂ ਦੇ ਕਿਸਾਨ ਏਨੀ ਵਾਰ ਦਿਵਾਲੀਏ ਹੋਏ ਕਿ ਪੈਕਿੰਗਹਾਊਸਾਂ ਨੇ ਆਪਣੀ ਖ਼ੁਦ ਦੀ ਪਰਚੀ-ਹੁੰਡੀ ਛਾਪ ਲਈ; ਜਦੋਂ ਫਲ ਮੁੱਕੇ, ਤਾਂ ਵਿਕਰੀ ਦੀ ਗੱਲ ਬਣ ਗਈ ਸੇਵਾ-ਮੁਕਤੀ ਦੀ ਧੁੱਪ; ਜਦੋਂ ਸੇਵਾ-ਮੁਕਤ ਲੋਕਾਂ ਨੇ ਤੋੜਨ ਵਾਲਿਆਂ ਨੂੰ ਭਾਅ ਤੋਂ ਬਾਹਰ ਕਰ ਦਿੱਤਾ, ਤਾਂ ਗੱਲ ਬਣ ਗਈ ਝੀਲ-ਕੰਢੇ ਦੇ ਲੌਫ਼ਟਾਂ ਦੀ। ਹਰ ਪੜਾਅ ਦਾ ਓਹੀ ਅੰਤ ਹੋਇਆ, ਜਿੱਥੇ ਕੰਮ ਕਰਨ ਵਾਲੇ ਲੋਕ ਪਾਣੀ ਤੋਂ ਹੋਰ ਦੂਰ ਜਾ ਵੱਸੇ।</p>
           <p>ਕੁਈਰ ਇਤਿਹਾਸ ਇਸ ਸਭ ਵਿੱਚ ਗੁੰਦਿਆ ਹੋਇਆ ਹੈ: ਗ਼ੈਰ-ਸਰਕਾਰੀ ਰਾਤਾਂ ਵਾਲੇ ਡਾਂਸ ਹਾਲ, ਦੋਸਤੀ ਦੇ ਜਾਲ ਜੋ ਰਿਹਾਇਸ਼ੀ ਸੂਚੀਆਂ ਦਾ ਕੰਮ ਵੀ ਦਿੰਦੇ ਸਨ, ਇੱਕ ਦ੍ਰਿਸ਼ ਜੋ ਓਦੋਂ ਤੱਕ ਲਾਭਦਾਇਕ ਤੇ ਚੁੱਪ ਰਹਿ ਕੇ ਬਚਿਆ ਰਿਹਾ ਜਦੋਂ ਤੱਕ ਓਹਨੂੰ ਹੋਰ ਚੁੱਪ ਰਹਿਣ ਦੀ ਲੋੜ ਨਾ ਰਹੀ।</p>
@@ -363,26 +458,26 @@
 <section id="voices" class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">// ਨੌਜਵਾਨ ਆਵਾਜ਼ਾਂ ਦਾ ਡੈਸਕ · ਬਿਨ ਸਮੀਖਿਆ। ਬਿਨ ਸੰਪਾਦਨ। ਸਹੀ।</span></div>
-    <h2 class="display">ਨੌਜਵਾਨ ਆਵਾਜ਼ਾਂ</h2>
+    <h2 class="display" style="--fit:54px;--dl:1">ਨੌਜਵਾਨ ਆਵਾਜ਼ਾਂ</h2>
     <p class="dek" style="color:#cfc6b6">ਓਹਨਾਂ ਲੇਖਕਾਂ ਵੱਲੋਂ ਤਿੰਨ ਖੇਤਰੀ ਰਿਪੋਰਟਾਂ ਜੋ ਹਾਲੇ ਵੋਟ ਨਹੀਂ ਪਾ ਸਕਦੇ ਪਰ ਕਿਰਾਏ ਦਾ ਹਿਸਾਬ ਪਹਿਲਾਂ ਹੀ ਜੋੜ ਸਕਦੇ ਹਨ। ਅਸੀਂ ਓਹਨਾਂ ਨੂੰ ਪੈਸਾ ਦਿੱਤਾ; ਇੱਕ ਲਫ਼ਜ਼ ਵੀ ਨਹੀਂ ਛੇੜਿਆ।</p>
     <div class="thirds" style="margin-top:34px">
       <div class="card report"><div class="hd pink"><span>ਰਿਪੋਰਟ 01</span><span>ਉਮਰ 19 · ਰਿਹਾਇਸ਼</span></div>
         <div class="bd">
-          <h3>ਮੇਰੀ ਉਮਰ ਦਾ ਕੋਈ ਵੀ ਇੱਥੇ ਟਿਕ ਨਹੀਂ ਸਕਦਾ</h3>
+          <h3 style="--fit:25px">ਮੇਰੀ ਉਮਰ ਦਾ ਕੋਈ ਵੀ ਇੱਥੇ ਟਿਕ ਨਹੀਂ ਸਕਦਾ</h3>
           <p>ਮੈਂ ਦੋ ਨੌਕਰੀਆਂ ਕਰਦਾ ਹਾਂ ਤੇ ਤਿੰਨ ਬੰਦਿਆਂ ਨਾਲ ਦੋ ਕਮਰਿਆਂ ਦਾ ਘਰ ਵੰਡਦਾ ਹਾਂ, ਤੇ ਫਿਰ ਵੀ ਮੈਂ ਹੀ ਕਾਮਯਾਬੀ ਦੀ ਕਹਾਣੀ ਹਾਂ। ਮੇਰਾ ਗਰੁੱਪ ਚੈਟ ਇੱਕ ਹੌਲੀ-ਹੌਲੀ ਹੋ ਰਹੀ ਵਿਦਾਇਗੀ ਪਾਰਟੀ ਹੈ: Vernon, Calgary, Surrey ਵਿੱਚ ਮਾਂ ਦਾ ਬੇਸਮੈਂਟ।</p>
           <div class="pull">"ਹਰ ਵਿਊਇੰਗ 'ਤੇ ਚਾਲੀ ਬੰਦੇ ਆਉਂਦੇ ਹਨ ਤੇ ਓਹਨਾਂ ਵਿੱਚੋਂ ਇੱਕ ਹਮੇਸ਼ਾ ਰੋ ਰਿਹਾ ਹੁੰਦਾ ਹੈ।"</div>
         </div>
       </div>
       <div class="card report"><div class="hd orange"><span>ਰਿਪੋਰਟ 02</span><span>ਉਮਰ 22 · ਪਰਦਾ ਚੁੱਕਣਾ</span></div>
         <div class="bd">
-          <h3>ਪੈਕਿੰਗਹਾਊਸ 'ਤੇ ਖੁੱਲ੍ਹ ਕੇ</h3>
+          <h3 style="--fit:25px">ਪੈਕਿੰਗਹਾਊਸ 'ਤੇ ਖੁੱਲ੍ਹ ਕੇ</h3>
           <p>ਮੈਂ Glenmore ਵਿੱਚ ਇੱਕ ਬੁਸ਼ ਪਾਰਟੀ 'ਤੇ ਖੁੱਲ੍ਹ ਕੇ ਦੱਸਿਆ ਤੇ ਸਭ ਤੋਂ ਭੈੜੀ ਗੱਲ ਜੋ ਹੋਈ ਓਹ ਇਹ ਸੀ ਕਿ Tyler ਨਾਂ ਦੇ ਇੱਕ ਮੁੰਡੇ ਨੇ "ਕੂਲ" ਕਿਹਾ ਤੇ ਪੁੱਛਿਆ ਕੀ ਮੈਂ ਓਹਨੂੰ ਘਰ ਛੱਡ ਸਕਦਾ ਹਾਂ। ਨਾ ਸਵਰਗ, ਨਾ ਨਰਕ, ਬੱਸ ਇੱਕ ਛੋਟਾ ਸ਼ਹਿਰ ਜੋ ਆਪਣੀ ਸਿਟੀ ਕੌਂਸਲ ਨਾਲੋਂ ਤੇਜ਼ੀ ਨਾਲ ਸਿੱਖ ਰਿਹਾ ਹੈ।</p>
           <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange);border:0;padding-left:0">ਭੂਗੋਲ ਹੀ ਆਖ਼ਰੀ ਪਰਦਾ ਹੈ</div>
         </div>
       </div>
       <div class="card report"><div class="hd teal"><span>ਰਿਪੋਰਟ 03</span><span>ਉਮਰ 17 · ਅੱਗ ਦਾ ਮੌਸਮ</span></div>
         <div class="bd">
-          <h3>ਮੈਂ ਦੋ ਵਾਰ ਘਰ ਖ਼ਾਲੀ ਕਰ ਚੁੱਕਿਆ ਹਾਂ ਤੇ ਹਾਲੇ ਵੋਟ ਨਹੀਂ ਪਾ ਸਕਦਾ</h3>
+          <h3 style="--fit:25px">ਮੈਂ ਦੋ ਵਾਰ ਘਰ ਖ਼ਾਲੀ ਕਰ ਚੁੱਕਿਆ ਹਾਂ ਤੇ ਹਾਲੇ ਵੋਟ ਨਹੀਂ ਪਾ ਸਕਦਾ</h3>
           <p>ਮੇਰੇ ਬਚਪਨ ਦੀਆਂ ਤਸਵੀਰਾਂ ਧੂੰਏਂ ਦੇ ਸਾਲਾਂ ਮੁਤਾਬਕ ਛਾਂਟੀਆਂ ਹੋਈਆਂ ਹਨ। ਅਸੀਂ 2021 ਵਿੱਚ ਤੇ ਫਿਰ 2023 ਵਿੱਚ ਗੱਡੀ ਭਰੀ, ਤੇ ਦੋਹਾਂ ਵਾਰ ਰੇਡੀਓ 'ਤੇ ਵੱਡਿਆਂ ਨੇ ਇਸ ਨੂੰ ਬੇਮਿਸਾਲ ਕਿਹਾ। ਇਹਦੀ ਮਿਸਾਲ ਹੈ।</p>
           <div class="pull teal">"ਮੈਂ ਹੀ ਓਹ ਮਿਸਾਲ ਹਾਂ।"</div>
         </div>
@@ -397,7 +492,7 @@
     <div class="split center">
       <div>
         <span class="kicker pink">10 · ਮੌਜੂਦਾ ਮਸਲੇ</span>
-        <h2 class="display" style="margin-top:16px">ਉਡੀਕ-ਸੂਚੀ</h2>
+        <h2 class="display" style="--fit:54px;--dl:1;margin-top:16px">ਉਡੀਕ-ਸੂਚੀ</h2>
         <p class="dek">Central Okanagan ਵਿੱਚ ਕੁਈਰ-ਸਮਝ ਵਾਲੀ ਸਿਹਤ-ਸੰਭਾਲ ਲੱਭਣੀ ਇੱਕ ਬਿਨਾਂ ਫ਼ਾਇਦਿਆਂ ਵਾਲੀ ਪਾਰਟ-ਟਾਈਮ ਨੌਕਰੀ ਹੈ। ਅਸੀਂ ਹਰ ਕਲੀਨਿਕ ਨੂੰ ਫ਼ੋਨ ਕੀਤਾ ਤਾਂ ਜੋ ਤੁਹਾਨੂੰ ਨਾ ਕਰਨਾ ਪਵੇ; ਜਿਸ ਕਿਸੇ ਤੱਕ ਅਸੀਂ ਪਹੁੰਚੇ ਓਹਨੇ ਓਹੀ ਤਿਕੋਣ ਦੱਸੀ: ਫ਼ੋਨ-ਟੈਗ, ਰੈਫ਼ਰਲ ਦਾ ਅਧਵਾਟਾ, ਤੇ ਇੱਕ ਹਾਈਵੇ।</p>
       </div>
       <div class="stats">
@@ -419,13 +514,90 @@
   </div>
 </div>
 
+<!-- ============ COMICS · CRUMBS ============ -->
+<section id="comics" class="sec" style="background:var(--paper2)">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.08</span><span class="tag">// crumbs · ep.1 · a golem seeks housing</span></div>
+    <h2 class="display" style="--fit:54px;--dl:1">Crumbs<span class="dot">.</span></h2>
+    <p class="dek">Our guest strip. Six panels, one loaf, zero vacancies. The slot is open, it pays, and the only brief is: make us laugh about the thing that isn't funny.</p>
+    <div style="margin-top:16px"><span class="kicker orange">Ep.1 · pencils, ink & crumbs by open call</span></div>
+    <div class="comic-strip"><figure class="panel"><span class="pn">01</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><path d="M50 116 L170 116 L158 140 L62 140 Z" fill="#cdb491" stroke="#1d1a17" stroke-width="3" stroke-linejoin="round"/><line x1="50" y1="116" x2="170" y2="116" stroke="#1d1a17" stroke-width="3"/><g transform="translate(52,22)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 78 Q14 39 58 39 Q102 39 102 78 Q102 93 58 93 Q14 93 14 78 Z" fill="#e4bd79"/>
+    <path d="M26 51 q11 -8 21 0 M49 49 q11 -8 21 2 M72 53 q8 -6 15 2" fill="none" stroke-width="2.3"/>
+    <circle cx="45" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><circle cx="72" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><path d="M49 79 q9 7 18 0" fill="none" stroke-width="2.6"/>
+    <circle cx="58" cy="74" r="1.9" fill="#f0477d" stroke="none"/>
+  </g></g><text x="150" y="44" font-size="24" fill="#fe9a0d">✦</text><text x="178" y="74" font-size="15" fill="#f0477d">✦</text></svg></div><figcaption>On the third day, the sourdough woke up.</figcaption></figure><figure class="panel"><span class="pn">02</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><g transform="translate(4,30)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 78 Q14 39 58 39 Q102 39 102 78 Q102 93 58 93 Q14 93 14 78 Z" fill="#e4bd79"/>
+    <path d="M26 51 q11 -8 21 0 M49 49 q11 -8 21 2 M72 53 q8 -6 15 2" fill="none" stroke-width="2.3"/>
+    <circle cx="45" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><circle cx="72" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><ellipse cx="58" cy="80" rx="7" ry="5" fill="#1d1a17" stroke="none"/>
+    <circle cx="58" cy="74" r="1.9" fill="#f0477d" stroke="none"/>
+  </g></g><g transform="rotate(-7 150 82)"><rect x="120" y="34" width="76" height="94" fill="#f6f1e7" stroke="#1d1a17" stroke-width="3"/><text x="158" y="62" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-weight="700" font-size="17" fill="#f0477d">$2,100</text><line x1="131" y1="76" x2="185" y2="76" stroke="#1d1a17" stroke-width="2"/><line x1="131" y1="90" x2="185" y2="90" stroke="#1d1a17" stroke-width="2"/><line x1="131" y1="104" x2="171" y2="104" stroke="#1d1a17" stroke-width="2"/><text x="158" y="122" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#1d1a17">“cozy”</text></g></svg></div><figcaption>$2,100 a month. “Cozy.” Shared with four yeasts.</figcaption></figure><figure class="panel"><span class="pn">03</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><circle cx="20" cy="44" r="7" fill="#1d1a17"/><path d="M12 66 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="45" cy="44" r="7" fill="#1d1a17"/><path d="M37 66 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="70" cy="44" r="7" fill="#1d1a17"/><path d="M62 66 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="95" cy="44" r="7" fill="#1d1a17"/><path d="M87 66 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="120" cy="44" r="7" fill="#1d1a17"/><path d="M112 66 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="145" cy="44" r="7" fill="#1d1a17"/><path d="M137 66 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="170" cy="44" r="7" fill="#1d1a17"/><path d="M162 66 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="195" cy="44" r="7" fill="#1d1a17"/><path d="M187 66 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="20" cy="70" r="7" fill="#1d1a17"/><path d="M12 92 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="45" cy="70" r="7" fill="#1d1a17"/><path d="M37 92 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="70" cy="70" r="7" fill="#1d1a17"/><path d="M62 92 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="95" cy="70" r="7" fill="#1d1a17"/><path d="M87 92 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="120" cy="70" r="7" fill="#1d1a17"/><path d="M112 92 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="145" cy="70" r="7" fill="#1d1a17"/><path d="M137 92 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="170" cy="70" r="7" fill="#1d1a17"/><path d="M162 92 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="195" cy="70" r="7" fill="#1d1a17"/><path d="M187 92 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="20" cy="96" r="7" fill="#1d1a17"/><path d="M12 118 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="45" cy="96" r="7" fill="#1d1a17"/><path d="M37 118 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="70" cy="96" r="7" fill="#1d1a17"/><path d="M62 118 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="95" cy="96" r="7" fill="#1d1a17"/><path d="M87 118 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="120" cy="96" r="7" fill="#1d1a17"/><path d="M112 118 q8 -13 16 0 Z" fill="#1d1a17"/><g transform="translate(123,76) scale(0.42)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 78 Q14 39 58 39 Q102 39 102 78 Q102 93 58 93 Q14 93 14 78 Z" fill="#e4bd79"/>
+    <path d="M26 51 q11 -8 21 0 M49 49 q11 -8 21 2 M72 53 q8 -6 15 2" fill="none" stroke-width="2.3"/>
+    <circle cx="45" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><circle cx="72" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><path d="M49 79 q9 7 18 0" fill="none" stroke-width="2.6"/>
+    <circle cx="58" cy="74" r="1.9" fill="#f0477d" stroke="none"/>
+  </g></g><circle cx="170" cy="96" r="7" fill="#1d1a17"/><path d="M162 118 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="195" cy="96" r="7" fill="#1d1a17"/><path d="M187 118 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="20" cy="122" r="7" fill="#1d1a17"/><path d="M12 144 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="45" cy="122" r="7" fill="#1d1a17"/><path d="M37 144 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="70" cy="122" r="7" fill="#1d1a17"/><path d="M62 144 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="95" cy="122" r="7" fill="#1d1a17"/><path d="M87 144 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="120" cy="122" r="7" fill="#1d1a17"/><path d="M112 144 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="145" cy="122" r="7" fill="#1d1a17"/><path d="M137 144 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="170" cy="122" r="7" fill="#1d1a17"/><path d="M162 144 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="195" cy="122" r="7" fill="#1d1a17"/><path d="M187 144 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="145" cy="70" r="15" fill="none" stroke="#f0477d" stroke-width="2.5"/></svg></div><figcaption>The viewing was forty deep. One other applicant was also bread.</figcaption></figure><figure class="panel"><span class="pn">04</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><g transform="translate(120,20)"><rect x="20" y="34" width="46" height="70" rx="6" fill="#1d1a17"/><circle cx="43" cy="24" r="16" fill="#1d1a17"/><path d="M20 60 L2 44" stroke="#1d1a17" stroke-width="8" stroke-linecap="round"/><circle cx="0" cy="42" r="5" fill="#1d1a17"/></g><g transform="translate(-6,54) scale(0.7)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 78 Q14 39 58 39 Q102 39 102 78 Q102 93 58 93 Q14 93 14 78 Z" fill="#e4bd79"/>
+    <path d="M26 51 q11 -8 21 0 M49 49 q11 -8 21 2 M72 53 q8 -6 15 2" fill="none" stroke-width="2.3"/>
+    <circle cx="45" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><circle cx="72" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><ellipse cx="58" cy="80" rx="7" ry="5" fill="#1d1a17" stroke="none"/>
+    <circle cx="58" cy="74" r="1.9" fill="#f0477d" stroke="none"/>
+  </g></g><g><rect x="60" y="16" width="148" height="27" rx="13.5" fill="#f6f1e7" stroke="#1d1a17" stroke-width="2.5"/><path d="M78 41 l4 13 l11 -11 Z" fill="#f6f1e7" stroke="#1d1a17" stroke-width="2.5"/><text x="134" y="34" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#1d1a17">but rising is all i do</text></g></svg></div><figcaption>“No pets, no plants, no leavening,” said the landlord.</figcaption></figure><figure class="panel"><span class="pn">05</span><div class="art night"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><rect x="0" y="0" width="220" height="150" fill="#241f1a"/><circle cx="176" cy="40" r="20" fill="#f6f1e7"/><circle cx="168" cy="36" r="20" fill="#241f1a"/><rect x="44" y="70" width="10" height="54" fill="#5a4a34"/><ellipse cx="49" cy="66" rx="38" ry="27" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2.5"/><circle cx="36" cy="60" r="4" fill="#f0477d"/><circle cx="62" cy="72" r="4" fill="#f0477d"/><g transform="translate(96,58) rotate(90 50 60)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 78 Q14 39 58 39 Q102 39 102 78 Q102 93 58 93 Q14 93 14 78 Z" fill="#e4bd79"/>
+    <path d="M26 51 q11 -8 21 0 M49 49 q11 -8 21 2 M72 53 q8 -6 15 2" fill="none" stroke-width="2.3"/>
+    <path d="M39 65 h11 M66 65 h11" fill="none"/><path d="M49 79 q9 7 18 0" fill="none" stroke-width="2.6"/>
+    <circle cx="58" cy="74" r="1.9" fill="#f0477d" stroke="none"/>
+  </g></g><text x="150" y="120" font-family="'Caveat',cursive" font-size="22" fill="#f6f1e7">zzz</text></svg></div><figcaption>The orchard doesn't run a credit check.</figcaption></figure><figure class="panel"><span class="pn">06</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><g transform="translate(2,26)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 78 Q14 39 58 39 Q102 39 102 78 Q102 93 58 93 Q14 93 14 78 Z" fill="#e4bd79"/>
+    <path d="M26 51 q11 -8 21 0 M49 49 q11 -8 21 2 M72 53 q8 -6 15 2" fill="none" stroke-width="2.3"/>
+    <circle cx="45" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><circle cx="72" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><path d="M49 79 q9 7 18 0" fill="none" stroke-width="2.6"/>
+    <circle cx="58" cy="74" r="1.9" fill="#f0477d" stroke="none"/>
+  </g></g><g transform="rotate(6 150 84)"><rect x="120" y="40" width="74" height="92" fill="#1d1a17"/><text x="157" y="96" text-anchor="middle" font-family="'UnifrakturMaguntia',serif" font-size="42" fill="#f0477d">DB</text></g><text x="120" y="34" font-size="19" fill="#f0477d">♥</text><text x="196" y="60" font-size="14" fill="#12b795">♥</text></svg></div><figcaption>Found a home in a magazine. Rent: get crumbs on it.</figcaption></figure></div>
+    <p class="meta" style="margin-top:24px;line-height:1.9">To be continued in №2 — “The Thaw.” Want the guest slot? Six panels to <a href="mailto:hello@dailybread.example?subject=CRUMBS">hello@dailybread.example</a>.</p>
+  </div>
+</section>
+
+<div class="band harl br"></div>
+
+<!-- ============ ART · THE WALL (rip-out centrefold) ============ -->
+<section id="art" class="sec field-ink">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.11</span><span class="tag" style="color:#b7ad9e">// the wall · rip-out centrefold · pull gently</span></div>
+    <div class="split center">
+      <div>
+        <h2 class="display" style="--fit:54px;--dl:1">The Wall</h2>
+        <p class="dek" style="color:#cfc6b6">The centrefold is a poster. Tear it out along the gutter and put it where a landlord can see it. This issue's wall belongs to the scene that refuses to be an address.</p>
+        <div class="annot"><span class="scribble teal">yes — actually rip it</span></div>
+      </div>
+      <div style="text-align:right"><span class="kicker pink">Centrefold №1 · rip-out poster</span></div>
+    </div>
+    <figure class="centrefold">
+      <span class="tearstrip" aria-hidden="true">tear here</span>
+      <svg class="poster-svg" viewBox="0 0 680 400" role="img" aria-label="A Scene Isn't an Address"><rect width="680" height="400" fill="#1d1a17"/><g><rect x="0" y="-13" width="26" height="26" transform="rotate(45 13 0)" fill="#f0477d"/><rect x="62" y="-13" width="26" height="26" transform="rotate(45 75 0)" fill="#12b795"/><rect x="124" y="-13" width="26" height="26" transform="rotate(45 137 0)" fill="#fe9a0d"/><rect x="186" y="-13" width="26" height="26" transform="rotate(45 199 0)" fill="#f0477d"/><rect x="248" y="-13" width="26" height="26" transform="rotate(45 261 0)" fill="#12b795"/><rect x="310" y="-13" width="26" height="26" transform="rotate(45 323 0)" fill="#fe9a0d"/><rect x="372" y="-13" width="26" height="26" transform="rotate(45 385 0)" fill="#f0477d"/><rect x="434" y="-13" width="26" height="26" transform="rotate(45 447 0)" fill="#12b795"/><rect x="496" y="-13" width="26" height="26" transform="rotate(45 509 0)" fill="#fe9a0d"/><rect x="558" y="-13" width="26" height="26" transform="rotate(45 571 0)" fill="#f0477d"/><rect x="620" y="-13" width="26" height="26" transform="rotate(45 633 0)" fill="#12b795"/></g><circle cx="566" cy="128" r="58" fill="#f0477d"/><circle cx="546" cy="112" r="58" fill="#1d1a17"/><path d="M0 306 L150 176 L300 306 Z" fill="#2a2620" stroke="#f6f1e7" stroke-width="2"/><path d="M210 306 L400 156 L590 306 Z" fill="#211d18" stroke="#f6f1e7" stroke-width="2"/><rect x="0" y="306" width="680" height="94" fill="#12b795"/><path d="M0 330 q40 -10 80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0" fill="none" stroke="#f6f1e7" stroke-width="2" opacity="0.5"/><g><rect x="37" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="40" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/><rect x="109" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="112" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/><rect x="181" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="184" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/><rect x="253" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="256" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/><rect x="325" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="328" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/><rect x="397" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="400" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/><rect x="469" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="472" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/><rect x="541" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="544" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/><rect x="613" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="616" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/></g><text x="46" y="150" font-family="'IBM Plex Mono',monospace" font-weight="800" font-size="62" letter-spacing="-2" fill="#f6f1e7">A Scene Isn't</text><text x="46" y="224" font-family="'IBM Plex Mono',monospace" font-weight="800" font-size="62" letter-spacing="-2" fill="#f0477d">an Address</text><text x="46" y="360" font-family="'IBM Plex Mono',monospace" font-size="13" letter-spacing="3" fill="#1d1a17" font-weight="700">DAILY BREAD №1 · PULL ALONG THE GUTTER · SYILX OKANAGAN</text></svg>
+    </figure>
+    <div class="split" style="margin-top:46px">
+      <div>
+        <span class="kicker">Also on the walls / plate room</span>
+        <div class="plate-row"><figure class="plate"><svg viewBox="0 0 200 150" role="presentation"><rect width="200" height="150" fill="#f6f1e7"/><rect x="30" y="26" width="140" height="112" fill="#2a2620" stroke="#1d1a17" stroke-width="3"/><rect x="44" y="36" width="30" height="30" fill="#4a423a" stroke="#1d1a17" stroke-width="2"/><rect x="90" y="36" width="30" height="30" fill="#4a423a" stroke="#1d1a17" stroke-width="2"/><rect x="136" y="36" width="30" height="30" fill="#4a423a" stroke="#1d1a17" stroke-width="2"/><rect x="44" y="86" width="30" height="30" fill="#4a423a" stroke="#1d1a17" stroke-width="2"/><rect x="90" y="86" width="30" height="30" fill="#f0477d" stroke="#1d1a17" stroke-width="2"/><rect x="136" y="86" width="30" height="30" fill="#4a423a" stroke="#1d1a17" stroke-width="2"/><rect x="44" y="136" width="30" height="30" fill="#4a423a" stroke="#1d1a17" stroke-width="2"/><rect x="90" y="136" width="30" height="30" fill="#4a423a" stroke="#1d1a17" stroke-width="2"/><rect x="136" y="136" width="30" height="30" fill="#4a423a" stroke="#1d1a17" stroke-width="2"/><rect x="70" y="118" width="60" height="16" fill="#fe9a0d" transform="rotate(-4 100 126)"/></svg><figcaption><b>Vacancy</b><span>photo essay · Bernard Ave</span></figcaption></figure><figure class="plate"><svg viewBox="0 0 200 150" role="presentation"><rect width="200" height="150" fill="#f6f1e7"/><rect x="24" y="52" width="120" height="10" fill="#5a4a34"/><rect x="30" y="62" width="8" height="30" fill="#5a4a34"/><rect x="128" y="62" width="8" height="30" fill="#5a4a34"/><path d="M0 86 q25 -9 50 0 t50 0 t50 0 t50 0" fill="none" stroke="#12b795" stroke-width="4"/><path d="M0 102 q25 -9 50 0 t50 0 t50 0 t50 0" fill="none" stroke="#12b795" stroke-width="4"/><path d="M0 118 q25 -9 50 0 t50 0 t50 0 t50 0" fill="none" stroke="#12b795" stroke-width="4"/><path d="M0 134 q25 -9 50 0 t50 0 t50 0 t50 0" fill="none" stroke="#12b795" stroke-width="4"/><rect x="0" y="120" width="200" height="30" fill="#12b795" opacity="0.9"/></svg><figcaption><b>The Lake Takes</b><span>ink on found paper</span></figcaption></figure><figure class="plate"><svg viewBox="0 0 200 150" role="presentation"><rect width="200" height="150" fill="#f6f1e7"/><rect x="27" y="70" width="6" height="52" fill="#3a2f22"/><path d="M16 78 l14 -20 l14 20 Z" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="67" y="70" width="6" height="52" fill="#3a2f22"/><circle cx="70" cy="66" r="18" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2.5"/><rect x="107" y="70" width="6" height="52" fill="#3a2f22"/><path d="M96 78 l14 -20 l14 20 Z" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="147" y="70" width="6" height="52" fill="#3a2f22"/><circle cx="150" cy="66" r="18" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2.5"/><line x1="10" y1="122" x2="190" y2="122" stroke="#1d1a17" stroke-width="3"/></svg><figcaption><b>Orchard, After</b><span>riso · two colours</span></figcaption></figure></div>
+      </div>
+      <div class="card colour-card">
+        <div class="hd pink"><span>Colouring page · pull out</span></div>
+        <div class="bd">
+          <h3 class="colour-h">Colour Your Own Collapse</h3>
+          <svg class="colour-svg" viewBox="0 0 640 240" role="img" aria-label="Colouring page: an orchard under a sun, drawn in outline to colour in"><rect width="640" height="240" fill="#f6f1e7"/><circle cx="560" cy="60" r="34" fill="none" stroke="#1d1a17" stroke-width="2.5"/><line x1="602" y1="60" x2="612" y2="60" stroke="#1d1a17" stroke-width="2.5"/><line x1="589.698484809835" y1="89.698484809835" x2="596.7695526217004" y2="96.76955262170047" stroke="#1d1a17" stroke-width="2.5"/><line x1="560" y1="102" x2="560" y2="112" stroke="#1d1a17" stroke-width="2.5"/><line x1="530.301515190165" y1="89.698484809835" x2="523.2304473782996" y2="96.76955262170048" stroke="#1d1a17" stroke-width="2.5"/><line x1="518" y1="60.00000000000001" x2="508" y2="60.00000000000001" stroke="#1d1a17" stroke-width="2.5"/><line x1="530.301515190165" y1="30.301515190165006" x2="523.2304473782996" y2="23.23044737829953" stroke="#1d1a17" stroke-width="2.5"/><line x1="560" y1="18" x2="560" y2="8" stroke="#1d1a17" stroke-width="2.5"/><line x1="589.698484809835" y1="30.301515190165" x2="596.7695526217004" y2="23.230447378299523" stroke="#1d1a17" stroke-width="2.5"/><path d="M0 190 q160 -34 320 0 t320 0" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="66" y="150" width="8" height="40" fill="none" stroke="#1d1a17" stroke-width="2.5"/><circle cx="70" cy="140" r="26" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="161" y="150" width="8" height="40" fill="none" stroke="#1d1a17" stroke-width="2.5"/><circle cx="165" cy="140" r="26" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="256" y="150" width="8" height="40" fill="none" stroke="#1d1a17" stroke-width="2.5"/><circle cx="260" cy="140" r="26" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="351" y="150" width="8" height="40" fill="none" stroke="#1d1a17" stroke-width="2.5"/><circle cx="355" cy="140" r="26" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="446" y="150" width="8" height="40" fill="none" stroke="#1d1a17" stroke-width="2.5"/><circle cx="450" cy="140" r="26" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="541" y="150" width="8" height="40" fill="none" stroke="#1d1a17" stroke-width="2.5"/><circle cx="545" cy="140" r="26" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="250" y="150" width="80" height="60" fill="none" stroke="#1d1a17" stroke-width="2.5"/><path d="M250 150 l40 -30 l40 30" fill="none" stroke="#1d1a17" stroke-width="2.5"/><text x="268" y="188" font-family="'IBM Plex Mono',monospace" font-size="11" fill="#1d1a17">FOR LEASE</text><text x="24" y="34" font-family="'Caveat',cursive" font-size="26" fill="#1d1a17">colour me →</text><line x1="0" y1="220" x2="640" y2="220" stroke="#1d1a17" stroke-width="1.5" stroke-dasharray="8 6"/></svg>
+          <p style="font-size:14px;line-height:1.7;margin-top:14px">The line-art page is yours. Crayon the orchard, redline the rent, sign the bottom. Photograph it and send it back; the best one runs the wall in №2.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ CALENDAR ============ -->
 <section id="calendar" class="sec">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.14</span><span class="tag">// ਕੈਲੰਡਰ · aug–oct 2026 · ਕੱਟੋ + ਫ੍ਰਿੱਜ</span></div>
     <div class="split">
       <div>
-        <h2 class="display">ਕੈਲੰਡਰ<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:1">ਕੈਲੰਡਰ<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">ਸੂਚੀਆਂ ਮੁਫ਼ਤ ਹਨ; 15 ਤਾਰੀਖ਼ ਤੱਕ ਈਮੇਲ ਕਰੋ। ਸ਼ਰਾਬ-ਮੁਕਤ ਤੇ ਹਰ-ਉਮਰ ਵਾਲੇ ਵਿਕਲਪ ◦ ਨਾਲ ਦਰਸਾਏ ਗਏ ਹਨ।</p>
         <div class="card" style="margin-top:24px">
           <div class="hd"><span>Aug — Oct 2026</span><span class="r">ਕੱਟੋ + ਫ੍ਰਿੱਜ</span></div>
@@ -490,7 +662,7 @@
     <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">// ਭੇਜਣ ਲਈ · №2 — "the thaw"</span></div>
     <div class="split">
       <div>
-        <h2 class="display">ਇਸ 'ਤੇ ਭੋਰੇ<br>ਖਿਲਾਰੋ<span class="dot">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:2">ਇਸ 'ਤੇ ਭੋਰੇ<br>ਖਿਲਾਰੋ<span class="dot">.</span></h2>
         <p class="dek" style="color:#cfc6b6">ਲੜੀਵਾਰ ਗਲਪ, ਇੱਕ ਖੁੱਲ੍ਹਾ ਸੈਂਟਰਫ਼ੋਲਡ, ਇੱਕ ਨੌਜਵਾਨ-ਆਵਾਜ਼ਾਂ ਵਾਲਾ ਡੈਸਕ, ਇੱਕ ਹਮੇਸ਼ਾ ਤਾਜ਼ਾ ਰਹਿਣ ਵਾਲੀ ਡਾਇਰੈਕਟਰੀ: №1 ਇੱਕ ਦ੍ਰਿਸ਼ ਦਾ ਪਹਿਲਾ ਖਰੜਾ ਹੈ ਜੋ ਆਪਣੀ ਹੋਂਦ ਦੀ ਦਲੀਲ ਦੇ ਰਿਹਾ ਹੈ। №2 ਹੈ "The Thaw" — ਜੋ ਵਾਪਸ ਆਉਂਦਾ ਹੈ। ਸਾਨੂੰ ਆਪਣਾ ਗੁੱਸਾ ਤੇ ਆਪਣੀਆਂ ਵਿਧੀਆਂ ਭੇਜੋ।</p>
         <div style="margin-top:26px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
           <a href="mailto:hello@dailybread.example?subject=WALL" class="stamp pink">hello@dailybread.example</a>
@@ -531,7 +703,7 @@
       <div>
         <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:min(280px,80%)">
         <div class="meta" style="letter-spacing:.45em;margin-top:10px">Laboratories Inc.</div>
-        <h2 class="display" style="margin-top:22px">ਲੈਬ ਤੋਂ</h2>
+        <h2 class="display" style="--fit:54px;--dl:1;margin-top:22px">ਲੈਬ ਤੋਂ</h2>
         <div class="prose justify" style="margin-top:18px">
           <p>ਪੂਰਾ ਖ਼ੁਲਾਸਾ, ਵੱਡੇ ਅੱਖਰਾਂ ਵਿੱਚ ਛਪਿਆ: ਇਹ ਰਸਾਲਾ Riposte Laboratories ਵੱਲੋਂ ਫੰਡ ਕੀਤਾ ਜਾਂਦਾ ਹੈ, ਇੱਕ ਕੈਲੋਨਾ ਦੀ ਟੋਲੀ ਜੋ ਮੁੜ-ਵਰਤੇ ਪਲਾਸਟਿਕ ਇੰਜੈਕਸ਼ਨ ਮੋਲਡਿੰਗ ਤੇ ਮੁੜ-ਪ੍ਰਾਪਤ ਸੈੱਲ ਮੌਡਿਊਲਰ ਬਿਜਲੀ ਨਾਲ ਬਰਬਾਦੀ 'ਤੇ ਜਵਾਬੀ ਹਮਲਾ ਕਰਦੀ ਹੈ। ਅਸੀਂ ਜੋ ਬਣਾ ਰਹੇ ਹਾਂ ਓਹ ਇੱਥੇ, ਇਹਨਾਂ ਹੀ ਪੰਨਿਆਂ 'ਤੇ, ਬਾਕੀ ਸਭ ਦੇ ਬਰਾਬਰ ਆਵਾਜ਼ ਵਿੱਚ ਸਾਂਝਾ ਕਰਦੇ ਹਾਂ।</p>
           <p>ਸੌਦਾ, ਲਿਖਤ ਵਿੱਚ: ਲੈਬ ਪ੍ਰਿੰਟਰ ਨੂੰ ਪੈਸਾ ਦਿੰਦੀ ਹੈ ਤੇ ਦੋ ਪੰਨੇ ਲੈਂਦੀ ਹੈ। ਸੰਪਾਦਕ ਪਾਠਕਾਂ ਨੂੰ ਜਵਾਬਦੇਹ ਹਨ, ਫੰਡਰ ਨੂੰ ਨਹੀਂ। ਜੇ ਇਹ ਕਦੇ ਬਦਲਿਆ, ਤਾਂ ਰੰਗ ਭਰਨ ਵਾਲਾ ਪੰਨਾ ਤੁਹਾਨੂੰ ਦੱਸ ਦੇਵੇਗਾ।</p>
@@ -555,6 +727,35 @@
   </div>
 </section>
 
+<div class="band harl br"></div>
+
+<!-- ============ STICKERS · PEEL ME (printable sheet) ============ -->
+<section id="stickers" class="sec stickers-sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.24</span><span class="tag">// peel me · sticker sheet · the leftover ink went here</span></div>
+    <div class="split center">
+      <div>
+        <h2 class="display" style="--fit:54px;--dl:1">Peel Me<span class="dot" style="color:var(--teal)">.</span></h2>
+        <p class="dek">The leftover ink went here. Print the page, cut along the dashes, and put the valley on your water bottle. Twelve stickers; no two collapses alike.</p>
+      </div>
+      <div class="print-cta">
+        <button type="button" class="printbtn" onclick="window.print()">Print this sheet ⎙</button>
+        <span class="fine">or press Ctrl / ⌘ + P · cut along the dashed lines</span>
+      </div>
+    </div>
+    <div class="card sheet">
+      <div class="hd"><span>Sticker sheet №1 · riso on offcuts</span><span class="r">Cut along dashes</span></div>
+      <div class="bd"><div class="sticker-grid"><div class="sticker k-g" style="--rot:-2.5deg"><div class="ic"><svg viewBox="0 0 116 108" role="presentation"><g transform="translate(4,4)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 78 Q14 39 58 39 Q102 39 102 78 Q102 93 58 93 Q14 93 14 78 Z" fill="#e4bd79"/>
+    <path d="M26 51 q11 -8 21 0 M49 49 q11 -8 21 2 M72 53 q8 -6 15 2" fill="none" stroke-width="2.3"/>
+    <circle cx="45" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><circle cx="72" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><path d="M49 79 q9 7 18 0" fill="none" stroke-width="2.6"/>
+    <circle cx="58" cy="74" r="1.9" fill="#f0477d" stroke="none"/>
+  </g></g></svg></div><span class="lab" style="color:#f0477d">Crumbs</span></div><div class="sticker k-s" style="--rot:1.5deg"><span class="stampbadge" style="border-color:#f0477d;color:#f0477d">Get Crumbs On It</span></div><div class="sticker k-s" style="--rot:-1deg"><span class="stampbadge" style="border-color:#fe9a0d;color:#fe9a0d">Free / PWYC</span></div><div class="sticker k-g" style="--rot:2.5deg"><div class="ic"><svg viewBox="0 0 100 80" role="presentation"><path d="M6 60 L34 22 L58 60 Z" fill="#2a2620"/><path d="M40 60 L66 30 L94 60 Z" fill="#1d1a17"/><circle cx="80" cy="24" r="10" fill="#f0477d"/><rect x="0" y="60" width="100" height="14" fill="#12b795"/></svg></div><span class="lab" style="color:#1d1a17">Kelowna</span></div><div class="sticker k-q" style="--rot:-2deg"><span class="quote" style="color:#12b795">A Scene Isn't an Address</span></div><div class="sticker k-m" style="--rot:1deg"><span class="mono">DB</span><span class="lab">Daily Bread</span></div><div class="sticker k-g" style="--rot:-2.5deg"><div class="ic"><svg viewBox="0 0 96 96" role="presentation"><g fill="none" stroke="#12b795" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M48 20 L64 46 M64 46 L54 44 M64 46 L62 36"/><path d="M70 60 L40 60 M40 60 L48 66 M40 60 L48 54" transform="rotate(120 48 48)"/><path d="M70 60 L40 60 M40 60 L48 66 M40 60 L48 54" transform="rotate(240 48 48)"/></g></svg></div><span class="lab" style="color:#12b795">Parry · Riposte · Recycle</span></div><div class="sticker k-g" style="--rot:1.5deg"><div class="ic"><svg viewBox="0 0 80 96" role="presentation"><path d="M40 6 C40 6 70 46 70 66 A30 30 0 1 1 10 66 C10 46 40 6 40 6 Z" fill="#12b795" stroke="#1d1a17" stroke-width="3"/><path d="M28 62 a12 12 0 0 0 12 12" fill="none" stroke="#f6f1e7" stroke-width="3"/></svg></div><span class="lab" style="color:#12b795">The Lake Takes</span></div><div class="sticker k-s" style="--rot:-1deg"><span class="stampbadge" style="border-color:#1d1a17;color:#1d1a17">I Am the Precedent</span></div><div class="sticker k-s" style="--rot:2.5deg"><span class="stampbadge" style="border-color:#f0477d;color:#f0477d">Quiet No More</span></div><div class="sticker k-s" style="--rot:-2deg"><span class="stampbadge" style="border-color:#fe9a0d;color:#fe9a0d">Baked in Kelowna</span></div><div class="sticker k-q" style="--rot:1deg"><span class="quote" style="color:#1d1a17">syilx okanagan · with respect</span></div></div></div>
+    </div>
+    <p class="meta" style="margin-top:18px;line-height:1.9">Riso-printed on the offcuts. If a colour's off, that's the point.</p>
+  </div>
+</section>
+
 <!-- ============ FOOTER / BACK COVER ============ -->
 <footer>
   <div class="band harl" style="border-top:2px solid var(--bone)"></div>
@@ -567,7 +768,9 @@
       <div class="meta" style="line-height:1.7;text-align:left">ISSN ਬਕਾਇਆ<br>№1 · ਗਰਮੀਆਂ 2026</div>
     </div>
     <div class="signoff" style="color:var(--pink);margin-top:4px">ਬਰਫ਼ ਪਿਘਲਣ 'ਤੇ ਮਿਲਾਂਗੇ ✕</div>
+    <div class="fswitch">Lightweight versions: <a href="/pa/" aria-current="true">Full</a> · <a href="/pa/lite/">Lite</a> · <a href="/pa/eink/">E-ink</a></div>
     <div class="colophon">500 ਦੀ ਛਪਾਈ ਵਿੱਚ ਬਿਨਾਂ ਸੌਂਪੀ syilx ਓਕਾਨਾਗਨ ਧਰਤੀ ਉੱਤੇ ਛਾਪਿਆ ਗਿਆ। IBM Plex Mono ਤੇ UnifrakturMaguntia ਵਿੱਚ ਸੈੱਟ ਕੀਤਾ। ਗ਼ਲਤੀਆਂ ਸਾਡੀਆਂ; ਸੁਧਾਈਆਂ ਤੁਹਾਡੀਆਂ; ਬਚੀ ਸਿਆਹੀ ਸਟਿੱਕਰਾਂ ਵਿੱਚ ਪੈ ਗਈ। · Parry. Riposte.</div>
+    <div class="verify-note"><a href="/verify/">Verified publishing ✓ confirm this edition has not been altered</a></div>
   </div>
   <div class="band" style="border-top:2px solid var(--bone)"></div>
 </footer>
