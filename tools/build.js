@@ -86,6 +86,59 @@ const LABBOARD = ['#12b795','#fe9a0d','#f0477d','#1d1a17','#12b795'].map(c=>({c}
 
 const esc = s => String(s).replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 
+/* ============================================================================
+   multilingual heading fit (pretext-style, done at build time)
+   ----------------------------------------------------------------------------
+   The section headlines render in IBM Plex Mono; the same headline translated
+   swings 3-4x in width across scripts (Hindi/CJK short, Tagalog/Latin/French
+   long), which flips a headline between one and two lines and shifts every
+   block beneath it. To keep the layout fixed and let only the text change, we
+   measure each string's display width the way @chenglou/pretext does — segment
+   into graphemes with Intl.Segmenter, sum East-Asian display cells (wide = 2,
+   combining marks = 0) — and bake a font-size so every language fills the same
+   box as the English reference. Because the target font is monospace the cell
+   count IS the width (pretext's canvas path is browser-only and would add
+   runtime JS + layout shift; this stays static). CELL = mono advance in em,
+   with headroom for the -.015em letter-spacing and the trailing "." span.     */
+const GRAPH = new Intl.Segmenter(undefined, {granularity:'grapheme'});
+const CELL = 0.62;
+function wideCP(cp){
+  return (cp>=0x1100&&cp<=0x115F)||(cp>=0x2E80&&cp<=0x303E)||(cp>=0x3041&&cp<=0x33FF)||
+         (cp>=0x3400&&cp<=0x4DBF)||(cp>=0x4E00&&cp<=0x9FFF)||(cp>=0xA000&&cp<=0xA4CF)||
+         (cp>=0xAC00&&cp<=0xD7A3)||(cp>=0xF900&&cp<=0xFAFF)||(cp>=0xFF00&&cp<=0xFF60)||
+         (cp>=0xFFE0&&cp<=0xFFE6);
+}
+function cellsOf(str){
+  const plain = String(str).replace(/<[^>]*>/g,'').replace(/&[a-z]+;/g,'x');
+  let w = 0;
+  for(const {segment} of GRAPH.segment(plain)){
+    if(/^\p{M}+$/u.test(segment)) continue;             // combining mark: zero width
+    w += wideCP(segment.codePointAt(0)) ? 2 : 1;
+  }
+  return w;
+}
+/* inline style for a <h2 class="display">: caps the font so the headline holds
+   English's line count within the narrow (tablet) column, and reserves that
+   many lines. w = narrowest column the headline occupies; pad = extra cells for
+   a trailing dot; extra = any pre-existing inline style to keep. */
+function fitDisplay(t, key, {w, base=54, pad=0, extra=''}){
+  const enSegs = String(EN[key]).split(/<br\s*\/?>/i);
+  const segs   = String(t[key]).split(/<br\s*\/?>/i);
+  const dl = Math.max(enSegs.length, segs.length);      // reserved lines (English intent)
+  const lineCells = segs.length > 1
+    ? Math.max(...segs.map(cellsOf)) + pad              // hard <br>: fit the longest line
+    : cellsOf(String(t[key])) + pad;                    // single line target
+  const fit = Math.max(24, Math.min(base, Math.round(w / (CELL * Math.max(1, lineCells)))));
+  const s = `--fit:${fit}px;--dl:${dl}`;
+  return extra ? `${s};${extra}` : s;
+}
+/* gentle cap for .report h3: shrink only when a translation would exceed
+   maxLines within the card; English and shorter languages are untouched. */
+function fitH3(t, key, {w, base=25, maxLines=3}){
+  const fit = Math.max(15, Math.min(base, Math.round(w * maxLines / (CELL * Math.max(1, cellsOf(String(t[key])))))));
+  return `--fit:${fit}px`;
+}
+
 /* ---- server-rendered list blocks (byte-identical to the old inline JS) ---- */
 function tocRows(t){
   return TOC.map((r,i)=>`<div class="li"><span class="pgchip" style="background:${r.c}">${r.pg}</span><span class="t">${esc(t['toc.'+i+'.t'])}</span><span class="end tagend">${esc(t['toc.'+i+'.k'])}</span></div>`).join('');
@@ -407,7 +460,7 @@ ${mtnote(t, code, variant)}
     <div class="rule" style="margin-bottom:34px"></div>
     <div class="split">
       <div>
-        <h2 class="display">${t['letter.h']}</h2>
+        <h2 class="display" style="${fitDisplay(t,'letter.h',{w:384})}">${t['letter.h']}</h2>
         <div class="prose justify" style="margin-top:22px">
           <p>${t['letter.p1']}</p>
           <p>${t['letter.p2']}</p>
@@ -441,7 +494,7 @@ ${mtnote(t, code, variant)}
 <section id="contents" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.01</span><span class="tag">${t['contents.tag']}</span></div>
-    <h2 class="display">${t['contents.h']}<span class="dot">.</span></h2>
+    <h2 class="display" style="${fitDisplay(t,'contents.h',{w:800,pad:1.5})}">${t['contents.h']}<span class="dot">.</span></h2>
     <p class="dek">${t['contents.dek']}</p>
     <div class="card" style="margin-top:30px">
       <div class="hd"><span>${t['contents.mfHd']}</span><span class="r">DB-TOC</span></div>
@@ -456,7 +509,7 @@ ${mtnote(t, code, variant)}
     <div class="sechead"><span class="no">Sec.02</span><span class="tag">${t['history.tag']}</span></div>
     <div class="split">
       <div>
-        <h2 class="display">${t['history.h']}</h2>
+        <h2 class="display" style="${fitDisplay(t,'history.h',{w:384})}">${t['history.h']}</h2>
         <div class="prose justify" style="margin-top:22px">
           <p>${t['history.p1']}</p>
           <p>${t['history.p2']}</p>
@@ -479,26 +532,26 @@ ${mtnote(t, code, variant)}
 <section id="voices" class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">${t['voices.tag']}</span></div>
-    <h2 class="display">${t['voices.h']}</h2>
+    <h2 class="display" style="${fitDisplay(t,'voices.h',{w:800})}">${t['voices.h']}</h2>
     <p class="dek" style="color:#cfc6b6">${t['voices.dek']}</p>
     <div class="thirds" style="margin-top:34px">
       <div class="card report"><div class="hd pink"><span>${t['voices.r1tag']}</span><span>${t['voices.r1meta']}</span></div>
         <div class="bd">
-          <h3>${t['voices.r1h']}</h3>
+          <h3 style="${fitH3(t,'voices.r1h',{w:216})}">${t['voices.r1h']}</h3>
           <p>${t['voices.r1p']}</p>
           <div class="pull">${t['voices.r1pull']}</div>
         </div>
       </div>
       <div class="card report"><div class="hd orange"><span>${t['voices.r2tag']}</span><span>${t['voices.r2meta']}</span></div>
         <div class="bd">
-          <h3>${t['voices.r2h']}</h3>
+          <h3 style="${fitH3(t,'voices.r2h',{w:216})}">${t['voices.r2h']}</h3>
           <p>${t['voices.r2p']}</p>
           <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange);border:0;padding-left:0">${t['voices.r2pull']}</div>
         </div>
       </div>
       <div class="card report"><div class="hd teal"><span>${t['voices.r3tag']}</span><span>${t['voices.r3meta']}</span></div>
         <div class="bd">
-          <h3>${t['voices.r3h']}</h3>
+          <h3 style="${fitH3(t,'voices.r3h',{w:216})}">${t['voices.r3h']}</h3>
           <p>${t['voices.r3p']}</p>
           <div class="pull teal">${t['voices.r3pull']}</div>
         </div>
@@ -513,7 +566,7 @@ ${mtnote(t, code, variant)}
     <div class="split center">
       <div>
         <span class="kicker pink">${t['waitlist.kicker']}</span>
-        <h2 class="display" style="margin-top:16px">${t['waitlist.h']}</h2>
+        <h2 class="display" style="${fitDisplay(t,'waitlist.h',{w:384,extra:'margin-top:16px'})}">${t['waitlist.h']}</h2>
         <p class="dek">${t['waitlist.dek']}</p>
       </div>
       <div class="stats">
@@ -539,7 +592,7 @@ ${mtnote(t, code, variant)}
 <section id="comics" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.08</span><span class="tag">${t['comic.tag']}</span></div>
-    <h2 class="display">${t['comic.h']}<span class="dot">.</span></h2>
+    <h2 class="display" style="${fitDisplay(t,'comic.h',{w:800,pad:1.5})}">${t['comic.h']}<span class="dot">.</span></h2>
     <p class="dek">${t['comic.dek']}</p>
     <div style="margin-top:16px"><span class="kicker orange">${t['comic.credit']}</span></div>
     <div class="comic-strip">${comicStrip(t)}</div>
@@ -555,7 +608,7 @@ ${mtnote(t, code, variant)}
     <div class="sechead"><span class="no">Sec.11</span><span class="tag" style="color:#b7ad9e">${t['art.tag']}</span></div>
     <div class="split center">
       <div>
-        <h2 class="display">${t['art.h']}</h2>
+        <h2 class="display" style="${fitDisplay(t,'art.h',{w:384})}">${t['art.h']}</h2>
         <p class="dek" style="color:#cfc6b6">${t['art.dek']}</p>
         <div class="annot"><span class="scribble teal">${t['art.annot']}</span></div>
       </div>
@@ -588,7 +641,7 @@ ${mtnote(t, code, variant)}
     <div class="sechead"><span class="no">Sec.14</span><span class="tag">${t['calendar.tag']}</span></div>
     <div class="split">
       <div>
-        <h2 class="display">${t['calendar.h']}<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="${fitDisplay(t,'calendar.h',{w:384,pad:1.5})}">${t['calendar.h']}<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">${t['calendar.dek']}</p>
         <div class="card" style="margin-top:24px">
           <div class="hd"><span>${t['calendar.evHd']}</span><span class="r">${t['calendar.evHd2']}</span></div>
@@ -653,7 +706,7 @@ ${mtnote(t, code, variant)}
     <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">${t['submit.tag']}</span></div>
     <div class="split">
       <div>
-        <h2 class="display">${t['submit.h']}<span class="dot">.</span></h2>
+        <h2 class="display" style="${fitDisplay(t,'submit.h',{w:384,pad:1.5})}">${t['submit.h']}<span class="dot">.</span></h2>
         <p class="dek" style="color:#cfc6b6">${t['submit.dek']}</p>
         <div style="margin-top:26px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
           <a href="mailto:hello@dailybread.example?subject=WALL" class="stamp pink">hello@dailybread.example</a>
@@ -694,7 +747,7 @@ ${mtnote(t, code, variant)}
       <div>
         <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:min(280px,80%)">
         <div class="meta" style="letter-spacing:.45em;margin-top:10px">${t['lab.labInc']}</div>
-        <h2 class="display" style="margin-top:22px">${t['lab.h']}</h2>
+        <h2 class="display" style="${fitDisplay(t,'lab.h',{w:384,extra:'margin-top:22px'})}">${t['lab.h']}</h2>
         <div class="prose justify" style="margin-top:18px">
           <p>${t['lab.p1']}</p>
           <p>${t['lab.p2']}</p>
@@ -726,7 +779,7 @@ ${mtnote(t, code, variant)}
     <div class="sechead"><span class="no">Sec.24</span><span class="tag">${t['stickers.tag']}</span></div>
     <div class="split center">
       <div>
-        <h2 class="display">${t['stickers.h']}<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="${fitDisplay(t,'stickers.h',{w:384,pad:1.5})}">${t['stickers.h']}<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">${t['stickers.dek']}</p>
       </div>
       <div class="print-cta">

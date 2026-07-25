@@ -61,8 +61,14 @@
   .kicker.pink{background:var(--pink);color:var(--bone)}
   .kicker.teal{background:var(--teal);color:var(--bone)}
   .kicker.orange{background:var(--orange);color:var(--ink)}
-  .display{font-size:clamp(32px,5.4vw,54px);line-height:.96;font-weight:800;
-    text-transform:uppercase;letter-spacing:-.015em}
+  /* .display headings are fitted per language at build time: --fit caps the
+     font so the translated headline holds the same line count as English, and
+     --dl reserves that many lines (viewport-driven, so identical across
+     languages) — the block below every headline lands at the same place.
+     Both fall back gracefully when unset (English full-width headings). */
+  .display{font-size:min(clamp(32px,5.4vw,54px),var(--fit,999px));line-height:.96;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.015em;text-wrap:balance;overflow-wrap:break-word;
+    min-height:calc(var(--dl,1) * .96 * clamp(32px,5.4vw,54px))}
   .display .dot{color:var(--pink)}
   .frak{font-family:'UnifrakturMaguntia',serif;font-weight:400;line-height:.9}
   .dek{font-size:15.5px;line-height:1.7;max-width:62ch;color:#3a352e;margin-top:14px}
@@ -168,7 +174,8 @@
   /* ---------- reports ---------- */
   .report{display:flex;flex-direction:column;height:100%}
   .report .bd{display:flex;flex-direction:column;flex:1}
-  .report h3{font-size:clamp(20px,2.5vw,25px);line-height:1.06;font-weight:800;text-transform:uppercase;margin:0 0 12px}
+  .report h3{font-size:min(clamp(20px,2.5vw,25px),var(--fit,999px));line-height:1.06;font-weight:800;
+    text-transform:uppercase;margin:0 0 12px;text-wrap:balance;overflow-wrap:break-word}
   .report p{font-size:14px;line-height:1.62;margin:0}
   .pull{border-left:6px solid var(--pink);padding:8px 0 8px 15px;font-size:17px;line-height:1.34;
     font-weight:600;font-style:italic;margin-top:auto;padding-top:16px}
@@ -182,7 +189,8 @@
   @media(max-width:560px){.stats{grid-template-columns:1fr}}
 
   /* ---------- quote band ---------- */
-  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;max-width:20ch}
+  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;
+    max-width:22ch;text-wrap:balance;overflow-wrap:break-word}
   .bigquote .mk{color:var(--pink);font-style:normal}
   .attrib{font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:22px;color:#b7ad9e}
 
@@ -378,7 +386,7 @@
     <div class="rule" style="margin-bottom:34px"></div>
     <div class="split">
       <div>
-        <h2 class="display">Ang Aming Araw-araw<br>na Pangamba</h2>
+        <h2 class="display" style="--fit:33px;--dl:2">Ang Aming Araw-araw<br>na Pangamba</h2>
         <div class="prose justify" style="margin-top:22px">
           <p><span class="drop">HI.</span> Natagpuan mo ang unang isyu ng isang queer na magasin sa isang lungsod na paulit-ulit na nagsasabi sa aming wala itong ganito. May queer na kasaysayan ang Kelowna, mga queer na bata, mga queer na matatanda, mga queer na panadero at burukrata; ang wala pa rito ay papel na malakas na nagsasabi nito.</p>
           <p>Ang isyung ito ay tungkol sa pagguho: ang mga taniman ng prutas, ang mga venue, ang matematika ng upa, ang trapiko sa tulay. Hindi dahil mga doomer kami, kundi dahil naguguho ang mga bagay dito nang nakatakda, at ang pagpangalan sa takda ang unang gawa ng pagsasaayos.</p>
@@ -412,7 +420,7 @@
 <section id="contents" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.01</span><span class="tag">// nilalaman · manifest / 48 pp</span></div>
-    <h2 class="display">Nilalaman<span class="dot">.</span></h2>
+    <h2 class="display" style="--fit:54px;--dl:1">Nilalaman<span class="dot">.</span></h2>
     <p class="dek">Labindalawang kontribyutor ang gumawa ng №1: mga manunulat na edad 17–74, dalawang potograpo, isang cartoonist, isang napakapasensyosong proofreader. Bawat byline ay lokal. Bawat bayad ay naibigay bago pa ang printer.</p>
     <div class="card" style="margin-top:30px">
       <div class="hd"><span>Manifest / 48 pp</span><span class="r">DB-TOC</span></div>
@@ -427,7 +435,7 @@
     <div class="sechead"><span class="no">Sec.02</span><span class="tag">// kasaysayan · bago ang tulay</span></div>
     <div class="split">
       <div>
-        <h2 class="display">Isang Bastos<br>na Kasaysayan</h2>
+        <h2 class="display" style="--fit:48px;--dl:2">Isang Bastos<br>na Kasaysayan</h2>
         <div class="prose justify" style="margin-top:22px">
           <p>Dalawang beses ipinagbili ng lambak ang sarili nito: una bilang Eden, pagkatapos bilang equity. Madalas malugi ang mga magsasaka ng prutas kaya ang mga packinghouse ang nagpalimbag ng sariling scrip; nang mamatay ang prutas, ang benta ay naging araw ng pagreretiro; nang matabunan ng mga retirado ang mga mamimitas, ang benta ay naging mga loft sa tabi ng lawa. Bawat gawa ay nagtatapos sa parehong paraan, kasama ang mga taong gumawa ng trabaho na naninirahan nang mas malayo sa tubig.</p>
           <p>Ang queer na kasaysayan ay nakatirintas sa lahat ng ito: mga sayawan na may di-opisyal na mga gabi, mga network ng pagkakaibigan na nagsilbi ring listahan ng pabahay, isang eksenang nabuhay sa pagiging kapaki-pakinabang at tahimik hanggang sa hindi na kailangan.</p>
@@ -450,26 +458,26 @@
 <section id="voices" class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">// desk ng batang tinig · hindi rinepaso. hindi ineedit. tama.</span></div>
-    <h2 class="display">Mga Batang Tinig</h2>
+    <h2 class="display" style="--fit:54px;--dl:1">Mga Batang Tinig</h2>
     <p class="dek" style="color:#cfc6b6">Tatlong field report mula sa mga manunulat na hindi pa makaboto ngunit marunong nang gawin ang matematika ng upa. Binayaran namin sila; hindi namin hinawakan ang isang salita.</p>
     <div class="thirds" style="margin-top:34px">
       <div class="card report"><div class="hd pink"><span>Report 01</span><span>Edad 19 · Pabahay</span></div>
         <div class="bd">
-          <h3>Walang Kasingedad Ko ang Kayang Manatili</h3>
+          <h3 style="--fit:25px">Walang Kasingedad Ko ang Kayang Manatili</h3>
           <p>Dalawa ang trabaho ko at hinahati ko ang isang two-bedroom sa tatlong tao, at ako pa ang success story. Ang group chat ko ay isang mabagal na despedida: Vernon, Calgary, basement ng nanay sa Surrey.</p>
           <div class="pull">"Bawat viewing ay apatnapung tao ang lalim at laging may isang umiiyak."</div>
         </div>
       </div>
       <div class="card report"><div class="hd orange"><span>Report 02</span><span>Edad 22 · Pagpapakilala</span></div>
         <div class="bd">
-          <h3>Nagladlad sa Packinghouse</h3>
+          <h3 style="--fit:25px">Nagladlad sa Packinghouse</h3>
           <p>Nagladlad ako sa isang bush party sa Glenmore at ang pinakamasamang nangyari ay may lalaking nagngangalang Tyler na nagsabing "cool" at nagtanong kung maihahatid ko siya pauwi. Hindi paraiso, hindi impiyerno, isa lamang maliit na lungsod na natututo nang mas mabilis kaysa sa city council nito.</p>
           <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange);border:0;padding-left:0">ang heograpiya ang huling kloset</div>
         </div>
       </div>
       <div class="card report"><div class="hd teal"><span>Report 03</span><span>Edad 17 · Panahon ng sunog</span></div>
         <div class="bd">
-          <h3>Dalawang Beses Na Akong Nag-evacuate at Hindi Pa Ako Makaboto</h3>
+          <h3 style="--fit:17px">Dalawang Beses Na Akong Nag-evacuate at Hindi Pa Ako Makaboto</h3>
           <p>Ang mga larawan ko noong bata ay nakaayos ayon sa taon ng usok. Iniimpake namin ang kotse noong 2021 at muli noong 2023, at sa parehong pagkakataon tinawag itong walang-katulad ng mga matatanda sa radyo. May katulad ito.</p>
           <div class="pull teal">"Ako ang katulad."</div>
         </div>
@@ -484,7 +492,7 @@
     <div class="split center">
       <div>
         <span class="kicker pink">10 · Mga kasalukuyang isyu</span>
-        <h2 class="display" style="margin-top:16px">Ang Waitlist</h2>
+        <h2 class="display" style="--fit:52px;--dl:1;margin-top:16px">Ang Waitlist</h2>
         <p class="dek">Ang paghahanap ng queer-competent na pangangalagang pangkalusugan sa Central Okanagan ay isang part-time na trabaho na walang benepisyo. Tinawagan namin ang bawat klinika para hindi mo na kailangan; lahat ng naabot namin ay naglarawan ng parehong tatsulok ng phone tag, referral limbo, at isang highway.</p>
       </div>
       <div class="stats">
@@ -510,7 +518,7 @@
 <section id="comics" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.08</span><span class="tag">// crumbs · ep.1 · a golem seeks housing</span></div>
-    <h2 class="display">Crumbs<span class="dot">.</span></h2>
+    <h2 class="display" style="--fit:54px;--dl:1">Crumbs<span class="dot">.</span></h2>
     <p class="dek">Our guest strip. Six panels, one loaf, zero vacancies. The slot is open, it pays, and the only brief is: make us laugh about the thing that isn't funny.</p>
     <div style="margin-top:16px"><span class="kicker orange">Ep.1 · pencils, ink & crumbs by open call</span></div>
     <div class="comic-strip"><figure class="panel"><span class="pn">01</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><path d="M50 116 L170 116 L158 140 L62 140 Z" fill="#cdb491" stroke="#1d1a17" stroke-width="3" stroke-linejoin="round"/><line x1="50" y1="116" x2="170" y2="116" stroke="#1d1a17" stroke-width="3"/><g transform="translate(52,22)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
@@ -556,7 +564,7 @@
     <div class="sechead"><span class="no">Sec.11</span><span class="tag" style="color:#b7ad9e">// the wall · rip-out centrefold · pull gently</span></div>
     <div class="split center">
       <div>
-        <h2 class="display">The Wall</h2>
+        <h2 class="display" style="--fit:54px;--dl:1">The Wall</h2>
         <p class="dek" style="color:#cfc6b6">The centrefold is a poster. Tear it out along the gutter and put it where a landlord can see it. This issue's wall belongs to the scene that refuses to be an address.</p>
         <div class="annot"><span class="scribble teal">yes — actually rip it</span></div>
       </div>
@@ -589,7 +597,7 @@
     <div class="sechead"><span class="no">Sec.14</span><span class="tag">// ang kalendaryo · aug–oct 2026 · gupitin + ilagay sa ref</span></div>
     <div class="split">
       <div>
-        <h2 class="display">Ang Kalendaryo<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:40px;--dl:1">Ang Kalendaryo<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">Libre ang mga listing; mag-email bago ang ika-15. Ang mga sober at all-ages na opsyon ay may markang ◦.</p>
         <div class="card" style="margin-top:24px">
           <div class="hd"><span>Aug — Oct 2026</span><span class="r">Gupitin + ilagay sa ref</span></div>
@@ -654,7 +662,7 @@
     <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">// mga pasa · №2 — "ang tunaw"</span></div>
     <div class="split">
       <div>
-        <h2 class="display">Lagyan Mo Ito<br>ng Mumo<span class="dot">.</span></h2>
+        <h2 class="display" style="--fit:43px;--dl:2">Lagyan Mo Ito<br>ng Mumo<span class="dot">.</span></h2>
         <p class="dek" style="color:#cfc6b6">Serialized na kathang-isip, isang bukas na centrefold, isang desk ng mga batang tinig, isang direktoryong nananatiling napapanahon: ang №1 ay unang burador ng isang eksenang nagpupumilit na ito ay umiiral. Ang №2 ay "The Thaw" — ang bumabalik. Ipadala sa amin ang iyong galit at ang iyong mga resipe.</p>
         <div style="margin-top:26px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
           <a href="mailto:hello@dailybread.example?subject=WALL" class="stamp pink">hello@dailybread.example</a>
@@ -695,7 +703,7 @@
       <div>
         <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:min(280px,80%)">
         <div class="meta" style="letter-spacing:.45em;margin-top:10px">Laboratories Inc.</div>
-        <h2 class="display" style="margin-top:22px">Mula sa Lab</h2>
+        <h2 class="display" style="--fit:54px;--dl:1;margin-top:22px">Mula sa Lab</h2>
         <div class="prose justify" style="margin-top:18px">
           <p>Buong pagsisiwalat, nakalimbag nang malaki: ang magasing ito ay pinondohan ng Riposte Laboratories, isang grupo sa Kelowna na lumalaban sa basura sa pamamagitan ng recycled-plastic injection molding at reclaimed-cell modular power. Ibinabahagi namin ang aming ginagawa dito, sa parehong mga pahina, sa parehong lakas gaya ng iba pa.</p>
           <p>Ang kasunduan, nakasulat: ang Lab ang nagbabayad sa printer at kumukuha ng dalawang pahina. Ang mga editor ay nananagot sa mga mambabasa, hindi sa pumopondo. Kung magbago man iyon, ipaaalam sa iyo ng colouring page.</p>
@@ -727,7 +735,7 @@
     <div class="sechead"><span class="no">Sec.24</span><span class="tag">// peel me · sticker sheet · the leftover ink went here</span></div>
     <div class="split center">
       <div>
-        <h2 class="display">Peel Me<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:1">Peel Me<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">The leftover ink went here. Print the page, cut along the dashes, and put the valley on your water bottle. Twelve stickers; no two collapses alike.</p>
       </div>
       <div class="print-cta">

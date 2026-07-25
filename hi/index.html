@@ -61,8 +61,14 @@
   .kicker.pink{background:var(--pink);color:var(--bone)}
   .kicker.teal{background:var(--teal);color:var(--bone)}
   .kicker.orange{background:var(--orange);color:var(--ink)}
-  .display{font-size:clamp(32px,5.4vw,54px);line-height:.96;font-weight:800;
-    text-transform:uppercase;letter-spacing:-.015em}
+  /* .display headings are fitted per language at build time: --fit caps the
+     font so the translated headline holds the same line count as English, and
+     --dl reserves that many lines (viewport-driven, so identical across
+     languages) — the block below every headline lands at the same place.
+     Both fall back gracefully when unset (English full-width headings). */
+  .display{font-size:min(clamp(32px,5.4vw,54px),var(--fit,999px));line-height:.96;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.015em;text-wrap:balance;overflow-wrap:break-word;
+    min-height:calc(var(--dl,1) * .96 * clamp(32px,5.4vw,54px))}
   .display .dot{color:var(--pink)}
   .frak{font-family:'UnifrakturMaguntia',serif;font-weight:400;line-height:.9}
   .dek{font-size:15.5px;line-height:1.7;max-width:62ch;color:#3a352e;margin-top:14px}
@@ -168,7 +174,8 @@
   /* ---------- reports ---------- */
   .report{display:flex;flex-direction:column;height:100%}
   .report .bd{display:flex;flex-direction:column;flex:1}
-  .report h3{font-size:clamp(20px,2.5vw,25px);line-height:1.06;font-weight:800;text-transform:uppercase;margin:0 0 12px}
+  .report h3{font-size:min(clamp(20px,2.5vw,25px),var(--fit,999px));line-height:1.06;font-weight:800;
+    text-transform:uppercase;margin:0 0 12px;text-wrap:balance;overflow-wrap:break-word}
   .report p{font-size:14px;line-height:1.62;margin:0}
   .pull{border-left:6px solid var(--pink);padding:8px 0 8px 15px;font-size:17px;line-height:1.34;
     font-weight:600;font-style:italic;margin-top:auto;padding-top:16px}
@@ -182,7 +189,8 @@
   @media(max-width:560px){.stats{grid-template-columns:1fr}}
 
   /* ---------- quote band ---------- */
-  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;max-width:20ch}
+  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;
+    max-width:22ch;text-wrap:balance;overflow-wrap:break-word}
   .bigquote .mk{color:var(--pink);font-style:normal}
   .attrib{font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:22px;color:#b7ad9e}
 
@@ -378,7 +386,7 @@
     <div class="rule" style="margin-bottom:34px"></div>
     <div class="split">
       <div>
-        <h2 class="display">हमारी रोज़ की<br>दहशत</h2>
+        <h2 class="display" style="--fit:54px;--dl:2">हमारी रोज़ की<br>दहशत</h2>
         <div class="prose justify" style="margin-top:22px">
           <p><span class="drop">नमस्ते.</span> आपको एक क्वीयर पत्रिका का पहला अंक ऐसे शहर में मिला है जो हमसे बार-बार कहता रहता है कि उसके पास कोई नहीं है। Kelowna के पास क्वीयर इतिहास है, क्वीयर बच्चे, क्वीयर बुज़ुर्ग, क्वीयर बेकर और बाबू; जो नहीं रहा वह है ऐसा कागज़ जो इसे खुलकर कहे।</p>
           <p>यह अंक ढहने के बारे में है: बगीचे, अड्डे, किराए का हिसाब, पुल का ट्रैफ़िक। इसलिए नहीं कि हम मनहूस हैं, बल्कि इसलिए कि यहाँ चीज़ें तयशुदा वक़्त पर बिखरती हैं, और उस वक़्त को नाम देना मरम्मत का पहला काम है।</p>
@@ -412,7 +420,7 @@
 <section id="contents" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.01</span><span class="tag">// सूची · मैनिफ़ेस्ट / 48 pp</span></div>
-    <h2 class="display">सूची<span class="dot">.</span></h2>
+    <h2 class="display" style="--fit:54px;--dl:1">सूची<span class="dot">.</span></h2>
     <p class="dek">बारह योगदानकर्ताओं ने №1 बनाया: 17–74 उम्र के लेखक, दो फ़ोटोग्राफ़र, एक कार्टूनिस्ट, एक बेहद सब्र वाला प्रूफ़रीडर। हर बायलाइन स्थानीय है। हर मेहनताना छापाख़ाने से पहले चुका दिया गया।</p>
     <div class="card" style="margin-top:30px">
       <div class="hd"><span>मैनिफ़ेस्ट / 48 pp</span><span class="r">DB-TOC</span></div>
@@ -427,7 +435,7 @@
     <div class="sechead"><span class="no">Sec.02</span><span class="tag">// इतिहास · पुल से पहले</span></div>
     <div class="split">
       <div>
-        <h2 class="display">एक बेअदब<br>इतिहास</h2>
+        <h2 class="display" style="--fit:54px;--dl:2">एक बेअदब<br>इतिहास</h2>
         <div class="prose justify" style="margin-top:22px">
           <p>इस घाटी ने खुद को दो बार बेचा: पहले स्वर्ग के रूप में, फिर पूँजी के रूप में। फल उगाने वाले इतनी बार दिवालिया हुए कि पैकिंगहाउसों ने अपनी ख़ुद की पर्ची-मुद्रा छापी; जब फल मरा, तो नारा बना बुढ़ापे की धूप; जब बुज़ुर्गों ने मज़दूरों को महँगाई से बाहर धकेल दिया, तो नारा बना झील किनारे के लॉफ़्ट। हर अंक का अंत एक ही तरह हुआ, उन लोगों के साथ जो काम करते थे और पानी से और दूर रहने चले गए।</p>
           <p>क्वीयर इतिहास इस सबमें गुँथा हुआ है: गैर-सरकारी रातों वाले डांस हॉल, दोस्ती के जाल जो आवास की सूची भी थे, एक ऐसा माहौल जो उपयोगी और चुप रहकर बचा रहा जब तक कि उसे रहने की ज़रूरत न रही।</p>
@@ -450,26 +458,26 @@
 <section id="voices" class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">// युवा आवाज़ें डेस्क · अपरीक्षित। असंपादित। सही।</span></div>
-    <h2 class="display">युवा आवाज़ें</h2>
+    <h2 class="display" style="--fit:54px;--dl:1">युवा आवाज़ें</h2>
     <p class="dek" style="color:#cfc6b6">उन लेखकों की तीन ज़मीनी रिपोर्टें जो अभी वोट नहीं दे सकते पर किराए का हिसाब पहले से लगा लेते हैं। हमने उन्हें मेहनताना दिया; हमने एक शब्द को नहीं छुआ।</p>
     <div class="thirds" style="margin-top:34px">
       <div class="card report"><div class="hd pink"><span>रिपोर्ट 01</span><span>उम्र 19 · आवास</span></div>
         <div class="bd">
-          <h3>मेरी उम्र का कोई भी टिकने का ख़र्च नहीं उठा सकता</h3>
+          <h3 style="--fit:25px">मेरी उम्र का कोई भी टिकने का ख़र्च नहीं उठा सकता</h3>
           <p>मैं दो नौकरियाँ करता हूँ और तीन लोगों के साथ एक दो-कमरे वाला घर बाँटता हूँ, और मैं ही कामयाबी की मिसाल हूँ। मेरा ग्रुप चैट एक धीमी रफ़्तार की विदाई पार्टी है: Vernon, Calgary, Surrey में माँ का तहख़ाना।</p>
           <div class="pull">"हर घर-दिखावे में चालीस लोग जुटते हैं और उनमें से एक हमेशा रो रहा होता है।"</div>
         </div>
       </div>
       <div class="card report"><div class="hd orange"><span>रिपोर्ट 02</span><span>उम्र 22 · खुलकर सामने आना</span></div>
         <div class="bd">
-          <h3>पैकिंगहाउस में खुलकर सामने</h3>
+          <h3 style="--fit:25px">पैकिंगहाउस में खुलकर सामने</h3>
           <p>मैं Glenmore में एक झाड़-पार्टी में खुलकर सामने आया और सबसे बुरा जो हुआ वह यह कि Tyler नाम के एक लड़के ने कहा "बढ़िया" और पूछा कि क्या मैं उसे घर छोड़ सकता हूँ। न स्वर्ग, न नरक, बस एक छोटा शहर अपनी नगर परिषद से तेज़ी से सीखता हुआ।</p>
           <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange);border:0;padding-left:0">भूगोल आख़िरी अलमारी है</div>
         </div>
       </div>
       <div class="card report"><div class="hd teal"><span>रिपोर्ट 03</span><span>उम्र 17 · आग का मौसम</span></div>
         <div class="bd">
-          <h3>मैं दो बार खाली करा चुका हूँ और अभी वोट नहीं दे सकता</h3>
+          <h3 style="--fit:25px">मैं दो बार खाली करा चुका हूँ और अभी वोट नहीं दे सकता</h3>
           <p>मेरे बचपन की तस्वीरें धुएँ के साल के हिसाब से छँटी हुई हैं। हमने 2021 में गाड़ी में सामान भरा और फिर 2023 में, और दोनों बार रेडियो पर बड़े-बूढ़े इसे अभूतपूर्व कहते रहे। इसकी पूर्व-मिसाल है।</p>
           <div class="pull teal">"मैं ही पूर्व-मिसाल हूँ।"</div>
         </div>
@@ -484,7 +492,7 @@
     <div class="split center">
       <div>
         <span class="kicker pink">10 · मौजूदा मुद्दे</span>
-        <h2 class="display" style="margin-top:16px">प्रतीक्षा सूची</h2>
+        <h2 class="display" style="--fit:54px;--dl:1;margin-top:16px">प्रतीक्षा सूची</h2>
         <p class="dek">Central Okanagan में क्वीयर-सक्षम स्वास्थ्य सेवा ढूँढना बिना किसी सुविधा वाली अंशकालिक नौकरी है। हमने हर क्लिनिक को फ़ोन किया ताकि आपको न करना पड़े; जिन तक हम पहुँचे उन सबने वही त्रिकोण बयान किया: फ़ोन का चक्कर, रेफ़रल की उहापोह, और एक हाईवे।</p>
       </div>
       <div class="stats">
@@ -510,7 +518,7 @@
 <section id="comics" class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.08</span><span class="tag">// crumbs · ep.1 · a golem seeks housing</span></div>
-    <h2 class="display">Crumbs<span class="dot">.</span></h2>
+    <h2 class="display" style="--fit:54px;--dl:1">Crumbs<span class="dot">.</span></h2>
     <p class="dek">Our guest strip. Six panels, one loaf, zero vacancies. The slot is open, it pays, and the only brief is: make us laugh about the thing that isn't funny.</p>
     <div style="margin-top:16px"><span class="kicker orange">Ep.1 · pencils, ink & crumbs by open call</span></div>
     <div class="comic-strip"><figure class="panel"><span class="pn">01</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><path d="M50 116 L170 116 L158 140 L62 140 Z" fill="#cdb491" stroke="#1d1a17" stroke-width="3" stroke-linejoin="round"/><line x1="50" y1="116" x2="170" y2="116" stroke="#1d1a17" stroke-width="3"/><g transform="translate(52,22)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
@@ -556,7 +564,7 @@
     <div class="sechead"><span class="no">Sec.11</span><span class="tag" style="color:#b7ad9e">// the wall · rip-out centrefold · pull gently</span></div>
     <div class="split center">
       <div>
-        <h2 class="display">The Wall</h2>
+        <h2 class="display" style="--fit:54px;--dl:1">The Wall</h2>
         <p class="dek" style="color:#cfc6b6">The centrefold is a poster. Tear it out along the gutter and put it where a landlord can see it. This issue's wall belongs to the scene that refuses to be an address.</p>
         <div class="annot"><span class="scribble teal">yes — actually rip it</span></div>
       </div>
@@ -589,7 +597,7 @@
     <div class="sechead"><span class="no">Sec.14</span><span class="tag">// कैलेंडर · aug–oct 2026 · काटो + फ़्रिज पर लगाओ</span></div>
     <div class="split">
       <div>
-        <h2 class="display">कैलेंडर<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:1">कैलेंडर<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">सूचीकरण मुफ़्त है; 15 तारीख़ तक ईमेल करें। नशा-मुक्त और सब-उम्र वाले विकल्प ◦ से चिह्नित।</p>
         <div class="card" style="margin-top:24px">
           <div class="hd"><span>Aug — Oct 2026</span><span class="r">काटो + फ़्रिज पर लगाओ</span></div>
@@ -654,7 +662,7 @@
     <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">// रचनाएँ भेजें · №2 — "पिघलाव"</span></div>
     <div class="split">
       <div>
-        <h2 class="display">इस पर टुकड़े<br>गिराओ<span class="dot">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:2">इस पर टुकड़े<br>गिराओ<span class="dot">.</span></h2>
         <p class="dek" style="color:#cfc6b6">धारावाहिक कथा, एक खुला केंद्र-पृष्ठ, एक युवा-आवाज़ें डेस्क, एक निर्देशिका जो ताज़ा रहती है: №1 एक ऐसे माहौल का पहला मसौदा है जो यह जताता है कि वह मौजूद है। №2 है "पिघलाव": जो लौटकर आता है। हमें अपना गुस्सा और अपनी रेसिपी भेजो।</p>
         <div style="margin-top:26px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
           <a href="mailto:hello@dailybread.example?subject=WALL" class="stamp pink">hello@dailybread.example</a>
@@ -695,7 +703,7 @@
       <div>
         <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:min(280px,80%)">
         <div class="meta" style="letter-spacing:.45em;margin-top:10px">Laboratories Inc.</div>
-        <h2 class="display" style="margin-top:22px">प्रयोगशाला से</h2>
+        <h2 class="display" style="--fit:54px;--dl:1;margin-top:22px">प्रयोगशाला से</h2>
         <div class="prose justify" style="margin-top:18px">
           <p>पूरा खुलासा, बड़े अक्षरों में छपा: यह पत्रिका Riposte Laboratories द्वारा वित्तपोषित है, जो Kelowna का एक ठिकाना है और पुनर्चक्रित-प्लास्टिक इंजेक्शन मोल्डिंग तथा पुनर्प्राप्त-सेल मॉड्यूलर बिजली से बर्बादी पर पलटवार करता है। हम यहाँ जो बना रहे हैं उसे इन्हीं पन्नों में साझा करते हैं, बाकी सबकी ही आवाज़ में।</p>
           <p>सौदा, लिखित में: प्रयोगशाला छापाख़ाने को भुगतान करती है और उसे दो पन्ने मिलते हैं। संपादक पाठकों के प्रति जवाबदेह हैं, वित्तपोषक के नहीं। अगर यह कभी बदला, तो रंग भरने वाला पन्ना आपको बता देगा।</p>
@@ -727,7 +735,7 @@
     <div class="sechead"><span class="no">Sec.24</span><span class="tag">// peel me · sticker sheet · the leftover ink went here</span></div>
     <div class="split center">
       <div>
-        <h2 class="display">Peel Me<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:1">Peel Me<span class="dot" style="color:var(--teal)">.</span></h2>
         <p class="dek">The leftover ink went here. Print the page, cut along the dashes, and put the valley on your water bottle. Twelve stickers; no two collapses alike.</p>
       </div>
       <div class="print-cta">
