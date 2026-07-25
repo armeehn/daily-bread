@@ -71,9 +71,10 @@
   .field{margin-bottom:13px}
   .field > label{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
     color:var(--muted);margin-bottom:5px;font-weight:600}
-  .field input[type=text],.field textarea{width:100%;background:#fff;border:1.5px solid var(--line);
+  .field input[type=text],.field textarea,.field select{width:100%;background:#fff;border:1.5px solid var(--line);
     padding:7px 9px;line-height:1.5}
-  .field input[type=text]:focus,.field textarea:focus{outline:0;border-color:var(--pink)}
+  .field select{cursor:pointer}
+  .field input[type=text]:focus,.field textarea:focus,.field select:focus{outline:0;border-color:var(--pink)}
   .field textarea{resize:vertical;min-height:60px}
   .field.color{display:flex;align-items:center;gap:10px}
   .field.color > label{margin:0;flex:1}
@@ -114,7 +115,10 @@
   .pvbar .spacer{flex:1}
   .pvbar button{background:transparent;border:1px solid #5a544b;color:#cfc6b6;padding:3px 8px;cursor:pointer;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase}
   .pvbar button.on{background:var(--bone);color:var(--ink);border-color:var(--bone)}
-  .frame-wrap{padding:16px;display:flex;justify-content:center}
+  .frame-wrap{padding:16px;display:flex;justify-content:safe center}
+  .frame-wrap.al-left{justify-content:safe flex-start}
+  .frame-wrap.al-center{justify-content:safe center}
+  .frame-wrap.al-right{justify-content:safe flex-end}
   iframe#preview{width:100%;max-width:100%;height:calc(100vh - 52px - 33px - 32px);border:2px solid var(--ink);background:#fff;box-shadow:8px 8px 0 rgba(29,26,23,.35)}
   iframe#preview.w-phone{width:390px}
   iframe#preview.w-tab{width:760px}
@@ -181,6 +185,7 @@
     <button class="btn" id="importBtn">Import JSON</button>
     <button class="btn" id="exportBtn">Export JSON</button>
     <button class="btn teal" id="publishBtn" title="Download index.html to commit">Publish → index.html</button>
+    <button class="btn" id="pdfBtn" title="Open the print dialog on the live preview. Choose 'Save as PDF', set Margins to None and turn Background graphics ON.">Export PDF</button>
     <button class="btn pink" id="resetBtn">Reset</button>
     <span class="status" id="status">Loaded</span>
   </header>
@@ -199,11 +204,14 @@
         <button data-w="full" class="on">Full</button>
         <button data-w="tab">Tablet</button>
         <button data-w="phone">Phone</button>
+        <button data-align="left" title="Park the preview at the left of the pane">◧</button>
+        <button data-align="center" class="on" title="Centre the preview in the pane">▣</button>
+        <button data-align="right" title="Park the preview at the right of the pane">◨</button>
         <button id="arrangeBtn" title="Drag elements to reposition; they snap to alignment guides. Double-click an element to reset it.">Arrange ⤢</button>
         <button id="clearArrangeBtn" title="Reset every element to its default position" style="display:none">Clear layout</button>
         <button id="openTab">Open ↗</button>
       </div>
-      <div class="frame-wrap"><iframe id="preview" title="Daily Bread preview"></iframe></div>
+      <div class="frame-wrap al-center"><iframe id="preview" title="Daily Bread preview"></iframe></div>
     </div>
   </div>
 </div>
@@ -355,13 +363,32 @@ function fieldEl(f){
     row.appendChild(img); row.appendChild(pick); row.appendChild(tx);
     d.appendChild(row); return d;
   }
+  if(f.type==="select"){
+    d.className="field";
+    d.innerHTML=`<label>${esc(f.label)}</label>`;
+    const sel=document.createElement("select");
+    (f.opts||[]).forEach(o=>{
+      const val=Array.isArray(o)?o[0]:o, lab=Array.isArray(o)?o[1]:o;
+      const op=document.createElement("option"); op.value=val; op.textContent=lab;
+      if(String(cur)===String(val)) op.selected=true;
+      sel.appendChild(op);
+    });
+    sel.addEventListener("change",()=>{ setPath(model,f.path,sel.value); schedule(); });
+    d.appendChild(sel); addHint(d,f); return d;
+  }
   d.className="field";
   d.innerHTML=`<label>${esc(f.label)}</label>`;
   const inp = f.type==="area" ? document.createElement("textarea") : document.createElement("input");
   if(f.type!=="area") inp.type="text";
   inp.value = cur!=null?cur:"";
   inp.addEventListener("input",()=>{ setPath(model,f.path,inp.value); schedule(); });
-  d.appendChild(inp); return d;
+  d.appendChild(inp); addHint(d,f); return d;
+}
+/* optional per-field helper text (schema `hint`) */
+function addHint(d,f){
+  if(!f.hint) return;
+  const h=document.createElement("div"); h.className="hint"; h.style.margin="6px 0 0";
+  h.textContent=f.hint; d.appendChild(h);
 }
 
 /* a repeatable list (of strings or of objects) */
@@ -462,6 +489,19 @@ $("#exportBtn").addEventListener("click",()=>{
 $("#publishBtn").addEventListener("click",()=>{
   download("index.html", DB.render(model), "text/html");
   toast("Downloaded index.html — commit it to publish");
+});
+$("#pdfBtn").addEventListener("click",()=>{
+  // print the live preview itself — it already carries the @page + bleed rules,
+  // so "Save as PDF" yields the print-ready file at trim + bleed with crop marks.
+  const fr=$("#preview");
+  try{ fr.contentWindow.focus(); fr.contentWindow.print(); }
+  catch(e){
+    const w=window.open("","_blank");
+    if(!w){ toast("Allow pop-ups to export the PDF"); return; }
+    w.document.open(); w.document.write(DB.render(model)); w.document.close();
+    w.onload=()=>{ w.focus(); w.print(); };
+  }
+  toast("Print → Save as PDF · Margins: None · Background graphics: ON");
 });
 $("#importBtn").addEventListener("click",()=> $("#fileImport").click());
 $("#fileImport").addEventListener("change",e=>{
@@ -736,6 +776,16 @@ document.querySelectorAll(".pvbar button[data-w]").forEach(b=>{
     document.querySelectorAll(".pvbar button[data-w]").forEach(x=>x.classList.remove("on"));
     b.classList.add("on");
     const f=$("#preview"); f.className=""; if(b.dataset.w!=="full") f.classList.add("w-"+b.dataset.w);
+  });
+});
+/* preview alignment: park the constrained iframe left / centre / right in the pane */
+document.querySelectorAll(".pvbar button[data-align]").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll(".pvbar button[data-align]").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on");
+    const fw=document.querySelector(".frame-wrap");
+    fw.classList.remove("al-left","al-center","al-right");
+    fw.classList.add("al-"+b.dataset.align);
   });
 });
 $("#openTab").addEventListener("click",()=>{
