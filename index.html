@@ -27,6 +27,8 @@
 <link rel="alternate" hreflang="ar" href="https://dailybre.ad/ar/">
 <link rel="alternate" hreflang="fa" href="https://dailybre.ad/fa/">
 <link rel="alternate" hreflang="x-default" href="https://dailybre.ad/">
+<link rel="alternate" media="(prefers-reduced-data: reduce)" href="/lite/">
+<link rel="alternate" media="(monochrome)" href="/eink/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
@@ -270,6 +272,18 @@
     @page{margin:12mm}
   }
 
+  /* ---------- rendering switch (Full / Lite / E-ink) ---------- */
+  header.top .vswitch{order:2;display:flex;border:2px solid var(--bone);font-size:10px;
+    letter-spacing:.12em;text-transform:uppercase}
+  header.top .vswitch a{color:var(--bone);padding:5px 9px;border-inline-start:1px dashed var(--bone);white-space:nowrap}
+  header.top .vswitch a:first-child{border-inline-start:0}
+  header.top .vswitch a[aria-current]{background:var(--bone);color:var(--ink);font-weight:700}
+  header.top .vswitch a:hover{color:var(--pink)}
+  header.top .vswitch a[aria-current]:hover{color:var(--ink)}
+  footer .fswitch{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8d857a;margin-top:2px}
+  footer .fswitch a{color:var(--bone);text-decoration:underline;margin:0 2px}
+  footer .fswitch a[aria-current]{color:var(--pink);text-decoration:none;font-weight:700}
+
   /* ---------- i18n chrome: language picker + MT notice ---------- */
   header.top .bar .langpick{position:relative;order:2;margin-inline-start:auto;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
   .langpick>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;color:var(--bone);padding:4px 2px}
@@ -320,6 +334,7 @@
       <a href="#lab">The Lab</a>
       <a href="#stickers">Stickers</a>
     </nav>
+    <nav class="vswitch" aria-label="Rendering"><a href="/" aria-current="true">Full</a><a href="/lite/">Lite</a><a href="/eink/">E-ink</a></nav>
     <details class="langpick"><summary aria-label="Language"><span class="globe" aria-hidden="true">🌐</span> English <span class="car" aria-hidden="true">▾</span></summary><div class="langmenu"><a href="/" hreflang="en" lang="en" aria-current="true"><span class="endo">English</span><span class="en">English</span></a><a href="/fr/" hreflang="fr" lang="fr"><span class="endo">Français</span><span class="en">French</span></a><a href="/es/" hreflang="es" lang="es"><span class="endo">Español</span><span class="en">Spanish</span></a><a href="/it/" hreflang="it" lang="it"><span class="endo">Italiano</span><span class="en">Italian</span></a><a href="/pl/" hreflang="pl" lang="pl"><span class="endo">Polski</span><span class="en">Polish</span></a><a href="/la/" hreflang="la" lang="la"><span class="endo">Latina</span><span class="en">Latin</span></a><a href="/zh-hans/" hreflang="zh-Hans" lang="zh-Hans"><span class="endo">简体中文</span><span class="en">Chinese (Simplified)</span></a><a href="/zh-hant/" hreflang="zh-Hant" lang="zh-Hant"><span class="endo">繁體中文</span><span class="en">Chinese (Traditional)</span></a><a href="/pa/" hreflang="pa" lang="pa"><span class="endo">ਪੰਜਾਬੀ</span><span class="en">Punjabi</span></a><a href="/ko/" hreflang="ko" lang="ko"><span class="endo">한국어</span><span class="en">Korean</span></a><a href="/ja/" hreflang="ja" lang="ja"><span class="endo">日本語</span><span class="en">Japanese</span></a><a href="/tl/" hreflang="tl" lang="tl"><span class="endo">Tagalog</span><span class="en">Tagalog</span></a><a href="/vi/" hreflang="vi" lang="vi"><span class="endo">Tiếng Việt</span><span class="en">Vietnamese</span></a><a href="/hi/" hreflang="hi" lang="hi"><span class="endo">हिन्दी</span><span class="en">Hindi</span></a><a href="/ar/" hreflang="ar" lang="ar" dir="rtl"><span class="endo">العربية</span><span class="en">Arabic</span></a><a href="/fa/" hreflang="fa" lang="fa" dir="rtl"><span class="endo">فارسی</span><span class="en">Farsi</span></a></div></details>
   </div>
 </header>
@@ -742,6 +757,7 @@
       <div class="meta" style="line-height:1.7;text-align:left">ISSN pending<br>№1 · Summer 2026</div>
     </div>
     <div class="signoff" style="color:var(--pink);margin-top:4px">see you at the thaw ✕</div>
+    <div class="fswitch">Lightweight versions: <a href="/" aria-current="true">Full</a> · <a href="/lite/">Lite</a> · <a href="/eink/">E-ink</a></div>
     <div class="colophon">Printed on unceded syilx Okanagan territory in a run of 500. Set in IBM Plex Mono and UnifrakturMaguntia. Errors are ours; corrections are yours; the leftover ink went into the stickers. · Parry. Riposte.</div>
   </div>
   <div class="band" style="border-top:2px solid var(--bone)"></div>

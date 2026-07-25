@@ -179,6 +179,13 @@ module.exports = {
   'chrome.language': 'Language',
   'chrome.mtnote': 'This is a machine translation of an English original. Read the <a href="/">English edition</a>.',
 
+  /* ---- rendering switch (Full / Lite / E-ink) ---- */
+  'chrome.rendering': 'Rendering',
+  'chrome.verFull': 'Full',
+  'chrome.verLite': 'Lite',
+  'chrome.verEink': 'E-ink',
+  'chrome.altVersions': 'Lightweight versions',
+
   /* ---- Sec.01 data · table of contents (18 rows) ---- */
   'toc.0.t': "Our Daily Dread — editor's letter",   'toc.0.k': 'House',
   'toc.1.t': 'Before the Bridge — a rude history',   'toc.1.k': 'History',
