@@ -175,6 +175,13 @@ module.exports = {
   'footer.signoff': 'see you at the thaw ✕',
   'footer.colophon': 'Printed on unceded syilx Okanagan territory in a run of 500. Set in IBM Plex Mono and UnifrakturMaguntia. Errors are ours; corrections are yours; the leftover ink went into the stickers. · Parry. Riposte.',
   'footer.verify': 'Verified publishing ✓ confirm this edition has not been altered',
+  /* live self-verification badge (full rendering only; falls back to footer.verify) */
+  'verify.checking': 'Checking this edition…',
+  'verify.ok': 'Verified — signed & publicly logged',
+  'verify.unanchored': 'Signed & logged; not yet anchored',
+  'verify.uncheckable': 'Signed & anchored; live copy uncheckable',
+  'verify.bad': 'This edition could not be verified',
+  'verify.details': 'how ▸',
 
   /* ---- i18n chrome ---- */
   'chrome.language': 'Language',
