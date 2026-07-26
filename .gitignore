@@ -14,3 +14,7 @@ package-lock.json
 tools/newsproof/store/
 __pycache__/
 *.pyc
+
+# rendered print PDFs (regenerate via db-render/serve-and-render.js)
+db-render/out/
+db-render/node_modules/
