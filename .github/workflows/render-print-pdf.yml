@@ -1,0 +1,73 @@
+# Renders the print-ready magazine PDF from source and commits it so the
+# Cloudflare Workers deploy serves it (studio's "Magazine PDF" button downloads it).
+#
+# The output db-render/out/"Daily Bread №1 — print.pdf" is generated from
+# db-render/"Daily Bread Issue 01-print.html" by render-print-pdf.js — NOT an
+# uploaded file. Runs only when the print source changes; the commit carries
+# [skip ci] and out/ is not a trigger path, so it can't loop.
+#
+# Gitea Actions also reads .github/workflows, so this file works on either.
+name: render-print-pdf
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'db-render/Daily Bread Issue 01-print.html'
+      - 'db-render/doc-page.js'
+      - 'db-render/image-slot.js'
+      - 'db-render/logo*.svg'
+      - 'db-render/uploads/**'
+      - 'db-render/vendor/**'
+      - 'db-render/render-print-pdf.js'
+      - '.github/workflows/render-print-pdf.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: render-print-pdf
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright + Chromium
+        working-directory: db-render
+        run: |
+          npm install playwright@1.61.0 --no-save
+          npx playwright install --with-deps chromium
+
+      - name: Render A4-landscape magazine PDF from source
+        working-directory: db-render
+        run: node render-print-pdf.js "Daily Bread Issue 01-print.html" "out/Daily Bread №1 — print.pdf"
+
+      - name: Sanity-check the output (24 pages, A4 landscape)
+        working-directory: db-render
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
+          info=$(pdfinfo "out/Daily Bread №1 — print.pdf")
+          echo "$info"
+          echo "$info" | grep -q "Pages: *24" || { echo "::error::expected 24 pages"; exit 1; }
+          # A4 landscape ~ 841.9 x 595.3 pt (width > height)
+          echo "$info" | grep -Eq "Page size: *84[12](\.[0-9]+)? x 59[456](\.[0-9]+)? pts" || { echo "::error::not A4 landscape"; exit 1; }
+
+      - name: Commit the rendered PDF if it changed
+        run: |
+          git config user.name "db-render-bot"
+          git config user.email "db-render-bot@users.noreply.github.com"
+          git add -f "db-render/out/Daily Bread №1 — print.pdf"
+          if git diff --cached --quiet; then
+            echo "no change in the rendered PDF"
+            exit 0
+          fi
+          git commit -m "ci: re-render print magazine PDF from source [skip ci]"
+          git push
