@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;family=Caveat:wght@600;700&amp;family=UnifrakturMaguntia&amp;display=swap" rel="stylesheet"><script src="./image-slot.js"></script><style>body{margin:0;background:#2a2723;font-family:'IBM Plex Mono',ui-monospace,monospace}a{color:#f0477d}a:hover{color:#12b795}</style></helmet>
+<div data-screen-label="Opinion" style="width:561px;height:794px;background:#f6f1e7;color:#1d1a17;position:relative;display:flex;flex-direction:column;overflow:hidden;font-family:'IBM Plex Mono',ui-monospace,monospace">
+  <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:8px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headLeft }}</span><span style="position:absolute;top:8px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headRight }}</span><span style="position:absolute;bottom:26px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">DOC NO. {{ docNo }}</span><span style="position:absolute;bottom:26px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ folio }}</span><sc-if value="{{ footerOn }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;left:0;right:0;bottom:0;height:20px;background:{{ footerBg }};border-top:2px solid #1d1a17;z-index:3"></div></sc-if></sc-if>
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;min-height:0">
+    <div style="border:2px solid #1d1a17;flex:1;display:flex;flex-direction:column;min-height:0">
+      <div style="padding:5px 10px;font-size:9px;font-weight:700;letter-spacing:.14em;background:{{ accent }};color:{{ tagFg }};border-bottom:2px solid #1d1a17;display:flex;justify-content:space-between"><span>{{ tag }}</span><span>{{ meta }}</span></div>
+      <div style="padding:14px 16px;display:flex;flex-direction:column;flex:1;min-height:0">
+        <h2 style="margin:0;font-size:25px;line-height:1.05;font-weight:800;text-transform:uppercase">{{ title }}</h2>
+        <div style="font-size:12px;line-height:1.65;margin-top:12px;text-align:justify;hyphens:auto;overflow:hidden">
+          <sc-for list="{{ paras }}" as="pp" hint-placeholder-count="2"><p style="margin:0 0 10px">{{ pp }}</p></sc-for>
+        </div>
+        <sc-if value="{{ hasNote }}" hint-placeholder-val="{{ false }}"><div style="font-family:'Caveat',cursive;font-size:20px;color:{{ accent }};transform:rotate(-2deg);margin-top:auto">{{ note }}</div></sc-if>
+        <sc-if value="{{ hasQuote }}" hint-placeholder-val="{{ true }}"><div style="border-left:6px solid {{ accent }};padding:6px 0 6px 12px;font-size:15px;line-height:1.35;font-weight:600;font-style:italic;margin-top:auto">{{ quote }}</div></sc-if>
+      </div>
+    </div>
+    <sc-if value="{{ hasPromise }}" hint-placeholder-val="{{ true }}"><div style="font-size:9.5px;letter-spacing:.1em;opacity:.65;margin-top:8px">{{ promise }}</div></sc-if>
+    <sc-if value="{{ hasScrib }}" hint-placeholder-val="{{ false }}"><div style="font-family:'Caveat',cursive;font-size:19px;color:#12b795;transform:rotate(-3deg);align-self:flex-end;margin-top:4px">{{ scribble }}</div></sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:561,&quot;height&quot;:794},
+&quot;tag&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;YOUNG VOICES · REPORT 01&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;meta&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;AGE 19 · HOUSING&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Nobody My Age Can Afford to Stay&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;quote&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;note&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;promise&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;UNREVIEWED. UNEDITED. CORRECT. — THE YV DESK PROMISE&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;scribble&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;options&quot;:[&quot;#f0477d&quot;,&quot;#fe9a0d&quot;,&quot;#12b795&quot;,&quot;#1d1a17&quot;],&quot;default&quot;:&quot;#f0477d&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;footer&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;mono&quot;,&quot;duo&quot;,&quot;accent&quot;,&quot;none&quot;],&quot;default&quot;:&quot;mono&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;chrome&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headLeft&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;03 · OPINION&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headRight&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;YOUNG VOICES DESK&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;docNo&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;DB-010-A&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;folio&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;10&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;}}">
+class Component extends DCLogic {
+  p(k,d){const v=this.props[k];return v==null||v===''?d:v}
+  sp(s){return String(s).split('||').map(t=>t.trim()).filter(Boolean)}
+  renderVals(){
+    const f=this.p('footer','mono'),a=this.p('accent','#f0477d');
+    const note=this.p('note','none'),quote=this.p('quote','\u201cEvery viewing is forty people deep and one of them is always crying.\u201d');
+    const promise=this.p('promise','UNREVIEWED. UNEDITED. CORRECT. — THE YV DESK PROMISE'),scribble=this.p('scribble','none');
+    return{chromeOn:this.props.chrome??true,accent:a,tagFg:a==='#fe9a0d'?'#1d1a17':'#f6f1e7',
+      headLeft:this.p('headLeft','03 · OPINION'),headRight:this.p('headRight','YOUNG VOICES DESK'),
+      docNo:this.p('docNo','DB-010-A'),folio:this.p('folio','10'),
+      footerOn:f!=='none',footerBg:f==='duo'?"repeating-conic-gradient(from 45deg,#f0477d 0% 25%,#12b795 0% 50%) 0 0/20px 20px":f==='accent'?`repeating-conic-gradient(${a} 0% 25%,#f6f1e7 0% 50%) 0 0/16px 16px`:"repeating-conic-gradient(#1d1a17 0% 25%,#f6f1e7 0% 50%) 0 0/16px 16px",
+      tag:this.p('tag','YOUNG VOICES · REPORT 01'),meta:this.p('meta','AGE 19 · HOUSING'),
+      title:this.p('title','Nobody My Age Can Afford to Stay'),
+      paras:this.sp(this.p('body','I work two jobs and split a two-bedroom with three people, and I\u2019m the success story. My group chat is a slow-motion goodbye party: Vernon, Calgary, mom\u2019s basement in Surrey. Every viewing is forty people deep and one of them is always crying.||The city calls it a \u201csupply challenge.\u201d From down here it looks simpler: the people who own Kelowna decided the people who run Kelowna\u2019s espresso machines should live somewhere else. I\u2019m not asking for a condo. I\u2019m asking to stay in the postal code where my life happens.')),
+      note,hasNote:note!=='none',quote,hasQuote:quote!=='none',
+      promise,hasPromise:promise!=='none',scribble,hasScrib:scribble!=='none'};
+  }
+}
+</script>
+</body>
+</html>

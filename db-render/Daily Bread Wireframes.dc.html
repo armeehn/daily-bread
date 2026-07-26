@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&amp;family=UnifrakturMaguntia&amp;family=Special+Elite&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"><style>body{margin:0;background:#f0eee9;font-family:'Caveat',cursive}a{color:#2a78d6}a:hover{color:#d63fa0}.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}.dv-tname{font:600 16px/1.2 'Caveat',cursive;color:#1a1a1a}.dv-opts{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 14px/1.3 'Caveat',cursive;color:rgba(0,0,0,.6)}.dv-card{max-width:100%;background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}.dv-next{margin:22px 0 0;font:14px/1.5 'Caveat',cursive;color:rgba(0,0,0,.55)}
+.fp{display:grid;grid-template-columns:repeat(7,110px);gap:10px;padding:18px}.sp{border:1.5px solid #333;border-radius:3px;background:#fff;min-height:82px;position:relative;display:flex}.sp .half{flex:1;padding:4px 5px 14px;font:600 10px/1.15 'Caveat',cursive;color:#222}.sp .half+.half{border-left:1px dashed #999}.pgnum{position:absolute;bottom:2px;right:5px;font:9px ui-monospace,monospace;color:#777;background:rgba(255,255,255,.85);padding:0 2px;border-radius:2px}.pgnumL{position:absolute;bottom:2px;left:5px;font:9px ui-monospace,monospace;color:#777;background:rgba(255,255,255,.85);padding:0 2px;border-radius:2px}
+.wf{position:relative;background:#fff}.wf *{box-sizing:border-box}.ph{background:repeating-linear-gradient(45deg,#eee,#eee 6px,#f8f8f8 6px,#f8f8f8 12px);border:1px solid #bbb;display:flex;align-items:center;justify-content:center;font:10px ui-monospace,monospace;color:#888;text-align:center;padding:4px}.bl{height:5px;background:#ddd;border-radius:2px;margin:4px 0}.bl.s{width:70%}.hand{font-family:'Caveat',cursive}.blk{font-family:'UnifrakturMaguntia',cursive}.type{font-family:'Special Elite',cursive}
+.tagP{background:#f5c8e4}.tagG{background:#c9f2c0}.tagY{background:#f7ecc0}.tagB{background:#dcdcdc}.tagV{background:#ddd2f5}
+.rl{font-family:'IBM Plex Mono',ui-monospace,monospace;color:#1d1a17;background:#f6f1e7}.rl .checker{height:18px;background:repeating-conic-gradient(#1d1a17 0% 25%,#f6f1e7 0% 50%) 0 0/14px 14px;border-top:2px solid #1d1a17;border-bottom:2px solid #1d1a17}.rl .harle{height:22px;background:repeating-conic-gradient(from 45deg,#f0477d 0% 25%,#12b795 0% 50%) 0 0/20px 20px;border-top:2px solid #1d1a17;border-bottom:2px solid #1d1a17}.rl .no{font-size:10px;font-weight:700;letter-spacing:.1em;background:#1d1a17;color:#f6f1e7;padding:2px 8px;display:inline-block}.rl .stamp{display:inline-block;padding:4px 9px;border:2px solid #fe9a0d;color:#fe9a0d;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;transform:rotate(-2deg)}.rl .corner{position:absolute;font-size:8px;letter-spacing:.12em;opacity:.7;text-transform:uppercase}.rl .blR{height:5px;background:#e2dccd;border-radius:0;margin:4px 0}.rl h4{font-size:15px;text-transform:uppercase;letter-spacing:.03em;font-weight:800;margin:0}</style></helmet>
+
+<section class="dv-turn" id="t2">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Riposte Labs house style — mono spec-sheet grunge, riffs on <a class="dv-oid" href="#1c">1c</a>/<a class="dv-oid" href="#1d">1d</a> with the real brand tokens</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="2a"><div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>Feature spread — spec-sheet framing: corner marks, № chips, checker rules, IBM Plex Mono</div>
+<div class="dv-card wf rl" style="width:560px">
+<div style="position:relative;display:flex;min-height:360px">
+  <span class="corner" style="top:6px;left:8px">DAILY BREAD №1</span><span class="corner" style="top:6px;right:8px">KELOWNA'S COLLAPSE</span><span class="corner" style="bottom:6px;left:8px">DOC NO. DB-004-A</span><span class="corner" style="bottom:6px;right:8px">PG 4/5</span>
+  <div style="flex:1;padding:24px 16px 20px;border-right:2px solid #1d1a17">
+    <span class="no" style="background:#f0477d">01 · HISTORY</span>
+    <h4 style="margin-top:10px;font-size:20px">Before the Bridge</h4>
+    <div style="font-size:9px;letter-spacing:.1em;color:#f0477d;margin-top:2px">SYILX LAND · SETTLER BOOMS · WHAT COLLAPSED FIRST</div>
+    <div class="ph" style="height:110px;margin:10px 0;border:2px solid #1d1a17">archival photo — 1958 bridge opening</div>
+    <div class="blR"></div><div class="blR"></div><div class="blR" style="width:70%"></div><div class="blR"></div><div class="blR" style="width:85%"></div>
+    <span class="stamp">EXHIBIT A</span>
+  </div>
+  <div style="flex:1;padding:24px 16px 20px">
+    <div style="border:2px solid #1d1a17">
+      <div style="padding:5px 9px;font-size:9px;font-weight:700;letter-spacing:.14em;border-bottom:2px solid #1d1a17;background:#eae4d6">TIMELINE / BOOMS &amp; BUSTS</div>
+      <div style="padding:10px 9px;font-size:10px"><div style="border-bottom:1px dashed #1d1a17;padding:4px 0">▸ 1892 — townsite platted</div><div style="border-bottom:1px dashed #1d1a17;padding:4px 0">▸ 1958 — bridge boom</div><div style="border-bottom:1px dashed #1d1a17;padding:4px 0">▸ 2003 — firestorm</div><div style="padding:4px 0">▸ 2026 — ???</div></div>
+    </div>
+    <div class="hand" style="font-size:13px;color:#12b795;transform:rotate(-1.5deg);margin-top:10px">margin gremlins stay — handwriting over the grid ↯</div>
+    <div class="blR"></div><div class="blR" style="width:60%"></div>
+  </div>
+</div>
+<div class="checker"></div>
+</div></div>
+
+<div class="dv-opt" id="2b"><div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>Opinion page — young voices as numbered lab reports, pink/orange/teal per writer</div>
+<div class="dv-card wf rl" style="width:280px">
+<div style="padding:16px 14px 12px;position:relative">
+  <span class="no" style="background:#12b795">05 · OPINION</span>
+  <h4 style="margin-top:8px">Field Reports from the Young</h4>
+  <div style="border:2px solid #1d1a17;margin-top:10px">
+    <div style="padding:4px 8px;font-size:8.5px;font-weight:700;letter-spacing:.12em;background:#f0477d;color:#f6f1e7;border-bottom:2px solid #1d1a17">REPORT 01 · AGE 19 · HOUSING</div>
+    <div style="padding:8px"><div class="blR"></div><div class="blR"></div><div class="blR" style="width:70%"></div></div>
+  </div>
+  <div style="border:2px solid #1d1a17;margin-top:8px">
+    <div style="padding:4px 8px;font-size:8.5px;font-weight:700;letter-spacing:.12em;background:#fe9a0d;border-bottom:2px solid #1d1a17">REPORT 02 · AGE 22 · COMING OUT</div>
+    <div style="padding:8px"><div class="blR"></div><div class="blR" style="width:80%"></div></div>
+  </div>
+  <div style="border:2px solid #1d1a17;margin-top:8px">
+    <div style="padding:4px 8px;font-size:8.5px;font-weight:700;letter-spacing:.12em;background:#12b795;color:#f6f1e7;border-bottom:2px solid #1d1a17">REPORT 03 · AGE 17 · FIRE SEASON</div>
+    <div style="padding:8px"><div class="blR"></div><div class="blR" style="width:65%"></div></div>
+  </div>
+  <div class="hand" style="font-size:12px;color:#f0477d;transform:rotate(1deg);margin-top:8px">“unreviewed. unedited. correct.”</div>
+</div>
+<div class="harle"></div>
+</div></div>
+
+<div class="dv-opt" id="2c"><div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a>From the Lab (pgs 30–31) — straight lift of riposte-labs.com spec sections</div>
+<div class="dv-card wf rl" style="width:560px">
+<div style="display:flex">
+  <div style="flex:1;padding:18px 16px;border-right:2px solid #1d1a17;position:relative">
+    <img src="logo.svg" alt="Riposte Laboratories" style="width:150px;display:block">
+    <div style="font-size:8px;letter-spacing:.4em;margin-top:4px">LABORATORIES INC.</div>
+    <h4 style="margin-top:14px">From the Lab</h4>
+    <div style="font-size:10px;margin-top:6px;line-height:1.5">What your magazine money funds: recycled plastic injection molding + reclaimed-cell modular power. <span style="color:#f0477d;font-weight:700">Parry. Riposte.</span></div>
+    <span class="stamp" style="margin-top:12px">FUNDER DISCLOSURE</span>
+  </div>
+  <div style="flex:1;padding:18px 16px">
+    <div style="border:2px solid #1d1a17">
+      <div style="padding:5px 9px;font-size:9px;font-weight:700;letter-spacing:.14em;border-bottom:2px solid #1d1a17;background:#eae4d6">THIS QUARTER / STATUS</div>
+      <div style="padding:9px;font-size:10px"><div style="border-bottom:1px dashed #1d1a17;padding:4px 0">▸ Plastic Works — molds v2 <span style="color:#12b795;font-weight:700">LIVE</span></div><div style="border-bottom:1px dashed #1d1a17;padding:4px 0">▸ Project HEX — cell grading <span style="color:#fe9a0d;font-weight:700">WIP</span></div><div style="padding:4px 0">▸ Daily Bread №2 — theme vote <span style="color:#f0477d;font-weight:700">OPEN</span></div></div>
+    </div>
+    <div class="blR" style="margin-top:10px"></div><div class="blR"></div><div class="blR" style="width:75%"></div>
+  </div>
+</div>
+<div class="checker" style="background:repeating-conic-gradient(#12b795 0% 25%,#f6f1e7 0% 50%) 0 0/14px 14px"></div>
+</div></div>
+
+<div class="dv-opt" id="2d"><div class="dv-olabel"><a class="dv-oid" href="#2d">2d</a>Cover ↔ interior handshake — acid cover art framed by mono spec chrome</div>
+<div class="dv-card wf rl" style="width:280px">
+<div style="position:relative;padding:22px 14px 18px">
+  <span class="corner" style="top:6px;left:8px">TOC</span><span class="corner" style="top:6px;right:8px">REV. A</span>
+  <div style="border:2px solid #1d1a17;position:relative;overflow:hidden">
+    <img src="uploads/lalalalala.png" alt="cover art" style="width:100%;display:block;filter:saturate(1.05)">
+    <div style="position:absolute;bottom:0;left:0;right:0;background:#1d1a17;color:#f6f1e7;font-size:8px;letter-spacing:.14em;padding:3px 6px">FIG. 0 — OUR DAILY DREAD</div>
+  </div>
+  <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap"><span class="no" style="background:#f0477d">HISTORY 4</span><span class="no" style="background:#fe9a0d;color:#1d1a17">PHOTO 8</span><span class="no" style="background:#12b795">OPINION 11</span><span class="no">COMIC 14</span><span class="no" style="background:#f0477d">POSTER 20</span><span class="no" style="background:#12b795">STICKERS 24</span></div>
+  <div class="hand" style="font-size:12px;color:#12b795;transform:rotate(-1deg);margin-top:8px">acid art stays loud; the chrome stays calm</div>
+</div>
+<div class="harle"></div>
+</div></div>
+
+</div>
+<p class="dv-next">Try next: “commit to <a class="dv-oid" href="#2a">2a</a> and build the real history spread” · “restyle the flatplan <a class="dv-oid" href="#1a">1a</a> in this system” · “more chaos in the margins of <a class="dv-oid" href="#2b">2b</a>”</p>
+</section>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Daily Bread №1 — “Kelowna's Collapse” · flatplan + 3 spread directions + section wireframes</span></div>
+
+<div class="dv-opts">
+<div class="dv-opt" id="1a"><div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Flatplan — 42 pages as A5 spreads (A4 landscape sheets). Colour = section family.</div>
+<div class="dv-card" style="width:880px">
+<div class="fp">
+  <div class="sp"><div class="half tagB" style="display:flex;align-items:center;justify-content:center"><span class="blk" style="font-size:13px">Cover</span></div><div class="pgnumL">FC</div></div>
+  <div class="sp"><div class="half tagB">Inside cover — masthead + Riposte Labs funding note</div><div class="half">01 · Editor's letter: “Our Daily Dread”</div><div class="pgnum">1</div></div>
+  <div class="sp"><div class="half">02 · Table of contents (ransom-note style)</div><div class="half">03 · Contributors + call for local artist submissions</div><div class="pgnum">2–3</div></div>
+  <div class="sp"><div class="half tagY">04–05 · HISTORY: “Before the Bridge” — syilx land, settler booms, what collapsed first</div><div class="half tagY">spread cont.</div><div class="pgnum">4–5</div></div>
+  <div class="sp"><div class="half tagY">06 · History cont. + archival photo</div><div class="half tagY">07 · Timeline: Kelowna's booms &amp; busts</div><div class="pgnum">6–7</div></div>
+  <div class="sp"><div class="half tagP">08–09 · PHOTO ESSAY: “Vacancy” — empty storefronts on Bernard Ave</div><div class="half tagP">full-bleed</div><div class="pgnum">8–9</div></div>
+  <div class="sp"><div class="half tagP">10 · Photo essay cont.</div><div class="half tagG">11 · OPINION №1 (young voices): housing</div><div class="pgnum">10–11</div></div>
+  <div class="sp"><div class="half tagG">12 · OPINION №2: coming out in a small city</div><div class="half tagG">13 · OPINION №3: climate anxiety after the fires</div><div class="pgnum">12–13</div></div>
+  <div class="sp"><div class="half tagV">14–15 · COMIC: “Crumbs” pt.1</div><div class="half tagV">pt.2</div><div class="pgnum">14–15</div></div>
+  <div class="sp"><div class="half tagY">16–17 · INTERVIEW: elder drag performer on 40 yrs of Okanagan queer life</div><div class="half tagY">cont.</div><div class="pgnum">16–17</div></div>
+  <div class="sp"><div class="half tagY">18 · Interview cont. + portrait</div><div class="half tagP">19 · POETRY: submissions ×2</div><div class="pgnum">18–19</div></div>
+  <div class="sp"><div class="half" style="background:#111;color:#eee">20–21 · CENTREFOLD: rip-out art poster (featured local artist)</div><div class="half" style="background:#111;color:#eee">perforated ✂</div><div class="pgnum">20–21</div></div>
+  <div class="sp"><div class="half tagP">22 · Featured artist bio + how to submit</div><div class="half tagG">23 · COLOURING PAGE: satire — “City Council Approves Another Tower”</div><div class="pgnum">22–23</div></div>
+  <div class="sp"><div class="half tagG">24 · STICKER PAGE</div><div class="half tagY">25 · CURRENT ISSUES: healthcare access feature</div><div class="pgnum">24–25</div></div>
+  <div class="sp"><div class="half tagY">26–27 · Feature cont. — data + street interviews</div><div class="half tagY">cont.</div><div class="pgnum">26–27</div></div>
+  <div class="sp"><div class="half tagP">28 · FICTION: short story pt.1</div><div class="half tagP">29 · Fiction pt.2</div><div class="pgnum">28–29</div></div>
+  <div class="sp"><div class="half tagB">30–31 · FROM THE LAB: what Riposte Laboratories is building</div><div class="half tagB">cont.</div><div class="pgnum">30–31</div></div>
+  <div class="sp"><div class="half tagG">32 · ADVICE: “Ask a Local Gay”</div><div class="half tagG">33 · REVIEWS: drag night / bakery / album</div><div class="pgnum">32–33</div></div>
+  <div class="sp"><div class="half tagG">34 · Reviews cont.</div><div class="half tagY">35 · EVENTS: community calendar Aug–Oct</div><div class="pgnum">34–35</div></div>
+  <div class="sp"><div class="half tagY">36 · Calendar cont. + mutual aid directory</div><div class="half tagP">37 · Reader mail + next issue's theme call</div><div class="pgnum">36–37</div></div>
+  <div class="sp"><div class="half tagV">38–39 · COMIC: “Crumbs” finale + guest strip</div><div class="half tagV">cont.</div><div class="pgnum">38–39</div></div>
+  <div class="sp"><div class="half tagB">40 · Attributions + staff photo (everyone assembled)</div><div class="half tagB">Inside back — ad/thanks</div><div class="pgnum">40</div></div>
+  <div class="sp"><div class="half tagB" style="display:flex;align-items:center;justify-content:center"><span class="blk" style="font-size:13px">Back cover</span></div><div class="pgnumL">BC</div></div>
+</div>
+<div style="padding:0 18px 14px;font:13px/1.4 'Caveat',cursive;color:#555">Yellow = features/history · Pink = art/photo/lit · Green = community/interactive · Purple = comic · Grey = house pages. 40 content pages + attributions page, per your spec.</div>
+</div></div>
+</div>
+
+<div class="dv-opts" style="margin-top:34px">
+<div class="dv-opt" id="1b"><div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Spread direction A — Blackletter everywhere, full acid pink/green (cover carried inside)</div>
+<div class="dv-card wf" style="width:560px;height:400px;background:#f9dcec;display:flex">
+<div style="flex:1;padding:16px;border-right:1px dashed #999">
+  <div class="blk" style="font-size:26px;color:#1c3a12">Before the Bridge</div>
+  <div class="hand" style="font-size:12px;color:#c2258a">HISTORY · pg 4</div>
+  <div class="ph" style="height:120px;margin:10px 0">archival photo — 1958 floating bridge opening</div>
+  <div class="bl"></div><div class="bl"></div><div class="bl s"></div><div class="bl"></div><div class="bl"></div><div class="bl s"></div>
+</div>
+<div style="flex:1;padding:16px;background:#c9f2c0">
+  <div class="ph" style="height:150px;background:repeating-linear-gradient(45deg,#b3e6a8,#b3e6a8 6px,#d4f5cc 6px,#d4f5cc 12px)">syilx territory map placeholder</div>
+  <div class="blk" style="font-size:15px;margin:8px 0 2px;color:#1c3a12">“The lake never agreed to any of it.”</div>
+  <div class="bl"></div><div class="bl"></div><div class="bl s"></div><div class="bl"></div>
+  <div class="hand" style="font-size:11px;color:#555;transform:rotate(-2deg)">margin chaos: doodles, stamps, tape ↯</div>
+</div>
+</div></div>
+
+<div class="dv-opt" id="1c"><div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Spread direction B — Blackletter section marks only; B&amp;W photocopier body, pink/green accents</div>
+<div class="dv-card wf" style="width:560px;height:400px;display:flex;background:#fff">
+<div style="flex:1;padding:16px;border-right:1px dashed #999">
+  <div class="blk" style="font-size:13px;background:#111;color:#7CFC5A;display:inline-block;padding:2px 8px">Opinion</div>
+  <div class="type" style="font-size:19px;margin:8px 0 2px">Nobody My Age Can Afford to Stay</div>
+  <div class="hand" style="font-size:12px;color:#c2258a">by a 19-year-old who works two jobs</div>
+  <div class="bl"></div><div class="bl"></div><div class="bl"></div><div class="bl s"></div><div class="bl"></div><div class="bl"></div><div class="bl s"></div><div class="bl"></div>
+  <div style="border:2px solid #111;padding:6px;margin-top:8px;transform:rotate(-1deg)"><span class="type" style="font-size:11px">PULL QUOTE — highlighted in pink marker</span><div style="height:6px;background:#f5a3d3;margin-top:3px"></div></div>
+</div>
+<div style="flex:1;padding:16px">
+  <div class="ph" style="height:110px;filter:grayscale(1)">grainy B&amp;W photo — for-rent signs</div>
+  <div class="bl" style="margin-top:10px"></div><div class="bl"></div><div class="bl s"></div><div class="bl"></div><div class="bl"></div>
+  <div class="hand" style="font-size:12px;color:#2c8a25;transform:rotate(1.5deg);margin-top:8px">green pen annotations in margins, like a returned essay</div>
+  <div class="bl"></div><div class="bl s"></div>
+</div>
+</div></div>
+
+<div class="dv-opt" id="1d"><div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a>Spread direction C — Riso 2-colour (pink + green inks only), typewriter headlines, heavy texture</div>
+<div class="dv-card wf" style="width:560px;height:400px;display:flex;background:#f7f3ea">
+<div style="flex:1;padding:16px;border-right:1px dashed #b09">
+  <div class="type" style="font-size:22px;color:#e0218a;text-transform:uppercase;letter-spacing:1px">Kelowna's Collapse</div>
+  <div class="type" style="font-size:11px;color:#2c8a25">feature · misregistered riso layers throughout</div>
+  <div class="ph" style="height:130px;margin:10px 0;background:repeating-linear-gradient(0deg,#f9c8e0,#f9c8e0 3px,#cdeac2 3px,#cdeac2 6px)">duotone photo — pink layer offset 2mm from green</div>
+  <div class="bl" style="background:#e8b7d2"></div><div class="bl" style="background:#e8b7d2"></div><div class="bl s" style="background:#e8b7d2"></div>
+</div>
+<div style="flex:1;padding:16px">
+  <div style="border:2px solid #2c8a25;padding:8px;transform:rotate(1deg)"><span class="type" style="font-size:12px;color:#2c8a25">sidebar in green ink only</span><div class="bl" style="background:#bfe0b5"></div><div class="bl s" style="background:#bfe0b5"></div></div>
+  <div class="type" style="font-size:13px;color:#e0218a;margin:12px 0 4px">★ cheap to print, extremely zine</div>
+  <div class="bl" style="background:#e8b7d2"></div><div class="bl" style="background:#e8b7d2"></div><div class="bl" style="background:#bfe0b5"></div><div class="bl s" style="background:#bfe0b5"></div>
+  <div class="hand" style="font-size:12px;color:#555;margin-top:10px;transform:rotate(-1deg)">blackletter reserved for cover + centrefold only</div>
+</div>
+</div></div>
+</div>
+
+<div class="dv-opts" style="margin-top:34px">
+<div class="dv-opt" id="1e"><div class="dv-olabel"><a class="dv-oid" href="#1e">1e</a>Sticker page wireframe (pg 24)</div>
+<div class="dv-card wf" style="width:280px;padding:14px">
+  <div class="blk" style="font-size:16px">Peel Me</div>
+  <div class="hand" style="font-size:11px;color:#888">kiss-cut sticker sheet — die lines dashed</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px">
+    <div class="ph" style="height:60px;border-radius:50%;border-style:dashed">loaf</div>
+    <div class="ph" style="height:60px;border-radius:12px;border-style:dashed">“eat the rich”</div>
+    <div class="ph" style="height:60px;border-radius:50%;border-style:dashed">ogopogo</div>
+    <div class="ph" style="height:60px;border-radius:12px;border-style:dashed;grid-column:span 2">Daily Bread logo drip</div>
+    <div class="ph" style="height:60px;border-radius:50%;border-style:dashed">peach</div>
+    <div class="ph" style="height:52px;border-radius:12px;border-style:dashed">pride crumb</div>
+    <div class="ph" style="height:52px;border-radius:50%;border-style:dashed">☹ condo</div>
+    <div class="ph" style="height:52px;border-radius:12px;border-style:dashed">issue motif</div>
+  </div>
+</div></div>
+
+<div class="dv-opt" id="1f"><div class="dv-olabel"><a class="dv-oid" href="#1f">1f</a>Colouring page wireframe (pg 23) — Economist/Aislin-style satire</div>
+<div class="dv-card wf" style="width:280px;padding:14px">
+  <div class="type" style="font-size:13px">COLOUR YOUR OWN COLLAPSE</div>
+  <div class="ph" style="height:280px;margin-top:10px;background:#fff;border:2px solid #111">line-art satire cartoon:<br>city council rides Ogopogo<br>bulldozing a queer bar<br>to build “LUXURY LOFTS”<br>(pure outlines, no fill)</div>
+  <div class="hand" style="font-size:11px;color:#888;margin-top:8px">caption line + “tag us with your finished page” note</div>
+</div></div>
+
+<div class="dv-opt" id="1g"><div class="dv-olabel"><a class="dv-oid" href="#1g">1g</a>Rip-out art centrefold (pgs 20–21)</div>
+<div class="dv-card wf" style="width:560px;height:400px;background:#111;display:flex;position:relative">
+  <div class="ph" style="position:absolute;inset:14px;background:repeating-linear-gradient(45deg,#222,#222 6px,#333 6px,#333 12px);color:#aaa">featured local artist — full-bleed A4 landscape artwork</div>
+  <div style="position:absolute;left:50%;top:0;bottom:0;border-left:2px dashed #777"></div>
+  <div class="hand" style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%) rotate(-1deg);color:#ddd;font-size:12px;background:#111;padding:2px 8px">✂ perforated spine — rip me out</div>
+  <div class="type" style="position:absolute;top:20px;bottom:20px;right:2px;color:#eee;font-size:10px;writing-mode:vertical-rl;text-align:center">artist name + insta — printed on margin so it survives the rip</div>
+</div></div>
+
+<div class="dv-opt" id="1h"><div class="dv-olabel"><a class="dv-oid" href="#1h">1h</a>Attributions + staff photo (pg 40)</div>
+<div class="dv-card wf" style="width:280px;padding:14px">
+  <div class="blk" style="font-size:15px">Who Made This</div>
+  <div class="ph" style="height:140px;margin:10px 0">staff photo — everyone assembled, gremlin energy</div>
+  <div class="bl"></div><div class="bl s"></div><div class="bl"></div><div class="bl s"></div><div class="bl"></div>
+  <div style="border-top:1px solid #ccc;margin-top:10px;padding-top:8px">
+    <div class="type" style="font-size:10px">funded by RIPOSTE LABORATORIES</div>
+    <div class="hand" style="font-size:11px;color:#888">printer credits · type credits · land acknowledgement</div>
+  </div>
+</div></div>
+</div>
+
+<p class="dv-next">Try next: “commit to <a class="dv-oid" href="#1c">1c</a> and design the opinion spread for real” · “merge <a class="dv-oid" href="#1b">1b</a> colour with <a class="dv-oid" href="#1d">1d</a> typewriter type” · “rework the flatplan order in <a class="dv-oid" href="#1a">1a</a>”</p>
+</section>
+</x-dc>
+</body>
+</html>

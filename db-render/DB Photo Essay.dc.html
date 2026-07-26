@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;family=Caveat:wght@600;700&amp;family=UnifrakturMaguntia&amp;display=swap" rel="stylesheet"><script src="./image-slot.js"></script><style>body{margin:0;background:#2a2723;font-family:'IBM Plex Mono',ui-monospace,monospace}a{color:#f0477d}a:hover{color:#12b795}</style></helmet>
+<div data-screen-label="Photo essay" style="width:561px;height:794px;background:#1d1a17;color:#f6f1e7;position:relative;display:flex;flex-direction:column;overflow:hidden;font-family:'IBM Plex Mono',ui-monospace,monospace">
+  <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:8px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.6;z-index:4">{{ headLeft }}</span><span style="position:absolute;top:8px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.6;z-index:4">{{ headRight }}</span><span style="position:absolute;bottom:8px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.6;z-index:4">DOC NO. {{ docNo }}</span><span style="position:absolute;bottom:8px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.6;z-index:4">{{ folio }}</span></sc-if>
+  <sc-if value="{{ isTitle }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:1;padding:30px 26px 30px 26px;display:flex;flex-direction:column;gap:10px;min-height:0">
+    <h1 style="margin:0;font-size:42px;line-height:.95;font-weight:800;text-transform:uppercase">{{ title }}</h1>
+    <div style="font-size:11.5px;line-height:1.6;opacity:.9">{{ dek }}</div>
+    <div style="position:relative;flex:1;min-height:0;border:2px solid #f6f1e7"><image-slot id="db-{{ slug }}-t1" shape="rect" placeholder="{{ ph1 }}"></image-slot></div>
+    <div style="position:relative;flex:1;min-height:0;border:2px solid #f6f1e7"><image-slot id="db-{{ slug }}-t2" shape="rect" placeholder="{{ ph2 }}"></image-slot></div>
+    <div style="font-size:9.5px;letter-spacing:.13em;opacity:.8;flex:none">{{ capA }}</div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isHero }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:30px 26px 30px 26px;display:flex;flex-direction:column;gap:10px;min-height:0">
+    <div style="position:relative;flex:1;border:2px solid #f6f1e7;min-height:0"><image-slot id="db-{{ slug }}-hero" shape="rect" placeholder="{{ ph1 }}"></image-slot></div>
+    <div style="font-size:9.5px;letter-spacing:.13em;opacity:.8">{{ capA }}</div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isGrid }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:30px 26px 30px 26px;display:flex;flex-direction:column;gap:10px;min-height:0">
+    <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;flex:1;min-height:0">
+      <div style="position:relative;border:2px solid #f6f1e7"><image-slot id="db-{{ slug }}-g1" shape="rect" placeholder="{{ ph1 }}"></image-slot></div>
+      <div style="position:relative;border:2px solid #f6f1e7"><image-slot id="db-{{ slug }}-g2" shape="rect" placeholder="{{ ph2 }}"></image-slot></div>
+      <div style="position:relative;border:2px solid #f6f1e7"><image-slot id="db-{{ slug }}-g3" shape="rect" placeholder="{{ ph3 }}"></image-slot></div>
+      <div style="position:relative;border:2px solid #f6f1e7"><image-slot id="db-{{ slug }}-g4" shape="rect" placeholder="{{ ph4 }}"></image-slot></div>
+    </div>
+    <div style="font-size:9.5px;letter-spacing:.13em;opacity:.8">{{ capA }}</div>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:561,&quot;height&quot;:794},
+&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;title&quot;,&quot;hero&quot;,&quot;grid&quot;],&quot;default&quot;:&quot;title&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;},
+&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Vacancy&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;dek&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;capA&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;ph1&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;photo — papered-over storefront window&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;ph2&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;photo — empty interior, cords on floor&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;ph3&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;photo — sun-bleached mannequin&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;ph4&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;photo — fourth frame&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;chrome&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headLeft&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;02 · PHOTO ESSAY&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headRight&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;BERNARD AVE, 6AM&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;docNo&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;DB-008-A&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;folio&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;08&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;slug&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;essay&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;}}">
+class Component extends DCLogic {
+  p(k,d){const v=this.props[k];return v==null||v===''?d:v}
+  renderVals(){
+    const v=this.p('variant','title');
+    return{chromeOn:this.props.chrome??true,isTitle:v==='title',isHero:v==='hero',isGrid:v==='grid',
+      headLeft:this.p('headLeft','02 · PHOTO ESSAY'),headRight:this.p('headRight','BERNARD AVE, 6AM'),
+      docNo:this.p('docNo','DB-008-A'),folio:this.p('folio','08'),
+      title:this.p('title','Vacancy'),
+      dek:this.p('dek','Six storefronts, one morning, zero people. A walking tour of what the \u201cbest downtown in Canada\u201d looks like before the patios open — and after the leases triple.'),
+      capA:this.p('capA',v==='hero'?'FIG. 3 — \u201cFOR LEASE / GREAT EXPOSURE.\u201d THE EXPOSURE IS DOING A LOT OF WORK.':'FIGS. 4–5 — SHOT ON EXPIRED FILM, APPROPRIATELY.'),
+      ph1:this.p('ph1','photo — papered-over storefront window'),ph2:this.p('ph2','photo — empty interior, cords on floor'),
+      ph3:this.p('ph3','photo — sun-bleached mannequin'),ph4:this.p('ph4','photo — fourth frame'),
+      slug:this.p('slug','essay')};
+  }
+}
+</script>
+</body>
+</html>

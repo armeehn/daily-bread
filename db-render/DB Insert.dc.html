@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;family=Caveat:wght@600;700&amp;family=UnifrakturMaguntia&amp;display=swap" rel="stylesheet"><script src="./image-slot.js"></script><style>body{margin:0;background:#2a2723;font-family:'IBM Plex Mono',ui-monospace,monospace}a{color:#f0477d}a:hover{color:#12b795}</style></helmet>
+<sc-if value="{{ isArt }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Featured art" style="width:561px;height:794px;background:#1d1a17;position:relative;display:flex;overflow:hidden;font-family:'IBM Plex Mono',ui-monospace,monospace">
+  <div style="position:absolute;inset:16px 36px 16px 16px;border:2px solid #f6f1e7"><image-slot id="db-{{ slug }}-art" shape="rect" placeholder="{{ placeholder }}"></image-slot></div>
+  <sc-if value="{{ hasRip }}" hint-placeholder-val="{{ true }}">
+  <div style="position:absolute;left:8px;top:0;bottom:0;border-left:2px dashed rgba(246,241,231,.55);z-index:3;pointer-events:none"></div>
+  <div style="position:absolute;left:8px;top:10px;transform:translateX(-50%) rotate(90deg);transform-origin:center;z-index:3;background:#1d1a17;color:#f6f1e7;font-size:8.5px;letter-spacing:.16em;padding:2px 8px;pointer-events:none;white-space:nowrap;display:none">.</div>
+  <div style="position:absolute;left:0;top:50%;transform:rotate(-90deg) translateY(-14px);transform-origin:left center;z-index:3;background:#1d1a17;color:#f6f1e7;font-size:8.5px;letter-spacing:.16em;padding:2px 8px;pointer-events:none;white-space:nowrap">{{ ripTag }}</div>
+  </sc-if>
+  <div style="position:absolute;top:16px;bottom:16px;right:8px;width:22px;display:flex;align-items:center;justify-content:center;z-index:3;pointer-events:none"><span style="writing-mode:vertical-rl;color:#f6f1e7;font-size:9px;letter-spacing:.18em;opacity:.85">{{ credit }}</span></div>
+</div>
+</sc-if>
+<sc-if value="{{ isArtist }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Artist" style="width:561px;height:794px;background:#f6f1e7;color:#1d1a17;position:relative;display:flex;flex-direction:column;overflow:hidden;font-family:'IBM Plex Mono',ui-monospace,monospace">
+  <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:8px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headLeft }}</span><span style="position:absolute;top:8px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headRight }}</span><span style="position:absolute;bottom:26px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">DOC NO. {{ docNo }}</span><span style="position:absolute;bottom:26px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ folio }}</span><div style="position:absolute;left:0;right:0;bottom:0;height:20px;background:repeating-conic-gradient(from 45deg,#f0477d 0% 25%,#12b795 0% 50%) 0 0/20px 20px;border-top:2px solid #1d1a17;z-index:3"></div></sc-if>
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;gap:12px;min-height:0">
+    <span style="font-size:10px;font-weight:700;letter-spacing:.12em;background:#1d1a17;color:#f6f1e7;padding:3px 10px;align-self:flex-start">{{ kicker }}</span>
+    <div style="display:flex;gap:14px">
+      <div style="width:140px;height:140px;flex:none;border:2px solid #1d1a17"><image-slot id="db-{{ slug }}-artist" shape="rect" placeholder="artist portrait"></image-slot></div>
+      <div style="font-size:11px;line-height:1.6">{{ bio }}</div>
+    </div>
+    <div style="border:2px solid #1d1a17">
+      <div style="padding:6px 10px;font-size:9.5px;font-weight:700;letter-spacing:.15em;border-bottom:2px solid #1d1a17;background:#eae4d6">{{ submitTitle }}</div>
+      <div style="padding:10px;font-size:11.5px;line-height:1.6">
+        <sc-for list="{{ submitList }}" as="s" hint-placeholder-count="3"><div style="border-bottom:1px dashed #1d1a17;padding:4px 0">▸ {{ s.a }}</div></sc-for>
+      </div>
+    </div>
+    <sc-if value="{{ hasScrib }}" hint-placeholder-val="{{ true }}"><div style="font-family:'Caveat',cursive;font-size:20px;color:#12b795;transform:rotate(-2deg);margin-top:auto;margin-bottom:8px">{{ scribble }}</div></sc-if>
+  </div>
+</div>
+</sc-if>
+<sc-if value="{{ isColouring }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Colouring" style="width:561px;height:794px;background:#f6f1e7;color:#1d1a17;position:relative;display:flex;flex-direction:column;overflow:hidden;font-family:'IBM Plex Mono',ui-monospace,monospace">
+  <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:8px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headLeft }}</span><span style="position:absolute;top:8px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headRight }}</span><span style="position:absolute;bottom:26px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">DOC NO. {{ docNo }}</span><span style="position:absolute;bottom:26px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ folio }}</span><div style="position:absolute;left:0;right:0;bottom:0;height:20px;background:repeating-conic-gradient(from 45deg,#f0477d 0% 25%,#12b795 0% 50%) 0 0/20px 20px;border-top:2px solid #1d1a17;z-index:3"></div></sc-if>
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;gap:10px;min-height:0">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px"><h2 style="margin:0;font-size:20px;font-weight:800;text-transform:uppercase">{{ title }}</h2><span style="font-size:9px;letter-spacing:.12em;opacity:.6">{{ edition }}</span></div>
+    <div style="flex:1;border:2px solid #1d1a17;background:#fff;position:relative;display:flex;align-items:center;justify-content:center;min-height:0">
+      <div style="text-align:center;font-size:10.5px;line-height:1.7;color:#666;max-width:40ch;padding:16px">{{ brief }}</div>
+      <span style="position:absolute;top:6px;left:8px;font-size:9px;font-weight:700;letter-spacing:.12em;color:#999">{{ figLabel }}</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;font-size:9px;letter-spacing:.1em">
+      <span>{{ crayonLabel }}</span>
+      <span style="width:16px;height:16px;border:2px solid #1d1a17;border-radius:50%"></span>
+      <span style="width:16px;height:16px;border:2px solid #1d1a17;border-radius:50%"></span>
+      <span style="width:16px;height:16px;border:2px solid #1d1a17;border-radius:50%"></span>
+      <span style="margin-left:auto;opacity:.6">{{ crayonNote }}</span>
+    </div>
+  </div>
+</div>
+</sc-if>
+<sc-if value="{{ isStickers }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Stickers" style="width:561px;height:794px;background:#f6f1e7;color:#1d1a17;position:relative;display:flex;flex-direction:column;overflow:hidden;font-family:'IBM Plex Mono',ui-monospace,monospace">
+  <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:8px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headLeft }}</span><span style="position:absolute;top:8px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headRight }}</span><span style="position:absolute;bottom:26px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">DOC NO. {{ docNo }}</span><span style="position:absolute;bottom:26px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ folio }}</span><div style="position:absolute;left:0;right:0;bottom:0;height:20px;background:repeating-conic-gradient(#1d1a17 0% 25%,#f6f1e7 0% 50%) 0 0/16px 16px;border-top:2px solid #1d1a17;z-index:3"></div></sc-if>
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;min-height:0">
+    <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><span style="font-family:'UnifrakturMaguntia',cursive;font-size:27px">{{ brand }}</span><span style="font-size:9px;letter-spacing:.14em;opacity:.6">{{ brandSub }}</span></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:12px;margin-top:14px;flex:1;min-height:0">
+      <sc-for list="{{ stickerList }}" as="s" hint-placeholder-count="9">
+        <div style="border:2px dashed #1d1a17;border-radius:{{ s.r }};background:{{ s.bg }};color:{{ s.fg }};display:flex;align-items:center;justify-content:center;text-align:center;font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:8px;line-height:1.3">{{ s.t }}</div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:561,&quot;height&quot;:794},
+&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;art&quot;,&quot;artist&quot;,&quot;colouring&quot;,&quot;stickers&quot;],&quot;default&quot;:&quot;stickers&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;},
+&quot;credit&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Featured art&quot;},
+&quot;ripTag&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;✂ RIP LINE — THE CREDIT MARGIN SURVIVES&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Featured art&quot;},
+&quot;placeholder&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Featured art&quot;},
+&quot;kicker&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;THE WALL / FEATURED ARTIST&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Artist&quot;},
+&quot;bio&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Artist&quot;},
+&quot;submitTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;SUBMIT / №2 — THE WALL&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Artist&quot;},
+&quot;submitRows&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Artist&quot;},
+&quot;scribble&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Artist&quot;},
+&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Colour Your Own Collapse&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Colouring&quot;},
+&quot;edition&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;№1&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Colouring&quot;},
+&quot;brief&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Colouring&quot;},
+&quot;figLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Colouring&quot;},
+&quot;crayonLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;TEST YOUR CRAYONS:&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Colouring&quot;},
+&quot;crayonNote&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;TAG US WITH YOUR FINISHED PAGE&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Colouring&quot;},
+&quot;brand&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Peel Me&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Stickers&quot;},
+&quot;brandSub&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;DIE LINES DASHED · STICK RESPONSIBLY(ISH)&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Stickers&quot;},
+&quot;stickers&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Stickers&quot;},
+&quot;chrome&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headLeft&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headRight&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;docNo&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;folio&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;slug&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;insert&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;}}">
+class Component extends DCLogic {
+  p(k,d){const v=this.props[k];return v==null||v===''?d:v}
+  sp(s){return String(s).split('||').map(t=>t.trim()).filter(Boolean)}
+  rw(s,n){return this.sp(s).map(r=>{const f=r.split('|').map(x=>x.trim());while(f.length<n)f.push('');return{a:f[0],b:f[1],c:f[2],d:f[3]}})}
+  renderVals(){
+    const v=this.p('variant','stickers'),scribble=this.p('scribble','none'),ripTag=this.p('ripTag','✂ RIP LINE — THE CREDIT MARGIN SURVIVES');
+    const defs={art:['','','DB-019-A','19'],artist:['07 · ART','THE WALL','DB-021-A','21'],colouring:['08 · SATIRE','CRAYON-PROOF PAPER','DB-022-A','22'],stickers:['09 · STICKERS (KISS-CUT)','STICK RESPONSIBLY(ISH)','DB-023-A','23']}[v]||['','','',''];
+    return{isArt:v==='art',isArtist:v==='artist',isColouring:v==='colouring',isStickers:v==='stickers',
+      chromeOn:this.props.chrome??true,
+      headLeft:this.p('headLeft',defs[0]),headRight:this.p('headRight',defs[1]),docNo:this.p('docNo',defs[2]),folio:this.p('folio',defs[3]),
+      placeholder:this.p('placeholder','FEATURED LOCAL ARTIST — full-page A5 portrait artwork, 300dpi. Submissions: see The Wall page'),
+      ripTag,hasRip:ripTag!=='none',
+      credit:this.p('credit','ARTIST NAME · @HANDLE · №1 FEATURED PIECE — THIS MARGIN SURVIVES THE RIP'),
+      kicker:this.p('kicker','THE WALL / FEATURED ARTIST'),
+      bio:this.p('bio','The two pieces you just passed (rip them out — that\u2019s the point) are by a local artist who answered our open call. Each issue, one artist, two wall-worthy pages, printed on heavier stock, credited in the margin so the credit survives the rip.'),
+      submitTitle:this.p('submitTitle','SUBMIT / №2 — THE WALL'),
+      submitList:this.rw(this.p('submitRows','Two pieces, A5 portrait, 300dpi, any medium that scans||Fee paid on selection · rights stay yours||hello@dailybread.example · subject: WALL'),1),
+      title:this.p('title','Colour Your Own Collapse'),edition:this.p('edition','№1'),
+      brief:this.p('brief','[ LINE-ART SATIRE CARTOON — COMMISSIONED PER ISSUE ] №1: city council, drawn as cheerful realtors, ride a saddled Ogopogo across the lake while towing the last queer venue on a \u201cLUXURY LOFTS\u201d barge. pure outlines · no fills · crayon-proof paper'),
+      figLabel:this.p('figLabel','FIG. 8 — AISLIN-GRADE DISRESPECT, LOCAL EDITION'),
+      crayonLabel:this.p('crayonLabel','TEST YOUR CRAYONS:'),crayonNote:this.p('crayonNote','TAG US WITH YOUR FINISHED PAGE'),
+      brand:this.p('brand','Peel Me'),brandSub:this.p('brandSub','DIE LINES DASHED · STICK RESPONSIBLY(ISH)'),
+      stickerList:this.rw(this.p('stickers','FRESH DAILY (DREAD) | circle | #f0477d | #f6f1e7||EAT THE RICH, SHARE THE BREAD | square | #f6f1e7 | #1d1a17||OGOPOGO SAW YOU | circle | #12b795 | #f6f1e7||DAILY BREAD — drip wordmark | square | #1d1a17 | #f6f1e7||LOCAL PEACH, GENDER UNKNOWN | circle | #fe9a0d | #1d1a17||I SURVIVED ANOTHER TOWER PROPOSAL | square | #f6f1e7 | #1d1a17||QUIET UNTIL WE DIDN\u2019T HAVE TO BE | square | #1d1a17 | #f6f1e7||PARRY. RIPOSTE. | circle | #f6f1e7 | #1d1a17||CRUMB 4 MAYOR | square | #f0477d | #f6f1e7'),4).map(s=>({t:s.a,r:s.b==='circle'?'50%':'14px',bg:s.c||'#f6f1e7',fg:s.d||'#1d1a17'})),
+      scribble,hasScrib:scribble!=='none',slug:this.p('slug','insert')};
+  }
+}
+</script>
+</body>
+</html>

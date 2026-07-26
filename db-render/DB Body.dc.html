@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;family=Caveat:wght@600;700&amp;family=UnifrakturMaguntia&amp;display=swap" rel="stylesheet"><script src="./image-slot.js"></script><style>body{margin:0;background:#2a2723;font-family:'IBM Plex Mono',ui-monospace,monospace}a{color:#f0477d}a:hover{color:#12b795}</style></helmet>
+<div data-screen-label="Body page" style="width:561px;height:794px;background:#f6f1e7;color:#1d1a17;position:relative;display:flex;flex-direction:column;overflow:hidden;font-family:'IBM Plex Mono',ui-monospace,monospace">
+  <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:8px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headLeft }}</span><span style="position:absolute;top:8px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headRight }}</span><span style="position:absolute;bottom:26px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">DOC NO. {{ docNo }}</span><span style="position:absolute;bottom:26px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ folio }}</span><sc-if value="{{ footerOn }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;left:0;right:0;bottom:0;height:20px;background:{{ footerBg }};border-top:2px solid #1d1a17;z-index:3"></div></sc-if></sc-if>
+  <sc-if value="{{ isImageText }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;gap:12px;min-height:0">
+    <sc-if value="{{ hasImg }}" hint-placeholder-val="{{ true }}">
+    <div style="position:relative;height:{{ imgH }};border:2px solid #1d1a17;flex:none">
+      <image-slot id="db-{{ slug }}-img" shape="rect" placeholder="{{ placeholder }}"></image-slot>
+      <div style="position:absolute;left:0;right:0;bottom:0;background:#1d1a17;color:#f6f1e7;font-size:9px;letter-spacing:.13em;padding:4px 8px;pointer-events:none">{{ caption }}</div>
+    </div>
+    </sc-if>
+    <div style="font-size:11.5px;line-height:1.62;text-align:justify;hyphens:auto;flex:1;overflow:hidden">
+      <sc-for list="{{ bodyParas }}" as="pp" hint-placeholder-count="2"><p style="margin:0 0 10px">{{ pp }}</p></sc-for>
+    </div>
+    <sc-if value="{{ hasScrib }}" hint-placeholder-val="{{ true }}"><div style="font-family:'Caveat',cursive;font-size:19px;color:{{ accent }};transform:rotate(-2deg)">{{ scribble }}</div></sc-if>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isLedger }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;min-height:0">
+    <span style="font-size:10px;font-weight:700;letter-spacing:.12em;background:#1d1a17;color:#f6f1e7;padding:3px 10px;align-self:flex-start">{{ kicker }}</span>
+    <div style="border:2px solid #1d1a17;margin-top:12px;flex:1;min-height:0;display:flex;flex-direction:column">
+      <div style="padding:6px 10px;font-size:9.5px;font-weight:700;letter-spacing:.15em;border-bottom:2px solid #1d1a17;background:#eae4d6;display:flex;justify-content:space-between"><span>{{ colA }}</span><span>{{ colB }}</span></div>
+      <div style="padding:6px 10px;font-size:11px;overflow:hidden">
+        <sc-for list="{{ tableList }}" as="l" hint-placeholder-count="10">
+          <div style="display:flex;gap:8px;align-items:baseline;padding:5px 0;border-bottom:1px dashed #1d1a17"><span style="font-weight:700;flex:none;width:44px">{{ l.a }}</span><span style="min-width:0">{{ l.b }}</span><span style="margin-left:auto;flex:none;font-size:8.5px;font-weight:700;letter-spacing:.08em;color:{{ l.cc }}">{{ l.c }}</span></div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="font-size:9px;line-height:1.55;border-top:2px solid #1d1a17;padding-top:6px;margin-top:12px;margin-bottom:12px"><span style="color:{{ accent }};font-weight:700">{{ noteTag }}</span> — {{ note2 }}</div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isChecklist }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;gap:12px;min-height:0">
+    <div style="border:2px solid #1d1a17">
+      <div style="padding:6px 10px;font-size:9.5px;font-weight:700;letter-spacing:.15em;border-bottom:2px solid #1d1a17;background:#eae4d6">{{ checkTitle }}</div>
+      <div style="padding:10px;font-size:11.5px;line-height:1.6">
+        <sc-for list="{{ checkList }}" as="c" hint-placeholder-count="4">
+          <div style="border-bottom:1px dashed #1d1a17;padding:5px 0">☐ {{ c.a }}</div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="font-size:11.5px;line-height:1.62;text-align:justify;hyphens:auto;flex:1;overflow:hidden">{{ body2 }}</div>
+    <sc-if value="{{ hasScrib2 }}" hint-placeholder-val="{{ false }}"><div style="font-family:'Caveat',cursive;font-size:20px;color:{{ accent }};transform:rotate(-2deg);align-self:flex-end;margin-bottom:8px">{{ scribble2 }}</div></sc-if>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isQuotes }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;gap:12px;min-height:0">
+    <span style="font-size:10px;font-weight:700;letter-spacing:.12em;background:#1d1a17;color:#f6f1e7;padding:3px 10px;align-self:flex-start">{{ kicker }}</span>
+    <div style="display:flex;flex-direction:column;gap:14px;flex:1;justify-content:center">
+      <sc-for list="{{ quoteList }}" as="q" hint-placeholder-count="4">
+        <div style="border-left:6px solid {{ q.c }};padding:4px 0 4px 12px;font-size:14px;line-height:1.45;font-style:italic">{{ q.a }}</div>
+      </sc-for>
+    </div>
+    <div style="font-size:9px;letter-spacing:.1em;opacity:.6">{{ note }}</div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isColumns }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;gap:12px;min-height:0">
+    <span style="font-size:10px;font-weight:700;letter-spacing:.12em;background:{{ accent }};color:#f6f1e7;padding:3px 10px;align-self:flex-start">{{ kicker }}</span>
+    <div style="font-size:11.5px;line-height:1.62;text-align:justify;hyphens:auto;column-count:2;column-gap:16px;column-rule:1px dashed #1d1a17;flex:1;overflow:hidden"><b>{{ proseLabel }}</b> {{ body2 }}</div>
+    <sc-if value="{{ hasStamp }}" hint-placeholder-val="{{ false }}"><div style="display:inline-block;align-self:flex-start;padding:5px 11px;border:2px solid #fe9a0d;color:#fe9a0d;font-size:10px;font-weight:700;letter-spacing:.18em;transform:rotate(-2deg);margin-bottom:8px">{{ stamp }}</div></sc-if>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:561,&quot;height&quot;:794},
+&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;image-text&quot;,&quot;ledger&quot;,&quot;checklist&quot;,&quot;quotes&quot;,&quot;columns&quot;],&quot;default&quot;:&quot;image-text&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;},
+&quot;kicker&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;placeholder&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;archival photo — orchard crews, 1910s&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Image-text&quot;},
+&quot;caption&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Image-text&quot;},
+&quot;imgH&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;250px&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Image-text&quot;},
+&quot;scribble&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Image-text&quot;},
+&quot;colA&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;ENTRY&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Ledger&quot;},
+&quot;colB&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;STATUS&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Ledger&quot;},
+&quot;table&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Ledger&quot;},
+&quot;noteTag&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;METHOD&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Ledger&quot;},
+&quot;note2&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Ledger&quot;},
+&quot;checkTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;WHAT ACTUALLY HELPS / CHECKLIST&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Checklist&quot;},
+&quot;checklist&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Checklist&quot;},
+&quot;body2&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Checklist&quot;},
+&quot;scribble2&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Checklist&quot;},
+&quot;quotes&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Quotes&quot;},
+&quot;note&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Quotes&quot;},
+&quot;proseLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Columns&quot;},
+&quot;stamp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Columns&quot;},
+&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;options&quot;:[&quot;#f0477d&quot;,&quot;#fe9a0d&quot;,&quot;#12b795&quot;,&quot;#1d1a17&quot;],&quot;default&quot;:&quot;#f0477d&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;footer&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;mono&quot;,&quot;duo&quot;,&quot;accent&quot;,&quot;none&quot;],&quot;default&quot;:&quot;mono&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;chrome&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headLeft&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;01 · HISTORY&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headRight&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;THEME: KELOWNA’S COLLAPSE&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;docNo&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;DB-006-A&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;folio&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;06&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;slug&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;body&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;}}">
+class Component extends DCLogic {
+  PAL=['#f0477d','#fe9a0d','#12b795','#1d1a17']
+  p(k,d){const v=this.props[k];return v==null||v===''?d:v}
+  sp(s){return String(s).split('||').map(t=>t.trim()).filter(Boolean)}
+  rw(s,n){return this.sp(s).map(r=>{const f=r.split('|').map(x=>x.trim());while(f.length<n)f.push('');return{a:f[0],b:f[1],c:f[2],d:f[3]}})}
+  renderVals(){
+    const v=this.p('variant','image-text'),f=this.p('footer','mono'),a=this.p('accent','#f0477d');
+    const scribble=this.p('scribble','none');
+    const scribble2=this.p('scribble2','none');
+    const stamp=this.p('stamp',v==='columns'?'ARCHIVED · SHOEBOX FONDS':'none');
+    const ph=this.p('placeholder','archival photo — orchard crews, 1910s');
+    const kickers={'image-text':'01 · HISTORY',ledger:'LEDGER / WHAT COLLAPSED WHEN',quotes:'HEARD ON BERNARD / VERBATIM',columns:'05 → 06',checklist:''};
+    return{isImageText:v==='image-text',isLedger:v==='ledger',isChecklist:v==='checklist',isQuotes:v==='quotes',isColumns:v==='columns',
+      chromeOn:this.props.chrome??true,accent:a,
+      headLeft:this.p('headLeft','01 · HISTORY'),headRight:this.p('headRight','THEME: KELOWNA\u2019S COLLAPSE'),
+      docNo:this.p('docNo','DB-006-A'),folio:this.p('folio','06'),
+      footerOn:f!=='none',footerBg:f==='duo'?"repeating-conic-gradient(from 45deg,#f0477d 0% 25%,#12b795 0% 50%) 0 0/20px 20px":f==='accent'?`repeating-conic-gradient(${a} 0% 25%,#f6f1e7 0% 50%) 0 0/16px 16px`:"repeating-conic-gradient(#1d1a17 0% 25%,#f6f1e7 0% 50%) 0 0/16px 16px",
+      hasImg:ph!=='none',placeholder:ph,imgH:this.p('imgH','250px'),
+      kicker:this.p('kicker',kickers[v]||''),
+      caption:this.p('caption','FIG. 2 — PICKING CREWS, RUTLAND BENCHES. THE APPLES WERE A PYRAMID SCHEME WITH ROOTS.'),
+      bodyParas:this.sp(this.p('body','The valley sold itself twice: first as Eden, then as equity. Fruit ranchers went broke so often the packinghouses printed their own scrip; when fruit died, the pitch became retirement sun; when the retirees priced out the pickers, the pitch became lakeside lofts.||Each act ended the same way — with the people who did the work living further from the water. The queer history is braided through all of it: dance halls with unofficial nights, friendship networks that doubled as housing lists, a scene that survived by being useful and quiet until it didn\u2019t have to be.')),
+      body2:this.p('body2',v==='columns'?'People ask if I\u2019m bitter about the decades in basements. Bitter? Those basements had better sound systems than half the clubs I\u2019ve played since. We recorded everything on cassette. Someone\u2019s nephew digitized it all last winter and I cried for a week. That\u2019s your history project right there — a drag queen\u2019s shoebox. The city archive called ME. I said darling, you\u2019re forty years late and you\u2019re paying for the shelving. They did. Progress is slow, then it\u2019s sudden, then it sends an invoice.':'The fix isn\u2019t mysterious: fund the clinic, train the staff, shorten the triangle. Cities that did it saw waits drop within two budget cycles. Ours pilots a task force instead. We\u2019ll print the task force\u2019s org chart when it produces one — the colouring page may get a sequel.'),
+      proseLabel:this.p('proseLabel',v==='columns'?'MD, continued:':''),
+      quoteList:this.rw(this.p('quotes','\u201cMy GP is great. My GP is also in Vancouver, where I don\u2019t live.\u201d||\u201cThe pharmacist figured it out before any doctor did. Shout out Deb.\u201d||\u201cI got my referral the same month my lease ended. Guess which one moved faster.\u201d||\u201cHonestly? The group chat is the healthcare system.\u201d'),1).map((r,i)=>({...r,c:this.PAL[i%4]})),
+      note:this.p('note','FOUR OF ELEVEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY'),
+      colA:this.p('colA','ENTRY'),colB:this.p('colB','STATUS'),
+      tableList:this.rw(this.p('table','1913 | fruit prices crater; scrip economy begins | BUST | #f0477d||1930s | packinghouse layoffs, valley-wide | BUST | #f0477d||1958 | bridge opens; ferry workers obsolete overnight | PIVOT | #fe9a0d||1973 | ALR freezes orchard speculation (briefly) | PARRY | #12b795||1980s | sawmill era ends; wine era begins | PIVOT | #fe9a0d||2003 | firestorm; 239 homes, 30k evacuated | BURN | #f0477d||2017 | flood year — the lake takes the boardwalk | FLOOD | #f0477d||2021 | heat dome; hottest place in Canada, again | BURN | #f0477d||2024 | last dedicated queer venue closes | BUST | #f0477d||2026 | this magazine. your move, city. | RIPOSTE | #12b795'),3).map((r,i)=>({...r,cc:r.d&&r.d.startsWith('#')?r.d:this.PAL[i%4]})),
+      noteTag:this.p('noteTag','METHOD'),note2:this.p('note2','compiled from city archives, newspaper morgues, and elders who were there. Corrections welcome and expected: see Crumbs Mail.'),
+      checkTitle:this.p('checkTitle','WHAT ACTUALLY HELPS / CHECKLIST'),
+      checkList:this.rw(this.p('checklist','The informed-consent clinic list — updated quarterly, see directory||Pharmacists can renew more than you think — ask directly||Telehealth counts. Bad wifi is still shorter than 400 km||Bring a friend to appointments. Bureaucracy respects witnesses'),1),
+      scribble,hasScrib:scribble!=='none',scribble2,hasScrib2:scribble2!=='none',stamp,hasStamp:stamp!=='none',slug:this.p('slug','body')};
+  }
+}
+</script>
+</body>
+</html>

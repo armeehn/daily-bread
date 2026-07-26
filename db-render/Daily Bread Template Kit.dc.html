@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;family=Caveat:wght@600;700&amp;family=UnifrakturMaguntia&amp;display=swap" rel="stylesheet"><style>body{margin:0;background:#2a2723;font-family:'IBM Plex Mono',ui-monospace,monospace}a{color:#f0477d}a:hover{color:#12b795}</style></helmet>
+<div style="display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:44px 40px 80px">
+  <div style="color:#f6f1e7;margin-bottom:16px">
+    <div style="font-family:'UnifrakturMaguntia',cursive;font-size:40px;line-height:1">Daily Bread</div>
+    <div style="font-size:10px;letter-spacing:.3em;margin-top:6px;opacity:.7">TEMPLATE KIT · A5 PAGES · EVERY PAGE STANDS ALONE · REORDER AT WILL</div>
+    <div style="font-size:10px;letter-spacing:.12em;margin-top:10px;line-height:1.8;opacity:.9"><a href="Daily Bread System Guide.dc.html" style="color:#fe9a0d">SYSTEM GUIDE</a> · <a href="Daily Bread Issue 02 Starter.dc.html" style="color:#12b795">№2 STARTER (BLANK)</a> · <a href="Daily Bread Issue 01 v2.dc.html" style="color:#f0477d">№1 REBUILT ON TEMPLATES (PROOF)</a></div>
+  </div>
+  <div style="color:#8d857a;font-size:9px;letter-spacing:.16em">DB COVER — front / back</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <dc-import name="DB Cover" slug="kit-cov" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Cover" variant="back" hint-size="561px,794px"></dc-import>
+  </div>
+  <div style="color:#8d857a;font-size:9px;letter-spacing:.16em;margin-top:18px">DB LETTER — letter / masthead</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <dc-import name="DB Letter" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Letter" variant="masthead" hint-size="561px,794px"></dc-import>
+  </div>
+  <div style="color:#8d857a;font-size:9px;letter-spacing:.16em;margin-top:18px">DB CONTENTS — manifest / contributors</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <dc-import name="DB Contents" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Contents" variant="contributors" hint-size="561px,794px"></dc-import>
+  </div>
+  <div style="color:#8d857a;font-size:9px;letter-spacing:.16em;margin-top:18px">DB FEATURE — opener / image / text-open / text-cont</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <dc-import name="DB Feature" slug="kit-f1" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Feature" variant="image" slug="kit-f2" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Feature" variant="text-open" slug="kit-f3" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Feature" variant="text-cont" slug="kit-f4" hint-size="561px,794px"></dc-import>
+  </div>
+  <div style="color:#8d857a;font-size:9px;letter-spacing:.16em;margin-top:18px">DB BODY — image-text / ledger / checklist / quotes / columns</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <dc-import name="DB Body" slug="kit-b1" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Body" variant="ledger" slug="kit-b2" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Body" variant="checklist" slug="kit-b3" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Body" variant="quotes" slug="kit-b4" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Body" variant="columns" slug="kit-b5" hint-size="561px,794px"></dc-import>
+  </div>
+  <div style="color:#8d857a;font-size:9px;letter-spacing:.16em;margin-top:18px">DB OPINION — one report card per page (accent + quote/note/promise all props)</div>
+  <dc-import name="DB Opinion" hint-size="561px,794px"></dc-import>
+  <div style="color:#8d857a;font-size:9px;letter-spacing:.16em;margin-top:18px">DB INTERVIEW — qa / portrait</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <dc-import name="DB Interview" slug="kit-i1" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Interview" variant="portrait" slug="kit-i2" hint-size="561px,794px"></dc-import>
+  </div>
+  <div style="color:#8d857a;font-size:9px;letter-spacing:.16em;margin-top:18px">DB PHOTO ESSAY — title / hero / grid (dark stock)</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <dc-import name="DB Photo Essay" slug="kit-p1" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Photo Essay" variant="hero" slug="kit-p2" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Photo Essay" variant="grid" slug="kit-p3" hint-size="561px,794px"></dc-import>
+  </div>
+  <div style="color:#8d857a;font-size:9px;letter-spacing:.16em;margin-top:18px">DB COMIC — page (title + endText optional) / guest</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <dc-import name="DB Comic" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Comic" variant="guest" hint-size="561px,794px"></dc-import>
+  </div>
+  <div style="color:#8d857a;font-size:9px;letter-spacing:.16em;margin-top:18px">DB POETRY — 1-2 poems, lines split on /</div>
+  <dc-import name="DB Poetry" hint-size="561px,794px"></dc-import>
+  <div style="color:#8d857a;font-size:9px;letter-spacing:.16em;margin-top:18px">DB REVIEW — advice / critique / cards / playlist</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <dc-import name="DB Review" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Review" variant="critique" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Review" variant="cards" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Review" variant="playlist" hint-size="561px,794px"></dc-import>
+  </div>
+  <div style="color:#8d857a;font-size:9px;letter-spacing:.16em;margin-top:18px">DB LISTINGS — calendar / directory / mail / program / screenings</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <dc-import name="DB Listings" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Listings" variant="directory" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Listings" variant="mail" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Listings" variant="program" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Listings" variant="screenings" hint-size="561px,794px"></dc-import>
+  </div>
+  <div style="color:#8d857a;font-size:9px;letter-spacing:.16em;margin-top:18px">DB INSERT — art (featured piece, ×2 per issue) / artist / colouring / stickers</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <dc-import name="DB Insert" variant="art" slug="kit-n1" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Insert" variant="artist" slug="kit-n2" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Insert" variant="colouring" slug="kit-n3" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Insert" slug="kit-n4" hint-size="561px,794px"></dc-import>
+  </div>
+  <div style="color:#8d857a;font-size:9px;letter-spacing:.16em;margin-top:18px">DB LAB — disclosure / status (funder pages, teal footer)</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <dc-import name="DB Lab" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Lab" variant="status" hint-size="561px,794px"></dc-import>
+  </div>
+  <div style="color:#8d857a;font-size:9px;letter-spacing:.16em;margin-top:18px">DB COLOPHON — staff / ad (inside back cover)</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <dc-import name="DB Colophon" slug="kit-c1" hint-size="561px,794px"></dc-import>
+    <dc-import name="DB Colophon" variant="ad" hint-size="561px,794px"></dc-import>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
