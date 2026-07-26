@@ -26,6 +26,8 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const STYLE = fs.readFileSync(path.join(__dirname, 'assets', 'style.css'), 'utf8');
 const ALT = fs.readFileSync(path.join(__dirname, 'assets', 'alt.css'), 'utf8');
+/* the reader-facing self-verification badge, inlined into the full editions */
+const VERIFYJS = fs.readFileSync(path.join(__dirname, 'assets', 'verify-badge.js'), 'utf8');
 
 /* ---- renderings: the full page + two lightweight variants ----
    full  = the rich, web-font, colour edition (served at the page root)
@@ -401,6 +403,28 @@ function mtnote(t, code, variant){
   const note = t['chrome.mtnote'].replace('href="/"', `href="${url('en', variant)}"`);
   return `<div class="mtnote">${note}</div>`;
 }
+/* The footer "verify" line. Every rendering keeps the static /verify/ link as a
+   no-JS fallback; the FULL editions (the ones with published newsproof proofs)
+   additionally carry the inline badge that checks THIS edition on load and
+   upgrades the link into a live status dot. lite / e-ink stay text-only and
+   motion-free by design, so they keep just the link. */
+function verifyNote(t, code, variant){
+  const link = `<a href="/verify/">${t['footer.verify']}</a>`;
+  if(variant !== 'full') return `<div class="verify-note">${link}</div>`;
+  const a = s => esc(s).replace(/"/g, '&quot;');   // attribute-safe (esc omits ")
+  const attrs = [
+    `id="np-badge"`,
+    `data-proof="/.well-known/newsproof/proofs/${code}.proof.json"`,
+    `data-url="${url(code, variant)}"`,
+    `data-t-checking="${a(t['verify.checking'])}"`,
+    `data-t-ok="${a(t['verify.ok'])}"`,
+    `data-t-unanchored="${a(t['verify.unanchored'])}"`,
+    `data-t-uncheckable="${a(t['verify.uncheckable'])}"`,
+    `data-t-bad="${a(t['verify.bad'])}"`,
+    `data-t-details="${a(t['verify.details'])}"`,
+  ].join(' ');
+  return `<div class="verify-note" ${attrs}>${link}</div>\n<script>\n${VERIFYJS}</script>`;
+}
 
 /* ============================================================================
    page
@@ -412,10 +436,10 @@ function page(code, variant){
   const L = LANGS.find(l=>l.code===code);
   const rtl = L.dir === 'rtl';
   const htmlCls = V.cls ? ` class="${V.cls}"` : '';
-  /* e-ink ships a pre-dithered 1-bit cover (Floyd–Steinberg) instead of the
-     colour JPEG: a continuous-tone photo would be hard-thresholded to blotches
-     by a 1-bit panel, and CSS grayscale() does not dither. Regenerate the asset
-     with tools/dither-cover.sh. full / lite keep the JPEG. */
+  /* e-ink ships a pre-dithered 1-bit cover (an AM halftone / newsprint screen)
+     instead of the colour JPEG: a continuous-tone photo would be hard-thresholded
+     to blotches by a 1-bit panel, and CSS grayscale() does not dither. Regenerate
+     the asset with tools/dither-cover.sh. full / lite keep the JPEG. */
   const cover = variant==='eink'
     ? { src:'/assets/cover-eink.png', w:800,  h:1200 }
     : { src:'/assets/cover.jpg',      w:1000, h:1500 };
@@ -461,8 +485,15 @@ ${css}
 <!-- ============ TOP BAR ============ -->
 <header class="top">
   <div class="wrap bar">
-    <span class="brand">Daily&nbsp;Bread</span>
-    <nav>
+    <a class="brand" href="${url(code, variant)}">
+      <span class="mark">Daily&nbsp;Bread</span>
+      <span class="lock">
+        <span class="lab">${esc(t['hero.tagline'])}</span>
+        <span class="doc">DB-001 &middot; N&ordm;1</span>
+      </span>
+    </a>
+    <span class="toprule" aria-hidden="true"></span>
+    <nav class="mainnav">
       <a href="#letter">${esc(t['nav.letter'])}</a>
       <a href="#contents">${esc(t['nav.contents'])}</a>
       <a href="#history">${esc(t['nav.history'])}</a>
@@ -866,7 +897,7 @@ ${mtnote(t, code, variant)}
     <div class="signoff" style="color:var(--pink);margin-top:4px">${t['footer.signoff']}</div>
     ${fswitch(t, code, variant)}
     <div class="colophon">${t['footer.colophon']}</div>
-    <div class="verify-note"><a href="/verify/">${t['footer.verify']}</a></div>
+    ${verifyNote(t, code, variant)}
   </div>
   <div class="band" style="border-top:2px solid var(--bone)"></div>
 </footer>

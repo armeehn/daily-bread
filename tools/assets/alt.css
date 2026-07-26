@@ -35,6 +35,11 @@
 
   /* ---------- version switch (base look lives in style.css) ---------- */
   .v-lite header.top .vswitch a:hover,.v-eink header.top .vswitch a:hover{color:var(--pink)}
+  /* brand titleblock: the pink doc number would collapse to #000 on the dark
+     e-ink bar (invisible); keep it and the interior rule at full paper contrast */
+  .v-eink header.top .brand .doc{color:#fff!important}
+  .v-eink header.top .brand .lock{border-inline-start-color:#fff!important}
+  .v-eink header.top .toprule::before{border-top-color:#fff!important;opacity:.4}
 
   /* ==========================================================================
      E-INK · pure monochrome, high contrast, no motion
