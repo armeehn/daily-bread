@@ -76,6 +76,55 @@ function loadStrings(code){
   return Object.assign({}, EN, tr);
 }
 
+/* ---- keep the translator handoff (strings/en.json) in lock-step with en.js ----
+   en.js is the source of truth; en.json is the flat English dump translators work
+   from. Regenerating it on every build means a new section can never ship with a
+   stale handoff, which is exactly how the comic/art/stickers keys once went out
+   untranslated. */
+function syncEnJson(){
+  const p = path.join(__dirname, 'strings', 'en.json');
+  const next = JSON.stringify(EN, null, 2) + '\n';
+  let prev = null;
+  try{ prev = fs.readFileSync(p, 'utf8'); }catch(e){}
+  if(prev !== next){
+    fs.writeFileSync(p, next);
+    console.log('synced strings/en.json ('+Object.keys(EN).length+' keys) from en.js');
+  }
+}
+
+/* ---- translation coverage: which keys fall back to English, per language ----
+   Returns the number of missing keys across all non-English languages and prints
+   a per-language report so untranslated content is loud at build time instead of
+   silently rendering in English on the live site. */
+function checkCoverage(){
+  const enKeys = Object.keys(EN);
+  let totalMissing = 0;
+  const report = [];
+  for(const L of LANGS){
+    if(L.code === 'en') continue;
+    const p = path.join(__dirname, 'strings', L.code + '.json');
+    let tr = {};
+    if(fs.existsSync(p)){
+      try{ tr = JSON.parse(fs.readFileSync(p, 'utf8')); }catch(e){}
+    }
+    const missing = enKeys.filter(k => !(k in tr));
+    totalMissing += missing.length;
+    report.push({code:L.code, missing});
+  }
+  if(totalMissing === 0){
+    console.log('i18n coverage: all', LANGS.length - 1, 'languages complete ('+enKeys.length+' keys each)');
+  } else {
+    console.warn('\n⚠  i18n coverage: '+totalMissing+' key(s) fall back to English:');
+    for(const r of report){
+      if(!r.missing.length) continue;
+      const preview = r.missing.slice(0, 8).join(', ') + (r.missing.length > 8 ? ', …' : '');
+      console.warn('   '+r.code.padEnd(8)+' missing '+String(r.missing.length).padStart(3)+': '+preview);
+    }
+    console.warn('   Add these keys to the language file(s) above, or pass --strict to fail the build.\n');
+  }
+  return totalMissing;
+}
+
 /* ---- structural data (non-translatable: page numbers, dates, colours) ---- */
 const TOC = ['#1d1a17','#f0477d','#fe9a0d','#12b795','#1d1a17','#f0477d','#fe9a0d','#12b795','#1d1a17','#f0477d','#fe9a0d','#12b795','#1d1a17','#f0477d','#fe9a0d','#f0477d','#12b795','#12b795','#1d1a17']
   .map((c,i)=>({c, pg:['01','04','08','11','14','16','19','20','23','24','25','28','30','32','36','37','38','40','44'][i]}));
@@ -394,12 +443,19 @@ function page(code, variant){
   const cover = variant==='eink'
     ? { src:'/assets/cover-eink.png', w:800,  h:1200 }
     : { src:'/assets/cover.jpg',      w:1000, h:1500 };
-  /* full loads the three web fonts; the lightweight variants ship system-only */
+  /* full loads all three web fonts (blackletter mast + mono body + script accents).
+     lite / e-ink stay system-only for the body mono and the Caveat script, but keep
+     the one UnifrakturMaguntia blackletter face: it is the paper's masthead identity;
+     the nameplate, brand mark, drop caps and the DB monogram all fall back to a plain
+     serif without it. A single small display face is worth the one request even under
+     the lightweight budget; font-display:swap still paints on serif until it arrives. */
   const fonts = variant==='full'
     ? `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">`
-    : '';
+    : `<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">`;
   /* full advertises the lighter renderings to data-saver / monochrome clients */
   const hints = variant==='full'
     ? `<link rel="alternate" media="(prefers-reduced-data: reduce)" href="${url(code,'lite')}">
@@ -814,7 +870,8 @@ ${mtnote(t, code, variant)}
         <p class="dek">${t['stickers.dek']}</p>
       </div>
       <div class="print-cta">
-        <button type="button" class="printbtn" onclick="window.print()">${t['stickers.print']} ⎙</button>
+        <button type="button" class="printbtn" onclick="document.body.classList.add('print-stickers');window.print()">${t['stickers.print']} ⎙</button>
+        <button type="button" class="printbtn ghost" onclick="document.body.classList.remove('print-stickers');window.print()">${t['stickers.printFull']} ⎙</button>
         <span class="fine">${t['stickers.printHint']}</span>
       </div>
     </div>
@@ -844,6 +901,9 @@ ${mtnote(t, code, variant)}
   </div>
   <div class="band" style="border-top:2px solid var(--bone)"></div>
 </footer>
+
+<!-- reset the sticker-sheet print mode after printing so Ctrl/⌘+P always yields the whole issue -->
+<script>addEventListener('afterprint',function(){document.body.classList.remove('print-stickers')});</script>
 
 </body>
 </html>
@@ -893,6 +953,7 @@ function clean(){
 function main(){
   const args = process.argv.slice(2);
   if(args.includes('--clean')) clean();
+  syncEnJson();
   /* positional args (any order): a language code and/or a variant id */
   const pos = args.filter(a=>!a.startsWith('--'));
   const onlyLang = pos.find(a=>LANGS.some(l=>l.code===a)) || null;
@@ -908,5 +969,10 @@ function main(){
   }
   if(!onlyLang && !onlyVar) emitSitemap();
   console.log('done:', n, 'files');
+  const missing = checkCoverage();
+  if(missing > 0 && args.includes('--strict')){
+    console.error('build failed: '+missing+' untranslated key(s) with --strict');
+    process.exit(1);
+  }
 }
 main();
