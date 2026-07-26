@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;family=Caveat:wght@600;700&amp;family=UnifrakturMaguntia&amp;display=swap" rel="stylesheet"><script src="./image-slot.js"></script><style>body{margin:0;background:#2a2723;font-family:'IBM Plex Mono',ui-monospace,monospace}a{color:#f0477d}a:hover{color:#12b795}</style></helmet>
+<div data-screen-label="Feature" style="width:561px;height:794px;background:#f6f1e7;color:#1d1a17;position:relative;display:flex;flex-direction:column;overflow:hidden;font-family:'IBM Plex Mono',ui-monospace,monospace">
+  <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:8px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headLeft }}</span><span style="position:absolute;top:8px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headRight }}</span><span style="position:absolute;bottom:26px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">DOC NO. {{ docNo }}</span><span style="position:absolute;bottom:26px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ folio }}</span><sc-if value="{{ footerOn }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;left:0;right:0;bottom:0;height:20px;background:{{ footerBg }};border-top:2px solid #1d1a17;z-index:3"></div></sc-if></sc-if>
+  <sc-if value="{{ isOpener }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;min-height:0">
+    <span style="font-size:10px;font-weight:700;letter-spacing:.12em;background:{{ accent }};color:#f6f1e7;padding:3px 10px;align-self:flex-start">{{ kicker }}</span>
+    <h1 style="margin:14px 0 0;font-size:36px;line-height:.98;font-weight:800;text-transform:uppercase">{{ title }}</h1>
+    <div style="font-size:12px;line-height:1.5;margin-top:10px">{{ dek }}</div>
+    <sc-if value="{{ hasByline }}" hint-placeholder-val="{{ false }}"><div style="font-size:9.5px;letter-spacing:.12em;color:{{ accent }};font-weight:700;margin-top:8px">{{ byline }}</div></sc-if>
+    <sc-if value="{{ hasStats }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;gap:10px;margin-top:14px">
+      <sc-for list="{{ statList }}" as="st" hint-placeholder-count="3">
+        <div style="flex:1;border:2px solid #1d1a17;padding:8px 6px;text-align:center"><div style="font-size:26px;font-weight:800;color:{{ st.c }}">{{ st.a }}</div><div style="font-size:8px;letter-spacing:.1em;margin-top:2px">{{ st.b }}</div></div>
+      </sc-for>
+    </div>
+    </sc-if>
+    <div style="font-size:11.5px;line-height:1.62;margin-top:14px;text-align:justify;hyphens:auto;overflow:hidden">
+      <sc-for list="{{ bodyParas }}" as="pp" hint-placeholder-count="2"><p style="margin:0 0 10px">{{ pp }}</p></sc-for>
+    </div>
+    <div style="margin-top:auto;margin-bottom:12px;font-size:9px;letter-spacing:.1em;opacity:.6;border-top:2px solid #1d1a17;padding-top:6px">{{ contNote }}</div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isImage }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;gap:10px;min-height:0">
+    <div style="position:relative;flex:1;border:2px solid #1d1a17;min-height:0"><image-slot id="db-{{ slug }}-hero" shape="rect" placeholder="{{ placeholder }}"></image-slot>
+      <div style="position:absolute;left:0;right:0;bottom:0;background:#1d1a17;color:#f6f1e7;font-size:9px;letter-spacing:.13em;padding:4px 8px;pointer-events:none">{{ caption }}</div>
+    </div>
+    <sc-if value="{{ hasScrib }}" hint-placeholder-val="{{ false }}"><div style="font-family:'Caveat',cursive;font-size:19px;color:{{ accent }};transform:rotate(-2deg)">{{ scribble }}</div></sc-if>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isTextOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:32px 26px 56px 26px;display:flex;flex-direction:column;min-height:0">
+    <div style="font-size:9.5px;letter-spacing:.3em;opacity:.6">{{ kicker }}</div>
+    <h1 style="margin:10px 0 0;font-size:32px;line-height:1;font-weight:800;text-transform:uppercase">{{ title }}</h1>
+    <sc-if value="{{ hasByline }}" hint-placeholder-val="{{ true }}"><div style="font-size:9.5px;letter-spacing:.12em;color:{{ accent }};font-weight:700;margin-top:6px">{{ byline }}</div></sc-if>
+    <div style="font-size:12px;line-height:1.7;margin-top:16px;text-align:justify;hyphens:auto;overflow:hidden">
+      <p style="margin:0"><span style="float:left;font-family:'UnifrakturMaguntia',cursive;font-size:50px;line-height:.8;padding:4px 8px 0 0">{{ dropCap }}</span>{{ firstRest }}</p>
+      <sc-for list="{{ restParas }}" as="pp" hint-placeholder-count="1"><p style="margin:10px 0 0">{{ pp }}</p></sc-for>
+    </div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isTextCont }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:32px 26px 56px 26px;display:flex;flex-direction:column;min-height:0">
+    <div style="font-size:12px;line-height:1.7;text-align:justify;hyphens:auto;flex:1;overflow:hidden">
+      <sc-for list="{{ bodyParas }}" as="pp" hint-placeholder-count="2"><p style="margin:0 0 10px">{{ pp }}</p></sc-for>
+    </div>
+    <div style="border:2px solid #1d1a17;padding:10px 12px;margin-top:12px;margin-bottom:12px">
+      <div style="font-size:9.5px;font-weight:700;letter-spacing:.15em">{{ boxTitle }}</div>
+      <div style="font-size:11px;line-height:1.55;margin-top:4px;opacity:.8">{{ boxBody }}</div>
+    </div>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:561,&quot;height&quot;:794},
+&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;opener&quot;,&quot;image&quot;,&quot;text-open&quot;,&quot;text-cont&quot;],&quot;default&quot;:&quot;opener&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;},
+&quot;kicker&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;10 · CURRENT ISSUES&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;The Waitlist&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;dek&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;byline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;stats&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;contNote&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;caption&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Image variant&quot;},
+&quot;placeholder&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;feature photo — drag and drop, 300dpi&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Image variant&quot;},
+&quot;scribble&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Image variant&quot;},
+&quot;boxTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;CONTINUED IN №2 — “THE THAW”&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Text variants&quot;},
+&quot;boxBody&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Text variants&quot;},
+&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;options&quot;:[&quot;#f0477d&quot;,&quot;#fe9a0d&quot;,&quot;#12b795&quot;,&quot;#1d1a17&quot;],&quot;default&quot;:&quot;#f0477d&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;footer&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;mono&quot;,&quot;duo&quot;,&quot;accent&quot;,&quot;none&quot;],&quot;default&quot;:&quot;mono&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;chrome&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headLeft&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headRight&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;THEME: KELOWNA’S COLLAPSE&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;docNo&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;DB-024-A&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;folio&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;24&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;slug&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;feat&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;}}">
+class Component extends DCLogic {
+  PAL=['#f0477d','#fe9a0d','#12b795','#1d1a17']
+  p(k,d){const v=this.props[k];return v==null||v===''?d:v}
+  sp(s){return String(s).split('||').map(t=>t.trim()).filter(Boolean)}
+  rw(s,n){return this.sp(s).map(r=>{const f=r.split('|').map(x=>x.trim());while(f.length<n)f.push('');return{a:f[0],b:f[1],c:f[2]}})}
+  renderVals(){
+    const v=this.p('variant','opener'),f=this.p('footer','mono'),a=this.p('accent','#f0477d');
+    const isText=v==='text-open'||v==='text-cont';
+    const paras=this.sp(this.p('body',v==='text-open'?
+      'The realtor said the house had lake access, and it did, the way a mouth has throat access. June found the stairs behind the lilac on the second day — forty-one steps of split cedar going down to a dock that wasn\u2019t in the listing photos, because docks that old don\u2019t photograph, they testify.||Her grandmother had warned her about the lake in the language June only half-kept: it gives, but it keeps receipts. Every family on the bench had a story with the same shape — a ring, a brother, a hayfork, a name — something the water accepted and never gave back at the same size.':
+      v==='text-cont'?
+      'On the dock she found the offerings the winter had rearranged: a doll\u2019s shoe, a fishing licence from 1974, a phone in a sandwich bag, screen up, one notification still glowing like a lure. The lake was flat as a ledger. June, who had moved back for the cheap rent that no longer existed and the family that barely did, rolled her jeans and stepped down onto the first cold plank.||\u201cOkay,\u201d she told the water, the town, the whole arranged marriage of valley and debt. \u201cShow me what you kept.\u201d':
+      'The numbers are placeholder-real: swap in the verified figures before print. The shape of the story won\u2019t change — everyone we interviewed described the same triangle of phone tag, referral limbo, and a highway.'));
+    const first=paras[0]||'',scribble=this.p('scribble','none'),stats=this.p('stats',v==='opener'?'14 | MONTHS · AVG GENDER CLINIC WAIT||2 | PROVIDERS TAKING NEW PATIENTS||400 | KM TO NEAREST ALTERNATIVE':'none');
+    const byline=this.p('byline',isText?'BY [AUTHOR] · ILLUSTRATION OPEN CALL':'none');
+    return{isOpener:v==='opener',isImage:v==='image',isTextOpen:v==='text-open',isTextCont:v==='text-cont',
+      chromeOn:this.props.chrome??true,accent:a,
+      headLeft:this.p('headLeft',isText?'11 · FICTION':'10 · CURRENT ISSUES'),headRight:this.p('headRight','THEME: KELOWNA\u2019S COLLAPSE'),
+      docNo:this.p('docNo','DB-024-A'),folio:this.p('folio','24'),
+      footerOn:f!=='none',footerBg:f==='duo'?"repeating-conic-gradient(from 45deg,#f0477d 0% 25%,#12b795 0% 50%) 0 0/20px 20px":f==='accent'?`repeating-conic-gradient(${a} 0% 25%,#f6f1e7 0% 50%) 0 0/16px 16px`:"repeating-conic-gradient(#1d1a17 0% 25%,#f6f1e7 0% 50%) 0 0/16px 16px",
+      kicker:this.p('kicker',isText?'SHORT FICTION':'10 · CURRENT ISSUES'),
+      title:this.p('title',isText?'The Lake Takes':'The Waitlist'),
+      byline,hasByline:byline!=='none',
+      dek:this.p('dek','Trying to find queer-competent healthcare in the Central Okanagan is a part-time job with no benefits. We phoned every clinic so you don\u2019t have to.'),
+      dropCap:first.charAt(0),firstRest:first.slice(1),restParas:paras.slice(1),bodyParas:paras,
+      hasStats:stats!=='none',statList:this.rw(stats==='none'?'':stats,2).map((r,i)=>({...r,c:r.c&&r.c.startsWith('#')?r.c:this.PAL[i%4]})),
+      caption:this.p('caption','FIG. 1 — CAPTION SETS THE JOKE, THE IMAGE SETS THE SCENE.'),
+      placeholder:this.p('placeholder','feature photo — drag and drop, 300dpi'),
+      contNote:this.p('contNote','CONTINUED NEXT PAGE → · STREET INTERVIEWS + WHAT ACTUALLY HELPS'),
+      boxTitle:this.p('boxTitle','CONTINUED IN №2 — \u201cTHE THAW\u201d'),
+      boxBody:this.p('boxBody','Serialized fiction runs across issues. Miss one and the lake keeps your bookmark.'),
+      scribble,hasScrib:scribble!=='none',slug:this.p('slug','feat')};
+  }
+}
+</script>
+</body>
+</html>

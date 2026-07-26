@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;family=Caveat:wght@600;700&amp;family=UnifrakturMaguntia&amp;display=swap" rel="stylesheet"><script src="./image-slot.js"></script><style>body{margin:0;background:#2a2723;font-family:'IBM Plex Mono',ui-monospace,monospace}a{color:#f0477d}a:hover{color:#12b795}</style></helmet>
+<div data-screen-label="Review" style="width:561px;height:794px;background:#f6f1e7;color:#1d1a17;position:relative;display:flex;flex-direction:column;overflow:hidden;font-family:'IBM Plex Mono',ui-monospace,monospace">
+  <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:8px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headLeft }}</span><span style="position:absolute;top:8px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headRight }}</span><span style="position:absolute;bottom:26px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">DOC NO. {{ docNo }}</span><span style="position:absolute;bottom:26px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ folio }}</span><sc-if value="{{ footerOn }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;left:0;right:0;bottom:0;height:20px;background:{{ footerBg }};border-top:2px solid #1d1a17;z-index:3"></div></sc-if></sc-if>
+  <sc-if value="{{ isAdvice }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;gap:12px;min-height:0">
+    <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><span style="font-family:'UnifrakturMaguntia',cursive;font-size:27px">{{ brand }}</span><span style="font-size:9px;letter-spacing:.14em;opacity:.6">{{ brandSub }}</span></div>
+    <sc-for list="{{ adviceList }}" as="q" hint-placeholder-count="2">
+      <div style="border:2px solid #1d1a17;padding:12px 14px">
+        <div style="font-size:11px;font-style:italic;line-height:1.55">Q: {{ q.a }}</div>
+        <div style="font-size:11.5px;line-height:1.62;margin-top:8px;border-top:1px dashed #1d1a17;padding-top:8px"><b style="color:{{ accent }}">A:</b> {{ q.b }}</div>
+      </div>
+    </sc-for>
+    <sc-if value="{{ hasScrib }}" hint-placeholder-val="{{ true }}"><div style="font-family:'Caveat',cursive;font-size:19px;color:{{ accent }};transform:rotate(-2deg);margin-top:auto;margin-bottom:8px">{{ scribble }}</div></sc-if>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isCritique }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;gap:12px;min-height:0">
+    <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><span style="font-family:'UnifrakturMaguntia',cursive;font-size:27px">{{ brand }}</span><span style="font-size:9px;letter-spacing:.14em;opacity:.6">{{ brandSub }}</span></div>
+    <sc-for list="{{ featureList }}" as="f" hint-placeholder-count="2">
+      <div style="border:2px solid #1d1a17">
+        <div style="padding:5px 10px;font-size:9px;font-weight:700;letter-spacing:.14em;border-bottom:2px solid #1d1a17;background:#eae4d6;display:flex;justify-content:space-between;gap:8px"><span>{{ f.a }}</span><span style="color:{{ f.cc }};text-align:right">{{ f.b }}</span></div>
+        <div style="padding:10px 12px;font-size:11px;line-height:1.6;text-align:justify"><b>{{ f.d }}</b> — {{ f.e }}</div>
+      </div>
+    </sc-for>
+    <div style="border:2px solid #1d1a17;padding:8px 12px;font-size:10px;line-height:1.6;background:#eae4d6;margin-top:auto;margin-bottom:8px"><b style="letter-spacing:.12em">{{ rulesTag }}</b> — {{ rules }}</div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isCards }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;gap:12px;min-height:0">
+    <span style="font-size:10px;font-weight:700;letter-spacing:.12em;background:#1d1a17;color:#f6f1e7;padding:3px 10px;align-self:flex-start">{{ kicker }}</span>
+    <sc-for list="{{ cardList }}" as="r" hint-placeholder-count="3">
+      <div style="border:2px solid #1d1a17;flex:1;display:flex;flex-direction:column;min-height:0">
+        <div style="padding:5px 10px;font-size:9px;font-weight:700;letter-spacing:.14em;border-bottom:2px solid #1d1a17;background:#eae4d6;display:flex;justify-content:space-between;gap:8px"><span>{{ r.a }}</span><span style="color:{{ r.cc }};text-align:right">{{ r.b }}</span></div>
+        <div style="padding:8px 10px;font-size:11px;line-height:1.55"><b>{{ r.d }}</b> — {{ r.e }}</div>
+      </div>
+    </sc-for>
+    <sc-if value="{{ hasBlurb }}" hint-placeholder-val="{{ false }}"><div style="font-size:11.5px;line-height:1.6;text-align:justify">{{ blurb }}</div></sc-if>
+    <sc-if value="{{ hasStamp }}" hint-placeholder-val="{{ false }}"><div style="display:inline-block;align-self:flex-start;padding:5px 11px;border:2px solid #fe9a0d;color:#fe9a0d;font-size:10px;font-weight:700;letter-spacing:.18em;transform:rotate(-2deg);margin-bottom:8px">{{ stamp }}</div></sc-if>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isPlaylist }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;min-height:0">
+    <span style="font-size:10px;font-weight:700;letter-spacing:.12em;background:#fe9a0d;padding:3px 10px;align-self:flex-start">{{ kicker }}</span>
+    <h2 style="margin:12px 0 0;font-size:24px;font-weight:800;text-transform:uppercase">{{ rotTitle }}<span style="color:#fe9a0d">.</span></h2>
+    <div style="border:2px solid #1d1a17;margin-top:10px;flex:1;min-height:0;display:flex;flex-direction:column">
+      <div style="padding:6px 10px;font-size:9.5px;font-weight:700;letter-spacing:.15em;border-bottom:2px solid #1d1a17;background:#eae4d6;display:flex;justify-content:space-between;gap:8px"><span>{{ rotLabel }}</span><span style="color:#fe9a0d;text-align:right">{{ rotTag }}</span></div>
+      <div style="padding:6px 10px;font-size:11px;overflow:hidden">
+        <sc-for list="{{ trackList }}" as="m" hint-placeholder-count="7">
+          <div style="display:flex;gap:10px;align-items:baseline;padding:5.5px 0;border-bottom:1px dashed #1d1a17"><span style="font-weight:700;min-width:0">{{ m.a }}</span><span style="margin-left:auto;flex:none;font-size:9px;opacity:.65;text-align:right;max-width:20ch">{{ m.b }}</span></div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:10px;margin-bottom:12px"><div style="width:44px;height:44px;border:2px solid #1d1a17;background:repeating-conic-gradient(#1d1a17 0% 25%,#f6f1e7 0% 50%) 0 0/8px 8px;flex:none"></div><div style="font-size:9.5px;letter-spacing:.12em;line-height:1.5">{{ qrNote }}<br><span style="opacity:.6">{{ qrSub }}</span></div></div>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:561,&quot;height&quot;:794},
+&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;advice&quot;,&quot;critique&quot;,&quot;cards&quot;,&quot;playlist&quot;],&quot;default&quot;:&quot;advice&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;},
+&quot;brand&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Advice / Critique&quot;},
+&quot;brandSub&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Advice / Critique&quot;},
+&quot;advice&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Advice / Critique&quot;},
+&quot;features&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Advice / Critique&quot;},
+&quot;rulesTag&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;HOUSE RULES&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Advice / Critique&quot;},
+&quot;rules&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Advice / Critique&quot;},
+&quot;scribble&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Advice / Critique&quot;},
+&quot;kicker&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cards / Playlist&quot;},
+&quot;cards&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cards / Playlist&quot;},
+&quot;blurb&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cards / Playlist&quot;},
+&quot;stamp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cards / Playlist&quot;},
+&quot;rotTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Rotation&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cards / Playlist&quot;},
+&quot;rotLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;STAFF ROTATION / №1&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cards / Playlist&quot;},
+&quot;rotTag&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;LOUD&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cards / Playlist&quot;},
+&quot;tracks&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cards / Playlist&quot;},
+&quot;qrNote&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;FULL PLAYLIST QR — UPDATED PER ISSUE&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cards / Playlist&quot;},
+&quot;qrSub&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;SEND US ONE SONG + ONE SENTENCE&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cards / Playlist&quot;},
+&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;options&quot;:[&quot;#f0477d&quot;,&quot;#fe9a0d&quot;,&quot;#12b795&quot;,&quot;#1d1a17&quot;],&quot;default&quot;:&quot;#f0477d&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;footer&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;mono&quot;,&quot;duo&quot;,&quot;accent&quot;,&quot;none&quot;],&quot;default&quot;:&quot;mono&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;chrome&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headLeft&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headRight&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;docNo&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;folio&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;}}">
+class Component extends DCLogic {
+  PAL=['#12b795','#fe9a0d','#f0477d','#1d1a17']
+  p(k,d){const v=this.props[k];return v==null||v===''?d:v}
+  sp(s){return String(s).split('||').map(t=>t.trim()).filter(Boolean)}
+  rw(s,n){return this.sp(s).map(r=>{const f=r.split('|').map(x=>x.trim());while(f.length<n)f.push('');return{a:f[0],b:f[1],c:f[2],d:f[3],e:f[4]}})}
+  renderVals(){
+    const v=this.p('variant','advice'),f=this.p('footer','mono'),a=this.p('accent','#f0477d');
+    const heads={advice:['12 · ADVICE','CERTIFIED · SINCE TUESDAY','DB-031-A','31'],critique:['15 · FOOD','NO FREE MEALS, NO MERCY','DB-034-A','34'],cards:['13 · REVIEWS','FIELD-TESTED','DB-032-A','32'],playlist:['16 · LISTENING','LOUD IN THE PASTE-UP ROOM','DB-035-A','35']}[v]||['','','',''];
+    const scribble=this.p('scribble','none');
+    const blurb=this.p('blurb','none'),stamp=this.p('stamp','none');
+    return{isAdvice:v==='advice',isCritique:v==='critique',isCards:v==='cards',isPlaylist:v==='playlist',
+      chromeOn:this.props.chrome??true,accent:a,
+      headLeft:this.p('headLeft',heads[0]),headRight:this.p('headRight',heads[1]),
+      docNo:this.p('docNo',heads[2]),folio:this.p('folio',heads[3]),
+      footerOn:f!=='none',footerBg:f==='duo'?"repeating-conic-gradient(from 45deg,#f0477d 0% 25%,#12b795 0% 50%) 0 0/20px 20px":f==='accent'?`repeating-conic-gradient(${a} 0% 25%,#f6f1e7 0% 50%) 0 0/16px 16px`:"repeating-conic-gradient(#1d1a17 0% 25%,#f6f1e7 0% 50%) 0 0/16px 16px",
+      brand:this.p('brand',v==='critique'?'The Bite Back':'Ask a Local Gay'),
+      brandSub:this.p('brandSub',v==='critique'?'RESTAURANT CRITIQUE · NO FREE MEALS, NO MERCY':'CERTIFIED · SINCE TUESDAY'),
+      adviceList:this.rw(this.p('advice','My parents keep introducing me as their \u201croommate\u2019s friend.\u201d The roommate is my wife. Escalate or let it ride? — TIRED IN LAKE COUNTRY | Send them a fridge magnet of your wedding photo every month. No note. Bureaucracy respects witnesses and parents respect fridges. By magnet six you\u2019ll be \u201cthe girls.\u201d By ten, they\u2019re paying for brunch.||Is it a red flag if a date says Kelowna has \u201cno culture\u201d? — DEFENSIVE DOWNTOWN | It\u2019s a beige flag. Hand them this magazine, the calendar page, and a pen. If they come to one thing on the calendar, marry them. If they critique the font, you\u2019ve met the editor — run.'),2),
+      featureList:this.rw(this.p('features','WINE BAR · LAKESHORE · $$$$ | 2/5 — GORGEOUS, HUNGRY | #f0477d | The place that replaced the diner | The room is stunning, the playlist is a moodboard, and the \u201cheritage tomato moment\u201d is one tomato. Our server was the best actor in the valley: she said \u201cgreat choice\u201d about a $19 plate of air with total conviction. We left elegant and starving, then bought gas-station taquitos. Verdict: it photographs like a meal.||DINER · RUTLAND · $ | 5/5 — PROTECT AT ALL COSTS | #12b795 | The 24-hour survivor on Hwy 33 | Coffee refills arrive before you ask, the hashbrowns have structural integrity, and the night cook remembers your order and your pronouns. Every collapse in this issue is survivable from booth six. Bring cash, tip like rent is due, because theirs is too.'),5).map((r,i)=>({...r,cc:r.c&&r.c.startsWith('#')?r.c:this.PAL[i%4]})),
+      rulesTag:this.p('rulesTag','HOUSE RULES'),
+      rules:this.p('rules','we pay full price · we book under fake names · patios judged by dog traffic · anywhere that feeds evacuation crews gets a permanent star'),
+      kicker:this.p('kicker',v==='playlist'?'16 · WHAT WE\u2019RE LISTENING TO':'REVIEWS / FIELD-TESTED'),
+      cardList:this.rw(this.p('cards','DRAG NIGHT · POP-UP | RIPS | #12b795 | \u201cHarvest Moon\u201d at the community hall | A gymnasium, a rented fog machine, and the best crowd this valley has produced. The floor is lava and the lava is love. Next one: see calendar.||BAKERY · DOWNTOWN | 4/5 | #fe9a0d | The new sourdough place on Ellis | The loaf is honest, the queue is chatty, and the owner slips day-olds to anyone who compliments the playlist. Crumb declined to comment, citing family.||CIVIC · ONGOING | 0/5 | #f0477d | Council public-hearing livestream | Buffering as dramaturgy. Runtime: eternal. One star added for the councillor who said \u201chousing is for people\u201d out loud; four removed for the vote after.'),5).map((r,i)=>({...r,cc:r.c&&r.c.startsWith('#')?r.c:this.PAL[i%4]})),
+      blurb,hasBlurb:blurb!=='none',stamp,hasStamp:stamp!=='none',
+      rotTitle:this.p('rotTitle','Rotation'),rotLabel:this.p('rotLabel','STAFF ROTATION / №1'),rotTag:this.p('rotTag','LOUD'),
+      trackList:this.rw(this.p('tracks','\u201cBench Water\u201d — local EP | the connector, at night||ballroom sets — Paris Is Burning warm-ups | pre-screening homework||snotty coast punk — 7\u2033 from a Rutland garage | paste-up fuel||a syilx songwriter\u2019s live tape | ask at the record stall||disco edits for the beach assembly | aug 15, bring speakers||the diner jukebox, booth six | field recording, honestly||whatever the night cook hums | unreleased. protected.'),2),
+      qrNote:this.p('qrNote','FULL PLAYLIST QR — UPDATED PER ISSUE'),qrSub:this.p('qrSub','SEND US ONE SONG + ONE SENTENCE'),
+      scribble,hasScrib:scribble!=='none'};
+  }
+}
+</script>
+</body>
+</html>

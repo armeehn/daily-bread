@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;family=Caveat:wght@600;700&amp;family=UnifrakturMaguntia&amp;display=swap" rel="stylesheet"><script src="./image-slot.js"></script><style>body{margin:0;background:#2a2723;font-family:'IBM Plex Mono',ui-monospace,monospace}a{color:#f0477d}a:hover{color:#12b795}</style></helmet>
+<div data-screen-label="Colophon" style="width:561px;height:794px;background:#f6f1e7;color:#1d1a17;position:relative;display:flex;flex-direction:column;overflow:hidden;font-family:'IBM Plex Mono',ui-monospace,monospace">
+  <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:8px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headLeft }}</span><span style="position:absolute;top:8px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headRight }}</span><span style="position:absolute;bottom:26px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">DOC NO. {{ docNo }}</span><span style="position:absolute;bottom:26px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ folio }}</span><div style="position:absolute;left:0;right:0;bottom:0;height:20px;background:repeating-conic-gradient(from 45deg,#f0477d 0% 25%,#12b795 0% 50%) 0 0/20px 20px;border-top:2px solid #1d1a17;z-index:3"></div></sc-if>
+  <sc-if value="{{ isStaff }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;gap:12px;min-height:0">
+    <div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:'UnifrakturMaguntia',cursive;font-size:27px">{{ brand }}</span></div>
+    <div style="position:relative;height:230px;border:2px solid #1d1a17;flex:none"><image-slot id="db-{{ slug }}-staff" shape="rect" placeholder="{{ placeholder }}"></image-slot>
+      <div style="position:absolute;left:0;right:0;bottom:0;background:#1d1a17;color:#f6f1e7;font-size:9px;letter-spacing:.13em;padding:4px 8px;pointer-events:none">{{ caption }}</div>
+    </div>
+    <div style="border:2px solid #1d1a17;flex:1;min-height:0;display:flex;flex-direction:column">
+      <div style="padding:5px 10px;font-size:9.5px;font-weight:700;letter-spacing:.15em;border-bottom:2px solid #1d1a17;background:#eae4d6">{{ creditsLabel }}</div>
+      <div style="padding:6px 10px;font-size:10.5px;overflow:hidden">
+        <sc-for list="{{ creditList }}" as="c" hint-placeholder-count="7">
+          <div style="display:flex;gap:10px;padding:4px 0;border-bottom:1px dashed #1d1a17"><span style="opacity:.6;flex:none;width:120px">{{ c.a }}</span><span style="font-weight:600;min-width:0">{{ c.b }}</span></div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isAd }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;gap:14px;min-height:0">
+    <div style="font-size:11px;line-height:1.65;text-align:justify">{{ colophon }}</div>
+    <div style="border:2px solid #1d1a17;padding:12px;display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;flex:1;min-height:0">
+      <img src="logo.svg" alt="Riposte Laboratories" style="width:200px;display:block;opacity:.9">
+      <div style="font-size:9.5px;letter-spacing:.3em">{{ slogan }}</div>
+      <div style="font-size:10.5px;line-height:1.6;text-align:center;max-width:40ch;opacity:.8">{{ adText }}</div>
+    </div>
+    <div style="font-family:'Caveat',cursive;font-size:22px;color:#f0477d;transform:rotate(-2deg);align-self:center;margin-bottom:6px">{{ sig }}</div>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:561,&quot;height&quot;:794},
+&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;staff&quot;,&quot;ad&quot;],&quot;default&quot;:&quot;staff&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;},
+&quot;brand&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Who Made This&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Staff&quot;},
+&quot;placeholder&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Staff&quot;},
+&quot;caption&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Staff&quot;},
+&quot;creditsLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;ATTRIBUTIONS / EVERY HAND&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Staff&quot;},
+&quot;credits&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Staff&quot;},
+&quot;colophon&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Ad page&quot;},
+&quot;slogan&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;PARRY. RIPOSTE.&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Ad page&quot;},
+&quot;adText&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Ad page&quot;},
+&quot;sig&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;see you at the thaw ✕&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Ad page&quot;},
+&quot;chrome&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headLeft&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;20 · COLOPHON&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headRight&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;SEE YOU IN №2&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;docNo&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;DB-042-A&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;folio&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;slug&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;colophon&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;}}">
+class Component extends DCLogic {
+  p(k,d){const v=this.props[k];return v==null||v===''?d:v}
+  sp(s){return String(s).split('||').map(t=>t.trim()).filter(Boolean)}
+  rw(s,n){return this.sp(s).map(r=>{const f=r.split('|').map(x=>x.trim());while(f.length<n)f.push('');return{a:f[0],b:f[1]}})}
+  renderVals(){
+    const v=this.p('variant','staff');
+    return{chromeOn:this.props.chrome??true,isStaff:v==='staff',isAd:v==='ad',
+      headLeft:this.p('headLeft','20 · COLOPHON'),headRight:this.p('headRight','SEE YOU IN №2'),
+      docNo:this.p('docNo','DB-042-A'),folio:this.p('folio',v==='staff'?'42':'IBC'),
+      brand:this.p('brand','Who Made This'),
+      placeholder:this.p('placeholder','staff photo — everyone assembled, gremlin energy, timer on a ladder'),
+      caption:this.p('caption','FIG. 9 — THE ENTIRE OPERATION. YES, THE DOG IS ON THE MASTHEAD.'),
+      creditsLabel:this.p('creditsLabel','ATTRIBUTIONS / EVERY HAND'),
+      creditList:this.rw(this.p('credits','EDITOR | your name here||YOUNG VOICES | three writers||PHOTOGRAPHY | \u201cVacancy\u201d — [photographer]||COMICS | \u201cCrumbs\u201d — [cartoonist] · guest: [name]||THE WALL | [featured artist], two pieces, №1||SATIRE CARTOON | [illustrator], with apologies to council||PROOFREADING | the patient one||FUNDING | Riposte Laboratories Inc.||PRINTER | [local print shop], 500 copies'),2),
+      colophon:this.p('colophon','Printed on unceded syilx Okanagan territory in a run of 500. Set in IBM Plex Mono and UnifrakturMaguntia. Errors are ours; corrections are yours; the leftover ink went into the stickers.'),
+      slogan:this.p('slogan','PARRY. RIPOSTE.'),
+      adText:this.p('adText','This space is the inside back cover. In №2 it\u2019s for sale to any local business that has never evicted anyone. Rates on request.'),
+      sig:this.p('sig','see you at the thaw ✕'),slug:this.p('slug','colophon')};
+  }
+}
+</script>
+</body>
+</html>

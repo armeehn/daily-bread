@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;family=Caveat:wght@600;700&amp;family=UnifrakturMaguntia&amp;display=swap" rel="stylesheet"><script src="./image-slot.js"></script><style>body{margin:0;background:#2a2723;font-family:'IBM Plex Mono',ui-monospace,monospace}a{color:#f0477d}a:hover{color:#12b795}</style></helmet>
+<div data-screen-label="Letter" style="width:561px;height:794px;background:#f6f1e7;color:#1d1a17;position:relative;display:flex;flex-direction:column;overflow:hidden;font-family:'IBM Plex Mono',ui-monospace,monospace">
+  <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:8px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headLeft }}</span><span style="position:absolute;top:8px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headRight }}</span><span style="position:absolute;bottom:26px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">DOC NO. {{ docNo }}</span><span style="position:absolute;bottom:26px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ folio }}</span><sc-if value="{{ footerOn }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;left:0;right:0;bottom:0;height:20px;background:{{ footerBg }};border-top:2px solid #1d1a17;z-index:3"></div></sc-if></sc-if>
+  <sc-if value="{{ isMasthead }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;min-height:0">
+    <div style="font-family:'UnifrakturMaguntia',cursive;font-size:46px;line-height:1">{{ wordmark }}</div>
+    <div style="font-size:9px;letter-spacing:.28em;margin-top:4px">{{ subtitle }}</div>
+    <div style="border:2px solid #1d1a17;margin-top:20px">
+      <div style="padding:6px 10px;font-size:9.5px;font-weight:700;letter-spacing:.15em;border-bottom:2px solid #1d1a17;background:#eae4d6">{{ mastheadLabel }}</div>
+      <div style="padding:10px;font-size:11px;line-height:1.55">
+        <sc-for list="{{ mastheadRows }}" as="m" hint-placeholder-count="4">
+          <div style="border-bottom:1px dashed #1d1a17;padding:4px 0;display:flex;justify-content:space-between;gap:10px"><span style="opacity:.6">{{ m.a }}</span><span style="font-weight:700;text-align:right">{{ m.b }}</span></div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="font-size:11px;line-height:1.6;margin-top:16px">{{ ack }}</div>
+    <div style="margin-top:auto;margin-bottom:12px;display:flex;align-items:center;gap:12px">
+      <img src="logo.svg" alt="Riposte Laboratories" style="width:120px;display:block">
+      <div style="font-size:9px;line-height:1.5;letter-spacing:.08em">{{ funderLine }}<br><span style="opacity:.6">{{ funderNote }}</span></div>
+    </div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isLetter }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;min-height:0;position:relative">
+    <span style="font-size:10px;font-weight:700;letter-spacing:.12em;background:#1d1a17;color:#f6f1e7;padding:3px 10px;align-self:flex-start">{{ kicker }}</span>
+    <h1 style="margin:14px 0 0;font-size:36px;line-height:1;font-weight:800;text-transform:uppercase">{{ title }}</h1>
+    <div style="font-size:12px;line-height:1.65;margin-top:16px;text-align:justify;hyphens:auto;overflow:hidden">
+      <p style="margin:0"><sc-if value="{{ hasLead }}" hint-placeholder-val="{{ true }}"><span style="font-weight:700;background:{{ accent }};color:#f6f1e7;padding:0 4px">{{ lead }}</span> </sc-if>{{ firstPara }}</p>
+      <sc-for list="{{ restParas }}" as="pp" hint-placeholder-count="2"><p style="margin:12px 0 0">{{ pp }}</p></sc-for>
+    </div>
+    <div style="font-family:'Caveat',cursive;font-size:25px;color:#12b795;transform:rotate(-2deg);margin-top:16px">{{ signoff }}</div>
+    <sc-if value="{{ hasStamp }}" hint-placeholder-val="{{ true }}"><div style="margin-top:auto;margin-bottom:12px;display:inline-block;align-self:flex-start;padding:5px 11px;border:2px solid #fe9a0d;color:#fe9a0d;font-size:10px;font-weight:700;letter-spacing:.18em;transform:rotate(-2deg)">{{ stamp }}</div></sc-if>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:561,&quot;height&quot;:794},
+&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;letter&quot;,&quot;masthead&quot;],&quot;default&quot;:&quot;letter&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;},
+&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Our Daily Dread&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Letter&quot;},
+&quot;kicker&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;00 · EDITOR’S LETTER&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Letter&quot;},
+&quot;lead&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;HI.&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Letter&quot;},
+&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Letter&quot;},
+&quot;signoff&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;— the editors ✕&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Letter&quot;},
+&quot;stamp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;BATCH №1 · FRESH&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Letter&quot;},
+&quot;wordmark&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Daily Bread&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Masthead&quot;},
+&quot;subtitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;A QUEER MAGAZINE FOR THE OKANAGAN&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Masthead&quot;},
+&quot;mastheadLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;MASTHEAD / №1 · SUMMER 2026&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Masthead&quot;},
+&quot;masthead&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Masthead&quot;},
+&quot;ack&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Masthead&quot;},
+&quot;funderLine&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;FUNDED BY RIPOSTE LABORATORIES INC.&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Masthead&quot;},
+&quot;funderNote&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;EDITORIAL INDEPENDENCE CLAUSE: SEE FROM THE LAB&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Masthead&quot;},
+&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;options&quot;:[&quot;#f0477d&quot;,&quot;#fe9a0d&quot;,&quot;#12b795&quot;,&quot;#1d1a17&quot;],&quot;default&quot;:&quot;#f0477d&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;footer&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;mono&quot;,&quot;duo&quot;,&quot;accent&quot;,&quot;none&quot;],&quot;default&quot;:&quot;mono&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;chrome&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headLeft&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;DAILY BREAD №1 · KELOWNA BC&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headRight&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;THEME: KELOWNA’S COLLAPSE&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;docNo&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;DB-000-A&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;folio&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;}}">
+class Component extends DCLogic {
+  p(k,d){const v=this.props[k];return v==null||v===''?d:v}
+  sp(s){return String(s).split('||').map(t=>t.trim()).filter(Boolean)}
+  rw(s,n){return this.sp(s).map(r=>{const f=r.split('|').map(x=>x.trim());while(f.length<n)f.push('');return{a:f[0],b:f[1]}})}
+  renderVals(){
+    const v=this.p('variant','letter'),f=this.p('footer','mono'),a=this.p('accent','#f0477d');
+    const paras=this.sp(this.p('body','You found the first issue of a queer magazine in a city that keeps telling us it doesn\u2019t have one. Kelowna has queer history, queer kids, queer elders, queer bakers and bureaucrats — what it hasn\u2019t had is paper that says so out loud.||This issue is about collapse: the orchards, the venues, the rent math, the bridge traffic. Not because we\u2019re doomers, but because things fall apart here on schedule, and naming the schedule is the first act of repair.||Rip out the poster. Colour the cartoon. Mail us your fury and your recipes. This thing only works if you get crumbs on it.'));
+    const lead=this.p('lead','HI.'),stamp=this.p('stamp','BATCH №1 · FRESH');
+    return{isMasthead:v==='masthead',isLetter:v==='letter',
+      chromeOn:this.props.chrome??true,accent:a,
+      headLeft:this.p('headLeft','DAILY BREAD №1 · KELOWNA BC'),headRight:this.p('headRight','THEME: KELOWNA\u2019S COLLAPSE'),
+      docNo:this.p('docNo','DB-000-A'),folio:this.p('folio',v==='masthead'?'IC':'01'),
+      footerOn:f!=='none',footerBg:f==='duo'?"repeating-conic-gradient(from 45deg,#f0477d 0% 25%,#12b795 0% 50%) 0 0/20px 20px":f==='accent'?`repeating-conic-gradient(${a} 0% 25%,#f6f1e7 0% 50%) 0 0/16px 16px`:"repeating-conic-gradient(#1d1a17 0% 25%,#f6f1e7 0% 50%) 0 0/16px 16px",
+      wordmark:this.p('wordmark','Daily Bread'),subtitle:this.p('subtitle','A QUEER MAGAZINE FOR THE OKANAGAN'),
+      mastheadLabel:this.p('mastheadLabel','MASTHEAD / №1 · SUMMER 2026'),
+      mastheadRows:this.rw(this.p('masthead','EDITOR | your name here||ART + COMICS | open call — pg 24||YOUNG VOICES DESK | pg 11||PRINTED | on unceded syilx territory'),2),
+      ack:this.p('ack','Daily Bread is published on the unceded, ancestral territory of the syilx Okanagan people. We pay rent to a landlord and respect to a Nation, and we know only one of those is owed.'),
+      funderLine:this.p('funderLine','FUNDED BY RIPOSTE LABORATORIES INC.'),funderNote:this.p('funderNote','EDITORIAL INDEPENDENCE CLAUSE: SEE FROM THE LAB'),
+      kicker:this.p('kicker','00 · EDITOR\u2019S LETTER'),title:this.p('title','Our Daily Dread'),
+      lead,hasLead:lead!=='none',firstPara:paras[0]||'',restParas:paras.slice(1),
+      signoff:this.p('signoff','— the editors ✕'),stamp,hasStamp:stamp!=='none'};
+  }
+}
+</script>
+</body>
+</html>

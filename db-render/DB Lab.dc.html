@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;family=Caveat:wght@600;700&amp;family=UnifrakturMaguntia&amp;display=swap" rel="stylesheet"><script src="./image-slot.js"></script><style>body{margin:0;background:#2a2723;font-family:'IBM Plex Mono',ui-monospace,monospace}a{color:#f0477d}a:hover{color:#12b795}</style></helmet>
+<div data-screen-label="From the Lab" style="width:561px;height:794px;background:#f6f1e7;color:#1d1a17;position:relative;display:flex;flex-direction:column;overflow:hidden;font-family:'IBM Plex Mono',ui-monospace,monospace">
+  <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:8px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headLeft }}</span><span style="position:absolute;top:8px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headRight }}</span><span style="position:absolute;bottom:26px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">DOC NO. {{ docNo }}</span><span style="position:absolute;bottom:26px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ folio }}</span><div style="position:absolute;left:0;right:0;bottom:0;height:20px;background:repeating-conic-gradient(#12b795 0% 25%,#f6f1e7 0% 50%) 0 0/16px 16px;border-top:2px solid #1d1a17;z-index:3"></div></sc-if>
+  <sc-if value="{{ isDisclosure }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:1;padding:32px 26px 56px 26px;display:flex;flex-direction:column;min-height:0">
+    <img src="logo.svg" alt="Riposte Laboratories" style="width:240px;display:block">
+    <div style="font-size:9.5px;letter-spacing:.42em;margin-top:6px">{{ logoSub }}</div>
+    <h1 style="margin:18px 0 0;font-size:30px;line-height:1;font-weight:800;text-transform:uppercase">{{ title }}</h1>
+    <div style="font-size:12px;line-height:1.65;margin-top:12px;text-align:justify;hyphens:auto;overflow:hidden">
+      <sc-for list="{{ bodyParas }}" as="pp" hint-placeholder-count="2"><p style="margin:0 0 10px">{{ pp }}</p></sc-for>
+    </div>
+    <sc-if value="{{ hasStamp }}" hint-placeholder-val="{{ true }}"><div style="display:inline-block;align-self:flex-start;margin-top:6px;padding:5px 11px;border:2px solid #fe9a0d;color:#fe9a0d;font-size:10px;font-weight:700;letter-spacing:.18em;transform:rotate(-2deg)">{{ stamp }}</div></sc-if>
+    <div style="font-family:'Caveat',cursive;font-size:22px;color:#12b795;transform:rotate(-2deg);margin-top:auto;margin-bottom:10px">{{ sig }}</div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isStatus }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:32px 26px 56px 26px;display:flex;flex-direction:column;gap:12px;min-height:0">
+    <div style="border:2px solid #1d1a17;flex:1;min-height:0;display:flex;flex-direction:column">
+      <div style="padding:6px 10px;font-size:9.5px;font-weight:700;letter-spacing:.15em;border-bottom:2px solid #1d1a17;background:#eae4d6;display:flex;justify-content:space-between"><span>{{ statusLabel }}</span><span style="color:#f0477d">{{ statusTag }}</span></div>
+      <div style="padding:8px 10px;font-size:11px;overflow:hidden">
+        <sc-for list="{{ statusList }}" as="j" hint-placeholder-count="5">
+          <div style="display:flex;gap:10px;align-items:baseline;padding:5px 0;border-bottom:1px dashed #1d1a17"><span style="font-weight:600;min-width:0">{{ j.a }}</span><span style="margin-left:auto;flex:none;font-size:9px;font-weight:700;letter-spacing:.12em;color:#f6f1e7;background:{{ j.cc }};padding:1px 7px">{{ j.b }}</span></div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="border:2px solid #1d1a17">
+      <div style="padding:6px 10px;font-size:9.5px;font-weight:700;letter-spacing:.15em;border-bottom:2px solid #1d1a17;background:#fe9a0d">{{ whyTitle }}</div>
+      <div style="padding:10px;font-size:11.5px;line-height:1.62;text-align:justify">{{ whyBody }}</div>
+    </div>
+    <div style="font-size:9px;letter-spacing:.1em;opacity:.6;border-top:2px solid #1d1a17;padding-top:6px;margin-top:auto;margin-bottom:12px">{{ footNote }}</div>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:561,&quot;height&quot;:794},
+&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;disclosure&quot;,&quot;status&quot;],&quot;default&quot;:&quot;disclosure&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;},
+&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;From the Lab&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Disclosure&quot;},
+&quot;logoSub&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;LABORATORIES INC.&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Disclosure&quot;},
+&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Disclosure&quot;},
+&quot;stamp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;FUNDER DISCLOSURE · SIGNED&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Disclosure&quot;},
+&quot;sig&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;parry. riposte. recycle.&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Disclosure&quot;},
+&quot;statusLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;THIS QUARTER / STATUS BOARD&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Status&quot;},
+&quot;statusTag&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Q3-26&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Status&quot;},
+&quot;status&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Status&quot;},
+&quot;whyTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;WHY FUND A MAGAZINE?&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Status&quot;},
+&quot;whyBody&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Status&quot;},
+&quot;footNote&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Status&quot;},
+&quot;chrome&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headLeft&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;RIPOSTE LABORATORIES INC.&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headRight&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;EST. 2026 · REV. A&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;docNo&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;RL-DB-029&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;folio&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;}}">
+class Component extends DCLogic {
+  PAL=['#12b795','#fe9a0d','#f0477d','#1d1a17']
+  p(k,d){const v=this.props[k];return v==null||v===''?d:v}
+  sp(s){return String(s).split('||').map(t=>t.trim()).filter(Boolean)}
+  rw(s,n){return this.sp(s).map(r=>{const f=r.split('|').map(x=>x.trim());while(f.length<n)f.push('');return{a:f[0],b:f[1],c:f[2]}})}
+  renderVals(){
+    const v=this.p('variant','disclosure'),stamp=this.p('stamp','FUNDER DISCLOSURE · SIGNED');
+    return{chromeOn:this.props.chrome??true,isDisclosure:v==='disclosure',isStatus:v==='status',
+      headLeft:this.p('headLeft','RIPOSTE LABORATORIES INC.'),headRight:this.p('headRight','EST. 2026 · REV. A'),
+      docNo:this.p('docNo','RL-DB-029'),folio:this.p('folio',v==='status'?'30':'29'),
+      logoSub:this.p('logoSub','LABORATORIES INC.'),title:this.p('title','From the Lab'),
+      bodyParas:this.sp(this.p('body','Full disclosure, printed large: this magazine is funded by Riposte Laboratories, a Kelowna outfit that counter-attacks waste — recycled-plastic injection molding and reclaimed-cell modular power. We share what we\u2019re building here, in the same pages, at the same volume as everyone else.||The deal, in writing: the Lab pays the printer and gets two pages. The editors answer to readers, not the funder. If that ever changes, the colouring page will let you know.')),
+      stamp,hasStamp:stamp!=='none',sig:this.p('sig','parry. riposte. recycle.'),
+      statusLabel:this.p('statusLabel','THIS QUARTER / STATUS BOARD'),statusTag:this.p('statusTag','Q3-26'),
+      statusList:this.rw(this.p('status','Plastic Works — molds v2, park benches from #5 tubs | LIVE | #12b795||Project HEX — reclaimed-cell grading rig | WIP | #fe9a0d||Esh — shop assistant, currently a whiteboard | DRAWING | #f0477d||Daily Bread №2 — theme vote (see Crumbs Mail) | OPEN | #1d1a17||First Friday open doors — bring clean plastics | RECURRING | #12b795'),2).map((r,i)=>({...r,cc:r.c&&r.c.startsWith('#')?r.c:this.PAL[i%4]})),
+      whyTitle:this.p('whyTitle','WHY FUND A MAGAZINE?'),
+      whyBody:this.p('whyBody','Because a lab that fixes material waste in a town losing its cultural material would be doing half a job. Paper is infrastructure. So are drag nights. Line item approved.'),
+      footNote:this.p('footNote','TOUR THE SHOP: OPEN DOORS FIRST FRIDAYS · BRING CLEAN #2 + #5 PLASTICS')};
+  }
+}
+</script>
+</body>
+</html>

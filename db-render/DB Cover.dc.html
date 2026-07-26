@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;family=Caveat:wght@600;700&amp;family=UnifrakturMaguntia&amp;display=swap" rel="stylesheet"><script src="./image-slot.js"></script><style>body{margin:0;background:#2a2723;font-family:'IBM Plex Mono',ui-monospace,monospace}a{color:#f0477d}a:hover{color:#12b795}</style></helmet>
+<sc-if value="{{ isFront }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Front cover" style="width:561px;height:794px;position:relative;overflow:hidden;background:#1d1a17;color:#f6f1e7;font-family:'IBM Plex Mono',ui-monospace,monospace">
+  <sc-if value="{{ hasArt }}" hint-placeholder-val="{{ false }}"><img src="{{ art }}" alt="cover art" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block"></sc-if>
+  <sc-if value="{{ noArt }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;inset:0"><image-slot id="db-{{ slug }}-cover" shape="rect" placeholder="COVER ART — full-bleed A5 portrait, 300dpi"></image-slot></div></sc-if>
+  <div style="position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;background:#1d1a17;color:#f6f1e7;font-size:8.5px;letter-spacing:.14em;padding:5px 10px;z-index:2"><span>{{ issueTag }}</span><span>{{ price }}</span><span>{{ publisher }}</span></div>
+</div>
+</sc-if>
+<sc-if value="{{ isBack }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Back cover" style="width:561px;height:794px;background:#1d1a17;color:#f6f1e7;position:relative;display:flex;flex-direction:column;overflow:hidden;font-family:'IBM Plex Mono',ui-monospace,monospace">
+  <div style="height:120px;background:repeating-conic-gradient(from 45deg,#f0477d 0% 25%,#12b795 0% 50%) 0 0/40px 40px;border-bottom:2px solid #f6f1e7"></div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:30px">
+    <img src="logo.svg" alt="Riposte Laboratories" style="width:300px;display:block;filter:invert(1)">
+    <div style="font-size:10px;letter-spacing:.45em">{{ publisherLong }}</div>
+    <div style="font-size:12px;line-height:1.7;text-align:center;max-width:36ch;opacity:.85">{{ tagline }}</div>
+    <div style="display:flex;gap:10px;align-items:center"><div style="width:120px;height:34px;background:repeating-linear-gradient(90deg,#f6f1e7 0 3px,#1d1a17 3px 5px,#f6f1e7 5px 6px,#1d1a17 6px 10px)"></div><div style="font-size:9px;letter-spacing:.14em;opacity:.7">{{ issn }}<br>{{ edition }}</div></div>
+  </div>
+  <div style="height:60px;background:repeating-conic-gradient(#f6f1e7 0% 25%,#1d1a17 0% 50%) 0 0/30px 30px;border-top:2px solid #f6f1e7"></div>
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:561,&quot;height&quot;:794},
+&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;front&quot;,&quot;back&quot;],&quot;default&quot;:&quot;front&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;},
+&quot;art&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;issueTag&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;№1 — KELOWNA’S COLLAPSE&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;price&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;PAY WHAT YOU CAN&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;publisher&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;RIPOSTE LABORATORIES&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;publisherLong&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;RIPOSTE LABORATORIES INC.&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Back&quot;},
+&quot;tagline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Back&quot;},
+&quot;issn&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;ISSN PENDING&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Back&quot;},
+&quot;edition&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;№1 · SUMMER 2026&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Back&quot;},
+&quot;slug&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;cover&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;}}">
+class Component extends DCLogic {
+  p(k,d){const v=this.props[k];return v==null||v===''?d:v}
+  renderVals(){
+    const v=this.p('variant','front'),art=this.p('art','');
+    return{isFront:v==='front',isBack:v==='back',art,hasArt:v==='front'&&art!=='',noArt:v==='front'&&art==='',slug:this.p('slug','cover'),
+      issueTag:this.p('issueTag','№1 — KELOWNA\u2019S COLLAPSE'),price:this.p('price','PAY WHAT YOU CAN'),publisher:this.p('publisher','RIPOSTE LABORATORIES'),
+      publisherLong:this.p('publisherLong','RIPOSTE LABORATORIES INC.'),tagline:this.p('tagline','Daily Bread is baked quarterly in Kelowna, BC. Free where you found it. Pay what you can where you can\u2019t.'),
+      issn:this.p('issn','ISSN PENDING'),edition:this.p('edition','№1 · SUMMER 2026')};
+  }
+}
+</script>
+</body>
+</html>

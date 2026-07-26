@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;family=Caveat:wght@600;700&amp;family=UnifrakturMaguntia&amp;display=swap" rel="stylesheet"><script src="./image-slot.js"></script><style>body{margin:0;background:#2a2723;font-family:'IBM Plex Mono',ui-monospace,monospace}a{color:#f0477d}a:hover{color:#12b795}</style></helmet>
+<div data-screen-label="Comic" style="width:561px;height:794px;background:#f6f1e7;color:#1d1a17;position:relative;display:flex;flex-direction:column;overflow:hidden;font-family:'IBM Plex Mono',ui-monospace,monospace">
+  <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:8px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headLeft }}</span><span style="position:absolute;top:8px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headRight }}</span><span style="position:absolute;bottom:26px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">DOC NO. {{ docNo }}</span><span style="position:absolute;bottom:26px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ folio }}</span><sc-if value="{{ footerOn }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;left:0;right:0;bottom:0;height:20px;background:repeating-conic-gradient(#1d1a17 0% 25%,#f6f1e7 0% 50%) 0 0/16px 16px;border-top:2px solid #1d1a17;z-index:3"></div></sc-if></sc-if>
+  <sc-if value="{{ isPage }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;gap:10px;min-height:0">
+    <sc-if value="{{ hasTitle }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:'UnifrakturMaguntia',cursive;font-size:28px">{{ title }}</span><span style="font-size:9px;letter-spacing:.14em;opacity:.6">{{ sub }}</span></div></sc-if>
+    <div style="display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:10px;flex:1;min-height:0">
+      <sc-for list="{{ panelList }}" as="p" hint-placeholder-count="4">
+        <div style="border:2px solid #1d1a17;position:relative;background:repeating-linear-gradient(45deg,#efe9db,#efe9db 7px,#f6f1e7 7px,#f6f1e7 14px);display:flex;align-items:center;justify-content:center;padding:10px"><span style="font-size:10px;text-align:center;line-height:1.5;max-width:26ch;background:#f6f1e7;border:1px dashed #1d1a17;padding:6px 8px">{{ p }}</span></div>
+      </sc-for>
+      <sc-if value="{{ hasEnd }}" hint-placeholder-val="{{ false }}">
+      <div style="border:2px solid #1d1a17;background:#1d1a17;color:#f6f1e7;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px;font-size:11px;line-height:1.5;gap:4px"><span>{{ endText }}</span><span style="font-family:'Caveat',cursive;font-size:17px;color:#fe9a0d">{{ endNote }}</span></div>
+      </sc-if>
+    </div>
+    <div style="font-size:9px;letter-spacing:.1em;opacity:.6">{{ credit }}</div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isGuest }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;gap:10px;min-height:0">
+    <span style="font-size:10px;font-weight:700;letter-spacing:.12em;background:#fe9a0d;padding:3px 10px;align-self:flex-start">{{ guestTag }}</span>
+    <div style="flex:1;border:2px solid #1d1a17;background:repeating-linear-gradient(45deg,#efe9db,#efe9db 7px,#f6f1e7 7px,#f6f1e7 14px);display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;min-height:0"><span style="font-size:11px;line-height:1.6;background:#f6f1e7;border:1px dashed #1d1a17;padding:10px 14px;max-width:34ch">{{ guestText }}</span></div>
+    <sc-if value="{{ hasScrib }}" hint-placeholder-val="{{ false }}"><div style="font-family:'Caveat',cursive;font-size:19px;color:#f0477d;transform:rotate(-2deg);align-self:flex-end">{{ scribble }}</div></sc-if>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:561,&quot;height&quot;:794},
+&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;page&quot;,&quot;guest&quot;],&quot;default&quot;:&quot;page&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;},
+&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Crumbs&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;sub&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;A SOURDOUGH GOLEM SEEKS HOUSING. EP.1&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;panels&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;endText&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;endNote&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;no spoilers but the loaf unionizes&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;credit&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;guestTag&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;GUEST STRIP / ROTATING SLOT&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Guest&quot;},
+&quot;guestText&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Guest&quot;},
+&quot;scribble&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Guest&quot;},
+&quot;chrome&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;footer&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;mono&quot;,&quot;none&quot;],&quot;default&quot;:&quot;mono&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headLeft&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;04 · COMIC&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headRight&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;“CRUMBS” — EP.1 OF ∞&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;docNo&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;DB-013-A&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;folio&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;13&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;}}">
+class Component extends DCLogic {
+  p(k,d){const v=this.props[k];return v==null||v===''?d:v}
+  sp(s){return String(s).split('||').map(t=>t.trim()).filter(Boolean)}
+  renderVals(){
+    const v=this.p('variant','page'),title=this.p('title','Crumbs'),endText=this.p('endText','none'),scribble=this.p('scribble','none');
+    return{chromeOn:this.props.chrome??true,isPage:v==='page',isGuest:v==='guest',
+      headLeft:this.p('headLeft','04 · COMIC'),headRight:this.p('headRight','\u201cCRUMBS\u201d — EP.1 OF ∞'),
+      docNo:this.p('docNo','DB-013-A'),folio:this.p('folio','13'),
+      footerOn:this.p('footer','mono')!=='none',
+      title,hasTitle:title!=='none',sub:this.p('sub','A SOURDOUGH GOLEM SEEKS HOUSING. EP.1'),
+      panelList:this.sp(this.p('panels','PANEL 1 — a sourdough starter in a jar watches an eviction notice slide under the door||PANEL 2 — the starter OVERFLOWS. it has decided to become a person about this||PANEL 3 — CRUMB (our golem, 4ft, crusty, kind eyes) reads the rental listings. horror||PANEL 4 — \u201c$2,100. shared oven. no pets, no yeast.\u201d Crumb: \u201cI AM pets and yeast.\u201d')),
+      endText,hasEnd:endText!=='none',endNote:this.p('endNote','no spoilers but the loaf unionizes'),
+      credit:this.p('credit','STORY + ART: [CARTOONIST NAME] · DRAWN PAGES REPLACE THESE PANEL STUBS AT PASTE-UP'),
+      guestTag:this.p('guestTag','GUEST STRIP / ROTATING SLOT'),
+      guestText:this.p('guestText','FULL-PAGE GUEST COMIC — a different local cartoonist every issue. №1 guest: [NAME], \u201cParallel Parking as Queer Praxis\u201d'),
+      scribble,hasScrib:scribble!=='none'};
+  }
+}
+</script>
+</body>
+</html>

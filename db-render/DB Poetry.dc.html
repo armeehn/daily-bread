@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;family=Caveat:wght@600;700&amp;family=UnifrakturMaguntia&amp;display=swap" rel="stylesheet"><script src="./image-slot.js"></script><style>body{margin:0;background:#2a2723;font-family:'IBM Plex Mono',ui-monospace,monospace}a{color:#f0477d}a:hover{color:#12b795}</style></helmet>
+<div data-screen-label="Poetry" style="width:561px;height:794px;background:#f6f1e7;color:#1d1a17;position:relative;display:flex;flex-direction:column;overflow:hidden;font-family:'IBM Plex Mono',ui-monospace,monospace">
+  <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:8px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headLeft }}</span><span style="position:absolute;top:8px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ headRight }}</span><span style="position:absolute;bottom:26px;left:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">DOC NO. {{ docNo }}</span><span style="position:absolute;bottom:26px;right:12px;font-size:8.5px;letter-spacing:.14em;opacity:.7;z-index:4">{{ folio }}</span><sc-if value="{{ footerOn }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;left:0;right:0;bottom:0;height:20px;background:repeating-conic-gradient(#1d1a17 0% 25%,#f6f1e7 0% 50%) 0 0/16px 16px;border-top:2px solid #1d1a17;z-index:3"></div></sc-if></sc-if>
+  <div style="flex:1;padding:30px 26px 56px 26px;display:flex;flex-direction:column;min-height:0">
+    <span style="font-size:10px;font-weight:700;letter-spacing:.12em;background:{{ accent }};color:#f6f1e7;padding:3px 10px;align-self:flex-start">{{ kicker }}</span>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:30px;padding:0 8px;overflow:hidden">
+      <sc-for list="{{ poemList }}" as="pm" hint-placeholder-count="2">
+        <div style="border-top:{{ pm.rule }};padding-top:{{ pm.pad }}">
+          <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em">{{ pm.title }}</div>
+          <div style="font-size:12.5px;line-height:1.85;margin-top:8px;font-style:italic"><sc-for list="{{ pm.lines }}" as="ln" hint-placeholder-count="5"><div>{{ ln }}</div></sc-for></div>
+          <div style="font-size:9.5px;letter-spacing:.12em;margin-top:8px;opacity:.65">{{ pm.credit }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ hasScrib }}" hint-placeholder-val="{{ true }}"><div style="font-family:'Caveat',cursive;font-size:20px;color:{{ accent }};transform:rotate(-2deg);align-self:flex-end;margin-bottom:6px">{{ scribble }}</div></sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:561,&quot;height&quot;:794},
+&quot;kicker&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;06 · POETRY&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;poems&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;scribble&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},
+&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;options&quot;:[&quot;#f0477d&quot;,&quot;#fe9a0d&quot;,&quot;#12b795&quot;,&quot;#1d1a17&quot;],&quot;default&quot;:&quot;#12b795&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;footer&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;mono&quot;,&quot;none&quot;],&quot;default&quot;:&quot;mono&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;chrome&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headLeft&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;06 · POETRY&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;headRight&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;SUBMISSIONS · LIT&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;docNo&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;DB-018-A&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;},
+&quot;folio&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;18&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Chrome&quot;}}">
+class Component extends DCLogic {
+  p(k,d){const v=this.props[k];return v==null||v===''?d:v}
+  sp(s){return String(s).split('||').map(t=>t.trim()).filter(Boolean)}
+  renderVals(){
+    const scribble=this.p('scribble','none');
+    const poems=this.sp(this.p('poems','Lake Effect | the ogopogo is real and she is tired / of being your tourism budget / she surfaces only for girls / who skip stones left-handed / and boys who came out in a parking lot / she keeps every ring ever thrown in. | — SUBMITTED FROM RUTLAND, AGE 20||Harvest | my grandmother thinned apples so the rest grow large / i learned it as economics / she meant it as mercy / this town keeps thinning people / and calling the fruit a miracle. | — SUBMITTED FROM EAST KELOWNA, AGE 24')).map((b,i)=>{
+      const f=b.split('|').map(x=>x.trim());const lines=(f[1]||'').split('/').map(l=>l.trim()).filter(Boolean);
+      return{title:f[0]||'',lines:lines.map((l,j)=>j<lines.length-1?l+' /':l),credit:f[2]||'',rule:i>0?'1px dashed #1d1a17':'none',pad:i>0?'24px':'0'};});
+    return{chromeOn:this.props.chrome??true,accent:this.p('accent','#12b795'),
+      headLeft:this.p('headLeft','06 · POETRY'),headRight:this.p('headRight','SUBMISSIONS · LIT'),
+      docNo:this.p('docNo','DB-018-A'),folio:this.p('folio','18'),
+      footerOn:this.p('footer','mono')!=='none',
+      kicker:this.p('kicker','06 · POETRY'),poemList:poems,
+      scribble,hasScrib:scribble!=='none'};
+  }
+}
+</script>
+</body>
+</html>
