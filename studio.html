@@ -192,7 +192,7 @@
     <button class="btn" id="importBtn">Import JSON</button>
     <button class="btn" id="exportBtn">Export JSON</button>
     <button class="btn teal" id="publishBtn" title="Download index.html to commit">Publish → index.html</button>
-    <button class="btn" id="pdfBtn" title="Open the print dialog on the live preview. Choose 'Save as PDF', set Margins to None and turn Background graphics ON.">Export PDF</button>
+    <button class="btn" id="pdfBtn" title="Export a paginated, print-ready PDF: the cover, then one magazine page per section, at the trim size set under Print (default US&nbsp;Letter). Choose 'Save as PDF', set Margins to None and turn Background graphics ON.">Export PDF</button>
     <button class="btn pink" id="resetBtn">Reset</button>
     <span class="status" id="status">Loaded</span>
   </header>
@@ -498,8 +498,9 @@ $("#publishBtn").addEventListener("click",()=>{
   toast("Downloaded index.html — commit it to publish");
 });
 $("#pdfBtn").addEventListener("click",()=>{
-  // print the live preview itself — it already carries the @page + bleed rules,
-  // so "Save as PDF" yields the print-ready file at trim + bleed with crop marks.
+  // print the live preview itself — it carries the @page + bleed + pagination
+  // rules, so "Save as PDF" yields a paginated print-ready file (cover on page 1,
+  // then one section per page) at trim + bleed with crop marks on every page.
   const fr=$("#preview");
   try{ fr.contentWindow.focus(); fr.contentWindow.print(); }
   catch(e){
