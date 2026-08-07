@@ -177,3 +177,20 @@ branch; you get `daily-bread-studio.pages.dev`. Protect that project with
 Cloudflare Access (Pages integrates with Zero Trust natively). The apex domain
 stays on GitHub Pages untouched; the studio lives at a gated `*.pages.dev` URL.
 Fastest path if you don't want to move `ourdailybre.ad`.
+
+---
+
+## Brand
+
+Daily Bread is an independent publication **funded by** Riposte Laboratories Inc. — it is not
+a Riposte-branded product and keeps its own masthead, type stack and voice on purpose.
+[`BRAND.md`](BRAND.md) records what the two share, what diverges deliberately, and which
+parts of the [Riposte design system](https://github.com/armeehn/riposte-brand) still apply
+(chiefly contrast and print rule weights).
+
+<table>
+<tr>
+<td><b>DOC NO. DB-100-A</b><br>REV. A &middot; EST. 2026</td>
+<td align="right"><b>DAILY BREAD</b><br>Funded by Riposte Laboratories Inc.</td>
+</tr>
+</table>
