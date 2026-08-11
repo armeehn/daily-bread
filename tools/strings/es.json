@@ -142,6 +142,7 @@
   "footer.verify": "Publicación verificada ✓ confirma que esta edición no ha sido alterada",
   "chrome.language": "Idioma",
   "chrome.mtnote": "Esta es una traducción automática de un original en inglés. Lee la <a href=\"/\">edición en inglés</a>.",
+  "chrome.sections": "Secciones",
   "chrome.rendering": "Visualización",
   "chrome.verFull": "Completa",
   "chrome.verLite": "Ligera",

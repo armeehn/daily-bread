@@ -142,6 +142,7 @@
   "footer.verify": "検証済みの出版 ✓ この版が改変されていないことを確認",
   "chrome.language": "言語",
   "chrome.mtnote": "これは英語の原文の機械翻訳です。<a href=\"/\">英語版</a>をお読みください。",
+  "chrome.sections": "セクション",
   "chrome.rendering": "表示形式",
   "chrome.verFull": "フル",
   "chrome.verLite": "ライト",

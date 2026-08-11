@@ -142,6 +142,7 @@
   "footer.verify": "검증된 발행 ✓ 이 호가 변조되지 않았음을 확인하세요",
   "chrome.language": "언어",
   "chrome.mtnote": "이것은 영어 원문의 기계 번역입니다. <a href=\"/\">영어판</a>을 읽어보세요.",
+  "chrome.sections": "섹션",
   "chrome.rendering": "렌더링",
   "chrome.verFull": "전체",
   "chrome.verLite": "경량",
