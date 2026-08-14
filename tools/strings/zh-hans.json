@@ -142,6 +142,7 @@
   "footer.verify": "已验证出版 ✓ 确认本期未经改动",
   "chrome.language": "语言",
   "chrome.mtnote": "这是一篇英文原文的机器翻译。请阅读<a href=\"/\">英文版</a>。",
+  "chrome.sections": "章节",
   "chrome.rendering": "渲染",
   "chrome.verFull": "完整版",
   "chrome.verLite": "轻量版",

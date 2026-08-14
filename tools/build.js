@@ -62,9 +62,26 @@ const LANGS = [
 const ORIGIN = 'https://ourdailybre.ad';
 
 /* ---- string loading (translation falls back to English per key) ---- */
+/* Prose strings are interpolated into the page raw, so that the <a>/<b>/<i>/<br>
+   the editing model allows survives. The cost is that a bare "&" in a string
+   lands in the markup as a parse error — "pencils, ink & crumbs" shipped that
+   way to fifteen editions before anything read the output back. Normalise once,
+   here, where every string enters the build: an "&" that does not already open
+   an entity becomes "&amp;". esc() uses the same test, so a string normalised
+   here is never escaped a second time. */
+const BARE_AMP = /&(?!#\d+;|#x[0-9a-fA-F]+;|[a-zA-Z][a-zA-Z0-9]{1,31};)/g;
+function fixAmps(strings){
+  const out = {};
+  for(const k of Object.keys(strings)){
+    const v = strings[k];
+    out[k] = typeof v === 'string' ? v.replace(BARE_AMP, '&amp;') : v;
+  }
+  return out;
+}
+
 const EN = require('./strings/en.js');
 function loadStrings(code){
-  if(code === 'en') return EN;
+  if(code === 'en') return fixAmps(EN);
   const p = path.join(__dirname, 'strings', code + '.json');
   let tr = {};
   if(fs.existsSync(p)){
@@ -73,7 +90,7 @@ function loadStrings(code){
   } else {
     console.warn('no translation file for', code, '(using English)');
   }
-  return Object.assign({}, EN, tr);
+  return fixAmps(Object.assign({}, EN, tr));
 }
 
 /* ---- keep the translator handoff (strings/en.json) in lock-step with en.js ----
@@ -135,7 +152,11 @@ const EVENTS = [['Aug 07','#12b795'],['Aug 14','#fe9a0d'],['Aug 15','#f0477d'],[
 const SCREENINGS = [['Aug 14','#f0477d'],['Sep 04','#fe9a0d'],['Sep 25','#12b795']].map(([d,c])=>({d,c}));
 const LABBOARD = ['#12b795','#fe9a0d','#f0477d','#1d1a17','#12b795'].map(c=>({c}));
 
-const esc = s => String(s).replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+/* Entity-preserving: "&" is escaped unless it already opens one, so esc() is
+   safe to run over a string loadStrings() has already normalised. */
+const esc = s => String(s).replace(BARE_AMP, '&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+/* Same, plus the quote, for a value going inside an attribute. */
+const attr = s => esc(s).replace(/"/g, '&quot;');
 
 /* ============================================================================
    multilingual heading fit (pretext-style, done at build time)
@@ -411,17 +432,16 @@ function mtnote(t, code, variant){
 function verifyNote(t, code, variant){
   const link = `<a href="/verify/">${t['footer.verify']}</a>`;
   if(variant !== 'full') return `<div class="verify-note">${link}</div>`;
-  const a = s => esc(s).replace(/"/g, '&quot;');   // attribute-safe (esc omits ")
   const attrs = [
     `id="np-badge"`,
     `data-proof="/.well-known/newsproof/proofs/${code}.proof.json"`,
     `data-url="${url(code, variant)}"`,
-    `data-t-checking="${a(t['verify.checking'])}"`,
-    `data-t-ok="${a(t['verify.ok'])}"`,
-    `data-t-unanchored="${a(t['verify.unanchored'])}"`,
-    `data-t-uncheckable="${a(t['verify.uncheckable'])}"`,
-    `data-t-bad="${a(t['verify.bad'])}"`,
-    `data-t-details="${a(t['verify.details'])}"`,
+    `data-t-checking="${attr(t['verify.checking'])}"`,
+    `data-t-ok="${attr(t['verify.ok'])}"`,
+    `data-t-unanchored="${attr(t['verify.unanchored'])}"`,
+    `data-t-uncheckable="${attr(t['verify.uncheckable'])}"`,
+    `data-t-bad="${attr(t['verify.bad'])}"`,
+    `data-t-details="${attr(t['verify.details'])}"`,
   ].join(' ');
   return `<div class="verify-note" ${attrs}>${link}</div>\n<script>\n${VERIFYJS}</script>`;
 }
@@ -493,7 +513,7 @@ ${css}
       </span>
     </a>
     <span class="toprule" aria-hidden="true"></span>
-    <nav class="mainnav">
+    <nav class="mainnav" aria-label="${attr(t['chrome.sections'])}">
       <a href="#letter">${esc(t['nav.letter'])}</a>
       <a href="#contents">${esc(t['nav.contents'])}</a>
       <a href="#history">${esc(t['nav.history'])}</a>

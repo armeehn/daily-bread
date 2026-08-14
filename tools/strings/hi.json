@@ -142,6 +142,7 @@
   "footer.verify": "प्रमाणित प्रकाशन ✓ पुष्टि करें कि यह संस्करण बदला नहीं गया है",
   "chrome.language": "भाषा",
   "chrome.mtnote": "यह एक अंग्रेज़ी मूल का मशीनी अनुवाद है। <a href=\"/\">अंग्रेज़ी संस्करण</a> पढ़ें।",
+  "chrome.sections": "अनुभाग",
   "chrome.rendering": "रेंडरिंग",
   "chrome.verFull": "पूर्ण",
   "chrome.verLite": "हल्का",

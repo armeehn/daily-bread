@@ -142,6 +142,7 @@
   "footer.verify": "Editio comprobata ✓ confirma hanc editionem non esse mutatam",
   "chrome.language": "Lingua",
   "chrome.mtnote": "Haec est translatio machinalis originalis Anglici. Lege <a href=\"/\">editionem Anglicam</a>.",
+  "chrome.sections": "Sectiones",
   "chrome.rendering": "Redditio",
   "chrome.verFull": "Plena",
   "chrome.verLite": "Levis",

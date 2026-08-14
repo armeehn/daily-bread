@@ -142,6 +142,7 @@
   "footer.verify": "نشرٌ موثَّق ✓ تأكَّد أن هذه الطبعة لم تُغيَّر",
   "chrome.language": "اللغة",
   "chrome.mtnote": "هذه ترجمة آلية عن أصلٍ إنجليزي. اقرأ <a href=\"/\">النسخة الإنجليزية</a>.",
+  "chrome.sections": "الأقسام",
   "chrome.rendering": "العرض",
   "chrome.verFull": "كاملة",
   "chrome.verLite": "خفيفة",

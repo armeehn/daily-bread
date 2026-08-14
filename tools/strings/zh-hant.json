@@ -142,6 +142,7 @@
   "footer.verify": "已驗證出版 ✓ 確認本期未經竄改",
   "chrome.language": "語言",
   "chrome.mtnote": "這是英文原版的機器翻譯。請閱讀<a href=\"/\">英文版</a>。",
+  "chrome.sections": "章節",
   "chrome.rendering": "呈現方式",
   "chrome.verFull": "完整版",
   "chrome.verLite": "輕量版",
