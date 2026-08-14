@@ -187,6 +187,8 @@ module.exports = {
   'chrome.language': 'Language',
   'chrome.mtnote': 'This is a machine translation of an English original. Read the <a href="/">English edition</a>.',
 
+  'chrome.sections': 'Sections',
+
   /* ---- rendering switch (Full / Lite / E-ink) ---- */
   'chrome.rendering': 'Rendering',
   'chrome.verFull': 'Full',
