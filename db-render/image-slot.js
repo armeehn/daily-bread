@@ -288,8 +288,14 @@
     // read on dark decks too, and the slide's own text color is the one
     // color guaranteed to contrast with the slide background. The soft
     // look comes from opacity on those parts, not from a baked-in alpha.
+    // The placeholder chrome (caption, sub-caption, credit badge, credit link)
+    // PRINTS -- an unfilled slot's caption is real ink in the rendered PDF --
+    // so its face is pinned to the kit's webfont instead of the old
+    // system-ui,-apple-system,sans-serif stack, which resolved to whatever sans
+    // the rendering machine happened to have and moved those captions on 8 of
+    // the print issue's 24 pages between two otherwise identical renders.
     ':host{display:block;position:relative;' +
-    '  font:13px/1.3 system-ui,-apple-system,sans-serif;' +
+    '  font:13px/1.3 "IBM Plex Mono",ui-monospace,monospace;' +
     '  width:100%;height:100%;aspect-ratio:3/2}' +
     '.empty .cap,.empty .sub{opacity:.75}' +
     '.frame{position:absolute;inset:0;overflow:hidden;background:rgba(127,127,127,.08)}' +
@@ -360,7 +366,7 @@
     ':host([data-filled][data-editable]:hover) .ctl,:host([data-reframe]) .ctl' +
     '  {opacity:1;pointer-events:auto}' +
     '.ctl button{appearance:none;border:0;border-radius:6px;padding:5px 10px;cursor:pointer;' +
-    '  background:rgba(0,0,0,.65);color:#fff;font:11px/1 system-ui,-apple-system,sans-serif;' +
+    '  background:rgba(0,0,0,.65);color:#fff;font:11px/1 "IBM Plex Mono",ui-monospace,monospace;' +
     '  backdrop-filter:blur(6px)}' +
     '.ctl button:hover{background:rgba(0,0,0,.8)}' +
     '.err{position:absolute;left:8px;bottom:8px;right:8px;color:#b3261e;font-size:11px;' +
@@ -382,7 +388,7 @@
     '@media (prefers-reduced-motion:reduce){.loading::after{animation:none}}' +
     '.credit{position:absolute;left:6px;bottom:6px;max-width:calc(100% - 12px);display:none;' +
     '  padding:3px 7px;border-radius:5px;background:rgba(0,0,0,.55);color:#fff;' +
-    '  font:10px/1.2 system-ui,-apple-system,sans-serif;text-decoration:none;' +
+    '  font:10px/1.2 "IBM Plex Mono",ui-monospace,monospace;text-decoration:none;' +
     '  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;backdrop-filter:blur(6px)}' +
     // The credit is a SPAN holding one or two <a>s (Unsplash's prescribed
     // form links the photographer AND Unsplash) — anchors style inline so
@@ -418,7 +424,7 @@
     '.attr-error{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;' +
     '  justify-content:center;gap:6px;text-align:center;padding:12px;box-sizing:border-box;' +
     '  background:#f2f1ef;color:#6e6c66;user-select:none;' +
-    '  font:13px/1.45 system-ui,-apple-system,sans-serif}' +
+    '  font:13px/1.45 "IBM Plex Mono",ui-monospace,monospace}' +
     '.attr-error svg{opacity:.55}' +
     '.attr-error .cap{max-width:92%;font-weight:500;letter-spacing:.01em}' +
     ':host([data-attribution-error]) .attr-error{display:flex}' +
