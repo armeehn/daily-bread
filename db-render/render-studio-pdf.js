@@ -37,6 +37,7 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const { chromium } = require("playwright");
+const { pinPdfDates } = require("./pdf-dates");
 
 const ROOT = path.resolve(__dirname, "..");
 const VENDOR = path.join(__dirname, "vendor");
@@ -82,29 +83,6 @@ function splitTopLevel(s) {
   }
   if (cur) out.push(cur);
   return out;
-}
-
-/* ---- reproducible timestamps ------------------------------------------- */
-function pdfDate(epochSeconds) {
-  const d = new Date(epochSeconds * 1000);
-  const p = (n, w = 2) => String(n).padStart(w, "0");
-  return `D:${d.getUTCFullYear()}${p(d.getUTCMonth() + 1)}${p(d.getUTCDate())}` +
-         `${p(d.getUTCHours())}${p(d.getUTCMinutes())}${p(d.getUTCSeconds())}+00'00'`;
-}
-function pinDates(file) {
-  const sde = process.env.SOURCE_DATE_EPOCH;
-  if (!sde || !/^\d+$/.test(sde)) return false;
-  const stamp = pdfDate(Number(sde));
-  const buf = fs.readFileSync(file);
-  let s = buf.toString("latin1");
-  let hits = 0;
-  s = s.replace(/\/(CreationDate|ModDate)\s*\(([^)]*)\)/g, (m, key, val) => {
-    if (val.length !== stamp.length) return m;  // unexpected form: leave it alone
-    hits++;
-    return `/${key} (${stamp})`;
-  });
-  if (hits) fs.writeFileSync(file, Buffer.from(s, "latin1"));
-  return hits > 0;
 }
 
 /* ---- which faces actually ended up in the file --------------------------
@@ -282,13 +260,10 @@ server.listen(PORT, "127.0.0.1", async () => {
   await browser.close();
   server.close();
 
-  /* Chromium stamps wall-clock /CreationDate and /ModDate and does NOT honour
-     SOURCE_DATE_EPOCH, so two runs of an identical document differ in exactly those
-     two strings. Rewrite them in place when SOURCE_DATE_EPOCH is set: the PDF date
-     form is fixed-width, so this is a same-length substitution and every xref offset
-     stays valid. Without it, "render twice and require byte-identical output" tests
-     the clock rather than the render. */
-  pinDates(OUT);
+  /* Chromium stamps wall-clock dates and ignores SOURCE_DATE_EPOCH, so without this
+     two runs of an identical document differ in exactly those two strings. Shared
+     with render-print-pdf.js — see db-render/pdf-dates.js. */
+  pinPdfDates(OUT);
 
   /* Verify against the source, not against a constant. */
   const buf = fs.readFileSync(OUT);
