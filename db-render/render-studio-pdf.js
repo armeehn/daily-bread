@@ -113,7 +113,7 @@ function pinDates(file) {
    is set in whatever the rendering machine happened to have — the precise failure
    that made the previous print PDF unreproducible. Report it (with the offending
    characters) instead of letting it stay invisible; STRICT_FONTS=1 makes it fatal. */
-const DECLARED_FAMILIES = ["IBMPlexMono", "Caveat", "UnifrakturMaguntia"];
+const DECLARED_FAMILIES = ["IBMPlexMono", "Caveat", "UnifrakturMaguntia", "DBSymbols"];
 function auditFonts(file) {
   const zlib = require("zlib");
   const raw = fs.readFileSync(file);
