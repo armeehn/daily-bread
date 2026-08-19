@@ -187,7 +187,25 @@
       background: #f5f5f4;
       padding: 48px 24px;
       box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      /* Body face is PINNED to a real, embedded webfont rather than a system
+       * stack. The old value (-apple-system, BlinkMacSystemFont,
+       * "Helvetica Neue", Arial, sans-serif) resolved to whatever sans the
+       * rendering machine happened to have -- Noto Sans on one box, Liberation
+       * Sans on another, a third answer on a CI runner -- so text reflowed on
+       * every page and the "print-ready" PDF was not reproducible. Slotted page
+       * content inherits through :host in the flattened tree, so THIS rule, not
+       * the document's own body{font-family}, decided the body face.
+       *
+       * 'IBM Plex Mono' is the kit's real body face: every document in
+       * db-render already loads it, the print issue's own body rule already
+       * asks for it, it is the only body-capable family vendored in
+       * db-render/vendor (Caveat and UnifrakturMaguntia are display faces),
+       * and the colophon states the issue is "Set in IBM Plex Mono" -- which
+       * this line was quietly making untrue. The tail is a fallback only:
+       * render-print-pdf.js refuses to print until
+       * document.fonts.check('16px "IBM Plex Mono"') passes, so a fallback
+       * cannot silently reach a shipped PDF. */
+      font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
       --doc-page-w: 8.5in;
       --doc-page-h: 11in;
       --doc-page-margin: 0.75in;
