@@ -195,10 +195,19 @@
   };
   const escapeHtml = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
 
+  /* Two failures that used to share one label, and should not.
+     "signature invalid" means the proof bundle itself does not hold up — the
+     signature, the log inclusion or the hash inside it is wrong. That is the
+     serious one.
+     "does not match the signed bytes" means the bundle is perfectly valid and
+     the page being served simply is not the page it describes. That happens
+     when an issue is rebuilt and not re-signed, and it also happens when
+     something in the delivery path rewrites the HTML. Calling that "altered"
+     names an attacker the evidence does not identify. */
   function stateFor(r) {
-    if (!r.signedOk) return { cls: "bad", label: "verification failed" };
+    if (!r.signedOk) return { cls: "bad", label: "signature invalid" };
+    if (r.live === false) return { cls: "bad", label: "does not match the signed bytes" };
     if (!r.hasAnchor) return { cls: "warn", label: "signed, not anchored" };
-    if (r.live === false) return { cls: "bad", label: "live page altered" };
     if (r.live === null) return { cls: "warn", label: "signed & anchored; live page uncheckable" };
     return { cls: "ok", label: "verified" };
   }
@@ -284,11 +293,24 @@
         }
       }
 
-      const bad = results.filter((r) => !r.signedOk || r.live === false).length;
+      const sigBad = results.filter((r) => !r.signedOk).length;
+      const drift = results.filter((r) => r.signedOk && r.live === false).length;
       const unanchored = results.filter((r) => r.signedOk && !r.hasAnchor).length;
-      if (bad) {
-        setBanner("bad", `${bad} edition(s) did not verify`,
-                  "At least one edition is altered or unsigned. Do not trust it; check offline.");
+      const signedAt = (manifest.sth_timestamp || "").slice(0, 10);
+      if (sigBad) {
+        setBanner("bad", `${sigBad} of ${results.length} editions failed signature verification`,
+                  "The proof bundle for these editions does not hold up on its own terms — a bad " +
+                  "signature, a bad hash, or an edition missing from the transparency log. Do not " +
+                  "trust them; check with the offline verifier below.");
+      } else if (drift) {
+        setBanner("bad",
+                  `${drift} of ${results.length} editions do not match the bytes that were signed`,
+                  "Every signature and log proof checks out, so the published record is intact — but " +
+                  "the pages served to you now are not the pages that were signed" +
+                  (signedAt ? " on " + signedAt : "") + ". Either this issue was rebuilt and never " +
+                  "re-signed, or something between the publisher and you is rewriting it. This page " +
+                  "cannot tell those two apart; the offline verifier below, run against a copy you " +
+                  "fetched yourself, can.");
       } else if (unanchored) {
         setBanner("warn", "Signed and logged, but not fully anchored",
                   "Every edition is validly signed and in the log, but the log is not pinned to a public anchor, so the publisher could still rewrite history.");

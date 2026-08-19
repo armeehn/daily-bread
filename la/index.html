@@ -482,10 +482,67 @@
   [dir="rtl"] .list .li .end{margin-left:0;margin-right:auto}
   [dir="rtl"] .masthead-list .li .val{margin-left:0;margin-right:auto}
 
+/* Live verification alert — FULL editions only.
+
+   Kept out of style.css on purpose. style.css is inlined into all three
+   renderings, so anything added there also ships into lite and e-ink, which
+   carry no #np-alert element and are lightweight and motion-free by design.
+   This file is concatenated only for the full variant, where the element and
+   the script that drives it actually exist.
+*/
+  /* ── live verification alert ─────────────────────────────────────────────
+     The footer's verify-note is deliberately quiet. This is not.
+
+     When the edition on screen no longer matches the signature published for
+     it, the reader is told above the masthead, in the weight the magazine uses
+     for its own headlines, and the bar stays pinned there while they read — the
+     footer note is at the bottom of a very long issue, and since the tab rework
+     a reader may never reach it at all.
+
+     Hidden while checking and when everything verifies: a warning that is
+     always on screen is a warning nobody reads. `hidden` is the default in the
+     markup, so no-JS readers and passing editions get nothing.
+
+     verify-badge.js sets body.np-alerted and --np-alert-h so the sticky topbar
+     and the contents rail drop below the bar instead of sliding under it. */
+  #np-alert[hidden]{display:none}
+  #np-alert{position:sticky;top:0;z-index:100;background:var(--pink);color:var(--ink);
+    border-bottom:3px solid var(--ink)}
+  #np-alert .np-alert-in{display:flex;align-items:center;gap:14px;padding:12px 0;flex-wrap:wrap}
+  #np-alert .np-alert-dot{width:14px;height:14px;border-radius:50%;flex:none;
+    background:var(--ink);box-shadow:0 0 0 4px rgba(29,26,23,.18);
+    animation:npAlertPulse 1.6s ease-in-out infinite}
+  #np-alert .np-alert-msg{font-weight:700;font-size:16px;line-height:1.3;letter-spacing:.01em}
+  #np-alert .np-alert-more{margin-inline-start:auto;flex:none;color:var(--ink);
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;
+    border:2px solid var(--ink);padding:5px 10px;background:transparent}
+  #np-alert .np-alert-more:hover,#np-alert .np-alert-more:focus{background:var(--ink);color:var(--bone)}
+  #np-alert .np-alert-band{height:8px;background:var(--checker)}
+  #np-alert.np-warn{background:var(--orange)}
+  @keyframes npAlertPulse{0%,100%{opacity:1}50%{opacity:.3}}
+  @media (prefers-reduced-motion:reduce){#np-alert .np-alert-dot{animation:none}}
+  @media (max-width:560px){
+    #np-alert .np-alert-msg{font-size:14px}
+    #np-alert .np-alert-more{margin-inline-start:0}
+  }
+  /* Push the other two sticky layers down by the bar's measured height. */
+  body.np-alerted header.top{top:var(--np-alert-h,0px)}
+  body.np-alerted .rail,body.np-alerted .rail-in{top:calc(var(--topbar) + var(--np-alert-h,0px))}
+  /* Never print the bar; body.print-stickers > * already hides it for the
+     sticker sheet, but the whole-issue print needs its own rule. */
+  @media print{#np-alert{display:none !important}}
+
 </style>
 </head>
 <body>
-
+<div id="np-alert" role="alert" aria-live="assertive" hidden>
+  <div class="wrap np-alert-in">
+    <span class="np-alert-dot" aria-hidden="true"></span>
+    <span class="np-alert-msg"></span>
+    <a class="np-alert-more" href="/verify/"></a>
+  </div>
+  <div class="np-alert-band" aria-hidden="true"></div>
+</div>
 <!-- ============ TOP BAR ============ -->
 <header class="top">
   <div class="wrap bar">
@@ -993,7 +1050,7 @@
     <div class="signoff" style="color:var(--pink);margin-top:4px">ad gelu solutum te videbimus ✕</div>
     <div class="fswitch">Editiones leves: <a href="/la/" aria-current="true">Plena</a> · <a href="/la/lite/">Levis</a> · <a href="/la/eink/">E-ink</a></div>
     <div class="colophon">Impressum in territorio non cesso syilx Okanagan, editione 500. Compositum litteris IBM Plex Mono et UnifrakturMaguntia. Errata nostra sunt; correctiones tuae; atramentum reliquum in titulos adhaesivos abiit. · Parry. Riposte.</div>
-    <div class="verify-note" id="np-badge" data-proof="/.well-known/newsproof/proofs/la.proof.json" data-url="/la/" data-t-checking="Checking this edition…" data-t-ok="Verified — signed &amp; publicly logged" data-t-unanchored="Signed &amp; logged; not yet anchored" data-t-uncheckable="Signed &amp; anchored; live copy uncheckable" data-t-bad="This edition could not be verified" data-t-details="how ▸"><a href="/verify/">Editio comprobata ✓ confirma hanc editionem non esse mutatam</a></div>
+    <div class="verify-note" id="np-badge" data-proof="/.well-known/newsproof/proofs/la.proof.json" data-url="/la/" data-t-checking="Haec editio inspicitur…" data-t-ok="Comprobata — subscripta et publice in tabulas relata" data-t-unanchored="Subscripta et relata; nondum ancorata" data-t-uncheckable="Subscripta et ancorata; exemplar vivum comprobari non potest" data-t-bad="Haec editio comprobari non potuit" data-t-details="quomodo ▸"><a href="/verify/">Editio comprobata ✓ confirma hanc editionem non esse mutatam</a></div>
 <script>
 /* Daily Bread — reader-facing self-verification badge.
  *
@@ -1014,8 +1071,16 @@
   "use strict";
   var badge = document.getElementById("np-badge");
   if (!badge) return;
-  if (!(window.crypto && crypto.subtle && crypto.subtle.importKey)) return;
+  var alertBar = document.getElementById("np-alert");
   var C = badge.dataset, WK = "/.well-known/newsproof";
+  if (!(window.crypto && crypto.subtle && crypto.subtle.importKey)) {
+    /* No WebCrypto at all. Previously this returned silently and the page kept
+       its static "Verified publishing ✓" link — a page that had verified
+       nothing looked exactly like a page that had. Say so instead. */
+    showAlert("warn", C.tUncheckable);
+    badge.className = "verify-note np-warn";
+    return;
+  }
   var DOMAIN_STATEMENT = "newsproof/v1/statement\0", DOMAIN_STH = "newsproof/v1/sth\0";
 
   var enc = new TextEncoder();
@@ -1098,6 +1163,34 @@
 
   var getJSON = function (u) { return fetch(u, { cache: "no-store" }).then(function (r) { return r.json(); }); };
 
+  /* The prominent bar at the top of the page. `set()` drives it from the same
+     state machine as the footer dot, so the two can never disagree: hidden when
+     checking or verified, loud otherwise. Its height is published as
+     --np-alert-h so the sticky topbar and contents rail can sit below it. */
+  function measureAlert() {
+    if (!alertBar || alertBar.hidden) return;
+    document.documentElement.style.setProperty("--np-alert-h", alertBar.offsetHeight + "px");
+  }
+
+  function showAlert(cls, msg) {
+    if (!alertBar) return;
+    if (cls === "ok" || cls === "checking") {
+      alertBar.hidden = true;
+      document.body.classList.remove("np-alerted");
+      document.documentElement.style.removeProperty("--np-alert-h");
+      return;
+    }
+    alertBar.className = "np-" + cls;
+    var m = alertBar.querySelector(".np-alert-msg");
+    if (m) m.textContent = msg;
+    var more = alertBar.querySelector(".np-alert-more");
+    if (more) more.textContent = C.tDetails;
+    alertBar.hidden = false;
+    document.body.classList.add("np-alerted");
+    measureAlert();
+  }
+  addEventListener("resize", measureAlert);
+
   function set(cls, msg) {
     badge.className = "verify-note np-" + cls;
     badge.textContent = "";
@@ -1108,6 +1201,7 @@
     badge.appendChild(m);
     badge.appendChild(document.createTextNode(" "));
     badge.appendChild(a);
+    showAlert(cls, msg);
   }
 
   async function run() {
@@ -1171,7 +1265,13 @@
     else set("ok", C.tOk);
   }
 
-  run().catch(function () { /* any failure: leave the static /verify/ link untouched */ });
+  /* A verifier that throws has verified nothing, and used to leave the page
+     wearing its static "Verified publishing ✓" link. Fail closed and loud: a
+     proof that could not be fetched, parsed or checked is a proof that did not
+     pass. */
+  run().catch(function () {
+    try { set("bad", C.tBad); } catch (e) { /* nothing left to do */ }
+  });
 })();
 </script>
   </div>
