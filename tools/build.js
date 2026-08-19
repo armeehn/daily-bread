@@ -23,9 +23,12 @@
    ============================================================================ */
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const ROOT = path.resolve(__dirname, '..');
 const STYLE = fs.readFileSync(path.join(__dirname, 'assets', 'style.css'), 'utf8');
 const ALT = fs.readFileSync(path.join(__dirname, 'assets', 'alt.css'), 'utf8');
+/* full-variant-only: see the header of verify-alert.css */
+const ALERTCSS = fs.readFileSync(path.join(__dirname, 'assets', 'verify-alert.css'), 'utf8');
 /* the reader-facing self-verification badge, inlined into the full editions */
 const VERIFYJS = fs.readFileSync(path.join(__dirname, 'assets', 'verify-badge.js'), 'utf8');
 
@@ -469,6 +472,31 @@ function mtnote(t, code, variant){
   const note = t['chrome.mtnote'].replace('href="/"', `href="${url('en', variant)}"`);
   return `<div class="mtnote">${note}</div>`;
 }
+/* The loud half of the verification story.
+
+   The footer badge answers "is this really the issue Daily Bread published?"
+   for a reader who goes looking. This answers it for one who does not: an
+   edition that fails its own signature check says so at the top of the page,
+   above the masthead, and keeps saying it while you read.
+
+   It ships `hidden` and STAYS hidden unless the inline verifier downgrades the
+   edition. A tamper-evidence banner that is always on screen is a banner people
+   learn to scroll past, so silence is the verified state.
+
+   It carries no text of its own: the strings are read off #np-badge's existing
+   data-t-* attributes, so the sixteen translated editions gain a prominent
+   warning without gaining a single new string to translate. */
+function verifyAlert(t, code, variant){
+  if(variant !== 'full') return '';
+  return `<div id="np-alert" role="alert" aria-live="assertive" hidden>
+  <div class="wrap np-alert-in">
+    <span class="np-alert-dot" aria-hidden="true"></span>
+    <span class="np-alert-msg"></span>
+    <a class="np-alert-more" href="/verify/"></a>
+  </div>
+  <div class="np-alert-band" aria-hidden="true"></div>
+</div>`;
+}
 /* The footer "verify" line. Every rendering keeps the static /verify/ link as a
    no-JS fallback; the FULL editions (the ones with published newsproof proofs)
    additionally carry the inline badge that checks THIS edition on load and
@@ -526,7 +554,7 @@ function page(code, variant){
     ? `<link rel="alternate" media="(prefers-reduced-data: reduce)" href="${url(code,'lite')}">
 <link rel="alternate" media="(monochrome)" href="${url(code,'eink')}">`
     : '';
-  const css = variant==='full' ? STYLE : STYLE + '\n' + ALT;
+  const css = variant==='full' ? STYLE + '\n' + ALERTCSS : STYLE + '\n' + ALT;
   return `<!DOCTYPE html>
 <html lang="${L.hreflang}"${rtl?' dir="rtl"':''}${htmlCls}>
 <head>
@@ -546,7 +574,7 @@ ${css}
 </style>
 </head>
 <body>
-
+${verifyAlert(t, code, variant)}
 <!-- ============ TOP BAR ============ -->
 <header class="top">
   <div class="wrap bar">
@@ -1047,6 +1075,57 @@ function clean(){
    style.css (CSS cannot derive it from the target). Adding a tab to TABS and
    forgetting the stylesheet leaves a tab that never lights up, and nothing else
    would report it — so fail the build here instead. */
+/* The proofs under .well-known/newsproof/ are signed with a key that is NOT on
+   this machine (tools/newsproof/store/keys/ is git-ignored and off-box), so a
+   rebuild physically cannot re-sign. That makes silent drift the DEFAULT
+   outcome of editing this magazine, not an accident — and it is exactly what
+   happened: the proofs matched at 87e7f6a and broke 59 minutes later, and no
+   build, test or CI job has mentioned it since.
+
+   Every edition listed here is one whose readers now see the alert banner. This
+   is deliberately non-fatal: the fix (re-signing) is not available to whoever is
+   running this build, so failing would only block unrelated work. It is loud
+   instead. Pass --strict-proofs to make it fail. */
+function checkProofs(args){
+  const wkDir = path.join(ROOT, '.well-known', 'newsproof');
+  let manifest;
+  try{ manifest = JSON.parse(fs.readFileSync(path.join(wkDir, 'manifest.json'), 'utf8')); }
+  catch(e){ console.warn('newsproof: no manifest.json — proofs not checked'); return; }
+  const editions = manifest.editions || [];
+  const drifted = [];
+  for(const ed of editions){
+    let proof;
+    try{ proof = JSON.parse(fs.readFileSync(path.join(wkDir, ed.proof), 'utf8')); }
+    catch(e){ drifted.push(ed.code + ' (proof missing)'); continue; }
+    const file = path.join(ROOT, ed.url.replace(/^\/+/, ''), 'index.html');
+    let bytes;
+    try{ bytes = fs.readFileSync(file); }
+    catch(e){ drifted.push(ed.code + ' (page missing)'); continue; }
+    const got = crypto.createHash('sha256').update(bytes).digest('hex');
+    if(got !== proof.statement.content_sha256) drifted.push(ed.code);
+  }
+  if(!drifted.length){
+    console.log('newsproof: all ' + editions.length + ' editions still match their signed proofs');
+    return;
+  }
+  const signedAt = manifest.sth_timestamp || 'unknown';
+  console.warn('');
+  console.warn('  ##########################################################################');
+  console.warn('  #  newsproof: ' + drifted.length + ' of ' + editions.length + ' editions NO LONGER match their signed proof');
+  console.warn('  #  ' + drifted.join(', '));
+  console.warn('  #');
+  console.warn('  #  These pages were rebuilt after the proofs were signed (' + signedAt + ').');
+  console.warn('  #  Readers of these editions now see the banner: "' + (EN['verify.bad'] || 'could not be verified') + '".');
+  console.warn('  #  Only the off-box publisher key can clear this:');
+  console.warn('  #      python3 -m newsproof.dbproof sign');
+  console.warn('  ##########################################################################');
+  console.warn('');
+  if(args && args.includes('--strict-proofs')){
+    console.error('build failed: --strict-proofs and ' + drifted.length + ' edition(s) drifted');
+    process.exit(1);
+  }
+}
+
 function checkTabs(css){
   const missing = TABS.filter(s => !css.includes('a[href="#'+s.id+'"]')).map(s=>s.id);
   if(missing.length){
@@ -1075,6 +1154,7 @@ function main(){
   }
   if(!onlyLang && !onlyVar) emitSitemap();
   console.log('done:', n, 'files');
+  checkProofs(args);
   const missing = checkCoverage();
   if(missing > 0 && args.includes('--strict')){
     console.error('build failed: '+missing+' untranslated key(s) with --strict');
