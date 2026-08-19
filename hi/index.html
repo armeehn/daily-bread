@@ -508,7 +508,11 @@
   #np-alert[hidden]{display:none}
   #np-alert{position:sticky;top:0;z-index:100;background:var(--pink);color:var(--ink);
     border-bottom:3px solid var(--ink)}
-  #np-alert .np-alert-in{display:flex;align-items:center;gap:14px;padding:12px 0;flex-wrap:wrap}
+  #np-alert .np-alert-in{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    /* padding-block, never the shorthand: this element is also .wrap, whose
+       `padding:0 26px` is the page gutter. `padding:12px 0` silently deletes it
+       and the status dot ends up flush against the screen edge on a phone. */
+    padding-block:12px}
   #np-alert .np-alert-dot{width:14px;height:14px;border-radius:50%;flex:none;
     background:var(--ink);box-shadow:0 0 0 4px rgba(29,26,23,.18);
     animation:npAlertPulse 1.6s ease-in-out infinite}
