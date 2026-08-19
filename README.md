@@ -155,6 +155,41 @@ shows exactly what will publish, at full / tablet / phone widths.
 - **`index.html`** is the published edition. It currently holds the hand-built
   №1; the studio's model reproduces it exactly, so you can adopt the
   studio-driven workflow whenever you like by clicking Publish.
+- **`db-render/render-studio-pdf.js`** renders the print magazine PDF from that
+  same `DB.render(model)` output — the document in the studio's preview — so the
+  studio view and the printer's file are one thing. Page size, bleed, safe area
+  and crop marks all come from the model's **Print & bleed** panel; nothing in the
+  renderer hardcodes a paper size, and it refuses to write a PDF whose sheets do
+  not match the size that document's own `@page` rule declares.
+
+  ```bash
+  cd db-render && npm install playwright@1.61.0 --no-save
+  SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct) \
+    node render-studio-pdf.js "out/Daily Bread №1 — print.pdf"
+  ```
+
+  It resolves the model in this order: `--model <file>`, `$MAGAZINE_MODEL`,
+  `magazine.model.json` in the repo root, then `DB.DEFAULT_MODEL`. **Committing the
+  studio's "Export JSON" output as `magazine.model.json` is what makes an edit in
+  the studio reach the PDF**; with no such file it renders the default model, which
+  is what a freshly-opened studio shows. Alongside the PDF it writes
+  `out/magazine-render.json`, whose model fingerprint the studio's "Magazine PDF"
+  button reads so it can warn you when the file on the server was rendered from a
+  different model than the one you are editing.
+
+  The render is reproducible: fonts are served from `db-render/vendor/`, and the
+  script rewrites the PDF's `/CreationDate` and `/ModDate` from `SOURCE_DATE_EPOCH`
+  (Chromium stamps wall-clock time and ignores that variable itself, which is the
+  only reason two runs of an identical document ever differed). It also reports any
+  face that reached the file by *system* fallback — glyphs such as `✕ ⌘ ▸ ◦ ☐ ♥ ✂ ✦ →`
+  are absent from IBM Plex Mono and currently land on the rendering machine's
+  DejaVu/Liberation, so they are not yet portable; `STRICT_FONTS=1` makes that fatal.
+
+  The older `render-print-pdf.js` and the `*.dc.html` kit beside it built a
+  separate, hand-laid-out 24-page A4-landscape magazine that no studio edit could
+  reach. They are kept for reference, and `db-render/out/Daily Bread №1 — print.pdf`
+  is still that build until someone deliberately republishes (see
+  `.github/workflows/render-print-pdf.yml`, which never overwrites it automatically).
 
 Editing model: plain-text fields accept `<a>`, `<b>`, `<i>`, and `<br>` for
 links and emphasis; everything else is escaped, so copy is safe to paste.
