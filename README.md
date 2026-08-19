@@ -180,16 +180,27 @@ shows exactly what will publish, at full / tablet / phone widths.
   The render is reproducible: fonts are served from `db-render/vendor/`, and the
   script rewrites the PDF's `/CreationDate` and `/ModDate` from `SOURCE_DATE_EPOCH`
   (Chromium stamps wall-clock time and ignores that variable itself, which is the
-  only reason two runs of an identical document ever differed). It also reports any
-  face that reached the file by *system* fallback — glyphs such as `✕ ⌘ ▸ ◦ ☐ ♥ ✂ ✦ →`
-  are absent from IBM Plex Mono and currently land on the rendering machine's
-  DejaVu/Liberation, so they are not yet portable; `STRICT_FONTS=1` makes that fatal.
+  only reason two runs of an identical document ever differed). It also reads the
+  faces back out of the finished PDF and reports any that arrived by *system*
+  fallback; `STRICT_FONTS=1` turns that into a failure. The magazine currently
+  passes under `STRICT_FONTS=1` — the only faces in the file are the four the
+  document declares.
 
   The older `render-print-pdf.js` and the `*.dc.html` kit beside it built a
-  separate, hand-laid-out 24-page A4-landscape magazine that no studio edit could
-  reach. They are kept for reference, and `db-render/out/Daily Bread №1 — print.pdf`
-  is still that build until someone deliberately republishes (see
-  `.github/workflows/render-print-pdf.yml`, which never overwrites it automatically).
+  separate, hand-laid-out 24-page magazine that no studio edit could reach. They are
+  kept for reference only; `db-render/out/Daily Bread №1 — print.pdf` is now the
+  studio's own render. CI still never replaces it on its own — that takes
+  `workflow_dispatch` with `commit = true` — so a file a printer has proofed cannot
+  be overwritten by a push.
+
+- **`assets/fonts/db-symbols.woff2`** is a 9-glyph subset of DejaVu Sans (rebuild:
+  `python3 tools/make-symbol-font.py`) carrying `→ ⌘ ▸ ◦ ☐ ♥ ✂ ✕ ✦`, the marks none
+  of the three Google families provide. `db.js` names it second in every font stack,
+  bounded by `unicode-range` so it can never step in front of a family that owns the
+  character. Without it those glyphs came from whatever the rendering machine had,
+  which is what kept the PDF from being reproducible across machines. Its licence
+  (Bitstream Vera / Arev, notice required) is in `assets/fonts/LICENSE-DejaVu.txt`
+  and must travel with the font.
 
 Editing model: plain-text fields accept `<a>`, `<b>`, `<i>`, and `<br>` for
 links and emphasis; everything else is escaped, so copy is safe to paste.

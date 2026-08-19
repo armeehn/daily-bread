@@ -1,0 +1,13 @@
+{
+  "modelSource": "DB.DEFAULT_MODEL (db.js) — what a freshly-opened studio shows",
+  "modelHash": "5a715b94cf6fd904914d72c284b3a2936566508b2977e66449568ff06db3079a",
+  "pages": 33,
+  "pageWidthPt": 887.04,
+  "pageHeightPt": 641.04,
+  "trim": "custom",
+  "pdfSha256": "763eefc8e4f651b3bd2eb9b4e09e70e1dabaa36c77642fd19dfe992c916a2aca",
+  "pdfBytes": 1112845,
+  "sourceDateEpoch": 1787175720,
+  "unpinnedFonts": {},
+  "renderer": "render-studio-pdf.js (DB.render(model) — the document the studio shows)"
+}
