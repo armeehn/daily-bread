@@ -988,6 +988,11 @@ ${rail(t)}
     </div>
     <div class="signoff" style="color:var(--pink);margin-top:4px">${t['footer.signoff']}</div>
     <div class="colophon">${t['footer.colophon']}</div>
+    <!-- paper only. The live badge in the slim strip is screen chrome (that
+         strip is display:none in print), so without this line the printed issue
+         would carry no verification text at all — which is where it sat before
+         the back cover moved. Same string, so it costs no translation. -->
+    <div class="verify-print">${esc(t['footer.verify'])}</div>
   </div>
   <div class="band" style="border-top:2px solid var(--bone)"></div>
 </section>

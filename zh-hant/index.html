@@ -322,6 +322,9 @@
   .backcover .colophon{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#8d857a;
     border-top:1px solid rgba(246,241,231,.22);padding-top:20px;margin-top:8px;max-width:74ch;line-height:1.9}
 
+  /* paper-only twin of the strip's verify line — see @media print below */
+  .verify-print{display:none}
+
   /* ---------- site footer (slim strip under every pane) ----------
      One row: imprint line at the start, rendering switch and verification badge
      at the end, wrapping to two rows only when the line will not fit. */
@@ -446,6 +449,10 @@
 
     /* drop screen-only chrome so the PDF is just the paper */
     header.top,.mtnote,.print-cta,.fswitch,.rail,footer.slim{display:none !important}
+    /* ...which takes the live badge off paper with it, so the back cover shows
+       the static line instead and the printed issue reads as it always did */
+    .verify-print{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+      color:#8d857a;margin-top:6px}
     /* paper has no tabs: the whole issue prints, in document order */
     .issue{display:block !important}
     .pane{display:block !important}
@@ -1030,6 +1037,11 @@
     </div>
     <div class="signoff" style="color:var(--pink);margin-top:4px">解凍時見 ✕</div>
     <div class="colophon">在未割讓的 syilx Okanagan 土地上印製，印量 500。以 IBM Plex Mono 與 UnifrakturMaguntia 排版。錯誤是我們的；更正是你們的；剩下的油墨全進了貼紙。 · Parry. Riposte.</div>
+    <!-- paper only. The live badge in the slim strip is screen chrome (that
+         strip is display:none in print), so without this line the printed issue
+         would carry no verification text at all — which is where it sat before
+         the back cover moved. Same string, so it costs no translation. -->
+    <div class="verify-print">已驗證出版 ✓ 確認本期未經竄改</div>
   </div>
   <div class="band" style="border-top:2px solid var(--bone)"></div>
 </section>
