@@ -35,7 +35,7 @@
     --ink:#1d1a17; --bone:#f6f1e7; --panel:#eae4d6; --paper2:#efe9db;
     --dark:#2a2723; --muted:#8d857a;
     --pink:#f0477d; --teal:#12b795; --orange:#fe9a0d;
-    --maxw:1080px;
+    --maxw:1080px; --topbar:56px;
     --checker:repeating-conic-gradient(var(--ink) 0% 25%,var(--bone) 0% 50%) 0 0/18px 18px;
     --checker-inv:repeating-conic-gradient(var(--bone) 0% 25%,var(--ink) 0% 50%) 0 0/18px 18px;
     --harlequin:repeating-conic-gradient(from 45deg,var(--pink) 0% 25%,var(--teal) 0% 50%) 0 0/26px 26px;
@@ -156,6 +156,90 @@
   @media(max-width:760px){header.top nav.mainnav{display:none}
     header.top .toprule{display:none}
     header.top .brand{margin-inline-end:auto}}
+
+
+  /* ---------- tabbed reading: contents rail + one pane at a time -------------
+     The issue is still ONE document with the same markup and the same anchors —
+     the rail is a plain <nav> of in-page links, and each tab is a .pane wrapper
+     revealed by :target. No runtime JS, so it survives with scripting off.
+
+     The whole thing is gated behind `@supports selector(:has(*))` for one
+     reason: the landing state (nothing targeted yet) can only be expressed as
+     `body:not(:has(.pane:target))`. Without :has() the rules never apply, every
+     .pane stays visible, and the page degrades to exactly the continuous scroll
+     it was before — never to a blank page. Do not lift these rules out of the
+     @supports block.
+
+     The `a[href="#id"]` list below must name every entry in TABS in
+     tools/build.js; checkTabs() fails the build if one goes missing. */
+  .issue{display:block}
+  .rail{display:none}
+
+  @supports selector(:has(*)){
+    /* the rail replaces the header's section list — keeping both is duplicate
+       navigation, and the header row stays a single line at every width */
+    header.top nav.mainnav{display:none}
+
+    .issue{display:grid;grid-template-columns:minmax(206px,254px) minmax(0,1fr);
+      align-items:start;max-width:1560px;margin:0 auto}
+
+    /* ---- the contents rail (left column, its own scrollbar) ---- */
+    .rail{display:block;align-self:stretch;z-index:40;background:var(--ink);color:var(--bone)}
+    .rail-in{position:sticky;top:var(--topbar);
+      max-height:calc(100vh - var(--topbar));overflow-y:auto;overscroll-behavior:contain}
+    .rail-hd{position:sticky;top:0;z-index:2;display:flex;align-items:center;
+      justify-content:space-between;gap:10px;padding:11px 16px;
+      font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+      background:#332e28;border-bottom:1px dashed rgba(246,241,231,.4)}
+    .rail-hd .r{color:var(--pink);direction:ltr;unicode-bidi:isolate}
+    .rail-list{display:flex;flex-direction:column;padding-bottom:20px}
+    .rail a{--edge:transparent;--no:#b7ad9e;
+      display:flex;align-items:baseline;gap:11px;padding:11px 16px;color:var(--bone);
+      font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;line-height:1.35;
+      border-bottom:1px dashed rgba(246,241,231,.22);
+      border-inline-start:4px solid var(--edge)}
+    .rail a .no{flex:none;font-size:9.5px;letter-spacing:.1em;color:var(--no);
+      font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+    .rail a:hover{--edge:var(--teal);--no:var(--ink);background:var(--teal);color:var(--ink)}
+    .rail a:focus-visible{outline:2px solid var(--orange);outline-offset:-3px}
+
+    /* current tab. The last selector is the landing state: no pane targeted
+       yet, so the first tab is the one on screen. */
+    body:has(#letter:target) .rail a[href="#letter"],
+    body:has(#contents:target) .rail a[href="#contents"],
+    body:has(#history:target) .rail a[href="#history"],
+    body:has(#voices:target) .rail a[href="#voices"],
+    body:has(#comics:target) .rail a[href="#comics"],
+    body:has(#art:target) .rail a[href="#art"],
+    body:has(#calendar:target) .rail a[href="#calendar"],
+    body:has(#directory:target) .rail a[href="#directory"],
+    body:has(#submit:target) .rail a[href="#submit"],
+    body:has(#lab:target) .rail a[href="#lab"],
+    body:has(#stickers:target) .rail a[href="#stickers"],
+    body:not(:has(.pane:target)) .rail a[href="#letter"]{
+      --edge:var(--pink);--no:var(--muted);
+      background:var(--bone);color:var(--ink);font-weight:700}
+
+    /* ---- the panes ---- */
+    .panes{min-width:0}
+    .pane{display:none;scroll-margin-top:var(--topbar)}
+    .pane:target{display:block}
+    body:not(:has(.pane:target)) #letter{display:block}
+
+    /* ---- narrow: the rail becomes a scrollable strip across the top ---- */
+    @media(max-width:1040px){
+      .issue{display:block}
+      .rail{position:sticky;top:var(--topbar);border-bottom:2px solid var(--bone)}
+      .rail-in{position:static;max-height:none;overflow:visible}
+      .rail-hd{display:none}
+      .rail-list{flex-direction:row;padding:0;overflow-x:auto;scrollbar-width:thin;
+        -webkit-overflow-scrolling:touch}
+      .rail a{white-space:nowrap;padding:11px 15px;border-bottom:0;
+        border-inline-start:0;border-inline-end:1px dashed rgba(246,241,231,.22);
+        border-block-end:4px solid var(--edge)}
+      .pane{scroll-margin-top:calc(var(--topbar) + 46px)}
+    }
+  }
 
   /* ---------- hero ---------- */
   .hero{background:var(--ink);color:var(--bone);position:relative;overflow:hidden}
@@ -321,7 +405,10 @@
     *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
 
     /* drop screen-only chrome so the PDF is just the paper */
-    header.top,.mtnote,.print-cta,.fswitch{display:none !important}
+    header.top,.mtnote,.print-cta,.fswitch,.rail{display:none !important}
+    /* paper has no tabs: the whole issue prints, in document order */
+    .issue{display:block !important}
+    .pane{display:block !important}
     .hero .glow{opacity:.85}
 
     /* tighten the generous on-screen section rhythm for paper */
@@ -337,11 +424,14 @@
 
     /* ---- "Print this sheet": the sticker sheet only, WYSIWYG ---- */
     body.print-stickers > *{display:none !important}
-    body.print-stickers #stickers{display:block !important;padding:0 !important}
-    body.print-stickers #stickers .wrap{padding:12mm !important;max-width:none}
-    body.print-stickers #stickers .sechead,
-    body.print-stickers #stickers .split,
-    body.print-stickers #stickers > .wrap > .meta{display:none !important}
+    body.print-stickers main.issue{display:block !important}
+    body.print-stickers .pane{display:none !important}
+    body.print-stickers #stickers{display:block !important}
+    body.print-stickers .stickers-sec{display:block !important;padding:0 !important}
+    body.print-stickers .stickers-sec .wrap{padding:12mm !important;max-width:none}
+    body.print-stickers .stickers-sec .sechead,
+    body.print-stickers .stickers-sec .split,
+    body.print-stickers .stickers-sec > .wrap > .meta{display:none !important}
     body.print-stickers .card.sheet{border:2px solid #000 !important;box-shadow:none !important;margin:0 !important;break-inside:avoid}
     body.print-stickers .card.sheet > .hd{display:flex !important}
     body.print-stickers .card.sheet > .bd{padding:0 !important}
@@ -424,6 +514,17 @@
   .v-lite .sec.tight,.v-eink .sec.tight{padding:44px 0}
   .v-lite .hero-grid,.v-eink .hero-grid{padding:48px 0 60px;gap:40px}
   .v-lite .hero .mast,.v-eink .hero .mast{font-size:clamp(52px,11vw,104px)}
+
+  /* ---------- contents rail ---------- */
+  /* the rail header's hand-coded charcoal is one of the hexes the token
+     collapse can't reach; on e-ink it has to be pure ink-on-paper */
+  .v-eink .rail-hd{background:#000!important;color:#fff!important}
+  .v-eink .rail-hd .r{color:#fff!important}
+  /* --edge is --pink, which e-ink collapses to #000 — invisible against the
+     rail's own black. The current tab is already inverted (paper on ink), so
+     drop the edge rather than draw a black line on black. */
+  .v-eink .rail a{--edge:transparent!important}
+  .v-lite .rail a,.v-eink .rail a{padding-block:9px}
 
   /* ---------- version switch (base look lives in style.css) ---------- */
   .v-lite header.top .vswitch a:hover,.v-eink header.top .vswitch a:hover{color:var(--pink)}
@@ -516,6 +617,28 @@
 </header>
 <div class="mtnote">Haec est translatio machinalis originalis Anglici. Lege <a href="/lite/">editionem Anglicam</a>.</div>
 
+<main class="issue">
+<nav class="rail" aria-label="Sectiones">
+  <div class="rail-in">
+    <div class="rail-hd"><span>Index</span><span class="r">DB-001</span></div>
+    <div class="rail-list">
+      <a href="#letter"><span class="no">00</span><span class="lb">Epistula</span></a>
+      <a href="#contents"><span class="no">01</span><span class="lb">Index</span></a>
+      <a href="#history"><span class="no">02</span><span class="lb">Historia</span></a>
+      <a href="#voices"><span class="no">03</span><span class="lb">Voces</span></a>
+      <a href="#comics"><span class="no">08</span><span class="lb">Comici</span></a>
+      <a href="#art"><span class="no">11</span><span class="lb">Ars</span></a>
+      <a href="#calendar"><span class="no">14</span><span class="lb">Calendarium</span></a>
+      <a href="#directory"><span class="no">18</span><span class="lb">Directorium</span></a>
+      <a href="#submit"><span class="no">19</span><span class="lb">Mitte</span></a>
+      <a href="#lab"><span class="no">16</span><span class="lb">Officina</span></a>
+      <a href="#stickers"><span class="no">24</span><span class="lb">Tituli</span></a>
+    </div>
+  </div>
+</nav>
+<div class="panes">
+
+<div class="pane" id="letter">
 <!-- ============ HERO ============ -->
 <div class="hero">
   <div class="glow"></div>
@@ -545,7 +668,7 @@
 </div>
 
 <!-- ============ EDITOR'S LETTER ============ -->
-<section id="letter" class="sec letter">
+<section class="sec letter">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.00</span><span class="tag">// epistula redactoris</span></div>
     <div class="rule" style="margin-bottom:34px"></div>
@@ -581,8 +704,11 @@
 
 <div class="band harl br"></div>
 
+</div><!-- /pane -->
+
+<div class="pane" id="contents">
 <!-- ============ CONTENTS ============ -->
-<section id="contents" class="sec" style="background:var(--paper2)">
+<section class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.01</span><span class="tag">// index · tabula / 48 pp</span></div>
     <h2 class="display" style="--fit:54px;--dl:1">Index<span class="dot">.</span></h2>
@@ -594,8 +720,11 @@
   </div>
 </section>
 
+</div><!-- /pane -->
+
+<div class="pane" id="history">
 <!-- ============ HISTORY + LEDGER ============ -->
-<section id="history" class="sec">
+<section class="sec">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.02</span><span class="tag">// historia · ante pontem</span></div>
     <div class="split">
@@ -619,8 +748,11 @@
   </div>
 </section>
 
+</div><!-- /pane -->
+
+<div class="pane" id="voices">
 <!-- ============ YOUNG VOICES ============ -->
-<section id="voices" class="sec field-ink">
+<section class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">// sedes vocum iuvenum · non recognita. non emendata. recta.</span></div>
     <h2 class="display" style="--fit:54px;--dl:1">Voces Iuvenum</h2>
@@ -679,8 +811,11 @@
   </div>
 </div>
 
+</div><!-- /pane -->
+
+<div class="pane" id="comics">
 <!-- ============ COMICS · CRUMBS ============ -->
-<section id="comics" class="sec" style="background:var(--paper2)">
+<section class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.08</span><span class="tag">// micae · ep.1 · golem habitationem quaerit</span></div>
     <h2 class="display" style="--fit:54px;--dl:1">Micae<span class="dot">.</span></h2>
@@ -723,8 +858,11 @@
 
 <div class="band harl br"></div>
 
+</div><!-- /pane -->
+
+<div class="pane" id="art">
 <!-- ============ ART · THE WALL (rip-out centrefold) ============ -->
-<section id="art" class="sec field-ink">
+<section class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.11</span><span class="tag" style="color:#b7ad9e">// murus · media pagina avellenda · leniter trahe</span></div>
     <div class="split center">
@@ -756,8 +894,11 @@
   </div>
 </section>
 
+</div><!-- /pane -->
+
+<div class="pane" id="calendar">
 <!-- ============ CALENDAR ============ -->
-<section id="calendar" class="sec">
+<section class="sec">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.14</span><span class="tag">// calendarium · aug–oct 2026 · exscinde + in refrigeratorium</span></div>
     <div class="split">
@@ -789,8 +930,11 @@
   </div>
 </section>
 
+</div><!-- /pane -->
+
+<div class="pane" id="directory">
 <!-- ============ DIRECTORY ============ -->
-<section id="directory" class="sec" style="background:var(--paper2)">
+<section class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.18</span><span class="tag">// auxilium mutuum · hanc paginam serva · singulis trimestribus probata</span></div>
     <div class="split">
@@ -821,8 +965,11 @@
 
 <div class="band harl br"></div>
 
+</div><!-- /pane -->
+
+<div class="pane" id="submit">
 <!-- ============ SUBMIT ============ -->
-<section id="submit" class="sec field-ink">
+<section class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">// submissiones · №2 — «gelu solutum»</span></div>
     <div class="split">
@@ -860,8 +1007,11 @@
   </div>
 </section>
 
+</div><!-- /pane -->
+
+<div class="pane" id="lab">
 <!-- ============ FROM THE LAB ============ -->
-<section id="lab" class="sec">
+<section class="sec">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.16</span><span class="tag">// ex officina · patroni professio, grandibus litteris impressa</span></div>
     <div class="split">
@@ -894,8 +1044,11 @@
 
 <div class="band harl br"></div>
 
+</div><!-- /pane -->
+
+<div class="pane" id="stickers">
 <!-- ============ STICKERS · PEEL ME (printable sheet) ============ -->
-<section id="stickers" class="sec stickers-sec">
+<section class="sec stickers-sec">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.24</span><span class="tag">// deme me · folium titulorum adhaesivorum · atramentum reliquum huc abiit</span></div>
     <div class="split center">
@@ -921,6 +1074,11 @@
     <p class="meta" style="margin-top:18px;line-height:1.9">Riso in resegminibus impressum. Si color aberrat, id est consilium.</p>
   </div>
 </section>
+
+</div><!-- /pane -->
+
+</div><!-- /panes -->
+</main>
 
 <!-- ============ FOOTER / BACK COVER ============ -->
 <footer>

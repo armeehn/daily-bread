@@ -10,6 +10,36 @@ Daily Bread print design: UnifrakturMaguntia blackletter masthead, IBM Plex Mono
 spec-sheet chrome, checker/harlequin bands, and the pink/teal/orange accent
 cascade over a bone/ink base. Assets live in `assets/`.
 
+## Reading — the contents rail and the section tabs
+
+The issue is read **one section at a time**, not as a single long scroll. A
+contents rail lists all eleven sections with their `Sec.` numbers — a sticky,
+independently scrolling column down the left at desktop widths, and a
+horizontally scrolling strip pinned under the top bar on narrow screens. Picking
+one shows that section on its own.
+
+It is still **one document with the same markup and no runtime JS**: each tab is
+a `.pane` wrapper carrying the section's existing anchor (`#letter`, `#comics`,
+…), revealed by CSS `:target`. So deep links keep working (`/#calendar` opens
+straight onto that tab), the browser's back button steps through tabs, `hreflang`
+and the sitemap are untouched, and **printing still yields the whole issue in
+document order** — the tabs are a screen affordance only.
+
+The rules live in `tools/assets/style.css` behind `@supports selector(:has(*))`,
+because the landing state ("nothing targeted yet, so show the first tab") can
+only be written as `body:not(:has(.pane:target))`. A browser without `:has()`
+never applies any of it and gets exactly the continuous scroll the site had
+before, with the top bar's section list back as its navigation — the failure mode
+is the old page, never a blank one.
+
+Two sections have no tab of their own and ride inside the pane they follow —
+WAITLIST STATS and the INTERVIEW QUOTE both sit in **Voices** — so a tab costs no
+new string in sixteen languages. The tab table is `TABS` in `tools/build.js`; it
+feeds the rail, the top-bar list and the pane wrappers. `style.css` needs one
+`a[href="#<id>"]` selector per tab for the current-tab highlight, which CSS
+cannot derive from the target, so `checkTabs()` **fails the build** if a tab is
+added without one.
+
 ## Languages — the multilingual build
 
 The site ships in **16 languages** (English plus the 12 the Government of BC

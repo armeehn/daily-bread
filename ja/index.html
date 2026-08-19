@@ -37,7 +37,7 @@
     --ink:#1d1a17; --bone:#f6f1e7; --panel:#eae4d6; --paper2:#efe9db;
     --dark:#2a2723; --muted:#8d857a;
     --pink:#f0477d; --teal:#12b795; --orange:#fe9a0d;
-    --maxw:1080px;
+    --maxw:1080px; --topbar:56px;
     --checker:repeating-conic-gradient(var(--ink) 0% 25%,var(--bone) 0% 50%) 0 0/18px 18px;
     --checker-inv:repeating-conic-gradient(var(--bone) 0% 25%,var(--ink) 0% 50%) 0 0/18px 18px;
     --harlequin:repeating-conic-gradient(from 45deg,var(--pink) 0% 25%,var(--teal) 0% 50%) 0 0/26px 26px;
@@ -158,6 +158,90 @@
   @media(max-width:760px){header.top nav.mainnav{display:none}
     header.top .toprule{display:none}
     header.top .brand{margin-inline-end:auto}}
+
+
+  /* ---------- tabbed reading: contents rail + one pane at a time -------------
+     The issue is still ONE document with the same markup and the same anchors —
+     the rail is a plain <nav> of in-page links, and each tab is a .pane wrapper
+     revealed by :target. No runtime JS, so it survives with scripting off.
+
+     The whole thing is gated behind `@supports selector(:has(*))` for one
+     reason: the landing state (nothing targeted yet) can only be expressed as
+     `body:not(:has(.pane:target))`. Without :has() the rules never apply, every
+     .pane stays visible, and the page degrades to exactly the continuous scroll
+     it was before — never to a blank page. Do not lift these rules out of the
+     @supports block.
+
+     The `a[href="#id"]` list below must name every entry in TABS in
+     tools/build.js; checkTabs() fails the build if one goes missing. */
+  .issue{display:block}
+  .rail{display:none}
+
+  @supports selector(:has(*)){
+    /* the rail replaces the header's section list — keeping both is duplicate
+       navigation, and the header row stays a single line at every width */
+    header.top nav.mainnav{display:none}
+
+    .issue{display:grid;grid-template-columns:minmax(206px,254px) minmax(0,1fr);
+      align-items:start;max-width:1560px;margin:0 auto}
+
+    /* ---- the contents rail (left column, its own scrollbar) ---- */
+    .rail{display:block;align-self:stretch;z-index:40;background:var(--ink);color:var(--bone)}
+    .rail-in{position:sticky;top:var(--topbar);
+      max-height:calc(100vh - var(--topbar));overflow-y:auto;overscroll-behavior:contain}
+    .rail-hd{position:sticky;top:0;z-index:2;display:flex;align-items:center;
+      justify-content:space-between;gap:10px;padding:11px 16px;
+      font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+      background:#332e28;border-bottom:1px dashed rgba(246,241,231,.4)}
+    .rail-hd .r{color:var(--pink);direction:ltr;unicode-bidi:isolate}
+    .rail-list{display:flex;flex-direction:column;padding-bottom:20px}
+    .rail a{--edge:transparent;--no:#b7ad9e;
+      display:flex;align-items:baseline;gap:11px;padding:11px 16px;color:var(--bone);
+      font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;line-height:1.35;
+      border-bottom:1px dashed rgba(246,241,231,.22);
+      border-inline-start:4px solid var(--edge)}
+    .rail a .no{flex:none;font-size:9.5px;letter-spacing:.1em;color:var(--no);
+      font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+    .rail a:hover{--edge:var(--teal);--no:var(--ink);background:var(--teal);color:var(--ink)}
+    .rail a:focus-visible{outline:2px solid var(--orange);outline-offset:-3px}
+
+    /* current tab. The last selector is the landing state: no pane targeted
+       yet, so the first tab is the one on screen. */
+    body:has(#letter:target) .rail a[href="#letter"],
+    body:has(#contents:target) .rail a[href="#contents"],
+    body:has(#history:target) .rail a[href="#history"],
+    body:has(#voices:target) .rail a[href="#voices"],
+    body:has(#comics:target) .rail a[href="#comics"],
+    body:has(#art:target) .rail a[href="#art"],
+    body:has(#calendar:target) .rail a[href="#calendar"],
+    body:has(#directory:target) .rail a[href="#directory"],
+    body:has(#submit:target) .rail a[href="#submit"],
+    body:has(#lab:target) .rail a[href="#lab"],
+    body:has(#stickers:target) .rail a[href="#stickers"],
+    body:not(:has(.pane:target)) .rail a[href="#letter"]{
+      --edge:var(--pink);--no:var(--muted);
+      background:var(--bone);color:var(--ink);font-weight:700}
+
+    /* ---- the panes ---- */
+    .panes{min-width:0}
+    .pane{display:none;scroll-margin-top:var(--topbar)}
+    .pane:target{display:block}
+    body:not(:has(.pane:target)) #letter{display:block}
+
+    /* ---- narrow: the rail becomes a scrollable strip across the top ---- */
+    @media(max-width:1040px){
+      .issue{display:block}
+      .rail{position:sticky;top:var(--topbar);border-bottom:2px solid var(--bone)}
+      .rail-in{position:static;max-height:none;overflow:visible}
+      .rail-hd{display:none}
+      .rail-list{flex-direction:row;padding:0;overflow-x:auto;scrollbar-width:thin;
+        -webkit-overflow-scrolling:touch}
+      .rail a{white-space:nowrap;padding:11px 15px;border-bottom:0;
+        border-inline-start:0;border-inline-end:1px dashed rgba(246,241,231,.22);
+        border-block-end:4px solid var(--edge)}
+      .pane{scroll-margin-top:calc(var(--topbar) + 46px)}
+    }
+  }
 
   /* ---------- hero ---------- */
   .hero{background:var(--ink);color:var(--bone);position:relative;overflow:hidden}
@@ -323,7 +407,10 @@
     *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
 
     /* drop screen-only chrome so the PDF is just the paper */
-    header.top,.mtnote,.print-cta,.fswitch{display:none !important}
+    header.top,.mtnote,.print-cta,.fswitch,.rail{display:none !important}
+    /* paper has no tabs: the whole issue prints, in document order */
+    .issue{display:block !important}
+    .pane{display:block !important}
     .hero .glow{opacity:.85}
 
     /* tighten the generous on-screen section rhythm for paper */
@@ -339,11 +426,14 @@
 
     /* ---- "Print this sheet": the sticker sheet only, WYSIWYG ---- */
     body.print-stickers > *{display:none !important}
-    body.print-stickers #stickers{display:block !important;padding:0 !important}
-    body.print-stickers #stickers .wrap{padding:12mm !important;max-width:none}
-    body.print-stickers #stickers .sechead,
-    body.print-stickers #stickers .split,
-    body.print-stickers #stickers > .wrap > .meta{display:none !important}
+    body.print-stickers main.issue{display:block !important}
+    body.print-stickers .pane{display:none !important}
+    body.print-stickers #stickers{display:block !important}
+    body.print-stickers .stickers-sec{display:block !important;padding:0 !important}
+    body.print-stickers .stickers-sec .wrap{padding:12mm !important;max-width:none}
+    body.print-stickers .stickers-sec .sechead,
+    body.print-stickers .stickers-sec .split,
+    body.print-stickers .stickers-sec > .wrap > .meta{display:none !important}
     body.print-stickers .card.sheet{border:2px solid #000 !important;box-shadow:none !important;margin:0 !important;break-inside:avoid}
     body.print-stickers .card.sheet > .hd{display:flex !important}
     body.print-stickers .card.sheet > .bd{padding:0 !important}
@@ -426,6 +516,28 @@
 </header>
 <div class="mtnote">これは英語の原文の機械翻訳です。<a href="/">英語版</a>をお読みください。</div>
 
+<main class="issue">
+<nav class="rail" aria-label="セクション">
+  <div class="rail-in">
+    <div class="rail-hd"><span>目次</span><span class="r">DB-001</span></div>
+    <div class="rail-list">
+      <a href="#letter"><span class="no">00</span><span class="lb">巻頭言</span></a>
+      <a href="#contents"><span class="no">01</span><span class="lb">目次</span></a>
+      <a href="#history"><span class="no">02</span><span class="lb">歴史</span></a>
+      <a href="#voices"><span class="no">03</span><span class="lb">声</span></a>
+      <a href="#comics"><span class="no">08</span><span class="lb">漫画</span></a>
+      <a href="#art"><span class="no">11</span><span class="lb">アート</span></a>
+      <a href="#calendar"><span class="no">14</span><span class="lb">カレンダー</span></a>
+      <a href="#directory"><span class="no">18</span><span class="lb">ディレクトリ</span></a>
+      <a href="#submit"><span class="no">19</span><span class="lb">投稿</span></a>
+      <a href="#lab"><span class="no">16</span><span class="lb">ラボより</span></a>
+      <a href="#stickers"><span class="no">24</span><span class="lb">ステッカー</span></a>
+    </div>
+  </div>
+</nav>
+<div class="panes">
+
+<div class="pane" id="letter">
 <!-- ============ HERO ============ -->
 <div class="hero">
   <div class="glow"></div>
@@ -455,7 +567,7 @@
 </div>
 
 <!-- ============ EDITOR'S LETTER ============ -->
-<section id="letter" class="sec letter">
+<section class="sec letter">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.00</span><span class="tag">// 編集後記</span></div>
     <div class="rule" style="margin-bottom:34px"></div>
@@ -491,8 +603,11 @@
 
 <div class="band harl br"></div>
 
+</div><!-- /pane -->
+
+<div class="pane" id="contents">
 <!-- ============ CONTENTS ============ -->
-<section id="contents" class="sec" style="background:var(--paper2)">
+<section class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.01</span><span class="tag">// 目次 · 積荷目録 / 48 pp</span></div>
     <h2 class="display" style="--fit:54px;--dl:1">目次<span class="dot">.</span></h2>
@@ -504,8 +619,11 @@
   </div>
 </section>
 
+</div><!-- /pane -->
+
+<div class="pane" id="history">
 <!-- ============ HISTORY + LEDGER ============ -->
-<section id="history" class="sec">
+<section class="sec">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.02</span><span class="tag">// 歴史 · 橋がかかる前</span></div>
     <div class="split">
@@ -529,8 +647,11 @@
   </div>
 </section>
 
+</div><!-- /pane -->
+
+<div class="pane" id="voices">
 <!-- ============ YOUNG VOICES ============ -->
-<section id="voices" class="sec field-ink">
+<section class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">// ヤング・ヴォイセズ編集室 · 未査読。未編集。正確。</span></div>
     <h2 class="display" style="--fit:54px;--dl:1">ヤング・ヴォイセズ</h2>
@@ -589,8 +710,11 @@
   </div>
 </div>
 
+</div><!-- /pane -->
+
+<div class="pane" id="comics">
 <!-- ============ COMICS · CRUMBS ============ -->
-<section id="comics" class="sec" style="background:var(--paper2)">
+<section class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.08</span><span class="tag">// パン屑 · ep.1 · 住まいを探すゴーレム</span></div>
     <h2 class="display" style="--fit:54px;--dl:1">パン屑<span class="dot">.</span></h2>
@@ -633,8 +757,11 @@
 
 <div class="band harl br"></div>
 
+</div><!-- /pane -->
+
+<div class="pane" id="art">
 <!-- ============ ART · THE WALL (rip-out centrefold) ============ -->
-<section id="art" class="sec field-ink">
+<section class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.11</span><span class="tag" style="color:#b7ad9e">// 壁 · 破り取れる見開き · そっと引いて</span></div>
     <div class="split center">
@@ -666,8 +793,11 @@
   </div>
 </section>
 
+</div><!-- /pane -->
+
+<div class="pane" id="calendar">
 <!-- ============ CALENDAR ============ -->
-<section id="calendar" class="sec">
+<section class="sec">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.14</span><span class="tag">// カレンダー · 2026年8月–10月 · 切り取って冷蔵庫へ</span></div>
     <div class="split">
@@ -699,8 +829,11 @@
   </div>
 </section>
 
+</div><!-- /pane -->
+
+<div class="pane" id="directory">
 <!-- ============ DIRECTORY ============ -->
-<section id="directory" class="sec" style="background:var(--paper2)">
+<section class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.18</span><span class="tag">// 相互扶助 · このページは保存を · 四半期ごとに検証済み</span></div>
     <div class="split">
@@ -731,8 +864,11 @@
 
 <div class="band harl br"></div>
 
+</div><!-- /pane -->
+
+<div class="pane" id="submit">
 <!-- ============ SUBMIT ============ -->
-<section id="submit" class="sec field-ink">
+<section class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">// 投稿 · №2 —「雪解け」</span></div>
     <div class="split">
@@ -770,8 +906,11 @@
   </div>
 </section>
 
+</div><!-- /pane -->
+
+<div class="pane" id="lab">
 <!-- ============ FROM THE LAB ============ -->
-<section id="lab" class="sec">
+<section class="sec">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.16</span><span class="tag">// ラボより · 出資者開示、大きく刷る</span></div>
     <div class="split">
@@ -804,8 +943,11 @@
 
 <div class="band harl br"></div>
 
+</div><!-- /pane -->
+
+<div class="pane" id="stickers">
 <!-- ============ STICKERS · PEEL ME (printable sheet) ============ -->
-<section id="stickers" class="sec stickers-sec">
+<section class="sec stickers-sec">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.24</span><span class="tag">// 剥がして · ステッカーシート · 余ったインクの行き先</span></div>
     <div class="split center">
@@ -831,6 +973,11 @@
     <p class="meta" style="margin-top:18px;line-height:1.9">端材にリソ印刷。色がずれていたら、それがねらいです。</p>
   </div>
 </section>
+
+</div><!-- /pane -->
+
+</div><!-- /panes -->
+</main>
 
 <!-- ============ FOOTER / BACK COVER ============ -->
 <footer>
