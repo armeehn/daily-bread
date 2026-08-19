@@ -61,6 +61,30 @@ const LANGS = [
 
 const ORIGIN = 'https://ourdailybre.ad';
 
+/* ---- the reading tabs -------------------------------------------------------
+   One entry per tab: `id` is the anchor the rail links to AND the id of the
+   .pane wrapper that :target reveals; `key` names the already-translated
+   `nav.<key>` label (so a tab costs no new string in 16 languages); `no` is the
+   Sec. number printed on that section's own header, repeated in the rail so the
+   index reads like the issue's spec sheet. Order is document order.
+   Sections without a tab of their own (WAITLIST STATS, INTERVIEW QUOTE) ride
+   along inside the pane they follow — see the pane wrappers in page().
+   tools/assets/style.css carries one `a[href="#<id>"]` selector per entry for
+   the current-tab highlight; checkTabs() below fails the build if they drift. */
+const TABS = [
+  {id:'letter',    key:'letter',    no:'00'},
+  {id:'contents',  key:'contents',  no:'01'},
+  {id:'history',   key:'history',   no:'02'},
+  {id:'voices',    key:'voices',    no:'03'},
+  {id:'comics',    key:'comics',    no:'08'},
+  {id:'art',       key:'art',       no:'11'},
+  {id:'calendar',  key:'calendar',  no:'14'},
+  {id:'directory', key:'directory', no:'18'},
+  {id:'submit',    key:'submit',    no:'19'},
+  {id:'lab',       key:'lab',       no:'16'},
+  {id:'stickers',  key:'stickers',  no:'24'},
+];
+
 /* ---- string loading (translation falls back to English per key) ---- */
 /* Prose strings are interpolated into the page raw, so that the <a>/<b>/<i>/<br>
    the editing model allows survives. The cost is that a bare "&" in a string
@@ -397,6 +421,27 @@ function langpick(t, code, variant){
   return `<details class="langpick"><summary aria-label="${esc(t['chrome.language'])}"><span class="globe" aria-hidden="true">\u{1F310}</span> ${cur.endo} <span class="car" aria-hidden="true">▾</span></summary><div class="langmenu">${items}</div></details>`;
 }
 /* rendering switch — same language, hop between full / lite / e-ink */
+/* The contents rail: a plain in-page <nav>, sticky beside (or above) the pane
+   column. It is deliberately NOT role="tablist" — without runtime JS nothing can
+   keep aria-selected honest, and these are real links to real anchors that work
+   with JS off, with CSS off, and when the page is printed whole. */
+function rail(t){
+  const items = TABS.map(s =>
+    `      <a href="#${s.id}"><span class="no">${s.no}</span><span class="lb">${esc(t['nav.'+s.key])}</span></a>`
+  ).join('\n');
+  return `<nav class="rail" aria-label="${attr(t['chrome.sections'])}">
+  <div class="rail-in">
+    <div class="rail-hd"><span>${esc(t['nav.contents'])}</span><span class="r">DB-001</span></div>
+    <div class="rail-list">
+${items}
+    </div>
+  </div>
+</nav>`;
+}
+function mainnav(t){
+  const items = TABS.map(s => `      <a href="#${s.id}">${esc(t['nav.'+s.key])}</a>`).join('\n');
+  return `<nav class="mainnav" aria-label="${attr(t['chrome.sections'])}">\n${items}\n    </nav>`;
+}
 function vswitch(t, code, variant){
   const key = {full:'chrome.verFull', lite:'chrome.verLite', eink:'chrome.verEink'};
   const items = VARIANTS.map(v=>{
@@ -513,25 +558,18 @@ ${css}
       </span>
     </a>
     <span class="toprule" aria-hidden="true"></span>
-    <nav class="mainnav" aria-label="${attr(t['chrome.sections'])}">
-      <a href="#letter">${esc(t['nav.letter'])}</a>
-      <a href="#contents">${esc(t['nav.contents'])}</a>
-      <a href="#history">${esc(t['nav.history'])}</a>
-      <a href="#voices">${esc(t['nav.voices'])}</a>
-      <a href="#comics">${esc(t['nav.comics'])}</a>
-      <a href="#art">${esc(t['nav.art'])}</a>
-      <a href="#calendar">${esc(t['nav.calendar'])}</a>
-      <a href="#directory">${esc(t['nav.directory'])}</a>
-      <a href="#submit">${esc(t['nav.submit'])}</a>
-      <a href="#lab">${esc(t['nav.lab'])}</a>
-      <a href="#stickers">${esc(t['nav.stickers'])}</a>
-    </nav>
+    ${mainnav(t)}
     ${vswitch(t, code, variant)}
     ${langpick(t, code, variant)}
   </div>
 </header>
 ${mtnote(t, code, variant)}
 
+<main class="issue">
+${rail(t)}
+<div class="panes">
+
+<div class="pane" id="letter">
 <!-- ============ HERO ============ -->
 <div class="hero">
   <div class="glow"></div>
@@ -561,7 +599,7 @@ ${mtnote(t, code, variant)}
 </div>
 
 <!-- ============ EDITOR'S LETTER ============ -->
-<section id="letter" class="sec letter">
+<section class="sec letter">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.00</span><span class="tag">${t['letter.tag']}</span></div>
     <div class="rule" style="margin-bottom:34px"></div>
@@ -597,8 +635,11 @@ ${mtnote(t, code, variant)}
 
 <div class="band harl br"></div>
 
+</div><!-- /pane -->
+
+<div class="pane" id="contents">
 <!-- ============ CONTENTS ============ -->
-<section id="contents" class="sec" style="background:var(--paper2)">
+<section class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.01</span><span class="tag">${t['contents.tag']}</span></div>
     <h2 class="display" style="${fitDisplay(t,'contents.h',{w:800,pad:1.5})}">${t['contents.h']}<span class="dot">.</span></h2>
@@ -610,8 +651,11 @@ ${mtnote(t, code, variant)}
   </div>
 </section>
 
+</div><!-- /pane -->
+
+<div class="pane" id="history">
 <!-- ============ HISTORY + LEDGER ============ -->
-<section id="history" class="sec">
+<section class="sec">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.02</span><span class="tag">${t['history.tag']}</span></div>
     <div class="split">
@@ -635,8 +679,11 @@ ${mtnote(t, code, variant)}
   </div>
 </section>
 
+</div><!-- /pane -->
+
+<div class="pane" id="voices">
 <!-- ============ YOUNG VOICES ============ -->
-<section id="voices" class="sec field-ink">
+<section class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">${t['voices.tag']}</span></div>
     <h2 class="display" style="${fitDisplay(t,'voices.h',{w:800})}">${t['voices.h']}</h2>
@@ -695,8 +742,11 @@ ${mtnote(t, code, variant)}
   </div>
 </div>
 
+</div><!-- /pane -->
+
+<div class="pane" id="comics">
 <!-- ============ COMICS · CRUMBS ============ -->
-<section id="comics" class="sec" style="background:var(--paper2)">
+<section class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.08</span><span class="tag">${t['comic.tag']}</span></div>
     <h2 class="display" style="${fitDisplay(t,'comic.h',{w:800,pad:1.5})}">${t['comic.h']}<span class="dot">.</span></h2>
@@ -709,8 +759,11 @@ ${mtnote(t, code, variant)}
 
 <div class="band harl br"></div>
 
+</div><!-- /pane -->
+
+<div class="pane" id="art">
 <!-- ============ ART · THE WALL (rip-out centrefold) ============ -->
-<section id="art" class="sec field-ink">
+<section class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.11</span><span class="tag" style="color:#b7ad9e">${t['art.tag']}</span></div>
     <div class="split center">
@@ -742,8 +795,11 @@ ${mtnote(t, code, variant)}
   </div>
 </section>
 
+</div><!-- /pane -->
+
+<div class="pane" id="calendar">
 <!-- ============ CALENDAR ============ -->
-<section id="calendar" class="sec">
+<section class="sec">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.14</span><span class="tag">${t['calendar.tag']}</span></div>
     <div class="split">
@@ -775,8 +831,11 @@ ${mtnote(t, code, variant)}
   </div>
 </section>
 
+</div><!-- /pane -->
+
+<div class="pane" id="directory">
 <!-- ============ DIRECTORY ============ -->
-<section id="directory" class="sec" style="background:var(--paper2)">
+<section class="sec" style="background:var(--paper2)">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.18</span><span class="tag">${t['directory.tag']}</span></div>
     <div class="split">
@@ -807,8 +866,11 @@ ${mtnote(t, code, variant)}
 
 <div class="band harl br"></div>
 
+</div><!-- /pane -->
+
+<div class="pane" id="submit">
 <!-- ============ SUBMIT ============ -->
-<section id="submit" class="sec field-ink">
+<section class="sec field-ink">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">${t['submit.tag']}</span></div>
     <div class="split">
@@ -846,8 +908,11 @@ ${mtnote(t, code, variant)}
   </div>
 </section>
 
+</div><!-- /pane -->
+
+<div class="pane" id="lab">
 <!-- ============ FROM THE LAB ============ -->
-<section id="lab" class="sec">
+<section class="sec">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.16</span><span class="tag">${t['lab.tag']}</span></div>
     <div class="split">
@@ -880,8 +945,11 @@ ${mtnote(t, code, variant)}
 
 <div class="band harl br"></div>
 
+</div><!-- /pane -->
+
+<div class="pane" id="stickers">
 <!-- ============ STICKERS · PEEL ME (printable sheet) ============ -->
-<section id="stickers" class="sec stickers-sec">
+<section class="sec stickers-sec">
   <div class="wrap">
     <div class="sechead"><span class="no">Sec.24</span><span class="tag">${t['stickers.tag']}</span></div>
     <div class="split center">
@@ -902,6 +970,11 @@ ${mtnote(t, code, variant)}
     <p class="meta" style="margin-top:18px;line-height:1.9">${t['stickers.foot']}</p>
   </div>
 </section>
+
+</div><!-- /pane -->
+
+</div><!-- /panes -->
+</main>
 
 <!-- ============ FOOTER / BACK COVER ============ -->
 <footer>
@@ -970,8 +1043,21 @@ function clean(){
     if(fs.existsSync(d)){ fs.rmSync(d, {recursive:true, force:true}); console.log('removed', V.seg+'/'); }
   }
 }
+/* The current-tab highlight needs one `a[href="#<id>"]` selector per tab in
+   style.css (CSS cannot derive it from the target). Adding a tab to TABS and
+   forgetting the stylesheet leaves a tab that never lights up, and nothing else
+   would report it — so fail the build here instead. */
+function checkTabs(css){
+  const missing = TABS.filter(s => !css.includes('a[href="#'+s.id+'"]')).map(s=>s.id);
+  if(missing.length){
+    console.error('build failed: tools/assets/style.css has no current-tab rule for: '+missing.join(', '));
+    process.exit(1);
+  }
+}
+
 function main(){
   const args = process.argv.slice(2);
+  checkTabs(STYLE);
   if(args.includes('--clean')) clean();
   syncEnJson();
   /* positional args (any order): a language code and/or a variant id */

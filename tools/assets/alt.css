@@ -33,6 +33,17 @@
   .v-lite .hero-grid,.v-eink .hero-grid{padding:48px 0 60px;gap:40px}
   .v-lite .hero .mast,.v-eink .hero .mast{font-size:clamp(52px,11vw,104px)}
 
+  /* ---------- contents rail ---------- */
+  /* the rail header's hand-coded charcoal is one of the hexes the token
+     collapse can't reach; on e-ink it has to be pure ink-on-paper */
+  .v-eink .rail-hd{background:#000!important;color:#fff!important}
+  .v-eink .rail-hd .r{color:#fff!important}
+  /* --edge is --pink, which e-ink collapses to #000 — invisible against the
+     rail's own black. The current tab is already inverted (paper on ink), so
+     drop the edge rather than draw a black line on black. */
+  .v-eink .rail a{--edge:transparent!important}
+  .v-lite .rail a,.v-eink .rail a{padding-block:9px}
+
   /* ---------- version switch (base look lives in style.css) ---------- */
   .v-lite header.top .vswitch a:hover,.v-eink header.top .vswitch a:hover{color:var(--pink)}
   /* brand titleblock: the pink doc number would collapse to #000 on the dark
