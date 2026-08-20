@@ -971,13 +971,12 @@ ${rail(t)}
   </div>
 </section>
 
-</div><!-- /pane -->
-
-</div><!-- /panes -->
-</main>
-
-<!-- ============ FOOTER / BACK COVER ============ -->
-<footer>
+<!-- ============ BACK COVER ============
+     The back cover is the last page of the issue, not a block repeated under
+     every tab: it rides at the end of the final pane (Sec.24), so it is reached
+     by reading to the end and it keeps its printed position exactly. What every
+     pane still carries is the slim <footer> strip below. -->
+<section class="backcover">
   <div class="band harl" style="border-top:2px solid var(--bone)"></div>
   <div class="wrap inner">
     <img class="logo" src="/assets/riposte-logo.svg" alt="Riposte Laboratories">
@@ -988,11 +987,31 @@ ${rail(t)}
       <div class="meta" style="line-height:1.7;text-align:left">${t['footer.issn']}</div>
     </div>
     <div class="signoff" style="color:var(--pink);margin-top:4px">${t['footer.signoff']}</div>
-    ${fswitch(t, code, variant)}
     <div class="colophon">${t['footer.colophon']}</div>
-    ${verifyNote(t, code, variant)}
+    <!-- paper only. The live badge in the slim strip is screen chrome (that
+         strip is display:none in print), so without this line the printed issue
+         would carry no verification text at all — which is where it sat before
+         the back cover moved. Same string, so it costs no translation. -->
+    <div class="verify-print">${esc(t['footer.verify'])}</div>
   </div>
   <div class="band" style="border-top:2px solid var(--bone)"></div>
+</section>
+
+</div><!-- /pane -->
+
+</div><!-- /panes -->
+</main>
+
+<!-- ============ SITE FOOTER (slim strip, on every pane) ============
+     One row of standing chrome only — imprint line, the rendering switch and
+     the verification badge. It must stay a DIRECT CHILD of <body>: the sticker
+     print mode collapses the page with a body.print-stickers > * rule. -->
+<footer class="slim">
+  <div class="wrap finner">
+    <div class="tg">Riposte Laboratories Inc. &middot; DB-001</div>
+    ${fswitch(t, code, variant)}
+    ${verifyNote(t, code, variant)}
+  </div>
 </footer>
 
 <!-- reset the sticker-sheet print mode after printing so Ctrl/⌘+P always yields the whole issue -->
