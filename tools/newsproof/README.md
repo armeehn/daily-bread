@@ -81,3 +81,38 @@ No anchor supplied ⇒ **FAIL**, deliberately: an attacker who can serve you a
 tampered edition can also serve you an empty anchors file, so a missing anchor is
 a failure, not a skipped check. `--allow-unanchored` accepts the weaker guarantee
 knowingly.
+
+## Is the site actually verifying right now?
+
+```sh
+cd tools
+python3 -m newsproof.check_live            # against the deployed site
+python3 -m newsproof.check_live --offline  # repo vs proofs, no network
+```
+
+**Do not use `dbproof status` for this.** It verifies the log against itself and
+never re-hashes anything, so it reads perfectly healthy while every reader is
+looking at "This edition could not be verified". That is not hypothetical: the
+proofs went stale 59 minutes after they were signed and it went unnoticed for a
+month.
+
+`check_live` makes the same comparison the reader's badge makes, and separates
+the two ways it breaks:
+
+- **STALE PROOF** — served bytes equal the repo, but neither matches the
+  signature. The edition was rebuilt and published, never re-signed. Publishing
+  hygiene. Only the off-box publisher key clears it: `dbproof sign`.
+- **SERVED DIFFERS** — served bytes do not equal the repo. A bad deploy, a
+  poisoned cache, an edge rewriting the page, or tampering. This is the case the
+  transparency log exists for. It names Cloudflare's two known HTML injections
+  explicitly if it sees them.
+
+Exit status: `0` all verified, `1` stale proofs, `2` a serving mismatch.
+CI runs it daily — see `.github/workflows/verify-editions.yml`.
+
+⚠ **Never run `dbproof init` on a checkout that has no key.** Its only guard is
+whether `store/keys/publisher-private.json` already exists, so on a host where
+the key was never present that guard passes with no `--force` needed — and it
+mints a new identity, overwrites the committed public keys, resets the log and
+wipes the index. `sign`'s own error message says "no keys; run `init` first";
+on the build host that advice is wrong. Bring the key to the repo instead.
