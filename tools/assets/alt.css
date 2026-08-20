@@ -82,7 +82,7 @@
   .v-eink .field-ink .scribble{color:#fff!important}
   .v-eink .field-ink .report .pull{color:#fff!important;border-color:#fff!important}
   .v-eink .bigquote .mk{color:#fff!important}
-  .v-eink footer .signoff{color:#fff!important}
+  .v-eink .backcover .signoff{color:#fff!important}
   .v-eink .plate{background:#000!important;border-color:#fff!important}
 
   /* stamps: transparent-on-dark would disappear; light them on ink fields */
