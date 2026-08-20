@@ -18,3 +18,6 @@ __pycache__/
 # rendered print PDFs (regenerate via db-render/serve-and-render.js)
 db-render/out/
 db-render/node_modules/
+
+# the print document compiled from content/issue-*.js by tools/print/build-print.js
+db-render/build-*.dc.html
