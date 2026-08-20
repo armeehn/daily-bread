@@ -306,33 +306,74 @@
   .field-ink .checkline{border-color:rgba(246,241,231,.28)}
   .fine{font-size:10px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
 
-  /* ---------- footer ---------- */
-  footer{background:var(--ink);color:var(--bone)}
-  footer .inner{padding:60px 0;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
-  footer img.logo{width:min(300px,72%);filter:invert(1)}
-  footer .tg{font-size:11px;letter-spacing:.45em;text-transform:uppercase}
-  footer p.blurb{font-size:14px;line-height:1.75;max-width:42ch;color:#e7ddcd}
+  /* ---------- back cover ----------
+     The magazine's back cover: logo lockup, imprint, barcode, sign-off and
+     colophon. It is NOT the site footer — it lives at the end of the last pane
+     (see tools/build.js), so it is a page you arrive at, not 680px of furniture
+     repeated under every tab. Styles stay keyed to .backcover, never to the
+     element, so moving it again does not take the design with it. */
+  .backcover{background:var(--ink);color:var(--bone)}
+  .backcover .inner{padding-block:60px;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
+  .backcover img.logo{width:min(300px,72%);filter:invert(1)}
+  .backcover .tg{font-size:11px;letter-spacing:.45em;text-transform:uppercase}
+  .backcover p.blurb{font-size:14px;line-height:1.75;max-width:42ch;color:#e7ddcd}
   .barcode{width:130px;height:38px;background:repeating-linear-gradient(90deg,var(--bone) 0 3px,var(--ink) 3px 5px,var(--bone) 5px 6px,var(--ink) 6px 10px)}
-  footer .fmeta{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap}
-  footer .colophon{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#8d857a;
+  .backcover .fmeta{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap}
+  .backcover .colophon{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#8d857a;
     border-top:1px solid rgba(246,241,231,.22);padding-top:20px;margin-top:8px;max-width:74ch;line-height:1.9}
-  footer .verify-note{font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-top:2px;
+
+  /* paper-only twin of the strip's verify line — see @media print below */
+  .verify-print{display:none}
+
+  /* ---------- site footer (slim strip under every pane) ----------
+     One row: imprint line at the start, rendering switch and verification badge
+     at the end, wrapping to two rows only when the line will not fit. */
+  /* Panes are short now that the back cover has moved off every one of them, so
+     the strip has to be held to the bottom edge or it floats with bare page
+     under it (DIRECTORY and SUBMIT both end above the fold at 1440x900).
+     Screen only: paper has no viewport, and body{display:flex} would fight the
+     page breaks the printed issue depends on. */
+  /* Hold the pane column open to the fold. Screen only; paper has no viewport.
+     Two tempting one-liners are both wrong here, and were both measured:
+       body{display:flex;flex-direction:column} — main becomes a flex item and
+         stretches to the contents rail's max-content, which at <=1040px is a
+         horizontal strip 1244px wide: 1244px of horizontal overflow on a 390px
+         phone. min-width:0 does not stop it.
+       footer{position:sticky;top:100vh} — sticky cannot move a box past its
+         containing block, and body is only as tall as its content, so the strip
+         never reaches the bottom edge. */
+  @media screen{
+    main.issue{min-height:calc(100vh - var(--topbar) - var(--footbar))}
+  }
+  :root{--footbar:47px}
+  footer.slim{background:var(--ink);color:var(--bone);border-top:2px solid var(--bone)}
+  footer.slim .finner{padding-block:13px;display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:8px 26px}
+  footer.slim .tg{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#8d857a}
+  footer.slim .verify-note{margin-top:0;justify-content:flex-start}
+  footer.slim .fswitch{margin-top:0;margin-inline-start:auto}
+  /* narrow: the strip wraps to three rows, so the reserve above it grows too */
+  @media(max-width:700px){:root{--footbar:97px}
+    footer.slim .finner{justify-content:flex-start}
+    footer.slim .fswitch{margin-inline-start:0}}
+
+  .verify-note{font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-top:2px;
     display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
-  footer .verify-note a{color:var(--teal);text-decoration:none;border-bottom:1px dotted rgba(18,183,149,.5);padding-bottom:1px}
-  footer .verify-note a:hover{color:var(--bone);border-bottom-color:var(--bone)}
+  .verify-note a{color:var(--teal);text-decoration:none;border-bottom:1px dotted rgba(18,183,149,.5);padding-bottom:1px}
+  .verify-note a:hover{color:var(--bone);border-bottom-color:var(--bone)}
   /* live self-verification badge: a coloured status dot + message, added by the
      inline verifier the full editions carry (see tools/build.js verifyNote). */
-  footer .verify-note .np-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}
-  footer .verify-note .np-msg{color:#b7ad9e}
-  footer .verify-note.np-checking .np-dot{background:var(--orange);animation:npPulse 1.4s infinite}
-  footer .verify-note.np-ok   .np-dot{background:var(--teal)}
-  footer .verify-note.np-warn .np-dot{background:var(--orange)}
-  footer .verify-note.np-bad  .np-dot{background:var(--pink)}
-  footer .verify-note.np-ok   .np-msg{color:var(--teal)}
-  footer .verify-note.np-warn .np-msg{color:var(--orange)}
-  footer .verify-note.np-bad  .np-msg{color:var(--pink)}
+  .verify-note .np-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}
+  .verify-note .np-msg{color:#b7ad9e}
+  .verify-note.np-checking .np-dot{background:var(--orange);animation:npPulse 1.4s infinite}
+  .verify-note.np-ok   .np-dot{background:var(--teal)}
+  .verify-note.np-warn .np-dot{background:var(--orange)}
+  .verify-note.np-bad  .np-dot{background:var(--pink)}
+  .verify-note.np-ok   .np-msg{color:var(--teal)}
+  .verify-note.np-warn .np-msg{color:var(--orange)}
+  .verify-note.np-bad  .np-msg{color:var(--pink)}
   @keyframes npPulse{50%{opacity:.35}}
-  @media (prefers-reduced-motion:reduce){footer .verify-note.np-checking .np-dot{animation:none}}
+  @media (prefers-reduced-motion:reduce){.verify-note.np-checking .np-dot{animation:none}}
   .annot{margin-top:14px}
   .annot.right{text-align:right}
 
@@ -407,7 +448,11 @@
     *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
 
     /* drop screen-only chrome so the PDF is just the paper */
-    header.top,.mtnote,.print-cta,.fswitch,.rail{display:none !important}
+    header.top,.mtnote,.print-cta,.fswitch,.rail,footer.slim{display:none !important}
+    /* ...which takes the live badge off paper with it, so the back cover shows
+       the static line instead and the printed issue reads as it always did */
+    .verify-print{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+      color:#8d857a;margin-top:6px}
     /* paper has no tabs: the whole issue prints, in document order */
     .issue{display:block !important}
     .pane{display:block !important}
@@ -421,7 +466,7 @@
     .card,.panel,figure,.plate,.colour-card,.sticker,.stampbadge,
     .centrefold .poster-svg,.hero .cover-frame{break-inside:avoid}
     .sechead,h1,h2,h3,.display,.mast{break-after:avoid}
-    section,.hero,footer{break-inside:auto}
+    section,.hero,.backcover{break-inside:auto}
     a{color:inherit;text-decoration:none}
 
     /* ---- "Print this sheet": the sticker sheet only, WYSIWYG ---- */
@@ -431,6 +476,7 @@
     body.print-stickers #stickers{display:block !important}
     body.print-stickers .stickers-sec{display:block !important;padding:0 !important}
     body.print-stickers .stickers-sec .wrap{padding:12mm !important;max-width:none}
+    body.print-stickers .backcover{display:none !important}
     body.print-stickers .stickers-sec .sechead,
     body.print-stickers .stickers-sec .split,
     body.print-stickers .stickers-sec > .wrap > .meta{display:none !important}
@@ -449,9 +495,9 @@
   header.top .vswitch a[aria-current]{background:var(--bone);color:var(--ink);font-weight:700}
   header.top .vswitch a:hover{color:var(--pink)}
   header.top .vswitch a[aria-current]:hover{color:var(--ink)}
-  footer .fswitch{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8d857a;margin-top:2px}
-  footer .fswitch a{color:var(--bone);text-decoration:underline;margin:0 2px}
-  footer .fswitch a[aria-current]{color:var(--pink);text-decoration:none;font-weight:700}
+  .fswitch{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8d857a;margin-top:2px}
+  .fswitch a{color:var(--bone);text-decoration:underline;margin:0 2px}
+  .fswitch a[aria-current]{color:var(--pink);text-decoration:none;font-weight:700}
 
   /* ---------- i18n chrome: language picker + MT notice ---------- */
   header.top .bar .langpick{position:relative;order:4;align-self:center;margin-inline-start:16px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
@@ -1035,13 +1081,12 @@
   </div>
 </section>
 
-</div><!-- /pane -->
-
-</div><!-- /panes -->
-</main>
-
-<!-- ============ FOOTER / BACK COVER ============ -->
-<footer>
+<!-- ============ BACK COVER ============
+     The back cover is the last page of the issue, not a block repeated under
+     every tab: it rides at the end of the final pane (Sec.24), so it is reached
+     by reading to the end and it keeps its printed position exactly. What every
+     pane still carries is the slim <footer> strip below. -->
+<section class="backcover">
   <div class="band harl" style="border-top:2px solid var(--bone)"></div>
   <div class="wrap inner">
     <img class="logo" src="/assets/riposte-logo.svg" alt="Riposte Laboratories">
@@ -1052,9 +1097,30 @@
       <div class="meta" style="line-height:1.7;text-align:left">ISSN nakabinbin<br>№1 · Tag-init 2026</div>
     </div>
     <div class="signoff" style="color:var(--pink);margin-top:4px">magkita tayo sa tunaw ✕</div>
-    <div class="fswitch">Mga magaang bersyon: <a href="/tl/" aria-current="true">Buo</a> · <a href="/tl/lite/">Magaan</a> · <a href="/tl/eink/">E-ink</a></div>
     <div class="colophon">Nakalimbag sa hindi isinukong teritoryo ng syilx Okanagan sa run na 500. Nakaset sa IBM Plex Mono at UnifrakturMaguntia. Amin ang mga mali; sa inyo ang mga pagwawasto; ang natirang tinta ay napunta sa mga sticker. · Parry. Riposte.</div>
-    <div class="verify-note" id="np-badge" data-proof="/.well-known/newsproof/proofs/tl.proof.json" data-url="/tl/" data-t-checking="Sinusuri ang edisyong ito…" data-t-ok="Na-verify — nilagdaan at nakatala sa publiko" data-t-unanchored="Nilagdaan at nakatala; hindi pa naka-angkla" data-t-uncheckable="Nilagdaan at naka-angkla; hindi masuri ang live na kopya" data-t-bad="Hindi ma-verify ang edisyong ito" data-t-details="paano ▸"><a href="/verify/">Beripikadong paglalathala ✓ kumpirmahin na hindi binago ang edisyong ito</a></div>
+    <!-- paper only. The live badge in the slim strip is screen chrome (that
+         strip is display:none in print), so without this line the printed issue
+         would carry no verification text at all — which is where it sat before
+         the back cover moved. Same string, so it costs no translation. -->
+    <div class="verify-print">Beripikadong paglalathala ✓ kumpirmahin na hindi binago ang edisyong ito</div>
+  </div>
+  <div class="band" style="border-top:2px solid var(--bone)"></div>
+</section>
+
+</div><!-- /pane -->
+
+</div><!-- /panes -->
+</main>
+
+<!-- ============ SITE FOOTER (slim strip, on every pane) ============
+     One row of standing chrome only — imprint line, the rendering switch and
+     the verification badge. It must stay a DIRECT CHILD of <body>: the sticker
+     print mode collapses the page with a body.print-stickers > * rule. -->
+<footer class="slim">
+  <div class="wrap finner">
+    <div class="tg">Riposte Laboratories Inc. &middot; DB-001</div>
+    <div class="fswitch">Mga magaang bersyon: <a href="/tl/" aria-current="true">Buo</a> · <a href="/tl/lite/">Magaan</a> · <a href="/tl/eink/">E-ink</a></div>
+    <div class="verify-note" id="np-badge" data-proof="/.well-known/newsproof/proofs/tl.proof.json" data-url="/tl/" data-t-checking="Checking this edition…" data-t-ok="Verified — signed &amp; publicly logged" data-t-unanchored="Signed &amp; logged; not yet anchored" data-t-uncheckable="Signed &amp; anchored; live copy uncheckable" data-t-bad="This edition could not be verified" data-t-details="how ▸"><a href="/verify/">Beripikadong paglalathala ✓ kumpirmahin na hindi binago ang edisyong ito</a></div>
 <script>
 /* Daily Bread — reader-facing self-verification badge.
  *
@@ -1279,7 +1345,6 @@
 })();
 </script>
   </div>
-  <div class="band" style="border-top:2px solid var(--bone)"></div>
 </footer>
 
 <!-- reset the sticker-sheet print mode after printing so Ctrl/⌘+P always yields the whole issue -->
