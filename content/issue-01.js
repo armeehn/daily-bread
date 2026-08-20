@@ -37,6 +37,7 @@ module.exports = {
   pages: [
     /* 01 · P01 · FC */
     {
+      id: 'fc',
       template: 'Cover',
       variant: 'front',
       slug: 'v2-fc',
@@ -53,6 +54,7 @@ module.exports = {
     },
     /* 02 · P02 · IC */
     {
+      id: 'ic',
       template: 'Letter',
       variant: 'masthead',
       chrome: { footer: `mono`, accent: `#f0477d`, headLeft: `DAILY BREAD №1 · KELOWNA BC`, headRight: `THEME: KELOWNA’S COLLAPSE`, docNo: `DB-000-A`, folio: `IC` },
@@ -83,6 +85,7 @@ module.exports = {
     },
     /* 03 · P03 · 01 */
     {
+      id: 'p01',
       template: 'Letter',
       variant: 'letter',
       chrome: { footer: `mono`, accent: `#f0477d`, headLeft: `DAILY BREAD №1 · KELOWNA BC`, headRight: `THEME: KELOWNA’S COLLAPSE`, docNo: `DB-000-A`, folio: `01` },
@@ -113,6 +116,7 @@ module.exports = {
     },
     /* 04 · P04 · 02 */
     {
+      id: 'p02',
       template: 'Contents',
       variant: 'manifest',
       chrome: { footer: `duo`, accent: `#f0477d`, headLeft: `DAILY BREAD №1 · KELOWNA BC`, headRight: `THEME: KELOWNA’S COLLAPSE`, docNo: `DB-002-A`, folio: `02` },
@@ -156,6 +160,7 @@ module.exports = {
     },
     /* 05 · P05 · 03 */
     {
+      id: 'p03',
       template: 'Contents',
       variant: 'contributors',
       chrome: { footer: `duo`, accent: `#f0477d`, headLeft: `DAILY BREAD №1 · KELOWNA BC`, headRight: `THEME: KELOWNA’S COLLAPSE`, docNo: `DB-002-A`, folio: `03` },
@@ -199,6 +204,7 @@ module.exports = {
     },
     /* 06 · P06 · 04 */
     {
+      id: 'p04',
       template: 'Feature',
       variant: 'opener',
       slug: 'v2-p04',
@@ -223,6 +229,7 @@ module.exports = {
     },
     /* 07 · P07 · 05 */
     {
+      id: 'p05',
       template: 'Body',
       variant: 'image-text',
       slug: 'v2-p05',
@@ -275,6 +282,7 @@ module.exports = {
     },
     /* 08 · P08 · 06 */
     {
+      id: 'p06',
       template: 'Body',
       variant: 'image-text',
       slug: 'v2-p06',
@@ -327,6 +335,7 @@ module.exports = {
     },
     /* 09 · P09 · 07 */
     {
+      id: 'p07',
       template: 'Body',
       variant: 'ledger',
       slug: 'v2-p07',
@@ -379,6 +388,7 @@ module.exports = {
     },
     /* 10 · P10 · 08 */
     {
+      id: 'p08',
       template: 'Photo Essay',
       variant: 'hero',
       slug: 'v2-p08',
@@ -395,6 +405,7 @@ module.exports = {
     },
     /* 11 · P11 · 09 */
     {
+      id: 'p09',
       template: 'Photo Essay',
       variant: 'title',
       slug: 'v2-p09',
@@ -411,6 +422,7 @@ module.exports = {
     },
     /* 12 · P12 · 10 */
     {
+      id: 'p10',
       template: 'Body',
       variant: 'image-text',
       slug: 'v2-p10',
@@ -460,6 +472,7 @@ module.exports = {
     },
     /* 13 · P13 · 11 */
     {
+      id: 'p11',
       template: 'Opinion',
       chrome: { footer: `mono`, accent: `#f0477d`, headLeft: `03 · OPINION`, headRight: `YOUNG VOICES DESK`, docNo: `DB-011-A`, folio: `11` },
       content: {
@@ -478,6 +491,7 @@ module.exports = {
     },
     /* 14 · P14 · 12 */
     {
+      id: 'p12',
       template: 'Opinion',
       chrome: { footer: `mono`, accent: `#fe9a0d`, headLeft: `03 · OPINION`, headRight: `YOUNG VOICES DESK`, docNo: `DB-012-A`, folio: `12` },
       content: {
@@ -496,6 +510,7 @@ module.exports = {
     },
     /* 15 · P15 · 13 */
     {
+      id: 'p13',
       template: 'Opinion',
       chrome: { footer: `mono`, accent: `#12b795`, headLeft: `03 · OPINION`, headRight: `YOUNG VOICES DESK`, docNo: `DB-013-A`, folio: `13` },
       content: {
@@ -514,6 +529,7 @@ module.exports = {
     },
     /* 16 · P16 · 14 */
     {
+      id: 'p14',
       template: 'Comic',
       variant: 'page',
       chrome: { headLeft: `04 · COMIC`, headRight: `“CRUMBS” — EP.1 OF ∞`, docNo: `DB-014-A`, folio: `14`, footer: `mono` },
@@ -536,6 +552,7 @@ module.exports = {
     },
     /* 17 · P17 · 15 */
     {
+      id: 'p15',
       template: 'Comic',
       variant: 'page',
       chrome: { headLeft: `04 · COMIC`, headRight: `“CRUMBS” — EP.1 OF ∞`, docNo: `DB-015-A`, folio: `15`, footer: `mono` },
@@ -559,6 +576,7 @@ module.exports = {
     },
     /* 18 · P18 · 16 */
     {
+      id: 'p16',
       template: 'Interview',
       variant: 'portrait',
       slug: 'v2-p16',
@@ -584,6 +602,7 @@ module.exports = {
     },
     /* 19 · P19 · 17 */
     {
+      id: 'p17',
       template: 'Interview',
       variant: 'qa',
       slug: 'v2-p17',
@@ -609,6 +628,7 @@ module.exports = {
     },
     /* 20 · P20 · 18 */
     {
+      id: 'p18',
       template: 'Body',
       variant: 'columns',
       slug: 'v2-p18',
@@ -661,6 +681,7 @@ module.exports = {
     },
     /* 21 · P21 · 19 */
     {
+      id: 'p19',
       template: 'Poetry',
       chrome: { accent: `#12b795`, headLeft: `06 · POETRY`, headRight: `SUBMISSIONS · LIT`, docNo: `DB-019-A`, folio: `19`, footer: `mono` },
       content: {
@@ -674,6 +695,7 @@ module.exports = {
     },
     /* 22 · P22 · 20 */
     {
+      id: 'p20',
       template: 'Insert',
       variant: 'stickers',
       slug: 'v2-p20',
@@ -714,6 +736,7 @@ module.exports = {
     },
     /* 23 · P23 · 21 */
     {
+      id: 'p21',
       template: 'Insert',
       variant: 'colouring',
       slug: 'v2-p21',
@@ -754,6 +777,7 @@ module.exports = {
     },
     /* 24 · P24 · 22 */
     {
+      id: 'p22',
       template: 'Insert',
       variant: 'art',
       slug: 'v2-p22',
@@ -794,6 +818,7 @@ module.exports = {
     },
     /* 25 · P25 · 23 */
     {
+      id: 'p23',
       template: 'Insert',
       variant: 'art',
       slug: 'v2-p23',
@@ -834,6 +859,7 @@ module.exports = {
     },
     /* 26 · P26 · 24 */
     {
+      id: 'p24',
       template: 'Insert',
       variant: 'artist',
       slug: 'v2-p24',
@@ -874,6 +900,7 @@ module.exports = {
     },
     /* 27 · P27 · 25 */
     {
+      id: 'p25',
       template: 'Feature',
       variant: 'opener',
       slug: 'v2-p25',
@@ -899,6 +926,7 @@ module.exports = {
     },
     /* 28 · P28 · 26 */
     {
+      id: 'p26',
       template: 'Body',
       variant: 'quotes',
       slug: 'v2-p26',
@@ -951,6 +979,7 @@ module.exports = {
     },
     /* 29 · P29 · 27 */
     {
+      id: 'p27',
       template: 'Body',
       variant: 'checklist',
       slug: 'v2-p27',
@@ -1003,6 +1032,7 @@ module.exports = {
     },
     /* 30 · P30 · 28 */
     {
+      id: 'p28',
       template: 'Feature',
       variant: 'text-open',
       slug: 'v2-p28',
@@ -1027,6 +1057,7 @@ module.exports = {
     },
     /* 31 · P31 · 29 */
     {
+      id: 'p29',
       template: 'Feature',
       variant: 'text-cont',
       slug: 'v2-p29',
@@ -1051,6 +1082,7 @@ module.exports = {
     },
     /* 32 · P32 · 30 */
     {
+      id: 'p30',
       template: 'Lab',
       variant: 'disclosure',
       chrome: { headLeft: `RIPOSTE LABORATORIES INC.`, headRight: `EST. 2026 · REV. A`, docNo: `RL-DB-030`, folio: `30` },
@@ -1079,6 +1111,7 @@ module.exports = {
     },
     /* 33 · P33 · 31 */
     {
+      id: 'p31',
       template: 'Lab',
       variant: 'status',
       chrome: { headLeft: `RIPOSTE LABORATORIES INC.`, headRight: `EST. 2026 · REV. A`, docNo: `RL-DB-031`, folio: `31` },
@@ -1107,6 +1140,7 @@ module.exports = {
     },
     /* 34 · P34 · 32 */
     {
+      id: 'p32',
       template: 'Review',
       variant: 'advice',
       chrome: { footer: `mono`, accent: `#f0477d`, headLeft: `12 · ADVICE`, headRight: `CERTIFIED · SINCE TUESDAY`, docNo: `DB-032-A`, folio: `32` },
@@ -1150,6 +1184,7 @@ module.exports = {
     },
     /* 35 · P35 · 33 */
     {
+      id: 'p33',
       template: 'Review',
       variant: 'cards',
       chrome: { footer: `mono`, accent: `#f0477d`, headLeft: `13 · REVIEWS`, headRight: `FIELD-TESTED`, docNo: `DB-033-A`, folio: `33` },
@@ -1193,6 +1228,7 @@ module.exports = {
     },
     /* 36 · P36 · 34 */
     {
+      id: 'p34',
       template: 'Review',
       variant: 'critique',
       chrome: { footer: `mono`, accent: `#f0477d`, headLeft: `15 · FOOD`, headRight: `NO FREE MEALS, NO MERCY`, docNo: `DB-034-A`, folio: `34` },
@@ -1236,6 +1272,7 @@ module.exports = {
     },
     /* 37 · P37 · 35 */
     {
+      id: 'p35',
       template: 'Review',
       variant: 'playlist',
       chrome: { footer: `mono`, accent: `#f0477d`, headLeft: `16 · LISTENING`, headRight: `LOUD IN THE PASTE-UP ROOM`, docNo: `DB-035-A`, folio: `35` },
@@ -1279,6 +1316,7 @@ module.exports = {
     },
     /* 38 · P38 · 36 */
     {
+      id: 'p36',
       template: 'Listings',
       variant: 'program',
       chrome: { footer: `duo`, accent: `#f0477d`, headLeft: `17 · FILM`, headRight: `CLASSICS, OUTDOORS`, docNo: `DB-036-A`, folio: `36` },
@@ -1317,6 +1355,7 @@ module.exports = {
     },
     /* 39 · P39 · 37 */
     {
+      id: 'p37',
       template: 'Listings',
       variant: 'screenings',
       chrome: { footer: `duo`, accent: `#f0477d`, headLeft: `17 · FILM`, headRight: `DUSK SCREENINGS · FREE / PWYC`, docNo: `DB-037-A`, folio: `37` },
@@ -1359,6 +1398,7 @@ module.exports = {
     },
     /* 40 · P40 · 38 */
     {
+      id: 'p38',
       template: 'Listings',
       variant: 'calendar',
       chrome: { footer: `mono`, accent: `#f0477d`, headLeft: `14 · CALENDAR`, headRight: `AUG–OCT 2026`, docNo: `DB-038-A`, folio: `38` },
@@ -1407,6 +1447,7 @@ module.exports = {
     },
     /* 41 · P41 · 39 */
     {
+      id: 'p39',
       template: 'Listings',
       variant: 'directory',
       chrome: { footer: `mono`, accent: `#f0477d`, headLeft: `18 · MUTUAL AID`, headRight: `KEEP THIS PAGE`, docNo: `DB-039-A`, folio: `39` },
@@ -1453,6 +1494,7 @@ module.exports = {
     },
     /* 42 · P42 · 40 */
     {
+      id: 'p40',
       template: 'Body',
       variant: 'checklist',
       slug: 'v2-p40',
@@ -1508,6 +1550,7 @@ module.exports = {
     },
     /* 43 · P43 · 41 */
     {
+      id: 'p41',
       template: 'Listings',
       variant: 'mail',
       chrome: { footer: `mono`, accent: `#f0477d`, headLeft: `19 · CORRESPONDENCE`, headRight: `WRITE TO US`, docNo: `DB-041-A`, folio: `41` },
@@ -1546,6 +1589,7 @@ module.exports = {
     },
     /* 44 · P44 · 42 */
     {
+      id: 'p42',
       template: 'Comic',
       variant: 'page',
       chrome: { headLeft: `04 · COMIC, CONT.`, headRight: `“CRUMBS” EP.1 — END`, docNo: `DB-042-A`, folio: `42`, footer: `mono` },
@@ -1570,6 +1614,7 @@ module.exports = {
     },
     /* 45 · P45 · 43 */
     {
+      id: 'p43',
       template: 'Comic',
       variant: 'guest',
       chrome: { headLeft: `04 · COMIC`, headRight: `“CRUMBS” — EP.1 OF ∞`, docNo: `DB-043-A`, folio: `43`, footer: `mono` },
@@ -1592,6 +1637,7 @@ module.exports = {
     },
     /* 46 · P46 · 44 */
     {
+      id: 'p44',
       template: 'Colophon',
       variant: 'staff',
       slug: 'v2-p44',
@@ -1620,6 +1666,7 @@ module.exports = {
     },
     /* 47 · P47 · IBC */
     {
+      id: 'ibc',
       template: 'Colophon',
       variant: 'ad',
       slug: 'colophon',
@@ -1648,6 +1695,7 @@ module.exports = {
     },
     /* 48 · P48 · BC */
     {
+      id: 'bc',
       template: 'Cover',
       variant: 'back',
       slug: 'cover',
