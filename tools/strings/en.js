@@ -5,7 +5,23 @@
    tools/strings/<lang>.json supplies translations (same keys; missing -> English).
    Inline HTML (<br>, <b>, <span ...>) and glyphs (№ · ◦ ▸ ✕ ↓ ☐) are part of
    the string and MUST be preserved verbatim by translators.
+
+   NOT EVERY VALUE IS WRITTEN HERE. Ninety-four of them read `at('…')` instead —
+   they come from content/issue-01.js, the same file the print edition compiles
+   from, because they are the same fact set twice: the calendar entries, the
+   directory lines, the screenings, the contents table, the collapse ledger, the
+   lab's status board. A date the magazine moved has one place to change.
+
+   The rest stays written here, and should. The website is not the magazine —
+   roughly two thirds of these keys say something the printed page never says,
+   and making them agree would mean rewriting the site's copy rather than
+   sharing it. See tools/strings/from-issue.js for how an address resolves.
+
+   Keys and their order are unchanged by this arrangement, so every
+   tools/strings/<lang>.json keeps working exactly as before.
    ============================================================================ */
+const { at } = require('./from-issue.js');
+
 module.exports = {
   /* ---- <head> / social ---- */
   'meta.title': "Daily Bread №1 · Kelowna's Collapse · A Queer Magazine for the Okanagan",
@@ -15,7 +31,7 @@ module.exports = {
 
   /* ---- top-bar navigation ---- */
   'nav.letter': 'Letter',
-  'nav.contents': 'Contents',
+  'nav.contents': at('p02.content.title'),
   'nav.history': 'History',
   'nav.voices': 'Voices',
   'nav.comics': 'Comics',
@@ -44,24 +60,24 @@ module.exports = {
   'letter.h': 'Our Daily<br>Dread',
   'letter.p1': "<span class=\"drop\">HI.</span> You found the first issue of a queer magazine in a city that keeps telling us it doesn't have one. Kelowna has queer history, queer kids, queer elders, queer bakers and bureaucrats; what it hasn't had is paper that says so out loud.",
   'letter.p2': "This issue is about collapse: the orchards, the venues, the rent math, the bridge traffic. Not because we're doomers, but because things fall apart here on schedule, and naming the schedule is the first act of repair.",
-  'letter.p3': 'Rip out the poster. Colour the cartoon. Mail us your fury and your recipes. This thing only works if you get crumbs on it.',
-  'letter.signoff': '— the editors ✕',
+  'letter.p3': at('ic.content.body[2]'),
+  'letter.signoff': at('ic.content.signoff'),
   'letter.mastHd': 'Masthead / №1 · Summer 2026',
   'letter.mh1L': 'Editor',
-  'letter.mh1V': 'your name here',
+  'letter.mh1V': at('ic.content.masthead[0]|1'),
   'letter.mh2L': 'Art + comics',
   'letter.mh2V': 'open call',
   'letter.mh3L': 'Young voices desk',
   'letter.mh3V': 'three writers, 17–24',
   'letter.mh4L': 'Printed on',
   'letter.mh4V': 'unceded syilx territory',
-  'letter.landback': 'Daily Bread is published on the unceded, ancestral territory of the syilx Okanagan people. We pay rent to a landlord and respect to a Nation, and we know only one of those is owed.',
+  'letter.landback': at('ic.content.ack'),
   'letter.funded': 'Funded by Riposte<br>Laboratories Inc.',
 
   /* ---- Sec.01 · contents ---- */
   'contents.tag': '// contents · manifest / 48 pp',
-  'contents.h': 'Contents',
-  'contents.dek': 'Twelve contributors made №1: writers aged 17–74, two photographers, one cartoonist, one very patient proofreader. Every byline is local. Every fee got paid before the printer did.',
+  'contents.h': at('p02.content.title'),
+  'contents.dek': at('p02.content.whoBlurb'),
   'contents.mfHd': 'Manifest / 48 pp',
 
   /* ---- Sec.02 · history + ledger ---- */
@@ -81,23 +97,23 @@ module.exports = {
   'voices.dek': "Three field reports from writers who can't vote yet but can already do the rent math. We paid them; we didn't touch a word.",
   'voices.r1tag': 'Report 01',
   'voices.r1meta': 'Age 19 · Housing',
-  'voices.r1h': 'Nobody My Age Can Afford to Stay',
+  'voices.r1h': at('p11.content.title'),
   'voices.r1p': "I work two jobs and split a two-bedroom with three people, and I'm the success story. My group chat is a slow-motion goodbye party: Vernon, Calgary, mom's basement in Surrey.",
   'voices.r1pull': '"Every viewing is forty people deep and one of them is always crying."',
   'voices.r2tag': 'Report 02',
   'voices.r2meta': 'Age 22 · Coming out',
-  'voices.r2h': 'Out at the Packinghouse',
+  'voices.r2h': at('p12.content.title'),
   'voices.r2p': 'I came out at a bush party in Glenmore and the worst thing that happened was a guy named Tyler said "cool" and asked if I could drive him home. Not paradise, not hell, just a small city learning faster than its city council.',
   'voices.r2pull': 'geography is the last closet',
   'voices.r3tag': 'Report 03',
   'voices.r3meta': 'Age 17 · Fire season',
-  'voices.r3h': "I've Evacuated Twice and I Can't Vote Yet",
+  'voices.r3h': at('p13.content.title'),
   'voices.r3p': 'My childhood photos are sorted by smoke year. We packed the car in 2021 and again in 2023, and both times the adults on the radio called it unprecedented. It has precedent.',
   'voices.r3pull': '"I am the precedent."',
 
   /* ---- waitlist stats ---- */
   'waitlist.kicker': '10 · Current issues',
-  'waitlist.h': 'The Waitlist',
+  'waitlist.h': at('p25.content.title'),
   'waitlist.dek': "Trying to find queer-competent healthcare in the Central Okanagan is a part-time job with no benefits. We phoned every clinic so you don't have to; everyone we reached described the same triangle of phone tag, referral limbo, and a highway.",
   'waitlist.s1': 'Months · avg gender clinic wait',
   'waitlist.s2': 'Providers taking new patients',
@@ -111,7 +127,7 @@ module.exports = {
 
   /* ---- Sec.14 · calendar ---- */
   'calendar.tag': '// the calendar · aug–oct 2026 · clip + fridge',
-  'calendar.h': 'The Calendar',
+  'calendar.h': at('p36.content.title'),
   'calendar.dek': 'Listings are free; email by the 15th. Sober and all-ages options marked ◦.',
   'calendar.evHd': 'Aug — Oct 2026',
   'calendar.evHd2': 'Clip + fridge',
@@ -120,9 +136,9 @@ module.exports = {
   'calendar.scHd2': 'Rain moves us to the Lab',
   'calendar.scFine': 'Free / PWYC · captions on · projector + power: reclaimed cells, Project HEX',
   'calendar.voteHd': 'Vote — October screening',
-  'calendar.vote1': 'Portrait of a Lady on Fire (2019)',
-  'calendar.vote2': 'Hedwig and the Angry Inch (2001)',
-  'calendar.vote3': 'Bound (1996)',
+  'calendar.vote1': at('p37.content.votes[0]'),
+  'calendar.vote2': at('p37.content.votes[1]'),
+  'calendar.vote3': at('p37.content.votes[2]'),
   'calendar.voteFine': 'Mark one · photograph · send. Film democracy.',
 
   /* ---- Sec.18 · directory ---- */
@@ -133,9 +149,9 @@ module.exports = {
   'directory.helpsKicker': 'What actually helps / checklist',
   'directory.helpsHd': 'Field-tested',
   'directory.help1': 'The informed-consent clinic list — updated quarterly',
-  'directory.help2': 'Pharmacists can renew more than you think — ask directly',
-  'directory.help3': 'Telehealth counts. Bad wifi is still shorter than 400 km',
-  'directory.help4': 'Bring a friend to appointments. Bureaucracy respects witnesses',
+  'directory.help2': at('p05.content.checklist[1]'),
+  'directory.help3': at('p05.content.checklist[2]'),
+  'directory.help4': at('p05.content.checklist[3]'),
   'directory.annot': 'shout out Deb, seriously',
 
   /* ---- Sec.19 · submit ---- */
@@ -159,20 +175,20 @@ module.exports = {
   /* ---- Sec.16 · from the lab ---- */
   'lab.tag': '// from the lab · funder disclosure, printed large',
   'lab.labInc': 'Laboratories Inc.',
-  'lab.h': 'From the Lab',
+  'lab.h': at('p30.content.title'),
   'lab.p1': "Full disclosure, printed large: this magazine is funded by Riposte Laboratories, a Kelowna outfit that counter-attacks waste with recycled-plastic injection molding and reclaimed-cell modular power. We share what we're building here, in the same pages, at the same volume as everyone else.",
-  'lab.p2': 'The deal, in writing: the Lab pays the printer and gets two pages. The editors answer to readers, not the funder. If that ever changes, the colouring page will let you know.',
+  'lab.p2': at('p30.content.body[1]'),
   'lab.stamp': 'Funder disclosure · signed',
-  'lab.signoff': 'parry. riposte. recycle.',
+  'lab.signoff': at('p30.content.sig'),
   'lab.kicker': 'This quarter / status board',
   'lab.whyHd': 'Why fund a magazine?',
-  'lab.whyBody': 'Because a lab that fixes material waste in a town losing its cultural material would be doing half a job. Paper is infrastructure. So are drag nights. Line item approved.',
+  'lab.whyBody': at('p30.content.whyBody'),
   'lab.tour': 'Tour the shop: open doors first Fridays · bring clean #2 + #5 plastics.',
 
   /* ---- footer / back cover ---- */
   'footer.blurb': "Daily Bread is baked quarterly in Kelowna, BC. Free where you found it. Pay what you can where you can't.",
   'footer.issn': 'ISSN pending<br>№1 · Summer 2026',
-  'footer.signoff': 'see you at the thaw ✕',
+  'footer.signoff': at('p44.content.sig'),
   'footer.colophon': 'Printed on unceded syilx Okanagan territory in a run of 500. Set in IBM Plex Mono and UnifrakturMaguntia. Errors are ours; corrections are yours; the leftover ink went into the stickers. · Parry. Riposte.',
   'footer.verify': 'Verified publishing ✓ confirm this edition has not been altered',
   /* live self-verification badge (full rendering only; falls back to footer.verify) */
@@ -198,72 +214,72 @@ module.exports = {
 
   /* ---- Sec.01 data · table of contents (18 rows) ---- */
   'toc.0.t': "Our Daily Dread — editor's letter",   'toc.0.k': 'House',
-  'toc.1.t': 'Before the Bridge — a rude history',   'toc.1.k': 'History',
-  'toc.2.t': 'Vacancy — photo essay, Bernard Ave',   'toc.2.k': 'Photo',
-  'toc.3.t': 'Young Voices — three field reports',   'toc.3.k': 'Opinion',
-  'toc.4.t': 'Crumbs — ep.1, a golem seeks housing', 'toc.4.k': 'Comic',
-  'toc.5.t': 'Forty Years of Nerve — Miss Demeanour', 'toc.5.k': 'Interview',
-  'toc.6.t': 'Lake Effect / Harvest — poems',        'toc.6.k': 'Lit',
+  'toc.1.t': at('p02.content.rows[1]|1'),   'toc.1.k': 'History',
+  'toc.2.t': at('p02.content.rows[2]|1'),   'toc.2.k': 'Photo',
+  'toc.3.t': at('p02.content.rows[3]|1'),   'toc.3.k': 'Opinion',
+  'toc.4.t': at('p02.content.rows[4]|1'), 'toc.4.k': 'Comic',
+  'toc.5.t': at('p02.content.rows[5]|1'), 'toc.5.k': 'Interview',
+  'toc.6.t': at('p02.content.rows[6]|1'),        'toc.6.k': 'Lit',
   'toc.7.t': 'The Wall — rip-out centrefold',        'toc.7.k': 'Art',
-  'toc.8.t': 'Colour Your Own Collapse',             'toc.8.k': 'Satire',
-  'toc.9.t': 'Peel Me — sticker sheet',              'toc.9.k': 'Stickers',
-  'toc.10.t': 'The Waitlist — healthcare feature',   'toc.10.k': 'Issues',
-  'toc.11.t': 'The Lake Takes — fiction pt.1',       'toc.11.k': 'Lit',
-  'toc.12.t': 'From the Lab — funder disclosure',    'toc.12.k': 'Riposte',
+  'toc.8.t': at('p02.content.rows[8]|1'),             'toc.8.k': 'Satire',
+  'toc.9.t': at('p02.content.rows[7]|1'),              'toc.9.k': 'Stickers',
+  'toc.10.t': at('p02.content.rows[10]|1'),   'toc.10.k': 'Issues',
+  'toc.11.t': at('p02.content.rows[11]|1'),       'toc.11.k': 'Lit',
+  'toc.12.t': at('p02.content.rows[12]|1'),    'toc.12.k': 'Riposte',
   'toc.13.t': 'Ask a Local Gay / Reviews / Calendar', 'toc.13.k': 'Service',
   'toc.14.t': 'The Bite Back — restaurant critique', 'toc.14.k': 'Food',
   'toc.15.t': "Rotation — what we're listening to",  'toc.15.k': 'Music',
-  'toc.16.t': 'The Rewind + Movies in the Park',     'toc.16.k': 'Film',
+  'toc.16.t': at('p02.content.rows[15]|1'),     'toc.16.k': 'Film',
   'toc.17.t': 'Directory + Crumbs Mail',             'toc.17.k': 'Aid',
-  'toc.18.t': 'Who Made This — staff, assembled',    'toc.18.k': 'Colophon',
+  'toc.18.t': at('p02.content.rows[18]|1'),    'toc.18.k': 'Colophon',
 
   /* ---- Sec.02 data · ledger (10 rows) ---- */
-  'ledger.0.e': 'fruit prices crater; scrip economy begins',    'ledger.0.s': 'Bust',
-  'ledger.1.e': 'packinghouse layoffs, valley-wide',            'ledger.1.s': 'Bust',
-  'ledger.2.e': 'bridge opens; ferry workers obsolete overnight', 'ledger.2.s': 'Pivot',
-  'ledger.3.e': 'ALR freezes orchard speculation (briefly)',    'ledger.3.s': 'Parry',
-  'ledger.4.e': 'sawmill era ends; wine era begins',            'ledger.4.s': 'Pivot',
-  'ledger.5.e': 'firestorm; 239 homes, 30k evacuated',          'ledger.5.s': 'Burn',
+  'ledger.0.e': at('p05.content.table[0]|1'),    'ledger.0.s': 'Bust',
+  'ledger.1.e': at('p05.content.table[1]|1'),            'ledger.1.s': 'Bust',
+  'ledger.2.e': at('p05.content.table[2]|1'), 'ledger.2.s': 'Pivot',
+  'ledger.3.e': at('p05.content.table[3]|1'),    'ledger.3.s': 'Parry',
+  'ledger.4.e': at('p05.content.table[4]|1'),            'ledger.4.s': 'Pivot',
+  'ledger.5.e': at('p05.content.table[5]|1'),          'ledger.5.s': 'Burn',
   'ledger.6.e': 'flood year; the lake takes the boardwalk',     'ledger.6.s': 'Flood',
-  'ledger.7.e': 'heat dome; hottest place in Canada, again',    'ledger.7.s': 'Burn',
-  'ledger.8.e': 'last dedicated queer venue closes',            'ledger.8.s': 'Bust',
-  'ledger.9.e': 'this magazine. your move, city.',              'ledger.9.s': 'Riposte',
+  'ledger.7.e': at('p05.content.table[7]|1'),    'ledger.7.s': 'Burn',
+  'ledger.8.e': at('p05.content.table[8]|1'),            'ledger.8.s': 'Bust',
+  'ledger.9.e': at('p05.content.table[9]|1'),              'ledger.9.s': 'Riposte',
 
   /* ---- Sec.14 data · events (9 rows) ---- */
-  'events.0.t': 'First Friday at the Lab ◦',                'events.0.w': 'Riposte shop floor — tours, benches, zines',
-  'events.1.t': 'Movies in the Park №1 ◦',                  'events.1.w': 'City Park — Paris Is Burning',
-  'events.2.t': 'Queer Beach Assembly ◦',                   'events.2.w': 'Gyro Beach, north end — bring shade to share',
-  'events.3.t': 'Harvest Moon drag night',                  'events.3.w': 'community hall — PWYC at the door',
-  'events.4.t': 'Zine-making + submission clinic ◦',        'events.4.w': 'library makerspace — bring your fury',
+  'events.0.t': at('p38.content.rows[0]|1'),                'events.0.w': at('p38.content.rows[0]|2'),
+  'events.1.t': at('p38.content.rows[1]|1'),                  'events.1.w': at('p38.content.rows[1]|2'),
+  'events.2.t': at('p38.content.rows[2]|1'),                   'events.2.w': at('p38.content.rows[2]|2'),
+  'events.3.t': at('p38.content.rows[3]|1'),                  'events.3.w': at('p38.content.rows[3]|2'),
+  'events.4.t': at('p38.content.rows[4]|1'),        'events.4.w': at('p38.content.rows[4]|2'),
   'events.5.t': '№2 submission deadline',                   'events.5.w': 'art, opinion, poems',
-  'events.6.t': 'Orchard walk with an elder ◦',             'events.6.w': 'East Kelowna benches — history underfoot',
-  'events.7.t': 'Cassette night: the Shoebox Fonds',        'events.7.w': 'venue TBA — Miss Demeanour presiding',
-  'events.8.t': 'Issue №2 launch + colouring contest',      'events.8.w': 'location in №2. obviously',
+  'events.6.t': at('p38.content.rows[6]|1'),             'events.6.w': at('p38.content.rows[6]|2'),
+  'events.7.t': at('p38.content.rows[7]|1'),        'events.7.w': at('p38.content.rows[7]|2'),
+  'events.8.t': at('p38.content.rows[8]|1'),      'events.8.w': at('p38.content.rows[8]|2'),
 
   /* ---- Sec.14 data · screenings (3 rows) ---- */
-  'screenings.0.f': 'Paris Is Burning (1990)',        'screenings.0.p': 'City Park, at dusk',
-  'screenings.1.f': 'My Own Private Idaho (1991)',     'screenings.1.p': 'Ben Lee Park, at dusk',
-  'screenings.2.f': 'The Watermelon Woman (1996)',     'screenings.2.p': 'Rutland Centennial Park, at dusk',
+  'screenings.0.f': at('p36.content.notes[0]|0'),        'screenings.0.p': at('p37.content.rows[0]|2'),
+  'screenings.1.f': at('p36.content.notes[1]|0'),     'screenings.1.p': at('p37.content.rows[1]|2'),
+  'screenings.2.f': at('p36.content.notes[2]|0'),     'screenings.2.p': at('p37.content.rows[2]|2'),
 
   /* ---- Sec.18 data · directory (7 rows) ---- */
-  'dir.0.t': 'Crisis line (24/7, trans-competent)',   'dir.0.w': 'placeholder — verify before print',
-  'dir.1.t': 'Informed-consent clinic list',          'dir.1.w': 'updated quarterly · this page',
-  'dir.2.t': 'Youth drop-in (14–24) ◦',               'dir.2.w': 'wed + sat · downtown',
-  'dir.3.t': 'Mutual aid pantry',                      'dir.3.w': 'rutland · no questions',
-  'dir.4.t': 'Legal aid — tenant defence',            'dir.4.w': 'first mondays · library',
-  'dir.5.t': 'Elder queer social (55+) ◦',            'dir.5.w': 'thursdays · lakeshore',
-  'dir.6.t': 'Sober hangs ◦',                          'dir.6.w': 'see calendar, marked ◦',
+  'dir.0.t': at('p39.content.rows[0]|0'),   'dir.0.w': at('p39.content.rows[0]|1'),
+  'dir.1.t': at('p39.content.rows[1]|0'),          'dir.1.w': at('p39.content.rows[1]|1'),
+  'dir.2.t': at('p39.content.rows[2]|0'),               'dir.2.w': at('p39.content.rows[2]|1'),
+  'dir.3.t': at('p39.content.rows[3]|0'),                      'dir.3.w': at('p39.content.rows[3]|1'),
+  'dir.4.t': at('p39.content.rows[4]|0'),            'dir.4.w': at('p39.content.rows[4]|1'),
+  'dir.5.t': at('p39.content.rows[5]|0'),            'dir.5.w': at('p39.content.rows[5]|1'),
+  'dir.6.t': at('p39.content.rows[6]|0'),                          'dir.6.w': at('p39.content.rows[6]|1'),
 
   /* ---- Sec.16 data · lab status board (5 rows) ---- */
-  'lab.0.t': 'Plastic Works — molds v2, park benches from #5 tubs', 'lab.0.s': 'Live',
-  'lab.1.t': 'Project HEX — reclaimed-cell grading rig',            'lab.1.s': 'WIP',
-  'lab.2.t': 'Esh — shop assistant, currently a whiteboard',        'lab.2.s': 'Drawing',
+  'lab.0.t': at('p30.content.status[0]|0'), 'lab.0.s': 'Live',
+  'lab.1.t': at('p30.content.status[1]|0'),            'lab.1.s': at('p30.content.status[1]|1'),
+  'lab.2.t': at('p30.content.status[2]|0'),        'lab.2.s': 'Drawing',
   'lab.3.t': 'Daily Bread №2 — theme vote',                         'lab.3.s': 'Open',
-  'lab.4.t': 'First Friday open doors — bring clean plastics',      'lab.4.s': 'Recurring',
+  'lab.4.t': at('p30.content.status[4]|0'),      'lab.4.s': 'Recurring',
 
   /* ---- Sec.08 · comic · "Crumbs" ---- */
   'comic.tag': '// crumbs · ep.1 · a golem seeks housing',
-  'comic.h': 'Crumbs',
+  'comic.h': at('p14.content.title'),
   'comic.dek': "Our guest strip. Six panels, one loaf, zero vacancies. The slot is open, it pays, and the only brief is: make us laugh about the thing that isn't funny.",
   'comic.credit': 'Ep.1 · pencils, ink & crumbs by open call',
   'comic.p1c': 'On the third day, the sourdough woke up.',
@@ -287,33 +303,33 @@ module.exports = {
   'art.tear': 'tear here',
   'art.annot': 'yes — actually rip it',
   'art.plateKicker': 'Also on the walls / plate room',
-  'art.plate1t': 'Vacancy',
+  'art.plate1t': at('p08.content.title'),
   'art.plate1by': 'photo essay · Bernard Ave',
-  'art.plate2t': 'The Lake Takes',
+  'art.plate2t': at('p28.content.title'),
   'art.plate2by': 'ink on found paper',
   'art.plate3t': 'Orchard, After',
   'art.plate3by': 'riso · two colours',
-  'art.colourHd': 'Colour Your Own Collapse',
+  'art.colourHd': at('p02.content.rows[8]|1'),
   'art.colourBody': 'The line-art page is yours. Crayon the orchard, redline the rent, sign the bottom. Photograph it and send it back; the best one runs the wall in №2.',
   'art.colourStamp': 'Colouring page · pull out',
 
   /* ---- Sec.24 · stickers · "Peel Me" (printable sheet) ---- */
   'stickers.tag': '// peel me · sticker sheet · the leftover ink went here',
-  'stickers.h': 'Peel Me',
+  'stickers.h': at('p20.content.brand'),
   'stickers.dek': 'The leftover ink went here. Print the page, cut along the dashes, and put the valley on your water bottle. Twelve stickers; no two collapses alike.',
   'stickers.print': 'Print this sheet',
   'stickers.printFull': 'Print the whole issue',
   'stickers.printHint': 'sheet → cut along the dashes · whole issue prints to A4 (Ctrl / ⌘ + P)',
   'stickers.sheetHd': 'Sticker sheet №1 · riso on offcuts',
   'stickers.sheetMeta': 'Cut along dashes',
-  'stickers.s1': 'Crumbs',
+  'stickers.s1': at('p14.content.title'),
   'stickers.s2': 'Get Crumbs On It',
   'stickers.s3': 'Free / PWYC',
   'stickers.s4': 'Kelowna',
   'stickers.s5': "A Scene Isn't an Address",
-  'stickers.s6': 'Daily Bread',
+  'stickers.s6': at('ic.content.wordmark'),
   'stickers.s7': 'Parry · Riposte · Recycle',
-  'stickers.s8': 'The Lake Takes',
+  'stickers.s8': at('p28.content.title'),
   'stickers.s9': 'I Am the Precedent',
   'stickers.s10': 'Quiet No More',
   'stickers.s11': 'Baked in Kelowna',
