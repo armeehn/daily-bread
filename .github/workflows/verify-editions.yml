@@ -1,0 +1,94 @@
+# Two checks that would each have caught a bug this repo actually shipped.
+#
+# 1. GENERATED FILES MUST MATCH THEIR GENERATOR
+# Every page in the site root is output from tools/build.js. That makes a merge
+# conflict in a generated file resolvable in a way that is syntactically clean and
+# semantically wrong, and nothing reports it. This happened: PR #38 translated the
+# six verify.* keys, the merge in 6928104 resolved the fifteen translated editions
+# to their PRE-translation bytes, and the result shipped. Readers of every
+# non-English edition were shown the verification failure banner in English for a
+# month. The i18n coverage line did not catch it because it reads the SOURCES,
+# which were correct all along; only the built pages were stale.
+# The check is simply: rebuild, and require the tree to be unchanged.
+#
+# 2. THE LIVE SITE MUST STILL HASH TO WHAT WAS SIGNED
+# `dbproof status` verifies the log against itself and never re-hashes anything, so
+# it reads perfectly healthy while every reader sees "This edition could not be
+# verified". That is exactly what happened: the proofs went stale 59 minutes after
+# they were signed and nobody noticed for a month. check_live.py makes the same
+# comparison the reader's badge makes, against the deployed site.
+#
+# It distinguishes the two failure modes, because they want different responses:
+# a STALE PROOF (served == repo, but neither matches the signature) is publishing
+# hygiene and only the off-box publisher key can clear it; SERVED DIFFERS
+# (served != repo) is a bad deploy, a poisoned cache, an edge rewriting the page,
+# or tampering -- the case the transparency log exists for.
+#
+# Note for whoever reads a red scheduled run: the live job compares the tip of main
+# to the deployed site, so a run that fires during a deploy can report SERVED
+# DIFFERS for a minute. Re-run it before treating that as an incident.
+#
+# Gitea Actions also reads .github/workflows, so this file works on either.
+name: verify-editions
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Daily. The failure this catches is silent and open-ended -- the last one ran
+    # for a month -- so the cadence matters more than the hour.
+    - cron: '17 13 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-editions-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  generated:
+    name: generated files match tools/build.js
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # build.js uses only the node standard library, so there is nothing to install.
+      - name: Rebuild the site
+        run: node tools/build.js
+
+      - name: Require the rebuild to change nothing
+        run: |
+          if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Committed generated files do not match tools/build.js output."
+            echo
+            echo "Someone edited a generated page by hand, or a merge resolved one to"
+            echo "stale bytes. Do not hand-fix the pages: run 'node tools/build.js' and"
+            echo "commit the result."
+            echo
+            git status --porcelain
+            echo
+            git --no-pager diff --stat
+            exit 1
+          fi
+          echo "Clean: every generated file matches its generator."
+
+  live:
+    name: live editions still hash to their signatures
+    # A PR from a fork cannot tell us anything about production, and the scheduled
+    # run is the one that matters. Skip it on pull_request.
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # check_live.py is standard library only, same rule as verify_standalone.py.
+      - name: Check the deployed editions against the published proofs
+        working-directory: tools
+        run: python3 -m newsproof.check_live
