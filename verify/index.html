@@ -40,11 +40,16 @@
   h1{font-size:26px;line-height:1.15;margin:10px 0 6px;letter-spacing:-.01em}
   .lede{max-width:66ch;color:#3a352e;margin:0 0 6px}
 
-  /* banner */
-  .banner{display:flex;gap:14px;align-items:flex-start;border:2px solid var(--ink);
-    padding:16px 18px;margin:18px 0;background:var(--panel)}
-  .banner .dot{width:14px;height:14px;border-radius:50%;flex:none;margin-top:4px;background:var(--muted);
-    box-shadow:0 0 0 3px rgba(0,0,0,.06)}
+  /* banner — the verdict for the whole issue. Loud on purpose: this is the one
+     thing on the page a reader who reads nothing else should still take in, so
+     it sticks to the top of the viewport once a verdict exists. */
+  .banner{display:flex;gap:16px;align-items:flex-start;border:3px solid var(--ink);
+    padding:20px 22px;margin:18px 0;background:var(--panel);position:sticky;top:0;z-index:50}
+  .banner .dot{width:20px;height:20px;border-radius:50%;flex:none;margin-top:4px;background:var(--muted);
+    box-shadow:0 0 0 4px rgba(0,0,0,.08)}
+  .banner.bad .dot,.banner.warn .dot{animation:npPulse 1.6s ease-in-out infinite}
+  @keyframes npPulse{0%,100%{opacity:1}50%{opacity:.3}}
+  @media (prefers-reduced-motion:reduce){.banner .dot{animation:none !important}}
   .banner.pending .dot{background:var(--orange)}
   .banner.ok{background:#e7f6ef;border-color:#0e7a5f}
   .banner.ok .dot{background:var(--teal)}
@@ -52,8 +57,11 @@
   .banner.warn .dot{background:var(--orange)}
   .banner.bad{background:#fbe4e9;border-color:#c31d4c}
   .banner.bad .dot{background:var(--pink)}
-  .banner .b-title{font-weight:700;font-size:16px}
-  .banner .b-note{color:#3a352e;font-size:13.5px;margin-top:3px;max-width:70ch}
+  .banner .b-title{font-weight:700;font-size:21px;line-height:1.25;letter-spacing:-.01em}
+  .banner .b-note{color:#3a352e;font-size:14px;margin-top:6px;max-width:70ch}
+  .banner.bad{color:#7a0f2f}
+  .banner.bad .b-title{font-size:23px}
+  .banner.bad .b-note{color:#5c1226}
 
   /* spec box */
   .spec{border:2px solid var(--ink);margin:18px 0}
@@ -160,6 +168,13 @@
   <div id="np-list"><p style="padding:14px">Verifying…</p></div>
   <p class="note">Click any edition to see all seven checks. Each proof bundle is a
   self-contained <code>proof.json</code> you can download and verify offline.</p>
+  <p class="note">One caveat on the last check. It compares the bytes served to
+  you right now against the bytes that were signed, so it only holds if nothing
+  between the publisher and you rewrites the page. A CDN that injects its own
+  markup — analytics, bot-detection, an optimiser — changes those bytes on every
+  request, and this check will report a mismatch it cannot distinguish from
+  tampering. The first six checks are unaffected: they are made against the
+  signed bundle, not the network.</p>
 
   <div class="sechead"><span class="no">SEC.02</span><span class="tag">// what this proves, and what it does not</span></div>
   <div class="grid2">
