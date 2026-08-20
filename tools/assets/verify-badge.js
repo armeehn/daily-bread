@@ -17,8 +17,16 @@
   "use strict";
   var badge = document.getElementById("np-badge");
   if (!badge) return;
-  if (!(window.crypto && crypto.subtle && crypto.subtle.importKey)) return;
+  var alertBar = document.getElementById("np-alert");
   var C = badge.dataset, WK = "/.well-known/newsproof";
+  if (!(window.crypto && crypto.subtle && crypto.subtle.importKey)) {
+    /* No WebCrypto at all. Previously this returned silently and the page kept
+       its static "Verified publishing ✓" link — a page that had verified
+       nothing looked exactly like a page that had. Say so instead. */
+    showAlert("warn", C.tUncheckable);
+    badge.className = "verify-note np-warn";
+    return;
+  }
   var DOMAIN_STATEMENT = "newsproof/v1/statement\0", DOMAIN_STH = "newsproof/v1/sth\0";
 
   var enc = new TextEncoder();
@@ -101,6 +109,34 @@
 
   var getJSON = function (u) { return fetch(u, { cache: "no-store" }).then(function (r) { return r.json(); }); };
 
+  /* The prominent bar at the top of the page. `set()` drives it from the same
+     state machine as the footer dot, so the two can never disagree: hidden when
+     checking or verified, loud otherwise. Its height is published as
+     --np-alert-h so the sticky topbar and contents rail can sit below it. */
+  function measureAlert() {
+    if (!alertBar || alertBar.hidden) return;
+    document.documentElement.style.setProperty("--np-alert-h", alertBar.offsetHeight + "px");
+  }
+
+  function showAlert(cls, msg) {
+    if (!alertBar) return;
+    if (cls === "ok" || cls === "checking") {
+      alertBar.hidden = true;
+      document.body.classList.remove("np-alerted");
+      document.documentElement.style.removeProperty("--np-alert-h");
+      return;
+    }
+    alertBar.className = "np-" + cls;
+    var m = alertBar.querySelector(".np-alert-msg");
+    if (m) m.textContent = msg;
+    var more = alertBar.querySelector(".np-alert-more");
+    if (more) more.textContent = C.tDetails;
+    alertBar.hidden = false;
+    document.body.classList.add("np-alerted");
+    measureAlert();
+  }
+  addEventListener("resize", measureAlert);
+
   function set(cls, msg) {
     badge.className = "verify-note np-" + cls;
     badge.textContent = "";
@@ -111,6 +147,7 @@
     badge.appendChild(m);
     badge.appendChild(document.createTextNode(" "));
     badge.appendChild(a);
+    showAlert(cls, msg);
   }
 
   async function run() {
@@ -174,5 +211,11 @@
     else set("ok", C.tOk);
   }
 
-  run().catch(function () { /* any failure: leave the static /verify/ link untouched */ });
+  /* A verifier that throws has verified nothing, and used to leave the page
+     wearing its static "Verified publishing ✓" link. Fail closed and loud: a
+     proof that could not be fetched, parsed or checked is a proof that did not
+     pass. */
+  run().catch(function () {
+    try { set("bad", C.tBad); } catch (e) { /* nothing left to do */ }
+  });
 })();
