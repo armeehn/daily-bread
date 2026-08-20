@@ -192,8 +192,8 @@
     <button class="btn" id="importBtn">Import JSON</button>
     <button class="btn" id="exportBtn">Export JSON</button>
     <button class="btn teal" id="publishBtn" title="Download index.html to commit">Publish → index.html</button>
-    <button class="btn" id="pdfBtn" title="Export the WEB edition (the live preview above) as a paginated PDF: cover, then one page per section, at the trim size set under Print. Choose 'Save as PDF', Margins None, Background graphics ON. For the print magazine, use 'Magazine PDF'.">Web PDF</button>
-    <button class="btn teal" id="magPdfBtn" title="Download the print-ready magazine — Daily Bread №1, A4 landscape, 24 pages, ready to send to a printer. One click, no print dialog. CI renders it from source (db-render/Daily Bread Issue 01-print.html) on every change, so it is always A4 landscape with the full-bleed art baked in. This is the fixed magazine, independent of the model above.">Magazine PDF ⤓</button>
+    <button class="btn" id="pdfBtn" title="Export exactly what is on screen, right now, through your browser's print dialog: cover, then one page per section, at the trim size set under Print. Choose 'Save as PDF', Margins None, Background graphics ON. Same document as 'Magazine PDF' — use this one when you have unsaved edits, since it prints the live model instead of the last render CI committed.">Web PDF</button>
+    <button class="btn teal" id="magPdfBtn" title="Download the print-ready magazine PDF. CI renders it from THIS model — render-studio-pdf.js prints DB.render(model), the same document in the preview above — at the trim, bleed and crop marks set under Print. One click, no print dialog. If the rendered file on the server came from a different model than the one you are editing, this button tells you before downloading.">Magazine PDF ⤓</button>
     <button class="btn pink" id="resetBtn">Reset</button>
     <span class="status" id="status">Loaded</span>
   </header>
@@ -512,19 +512,62 @@ $("#pdfBtn").addEventListener("click",()=>{
   }
   toast("Print → Save as PDF · Margins: None · Background graphics: ON");
 });
-$("#magPdfBtn").addEventListener("click",()=>{
-  // One-click download of the CI-generated print-ready magazine. CI renders
-  // db-render/"Daily Bread Issue 01-print.html" to db-render/out/…-print.pdf via
-  // render-print-pdf.js (page.pdf with preferCSSPageSize + printBackground + margin:0,
-  // gated on doc-page.js's injected @page{size:297mm 210mm}), so the file is always
-  // A4 LANDSCAPE with the full-bleed art baked in — no browser print dialog, no paper
-  // or orientation surprises. See .github/workflows/render-print-pdf.yml.
+/* Fingerprint of the model, matching db-render/render-studio-pdf.js exactly: keys
+   sorted so a round-trip through localStorage or an exported JSON file cannot change
+   the digest for identical content. Returns null where crypto.subtle is unavailable
+   (a non-secure context, e.g. opening this file over file://), in which case the
+   drift check below simply stays quiet rather than guessing. */
+function canonicalJSON(v){
+  if(Array.isArray(v)) return "["+v.map(canonicalJSON).join(",")+"]";
+  if(v && typeof v==="object")
+    return "{"+Object.keys(v).sort().map(k=>JSON.stringify(k)+":"+canonicalJSON(v[k])).join(",")+"}";
+  return JSON.stringify(v===undefined?null:v);
+}
+async function modelFingerprint(m){
+  try{
+    if(!(window.crypto && crypto.subtle)) return null;
+    const buf=new TextEncoder().encode(canonicalJSON(m));
+    const h=await crypto.subtle.digest("SHA-256", buf);
+    return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,"0")).join("");
+  }catch(e){ return null; }
+}
+
+$("#magPdfBtn").addEventListener("click", async ()=>{
+  // The file behind this button is rendered by CI from DB.render(model) — the very
+  // document the preview above shows — by db-render/render-studio-pdf.js. It is no
+  // longer a separate hand-built layout, so "what the studio shows" and "what the
+  // printer gets" are the same document, paginated by db.js's own print CSS.
+  //
+  // One gap remains that no renderer can close: the committed render is of the
+  // model as committed, and you may have edited since. The sidecar manifest carries
+  // the fingerprint of the model it was rendered from, so say so plainly rather
+  // than handing over a PDF that quietly disagrees with the editor.
   const name = "Daily Bread №1 — print.pdf";
-  const href = "/db-render/out/" + encodeURIComponent(name);
-  const a = document.createElement("a");
-  a.href = href; a.download = name; a.rel = "noopener";
-  document.body.appendChild(a); a.click(); a.remove();
-  toast("Downloading the print-ready magazine — A4 landscape, ready to print");
+  const grab = ()=>{
+    const a=document.createElement("a");
+    a.href="/db-render/out/"+encodeURIComponent(name);
+    a.download=name; a.rel="noopener";
+    document.body.appendChild(a); a.click(); a.remove();
+  };
+  let man=null;
+  try{
+    const r=await fetch("/db-render/out/magazine-render.json",{cache:"no-store"});
+    if(r.ok) man=await r.json();
+  }catch(e){}
+  const mine=await modelFingerprint(model);
+  if(man && mine && man.modelHash!==mine){
+    const ok=confirm(
+      "The rendered PDF on the server was made from a different model than the one you are editing.\n\n"+
+      "On the server: "+man.pages+" pages, "+man.pageWidthPt+"×"+man.pageHeightPt+" pt, model "+man.modelHash.slice(0,12)+"\n"+
+      "Yours:        model "+mine.slice(0,12)+"\n\n"+
+      "Download the server's file anyway?\n\n"+
+      "Cancel, then use \u201cWeb PDF\u201d, to export exactly what you see on screen.");
+    if(!ok) return;
+  }
+  grab();
+  if(man && mine && man.modelHash===mine) toast("Downloading the magazine — "+man.pages+" pages, rendered from this exact model");
+  else if(man) toast("Downloading the magazine — "+man.pages+" pages");
+  else toast("Downloading the print-ready magazine");
 });
 $("#importBtn").addEventListener("click",()=> $("#fileImport").click());
 $("#fileImport").addEventListener("change",e=>{

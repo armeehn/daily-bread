@@ -30,6 +30,7 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const { chromium } = require("playwright");
+const { pinPdfDates } = require("./pdf-dates");
 
 const KIT = __dirname;
 const FILE = process.argv[2];
@@ -104,26 +105,13 @@ server.listen(PORT, "127.0.0.1", async () => {
 
   fs.mkdirSync(path.dirname(OUT), { recursive: true });
   await page.pdf({ path: OUT, printBackground: true, preferCSSPageSize: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } });
-  // Chromium stamps the wall clock into /CreationDate and /ModDate, which is
-  // the ONLY thing that differs between two identical renders. Honour
-  // SOURCE_DATE_EPOCH (the reproducible-builds convention) so CI can make the
-  // output byte-stable. The replacement is the same length as the original
-  // (D:YYYYMMDDHHMMSS+00'00' = 23 chars), so no xref offset moves; latin1 is
-  // byte-preserving in both directions, so the binary streams survive intact.
-  const sde = process.env.SOURCE_DATE_EPOCH;
-  if (sde && /^\d+$/.test(sde)) {
-    const d = new Date(parseInt(sde, 10) * 1000);
-    const p2 = (n) => String(n).padStart(2, "0");
-    const stamp = "D:" + d.getUTCFullYear() + p2(d.getUTCMonth() + 1) + p2(d.getUTCDate())
-      + p2(d.getUTCHours()) + p2(d.getUTCMinutes()) + p2(d.getUTCSeconds()) + "+00'00'";
-    const before = fs.readFileSync(OUT).toString("latin1");
-    let hits = 0;
-    const after = before.replace(/\/(CreationDate|ModDate) \(D:\d{14}\+00'00'\)/g,
-      (_m, key) => { hits++; return "/" + key + " (" + stamp + ")"; });
-    if (after.length !== before.length) { console.error("date rewrite changed file length"); process.exit(1); }
-    fs.writeFileSync(OUT, Buffer.from(after, "latin1"));
-    console.log("SOURCE_DATE_EPOCH=" + sde + " -> normalised", hits, "PDF date field(s) to", stamp);
-  }
+  // Chromium stamps the wall clock into /CreationDate and /ModDate, which is the
+  // ONLY thing that differs between two identical renders. Shared with
+  // render-studio-pdf.js — see db-render/pdf-dates.js.
+  const pinned = pinPdfDates(OUT);
+  if (pinned.applied)
+    console.log("SOURCE_DATE_EPOCH=" + process.env.SOURCE_DATE_EPOCH + " -> normalised",
+                pinned.hits, "PDF date field(s) to", pinned.stamp);
   console.log("wrote", OUT);
   await browser.close();
   server.close();
