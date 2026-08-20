@@ -114,6 +114,16 @@ jobs:
           pages=$(pdfinfo "$PDF" | awk '/^Pages:/{print $2}')
           [ "${pages:-0}" -ge 1 ] || { echo "::error::the render produced no pages"; exit 1; }
 
+      # The safe area is the check that catches what nothing else here can see. The
+      # media box is the whole sheet so backgrounds bleed, which means the safe inset
+      # lives in the flow — and a section that outgrows its page fragments onto a
+      # sheet that starts its first line outside the trim. The render still succeeds,
+      # the page count still looks plausible, and the studio preview has no sheets in
+      # it at all. Geometry comes from the document's own printGeom, not a constant.
+      - name: Check the safe area on every sheet
+        working-directory: db-render
+        run: node check-safe-area.js "$PDF"
+
       # A claim of determinism that wasn't tested twice is not evidence.
       - name: Render a second time and require byte-identical output
         working-directory: db-render
