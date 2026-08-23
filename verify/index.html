@@ -6,7 +6,7 @@
 <title>Verify · Daily Bread №1 · tamper-evidence</title>
 <meta name="description" content="Cryptographically verify that every language edition of Daily Bread №1 is the exact issue that was published, signed with an offline key and recorded in an append-only transparency log.">
 <meta name="robots" content="index,follow">
-<link rel="canonical" href="https://ourdailybre.ad/verify/">
+<link rel="canonical" href="https://db.ripostelabs.xyz/verify/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
@@ -200,12 +200,12 @@
   <p class="lede">The honest check is one you run with a verifier you did not get from
   us, against a fingerprint you obtained elsewhere. It needs only Python 3 — no
   packages to install.</p>
-  <pre>curl -O https://ourdailybre.ad/verify/verify_standalone.py
-curl -O https://ourdailybre.ad/.well-known/newsproof/publisher-key.json
-curl -O https://ourdailybre.ad/.well-known/newsproof/log-key.json
-curl -O https://ourdailybre.ad/.well-known/newsproof/anchors.jsonl
-curl -O https://ourdailybre.ad/.well-known/newsproof/consistency.json
-curl -O https://ourdailybre.ad/.well-known/newsproof/proofs/en.proof.json
+  <pre>curl -O https://db.ripostelabs.xyz/verify/verify_standalone.py
+curl -O https://db.ripostelabs.xyz/.well-known/newsproof/publisher-key.json
+curl -O https://db.ripostelabs.xyz/.well-known/newsproof/log-key.json
+curl -O https://db.ripostelabs.xyz/.well-known/newsproof/anchors.jsonl
+curl -O https://db.ripostelabs.xyz/.well-known/newsproof/consistency.json
+curl -O https://db.ripostelabs.xyz/.well-known/newsproof/proofs/en.proof.json
 
 python3 verify_standalone.py en.proof.json \
     --publisher-key publisher-key.json --log-key log-key.json \

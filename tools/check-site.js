@@ -34,7 +34,11 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const LIST = process.argv.includes('--list');
 
-const ORIGIN = 'https://ourdailybre.ad';
+/* Must match ORIGIN in tools/build.js. build.js exports nothing and calls main()
+   at import, so this cannot be shared by require(); kept in step by hand. When they
+   disagree, every sitemap URL fails below with "which build.js does not produce",
+   which reads like missing pages rather than a domain mismatch. */
+const ORIGIN = 'https://db.ripostelabs.xyz';
 const LANGS = ['en','fr','es','it','pl','la','zh-hans','zh-hant','pa','ko','ja','tl','vi','hi','ar','fa'];
 const RTL = ['ar','fa'];
 const VARIANTS = ['', 'lite', 'eink'];

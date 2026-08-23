@@ -62,7 +62,8 @@ const LANGS = [
   {code:'fa',      hreflang:'fa',      endo:'فارسی',         en:'Farsi',                dir:'rtl'},
 ];
 
-const ORIGIN = 'https://ourdailybre.ad';
+/* Kept in step by hand with ORIGIN in tools/check-site.js. */
+const ORIGIN = 'https://db.ripostelabs.xyz';
 
 /* ---- the reading tabs -------------------------------------------------------
    One entry per tab: `id` is the anchor the rail links to AND the id of the
