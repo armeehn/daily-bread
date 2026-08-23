@@ -68,9 +68,6 @@ const attrs = (tag) => {
 const tagsOf = (html, name) =>
   [...html.matchAll(new RegExp(`<${name}\\b[^>]*>`, 'gi'))].map(m => m[0]);
 
-/* Text outside of tags — where a bare "&" is a markup error. Inside an
-   attribute an unescaped "&" is legal-ish and browsers cope, so this only
-   looks at the text nodes, which is where it actually bites. */
 /* Blank a run of characters, keeping its length and its newlines, so anything
    measured against the original string (an offset, a line number) still lands
    in the same place. */
@@ -91,13 +88,28 @@ const blank = (s) => s.replace(/[^\n]/g, ' ');
 
    None of those is visible to a browser or a crawler. Blank them out first; the
    opening tags survive, so <script src> is still link-checked. */
+/* One left-to-right pass, not two, and the alternation matters. Blanking
+   script/style first and comments second lets `<!-- ... <script> ... -->` open a
+   body that runs to the next REAL </script>, blanking the live markup in
+   between: a <nav> so swallowed vanishes from the landmark and duplicate-id
+   checks silently. Doing it the other way round has the mirror fault. Scanning
+   once means whichever construct opens first wins, which is what a parser does.
+
+   The opening tag is matched quote-aware because ">" is legal inside a quoted
+   attribute value; `[^>]*` stops dead on <script data-x="a>b" src="...">, and
+   the src that falls off the end stops being link-checked. The three branches
+   are disjoint, so there is nothing to backtrack over. */
+const SKIPPABLE =
+  /(<(script|style)\b(?:"[^"]*"|'[^']*'|[^>"'])*>)([\s\S]*?)(<\/\2\s*>)|<!--[\s\S]*?-->/gi;
+
 function markupOnly(html) {
-  return html
-    .replace(/(<(script|style)\b[^>]*>)([\s\S]*?)(<\/\2\s*>)/gi,
-             (_m, open, _name, body, close) => open + blank(body) + close)
-    .replace(/<!--[\s\S]*?-->/g, blank);
+  return html.replace(SKIPPABLE, (m, open, _name, body, close) =>
+    open === undefined ? blank(m) : open + blank(body) + close);
 }
 
+/* Text outside of tags — where a bare "&" is a markup error. Inside an
+   attribute an unescaped "&" is legal-ish and browsers cope, so this only
+   looks at the text nodes, which is where it actually bites. */
 function rawAmpersands(html) {
   const hits = [];
   const text = html.replace(/<[^>]*>/g, blank);

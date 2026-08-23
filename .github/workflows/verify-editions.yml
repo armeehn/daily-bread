@@ -1,4 +1,4 @@
-# Two checks that would each have caught a bug this repo actually shipped.
+# Three checks that would each have caught a bug this repo actually shipped.
 #
 # 1. GENERATED FILES MUST MATCH THEIR GENERATOR
 # Every page in the site root is output from tools/build.js. That makes a merge
@@ -100,6 +100,7 @@ jobs:
       # Deliberately checks the COMMITTED pages, not a fresh build: those are the
       # bytes that deploy. The `generated` job above is what proves they match
       # tools/build.js, so the two jobs together cover both halves.
+      # check-site.js has no dependencies on purpose, same rule as build.js.
       - name: Read the built site back
         run: node tools/check-site.js
 
