@@ -1,4 +1,4 @@
-# Two checks that would each have caught a bug this repo actually shipped.
+# Three checks that would each have caught a bug this repo actually shipped.
 #
 # 1. GENERATED FILES MUST MATCH THEIR GENERATOR
 # Every page in the site root is output from tools/build.js. That makes a merge
@@ -27,6 +27,14 @@
 # Note for whoever reads a red scheduled run: the live job compares the tip of main
 # to the deployed site, so a run that fires during a deploy can report SERVED
 # DIFFERS for a minute. Re-run it before treating that as an incident.
+#
+# 3. THE BUILT SITE MUST STILL READ BACK CLEAN
+# tools/check-site.js reads the 48 built pages the way a browser and a crawler do
+# -- links, anchors, ids, alt text, hreflang, canonicals, the sitemap, and <nav>
+# naming. It existed but nothing ran it, so it drifted to 145 problems unnoticed:
+# every edition shipped two <nav> landmarks both named "Sections", which leaves a
+# screen-reader user unable to tell the header nav from the contents rail. A check
+# nobody runs is not a check, which is why this job exists.
 #
 # Gitea Actions also reads .github/workflows, so this file works on either.
 name: verify-editions
@@ -78,6 +86,23 @@ jobs:
             exit 1
           fi
           echo "Clean: every generated file matches its generator."
+
+  site:
+    name: built pages read back clean
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Deliberately checks the COMMITTED pages, not a fresh build: those are the
+      # bytes that deploy. The `generated` job above is what proves they match
+      # tools/build.js, so the two jobs together cover both halves.
+      # check-site.js has no dependencies on purpose, same rule as build.js.
+      - name: Read the built site back
+        run: node tools/check-site.js
 
   live:
     name: live editions still hash to their signatures

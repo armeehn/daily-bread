@@ -427,12 +427,19 @@ function langpick(t, code, variant){
 /* The contents rail: a plain in-page <nav>, sticky beside (or above) the pane
    column. It is deliberately NOT role="tablist" — without runtime JS nothing can
    keep aria-selected honest, and these are real links to real anchors that work
-   with JS off, with CSS off, and when the page is printed whole. */
+   with JS off, with CSS off, and when the page is printed whole.
+
+   Its accessible name is nav.contents ("Contents"), not chrome.sections. The
+   page carries three <nav> landmarks and mainnav() below already claims
+   chrome.sections, so naming both the same left a screen-reader user with two
+   identically-named "Sections" landmarks and no way to tell the header nav
+   from the rail. nav.contents is the rail's own visible heading and is already
+   translated in all sixteen languages, so this needs no new string. */
 function rail(t){
   const items = TABS.map(s =>
     `      <a href="#${s.id}"><span class="no">${s.no}</span><span class="lb">${esc(t['nav.'+s.key])}</span></a>`
   ).join('\n');
-  return `<nav class="rail" aria-label="${attr(t['chrome.sections'])}">
+  return `<nav class="rail" aria-label="${attr(t['nav.contents'])}">
   <div class="rail-in">
     <div class="rail-hd"><span>${esc(t['nav.contents'])}</span><span class="r">DB-001</span></div>
     <div class="rail-list">
