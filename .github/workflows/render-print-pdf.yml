@@ -32,9 +32,10 @@
 # layout while the generator produced 19, shipping a PDF that failed this repo's own
 # safe-area guard on 18 sheets. The rule is now the other way round: the PDF is a
 # result of this recipe and nothing else, and the run FAILS if the tracked file is
-# not byte-identical to what this recipe renders. CI still never commits it -- it
-# fails and tells the human to run it again with commit=true, so CI commits its own
-# output. The producer is this recipe, running here.
+# not byte-identical to what this recipe renders. No push and no pull request can
+# ever write that file -- such a run fails and tells the human to start this workflow
+# again with commit=true, which is the one path on which CI commits its own render.
+# The producer is this recipe, running here.
 #
 # A COROLLARY THAT SURPRISES PEOPLE
 # The tracked PDF cannot be produced on a workstation. The same source at the same
@@ -116,9 +117,13 @@ env:
 
 jobs:
   render:
-    # PINNED, not ubuntu-latest. The rendered bytes depend on this image's font
-    # stack and libraries, so a floating label would move the artifact underneath
-    # the byte-equality guard below and fail runs that changed nothing.
+    # PINNED, not ubuntu-latest. The rendered bytes depend on this image's font stack
+    # and libraries, so a floating label would move the artifact underneath the
+    # byte-equality guard below and redden runs that changed nothing. This narrows
+    # that window rather than closing it: ubuntu-24.04 is itself refreshed, and a
+    # font or library change inside it can still move the bytes. When that happens
+    # the guard fails on a change that touched nothing, and the fix is a commit=true
+    # run -- loud and safe, which is the trade being made here.
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -168,16 +173,22 @@ jobs:
       - name: Render a second time and require byte-identical output
         working-directory: db-render
         run: |
-          node render-studio-pdf.js "out/second.pdf" >/dev/null
-          if cmp -s "$PDF" "out/second.pdf"; then
+          # Into its own directory, deliberately. The renderer writes its manifest to
+          # dirname(OUT)/magazine-render.json, so rendering to out/second.pdf would
+          # overwrite out/magazine-render.json -- the file this workflow goes on to
+          # upload and, on the opt-in path, COMMIT. That was survivable only because
+          # the two renders are identical, which is the very thing being tested here.
+          mkdir -p out/second
+          node render-studio-pdf.js "out/second/second.pdf" >/dev/null
+          if cmp -s "$PDF" "out/second/second.pdf"; then
             echo "deterministic: two renders are byte-identical ($(sha256sum "$PDF" | cut -c1-16))"
           else
             echo "::error::render is NOT deterministic — two runs of the same source differ"
-            cmp -l "$PDF" "out/second.pdf" | head -20
-            ls -l "$PDF" "out/second.pdf"
+            cmp -l "$PDF" "out/second/second.pdf" | head -20
+            ls -l "$PDF" "out/second/second.pdf"
             exit 1
           fi
-          rm -f "out/second.pdf" "out/second.json" || true
+          rm -rf out/second
 
       # Uploaded BEFORE the guards below, deliberately. When the byte-equality gate
       # fails it tells a human to re-render; they need this recipe's own output in
@@ -302,10 +313,13 @@ jobs:
             echo "no change in the rendered PDF"
             exit 0
           fi
-          # No [skip ci]: the point of this commit is that the artifact is CI's own
-          # output, and the run it triggers is what proves the guard now passes on
-          # it. It cannot loop -- a triggered run never commits, because committing
-          # requires workflow_dispatch with commit=true.
+          # No [skip ci], but do not expect it to verify itself: a push made with the
+          # checkout-persisted GITHUB_TOKEN does not start a normal workflow run
+          # (GitHub suppresses that to prevent loops), so the runs this commit
+          # appears to queue sit at action_required and never execute. To SEE the
+          # guard pass on the artifact just committed, run this workflow again with
+          # commit=false. Looping is impossible regardless: committing requires
+          # workflow_dispatch with commit=true, which no trigger can set.
           git commit -m "ci: re-render the magazine PDF from the studio document (manual opt-in)"
           git push
 
@@ -314,5 +328,5 @@ jobs:
       - name: Note that nothing was committed
         if: ${{ always() && !(github.event_name == 'workflow_dispatch' && inputs.commit) }}
         run: |
-          echo "The committed PDF was left untouched — CI never writes it. It is downloadable as the \`print-pdf\` artifact." >> "$GITHUB_STEP_SUMMARY"
+          echo "The committed PDF was left untouched — no push or pull request ever writes it. It is downloadable as the \`print-pdf\` artifact." >> "$GITHUB_STEP_SUMMARY"
           echo "If the byte-equality guard failed, run this workflow from the Actions tab with **commit = true**. Do not render it locally — a workstation render is byte-different from this runner's and can never satisfy the guard." >> "$GITHUB_STEP_SUMMARY"
