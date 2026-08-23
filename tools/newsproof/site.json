@@ -5,7 +5,7 @@
     "title": "Daily Bread №1 · Kelowna's Collapse",
     "published_at": "2026-07-25T00:00:00Z",
     "authors": ["Daily Bread", "Riposte Laboratories Inc."],
-    "origin": "https://ourdailybre.ad"
+    "origin": "https://db.ripostelabs.xyz"
   },
   "note": "Editions must track the LANGS list in tools/build.js. Leaf order is the order below and is stable; append new editions, do not reorder.",
   "editions": [
