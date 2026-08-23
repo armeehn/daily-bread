@@ -21,9 +21,29 @@
 # with no such file the default model is used, which is what a fresh studio shows.
 #
 # WHY THIS DOES NOT AUTO-COMMIT
-# The committed PDF may have been proofed with a printer. CI must not silently
-# replace a proofed artifact. Every run renders, checks and uploads; the commit
-# happens only when a human asks via workflow_dispatch with commit=true.
+# CI must not silently replace the tracked artifact. Every run renders, checks and
+# uploads; the commit happens only when a human asks via workflow_dispatch with
+# commit=true.
+#
+# WHAT THE TRACKED ARTIFACT IS ALLOWED TO BE (changed deliberately, see #43)
+# This file used to say the committed PDF "may have been proofed with a printer",
+# and treated any divergence from a fresh render as information for a human rather
+# than an error. That is what let the tracked PDF sit at the pre-rebuild 33-sheet
+# layout while the generator produced 19, shipping a PDF that failed this repo's own
+# safe-area guard on 18 sheets. The rule is now the other way round: the PDF is a
+# result of this recipe and nothing else, and the run FAILS if the tracked file is
+# not byte-identical to what this recipe renders. No push and no pull request can
+# ever write that file -- such a run fails and tells the human to start this workflow
+# again with commit=true, which is the one path on which CI commits its own render.
+# The producer is this recipe, running here.
+#
+# A COROLLARY THAT SURPRISES PEOPLE
+# The tracked PDF cannot be produced on a workstation. The same source at the same
+# SOURCE_DATE_EPOCH renders to the same 19 sheets and the same layout elsewhere, but
+# not to the same bytes -- font subsetting and image encoding follow the OS's font
+# stack and libraries, which is why runs-on is pinned below. So "re-render it and
+# commit" is not the fix for a byte-equality failure; running this workflow with
+# commit=true is.
 #
 # THE CHECKS ARE AGAINST THE SOURCE, NOT AGAINST CONSTANTS
 # The old "24 pages / A4 landscape" assertions both passed on a document whose every
@@ -49,7 +69,16 @@ on:
       - 'magazine.model.json'
       - 'assets/**'
       - 'db-render/render-studio-pdf.js'
+      # pdf-dates.js pins /CreationDate and /ModDate, which is the exact mechanism
+      # the byte-equality guard below depends on: edit it and the tracked PDF's
+      # bytes change. It is as much an input as the renderer itself.
+      - 'db-render/pdf-dates.js'
+      - 'db-render/check-safe-area.js'
       - 'db-render/vendor/**'
+      # The tracked artifact is guarded below, so a change to IT must run this too.
+      # Without this line the workflow that renders the PDF did not trigger on the
+      # pull request that changed the PDF (#43), which is half of how it went stale.
+      - 'db-render/out/**'
       - '.github/workflows/render-print-pdf.yml'
   pull_request:
     paths:
@@ -57,12 +86,21 @@ on:
       - 'magazine.model.json'
       - 'assets/**'
       - 'db-render/render-studio-pdf.js'
+      # pdf-dates.js pins /CreationDate and /ModDate, which is the exact mechanism
+      # the byte-equality guard below depends on: edit it and the tracked PDF's
+      # bytes change. It is as much an input as the renderer itself.
+      - 'db-render/pdf-dates.js'
+      - 'db-render/check-safe-area.js'
       - 'db-render/vendor/**'
+      # The tracked artifact is guarded below, so a change to IT must run this too.
+      # Without this line the workflow that renders the PDF did not trigger on the
+      # pull request that changed the PDF (#43), which is half of how it went stale.
+      - 'db-render/out/**'
       - '.github/workflows/render-print-pdf.yml'
   workflow_dispatch:
     inputs:
       commit:
-        description: 'Commit the re-rendered PDF over the committed one (the committed file may be printer-proofed — only do this deliberately)'
+        description: 'Commit the re-rendered PDF over the committed one — the supported way to clear a byte-equality failure'
         type: boolean
         default: false
 
@@ -79,7 +117,14 @@ env:
 
 jobs:
   render:
-    runs-on: ubuntu-latest
+    # PINNED, not ubuntu-latest. The rendered bytes depend on this image's font stack
+    # and libraries, so a floating label would move the artifact underneath the
+    # byte-equality guard below and redden runs that changed nothing. This narrows
+    # that window rather than closing it: ubuntu-24.04 is itself refreshed, and a
+    # font or library change inside it can still move the bytes. When that happens
+    # the guard fails on a change that touched nothing, and the fix is a commit=true
+    # run -- loud and safe, which is the trade being made here.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -128,23 +173,118 @@ jobs:
       - name: Render a second time and require byte-identical output
         working-directory: db-render
         run: |
-          node render-studio-pdf.js "out/second.pdf" >/dev/null
-          if cmp -s "$PDF" "out/second.pdf"; then
+          # Into its own directory, deliberately. The renderer writes its manifest to
+          # dirname(OUT)/magazine-render.json, so rendering to out/second.pdf would
+          # overwrite out/magazine-render.json -- the file this workflow goes on to
+          # upload and, on the opt-in path, COMMIT. That was survivable only because
+          # the two renders are identical, which is the very thing being tested here.
+          mkdir -p out/second
+          node render-studio-pdf.js "out/second/second.pdf" >/dev/null
+          if cmp -s "$PDF" "out/second/second.pdf"; then
             echo "deterministic: two renders are byte-identical ($(sha256sum "$PDF" | cut -c1-16))"
           else
             echo "::error::render is NOT deterministic — two runs of the same source differ"
-            cmp -l "$PDF" "out/second.pdf" | head -20
-            ls -l "$PDF" "out/second.pdf"
+            cmp -l "$PDF" "out/second/second.pdf" | head -20
+            ls -l "$PDF" "out/second/second.pdf"
             exit 1
           fi
-          rm -f "out/second.pdf" "out/second.json" || true
+          rm -rf out/second
 
-      # The committed PDF is the thing a printer may have proofed. Report how the
-      # fresh render compares; do not act on it.
-      - name: Compare against the committed PDF
+      # Uploaded BEFORE the guards below, deliberately. When the byte-equality gate
+      # fails it tells a human to re-render; they need this recipe's own output in
+      # hand to diff against the tracked file, and a step after a failing one never
+      # runs.
+      - name: Upload the rendered PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: print-pdf
+          path: |
+            db-render/out/Daily Bread №1 — print.pdf
+            db-render/out/magazine-render.json
+          if-no-files-found: error
+          retention-days: 30
+
+      # ---- THE TRACKED ARTIFACT MUST BE THIS RECIPE'S OUTPUT ----------------
+      # Read the committed copies out of the tree: the working copy has already been
+      # overwritten by the render above. These three steps are skipped only on the
+      # deliberate opt-in re-commit, which exists precisely to replace the artifact.
+      - name: Read the committed artifact
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.commit) }}
+        run: |
+          git show "HEAD:db-render/$PDF" > /tmp/committed.pdf 2>/dev/null \
+            || { echo "::error::no PDF is committed at db-render/$PDF — the tracked file is what ships"; exit 1; }
+          git show "HEAD:db-render/$MANIFEST" > /tmp/committed.json 2>/dev/null \
+            || { echo "::error::db-render/$MANIFEST is not committed; it records the epoch its PDF was rendered at"; exit 1; }
+
+      # Prepress stated in its own terms. Byte equality below subsumes this whenever
+      # it passes, but this names the defect a human has to act on ("type outside the
+      # safe area, cut off the finished copy") instead of leaving them to infer it
+      # from a byte mismatch. It needs no browser: node, poppler and db.js only.
+      - name: The committed PDF must pass the safe-area guard
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.commit) }}
+        working-directory: db-render
+        run: node check-safe-area.js /tmp/committed.pdf
+
+      # THE GUARD. Anything stale, hand-rendered, or edited outside CI fails here.
+      #
+      # WHY IT RENDERS AGAIN INSTEAD OF REUSING THE RENDER ABOVE
+      # The renderer pins the PDF's /CreationDate and /ModDate from SOURCE_DATE_EPOCH,
+      # and this workflow sets that to the HEAD commit date. Every commit therefore
+      # moves those bytes, so comparing the tracked file against a render at HEAD's
+      # date would be red on every commit after the one that produced it -- and a
+      # guard that is always red is one people learn to re-run rather than read. The
+      # manifest records the epoch its own PDF was rendered at, so the comparison
+      # renders at THAT epoch. Only the date strings depend on it, never the layout.
+      #
+      # WHY NOT modelHash, WHICH WOULD BE CHEAPER
+      # The exact drift this guard exists for left modelHash completely unchanged at
+      # 5a715b94cf6f: the model was identical and db.js's print stylesheet had moved
+      # underneath it, 33 sheets to 19. A modelHash comparison would have passed.
+      - name: The committed PDF must be byte-identical to this render
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.commit) }}
         working-directory: db-render
         run: |
-          committed=$(git show "HEAD:db-render/$PDF" > /tmp/committed.pdf 2>/dev/null && echo yes || echo no)
+          epoch=$(node -e 'const m=require("/tmp/committed.json"); if(!m.sourceDateEpoch) process.exit(1); process.stdout.write(String(m.sourceDateEpoch))') \
+            || { echo "::error::the committed manifest records no sourceDateEpoch, so its PDF cannot be reproduced"; exit 1; }
+          echo "the committed manifest says it was rendered at SOURCE_DATE_EPOCH=$epoch"
+          mkdir -p out/cmp
+          SOURCE_DATE_EPOCH="$epoch" node render-studio-pdf.js "out/cmp/against-committed.pdf" >/dev/null
+          rc=0
+          cmp -s "out/cmp/against-committed.pdf" /tmp/committed.pdf || rc=1
+          # The manifest is committed alongside the PDF and the epoch above is READ
+          # from it, so leaving it unchecked would let a wrong manifest be reported as
+          # a stale PDF. Every field in it derives from the same source and the same
+          # epoch, so the recipe reproduces it byte-for-byte too.
+          cmp -s "out/cmp/magazine-render.json" /tmp/committed.json || rc=1
+          if [ "$rc" = 0 ]; then
+            echo "the committed PDF and manifest are exactly what this recipe renders ($(sha256sum /tmp/committed.pdf | cut -c1-16))"
+          else
+            echo "::error::the committed artifact is NOT what this recipe renders — it is stale, or it was produced outside CI"
+            echo "committed   sha256 $(sha256sum /tmp/committed.pdf | cut -d' ' -f1)  pages $(pdfinfo /tmp/committed.pdf | awk '/^Pages:/{print $2}')  $(stat -c%s /tmp/committed.pdf) bytes"
+            echo "this recipe sha256 $(sha256sum "out/cmp/against-committed.pdf" | cut -d' ' -f1)  pages $(pdfinfo "out/cmp/against-committed.pdf" | awk '/^Pages:/{print $2}')  $(stat -c%s "out/cmp/against-committed.pdf") bytes"
+            diff -u /tmp/committed.json "out/cmp/magazine-render.json" || true
+            cmp -l "out/cmp/against-committed.pdf" /tmp/committed.pdf | head -10 || true
+            echo "Do NOT re-render this locally and commit it: a workstation render"
+            echo "differs from this runner's in font and image encoding (same layout,"
+            echo "same page count, different bytes), so a hand-made file can never"
+            echo "satisfy this guard. Update it the only supported way:"
+            echo "  Actions -> render-print-pdf -> Run workflow -> commit = true"
+            echo "That makes CI render the artifact and commit its own output."
+          fi
+          rm -rf out/cmp
+          [ "$rc" = 0 ] || exit 1
+
+      - name: Summarise the render on the run page
+        if: ${{ always() }}
+        working-directory: db-render
+        run: |
+          # This runs even when a guard above failed, so the run page still says what
+          # came out. It must not invent a second failure when there is nothing to
+          # report: if an earlier step died before the render, the file is absent.
+          if [ ! -f "$PDF" ]; then
+            echo "No PDF was rendered in this run." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
           {
             echo "### Magazine PDF — rendered from the studio document"
             echo
@@ -160,52 +300,36 @@ jobs:
             echo '```json'
             cat "$MANIFEST"
             echo '```'
-            if [ "$committed" = yes ]; then
-              echo
-              echo "### Committed PDF (unchanged by this run)"
-              echo
-              echo '```'
-              pdfinfo /tmp/committed.pdf | grep -E "Pages|Page size|File size"
-              echo "sha256 $(sha256sum /tmp/committed.pdf | cut -d' ' -f1)"
-              echo '```'
-              echo
-              if cmp -s "$PDF" /tmp/committed.pdf; then
-                echo "The fresh render matches the committed file byte-for-byte."
-              else
-                echo "The fresh render **differs** from the committed file. Download the \`print-pdf\` artifact and compare it by eye before deciding to replace a proofed artifact."
-              fi
-            else
-              echo
-              echo "No PDF is committed at that path."
-            fi
           } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Upload the rendered PDF
-        uses: actions/upload-artifact@v4
-        with:
-          name: print-pdf
-          path: |
-            db-render/out/Daily Bread №1 — print.pdf
-            db-render/out/magazine-render.json
-          if-no-files-found: error
-          retention-days: 30
 
       # Opt-in only. Never runs on push or pull_request.
       - name: Commit the rendered PDF (explicit opt-in only)
         if: github.event_name == 'workflow_dispatch' && inputs.commit
         run: |
-          git config user.name "db-render-bot"
-          git config user.email "db-render-bot@users.noreply.github.com"
+          # The repo's commits are attributed to Sasha Zero. A distinct bot identity
+          # also made GitHub treat this commit as one from a first-time contributor,
+          # which parked the pull_request runs it queued at action_required.
+          git config user.name "Sasha Zero"
+          git config user.email "sasha@ripostelabs.xyz"
           git add -f "db-render/$PDF" "db-render/$MANIFEST"
           if git diff --cached --quiet; then
             echo "no change in the rendered PDF"
             exit 0
           fi
-          git commit -m "ci: re-render the magazine PDF from the studio document (manual opt-in) [skip ci]"
+          # No [skip ci], but do not expect it to verify itself: a push made with the
+          # checkout-persisted GITHUB_TOKEN does not start a normal workflow run
+          # (GitHub suppresses that to prevent loops), so the runs this commit
+          # appears to queue sit at action_required and never execute. To SEE the
+          # guard pass on the artifact just committed, run this workflow again with
+          # commit=false. Looping is impossible regardless: committing requires
+          # workflow_dispatch with commit=true, which no trigger can set.
+          git commit -m "ci: re-render the magazine PDF from the studio document (manual opt-in)"
           git push
 
+      # always(): this is the step that tells a human what to do about a FAILED
+      # byte-equality guard, so it is worthless if the failure skips it.
       - name: Note that nothing was committed
-        if: "!(github.event_name == 'workflow_dispatch' && inputs.commit)"
+        if: ${{ always() && !(github.event_name == 'workflow_dispatch' && inputs.commit) }}
         run: |
-          echo "The committed PDF was left untouched. It is downloadable as the \`print-pdf\` artifact." >> "$GITHUB_STEP_SUMMARY"
-          echo "To replace the committed file, run this workflow from the Actions tab with **commit = true**." >> "$GITHUB_STEP_SUMMARY"
+          echo "The committed PDF was left untouched — no push or pull request ever writes it. It is downloadable as the \`print-pdf\` artifact." >> "$GITHUB_STEP_SUMMARY"
+          echo "If the byte-equality guard failed, run this workflow from the Actions tab with **commit = true**. Do not render it locally — a workstation render is byte-different from this runner's and can never satisfy the guard." >> "$GITHUB_STEP_SUMMARY"
