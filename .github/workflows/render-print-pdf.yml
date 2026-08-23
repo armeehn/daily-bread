@@ -306,8 +306,11 @@ jobs:
       - name: Commit the rendered PDF (explicit opt-in only)
         if: github.event_name == 'workflow_dispatch' && inputs.commit
         run: |
-          git config user.name "db-render-bot"
-          git config user.email "db-render-bot@users.noreply.github.com"
+          # The repo's commits are attributed to Sasha Zero. A distinct bot identity
+          # also made GitHub treat this commit as one from a first-time contributor,
+          # which parked the pull_request runs it queued at action_required.
+          git config user.name "Sasha Zero"
+          git config user.email "sasha@ripostelabs.xyz"
           git add -f "db-render/$PDF" "db-render/$MANIFEST"
           if git diff --cached --quiet; then
             echo "no change in the rendered PDF"
