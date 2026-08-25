@@ -296,6 +296,7 @@
   "stickers.h": "剥がして",
   "stickers.dek": "余ったインクの行き先はここ。ページを印刷して、破線に沿って切り、この谷を水筒に貼ってください。ステッカー十二枚、同じ崩壊は二つとありません。",
   "stickers.print": "このシートを印刷",
+  "stickers.printFull": "この号全体を印刷",
   "stickers.printHint": "または Ctrl / ⌘ + P を押す · 破線に沿って切る",
   "stickers.sheetHd": "ステッカーシート №1 · 端材にリソ印刷",
   "stickers.sheetMeta": "破線に沿って切る",
