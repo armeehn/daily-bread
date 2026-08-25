@@ -296,6 +296,7 @@
   "stickers.h": "날 떼어내",
   "stickers.dek": "남은 잉크는 여기로 갔다. 페이지를 인쇄하고, 점선을 따라 자르고, 이 계곡을 당신의 물병에 붙여라. 스티커 열두 장; 똑같은 붕괴는 하나도 없다.",
   "stickers.print": "이 시트 인쇄하기",
+  "stickers.printFull": "이번 호 전체 인쇄하기",
   "stickers.printHint": "또는 Ctrl / ⌘ + P 누르기 · 점선을 따라 자르세요",
   "stickers.sheetHd": "스티커 시트 №1 · 자투리에 리소",
   "stickers.sheetMeta": "점선을 따라 자르세요",
