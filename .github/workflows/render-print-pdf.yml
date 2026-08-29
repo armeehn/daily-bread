@@ -195,7 +195,19 @@ jobs:
       # hand to diff against the tracked file, and a step after a failing one never
       # runs.
       - name: Upload the rendered PDF
+        if: ${{ contains(github.server_url, 'github.com') }}
         uses: actions/upload-artifact@v4
+        with:
+          name: print-pdf
+          path: |
+            db-render/out/Daily Bread №1 — print.pdf
+            db-render/out/magazine-render.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload the rendered PDF (Gitea)
+        if: ${{ !contains(github.server_url, 'github.com') }}
+        uses: christopherHX/gitea-upload-artifact@v4
         with:
           name: print-pdf
           path: |
