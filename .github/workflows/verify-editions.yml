@@ -104,6 +104,64 @@ jobs:
       - name: Read the built site back
         run: node tools/check-site.js
 
+  # 4. THE .tex MUST STILL PRODUCE THE COMMITTED WEB INPUT
+  # content/issue-01.tex is the source of truth; content/issue-01.js is emitted
+  # from it and is what tools/build.js reads. Parse the .tex, require it to equal
+  # the committed .js, rebuild the site, require the tree unchanged, and verify
+  # the newsproof proofs offline. Runs on pull requests on purpose: the `live`
+  # job below cannot (it needs production), which is how a one-string change
+  # once reached main with 15 of 16 editions unverifiable.
+  latex:
+    name: the .tex round-trips to the web build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Standard library only: python3 for the parser, node for build.js.
+      - name: Parse the .tex, rebuild the site, verify the proofs
+        run: |
+          python3 tools/db-latex.py check --edition issue-01 --web
+          python3 tools/db-latex.py check --edition issue-02 --web
+
+  # 5. THE .tex MUST STILL TYPESET TO THE PRESS GEOMETRY
+  # 48 A5 pages (420 x 594.96 pt) and 24 A4-landscape sides (841.92 x 594.96 pt),
+  # the sizes db-render/out/*.pdf measure. Needs TeX, so it runs in the TeX Live
+  # image on the self-hosted runners only (2.7 GB, pulled once there; never on
+  # github.com). Without riposte-latex on the runner the class uses its shim,
+  # which changes the face and colours but not the geometry this job asserts.
+  latex-print:
+    name: the .tex typesets to the press geometry
+    if: ${{ !contains(github.server_url, 'github.com') }}
+    runs-on: ubuntu-latest
+    container: texlive/texlive:latest-full
+    steps:
+      # FIRST, before checkout: a TeX image has no node and every `uses:` step
+      # is a JS action. pdfinfo is what check --print measures the PDFs with.
+      - name: Install node, python and poppler
+        run: apt-get update -qq && apt-get install -y -qq nodejs python3 poppler-utils
+
+      - uses: actions/checkout@v4
+
+      - name: Typeset both print outputs and measure them
+        run: |
+          python3 tools/db-latex.py check --edition issue-01 --print
+          python3 tools/db-latex.py check --edition issue-02 --print
+
+      - name: Keep the PDFs
+        if: always()
+        uses: ChristopherHX/gitea-upload-artifact@v4
+        with:
+          name: daily-bread-print
+          path: |
+            build/latex/issue-01/print.pdf
+            build/latex/issue-01/booklet.pdf
+            build/latex/issue-02/print.pdf
+            build/latex/issue-02/booklet.pdf
+
   live:
     name: live editions still hash to their signatures
     # A PR from a fork cannot tell us anything about production, and the scheduled

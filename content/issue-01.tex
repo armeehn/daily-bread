@@ -1,0 +1,1716 @@
+%% Daily Bread · the issue itself — SOURCE OF TRUTH
+%% ---------------------------------------------------------------------------
+%% One issue, one file. The web build and the print build both read this;
+%% see tools/latex/README.md for the pipeline and the macro set.
+%%
+%% NOTATION (inside a value, kept verbatim by both consumers)
+%%   "a | b | c"              fields within one row (no "|" in prose)
+%%   "line one / line two"    line breaks inside a poem
+%%   "Q: …" / "A: …"          speaker prefixes in interviews
+%%   "#f0477d" as a last field pins that row's accent (written \#f0477d)
+%%   "none"                   hides an optional element
+%%   \begin{seq}{name} … \block{…} … \end{seq}   a block sequence
+%%
+%% TeX specials are escaped: \# \$ \% \& \_ \{ \} \textbackslash{}
+%% ---------------------------------------------------------------------------
+
+\documentclass{dailybread}
+\issue{№1}
+\theme{Kelowna's Collapse}
+\edition{№1 · SUMMER 2026}
+\trim{A5}
+
+\begin{document}
+
+% 01 · fc · Cover
+\begin{page}{fc}{Cover}[front]
+\slug{v2-fc}
+\field{art}{uploads/lalalalala.png}
+\field{issueTag}{№1 — KELOWNA’S COLLAPSE}
+\field{price}{PAY WHAT YOU CAN}
+\field{publisher}{RIPOSTE LABORATORIES}
+\field{publisherLong}{RIPOSTE LABORATORIES INC.}
+\field{tagline}{Daily Bread is baked quarterly in Kelowna, BC. Free where you found it. Pay what you can where you can’t.}
+\field{issn}{ISSN PENDING}
+\field{edition}{№1 · SUMMER 2026}
+\end{page}
+
+% 02 · ic · Letter
+\begin{page}{ic}{Letter}[masthead]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{DAILY BREAD №1 · KELOWNA BC}
+\chrome{headRight}{THEME: KELOWNA’S COLLAPSE}
+\chrome{docNo}{DB-000-A}
+\chrome{folio}{IC}
+\begin{body}
+\block{You found the first issue of a queer magazine in a city that keeps telling us it doesn’t have one. Kelowna has queer history, queer kids, queer elders, queer bakers and bureaucrats — what it hasn’t had is paper that says so out loud.}
+\block{This issue is about collapse: the orchards, the venues, the rent math, the bridge traffic. Not because we’re doomers, but because things fall apart here on schedule, and naming the schedule is the first act of repair.}
+\block{Rip out the poster. Colour the cartoon. Mail us your fury and your recipes. This thing only works if you get crumbs on it.}
+\end{body}
+\field{lead}{HI.}
+\field{stamp}{BATCH №1 · FRESH}
+\field{wordmark}{Daily Bread}
+\field{subtitle}{A QUEER MAGAZINE FOR THE OKANAGAN}
+\field{mastheadLabel}{MASTHEAD / №1 · SUMMER 2026}
+\begin{seq}{masthead}
+\block{EDITOR | your name here}
+\block{ART + COMICS | open call — pg 24}
+\block{YOUNG VOICES DESK | pg 11}
+\block{PRINTED | on unceded syilx territory}
+\end{seq}
+\field{ack}{Daily Bread is published on the unceded, ancestral territory of the syilx Okanagan people. We pay rent to a landlord and respect to a Nation, and we know only one of those is owed.}
+\field{funderLine}{FUNDED BY RIPOSTE LABORATORIES INC.}
+\field{funderNote}{EDITORIAL INDEPENDENCE CLAUSE: SEE FROM THE LAB}
+\kicker{00 · EDITOR’S LETTER}
+\headline{Our Daily Dread}
+\field{signoff}{— the editors ✕}
+\end{page}
+
+% 03 · p01 · Letter
+\begin{page}{p01}{Letter}[letter]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{DAILY BREAD №1 · KELOWNA BC}
+\chrome{headRight}{THEME: KELOWNA’S COLLAPSE}
+\chrome{docNo}{DB-000-A}
+\chrome{folio}{01}
+\begin{body}
+\block{You found the first issue of a queer magazine in a city that keeps telling us it doesn’t have one. Kelowna has queer history, queer kids, queer elders, queer bakers and bureaucrats — what it hasn’t had is paper that says so out loud.}
+\block{This issue is about collapse: the orchards, the venues, the rent math, the bridge traffic. Not because we’re doomers, but because things fall apart here on schedule, and naming the schedule is the first act of repair.}
+\block{Rip out the poster. Colour the cartoon. Mail us your fury and your recipes. This thing only works if you get crumbs on it.}
+\end{body}
+\field{lead}{HI.}
+\field{stamp}{BATCH №1 · FRESH}
+\field{wordmark}{Daily Bread}
+\field{subtitle}{A QUEER MAGAZINE FOR THE OKANAGAN}
+\field{mastheadLabel}{MASTHEAD / №1 · SUMMER 2026}
+\begin{seq}{masthead}
+\block{EDITOR | your name here}
+\block{ART + COMICS | open call — pg 24}
+\block{YOUNG VOICES DESK | pg 11}
+\block{PRINTED | on unceded syilx territory}
+\end{seq}
+\field{ack}{Daily Bread is published on the unceded, ancestral territory of the syilx Okanagan people. We pay rent to a landlord and respect to a Nation, and we know only one of those is owed.}
+\field{funderLine}{FUNDED BY RIPOSTE LABORATORIES INC.}
+\field{funderNote}{EDITORIAL INDEPENDENCE CLAUSE: SEE FROM THE LAB}
+\kicker{00 · EDITOR’S LETTER}
+\headline{Our Daily Dread}
+\field{signoff}{— the editors ✕}
+\end{page}
+
+% 04 · p02 · Contents
+\begin{page}{p02}{Contents}[manifest]
+\chrome{footer}{duo}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{DAILY BREAD №1 · KELOWNA BC}
+\chrome{headRight}{THEME: KELOWNA’S COLLAPSE}
+\chrome{docNo}{DB-002-A}
+\chrome{folio}{02}
+\field{scribble}{none}
+\begin{seq}{rows}
+\block{01 | Our Daily Dread — editor’s letter | HOUSE}
+\block{04 | Before the Bridge — a rude history | HISTORY}
+\block{08 | Vacancy — photo essay, Bernard Ave | PHOTO}
+\block{11 | Young Voices — three field reports | OPINION}
+\block{14 | Crumbs — ep.1, a golem seeks housing | COMIC}
+\block{16 | Forty Years of Nerve — Miss Demeanour | INTERVIEW}
+\block{19 | Lake Effect / Harvest — poems | LIT}
+\block{20 | Peel Me — sticker sheet | STICKERS}
+\block{21 | Colour Your Own Collapse | SATIRE}
+\block{22 | The Wall — two pieces, centre rip-out | ART}
+\block{25 | The Waitlist — healthcare feature | ISSUES}
+\block{28 | The Lake Takes — fiction pt.1 | LIT}
+\block{30 | From the Lab — funder disclosure | RIPOSTE}
+\block{32 | Ask a Local Gay / Reviews | SERVICE}
+\block{34 | The Bite Back / Rotation | FOOD+MUSIC}
+\block{36 | The Rewind + Movies in the Park | FILM}
+\block{38 | Calendar / Directory / Go-Bag | AID}
+\block{41 | Crumbs Mail · finale · guest strip | COMIC}
+\block{44 | Who Made This — staff, assembled | COLOPHON}
+\end{seq}
+\headline{Contents}
+\field{manifestLabel}{MANIFEST / №1}
+\field{manifestTag}{DB-TOC}
+\field{whoTag}{WHO’S IN HERE}
+\field{whoBlurb}{Twelve contributors made №1: writers aged 17–74, two photographers, one cartoonist, one very patient proofreader. Every byline is local. Every fee got paid before the printer did.}
+\field{subTitle}{SUBMIT TO №2 — “THE THAW”}
+\begin{seq}{subRows}
+\block{Art for The Wall | one page, yours, 300dpi. We pay.}
+\block{Opinion (under 25) | 500 words of correct anger.}
+\block{Poems, fiction, comics | weird welcome.}
+\block{Deadline | Sept 15 · hello@dailybread.example}
+\end{seq}
+\field{footNote}{DAILY BREAD IS FREE / PWYC · PRINT RUN 500 · FONTS: IBM PLEX MONO, UNIFRAKTUR}
+\end{page}
+
+% 05 · p03 · Contents
+\begin{page}{p03}{Contents}[contributors]
+\chrome{footer}{duo}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{DAILY BREAD №1 · KELOWNA BC}
+\chrome{headRight}{THEME: KELOWNA’S COLLAPSE}
+\chrome{docNo}{DB-002-A}
+\chrome{folio}{03}
+\field{scribble}{none}
+\begin{seq}{rows}
+\block{01 | Our Daily Dread — editor’s letter | HOUSE}
+\block{04 | Before the Bridge — a rude history | HISTORY}
+\block{08 | Vacancy — photo essay, Bernard Ave | PHOTO}
+\block{11 | Young Voices — three field reports | OPINION}
+\block{14 | Crumbs — ep.1, a golem seeks housing | COMIC}
+\block{16 | Forty Years of Nerve — Miss Demeanour | INTERVIEW}
+\block{19 | Lake Effect / Harvest — poems | LIT}
+\block{20 | Peel Me — sticker sheet | STICKERS}
+\block{21 | Colour Your Own Collapse | SATIRE}
+\block{22 | The Wall — two pieces, centre rip-out | ART}
+\block{25 | The Waitlist — healthcare feature | ISSUES}
+\block{28 | The Lake Takes — fiction pt.1 | LIT}
+\block{30 | From the Lab — funder disclosure | RIPOSTE}
+\block{32 | Ask a Local Gay / Reviews | SERVICE}
+\block{34 | The Bite Back / Rotation | FOOD+MUSIC}
+\block{36 | The Rewind + Movies in the Park | FILM}
+\block{38 | Calendar / Directory / Go-Bag | AID}
+\block{41 | Crumbs Mail · finale · guest strip | COMIC}
+\block{44 | Who Made This — staff, assembled | COLOPHON}
+\end{seq}
+\headline{Contents}
+\field{manifestLabel}{MANIFEST / №1}
+\field{manifestTag}{DB-TOC}
+\field{whoTag}{WHO’S IN HERE}
+\field{whoBlurb}{Twelve contributors made №1: writers aged 17–74, two photographers, one cartoonist, one very patient proofreader. Every byline is local. Every fee got paid before the printer did.}
+\field{subTitle}{SUBMIT TO №2 — “THE THAW”}
+\begin{seq}{subRows}
+\block{Art for The Wall | one page, yours, 300dpi. We pay.}
+\block{Opinion (under 25) | 500 words of correct anger.}
+\block{Poems, fiction, comics | weird welcome.}
+\block{Deadline | Sept 15 · hello@dailybread.example}
+\end{seq}
+\field{footNote}{DAILY BREAD IS FREE / PWYC · PRINT RUN 500 · FONTS: IBM PLEX MONO, UNIFRAKTUR}
+\end{page}
+
+% 06 · p04 · Feature
+\begin{page}{p04}{Feature}[opener]
+\slug{v2-p04}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{01 · HISTORY}
+\chrome{headRight}{THEME: KELOWNA’S COLLAPSE}
+\chrome{docNo}{DB-004-A}
+\chrome{folio}{04}
+\begin{body}
+\block{FOR thousands of years before a single orchard row was staked, this was — and remains — unceded syilx Okanagan territory. The lake fed people. The grasslands were managed with fire, on purpose, by people who understood the valley as a system rather than a view.}
+\block{Then came the fur posts, the mission, and in 1892 a townsite plat with straight lines drawn over everything. The sales pitch was permanent abundance: apples forever, sun forever, growth forever.}
+\end{body}
+\field{scribble}{none}
+\field{stats}{none}
+\byline{WORDS: STAFF · PHOTOS: CITY OF KELOWNA ARCHIVES}
+\kicker{01 · HISTORY}
+\headline{Before the Bridge}
+\standfirst{This valley did not begin in 1892, and it will not end with the condo towers. A short, rude history of what was here, what got built on top of it, and what collapsed first.}
+\field{caption}{FIG. 1 — CAPTION SETS THE JOKE, THE IMAGE SETS THE SCENE.}
+\field{placeholder}{feature photo — drag and drop, 300dpi}
+\field{contNote}{CONTINUED NEXT PAGE → EVERY BOOM MADE THE SAME PROMISE}
+\field{boxTitle}{CONTINUED IN №2 — “THE THAW”}
+\field{boxBody}{Serialized fiction runs across issues. Miss one and the lake keeps your bookmark.}
+\end{page}
+
+% 07 · p05 · Body
+\begin{page}{p05}{Body}[image-text]
+\slug{v2-p05}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{01 · HISTORY}
+\chrome{headRight}{THEME: KELOWNA’S COLLAPSE}
+\chrome{docNo}{DB-005-A}
+\chrome{folio}{05}
+\field{scribble}{none}
+\field{scribble2}{none}
+\field{stamp}{none}
+\field{placeholder}{archival photo — 1958 floating bridge opening day}
+\field{imgH}{250px}
+\kicker{01 · HISTORY}
+\field{caption}{FIG. 1 — THE FLOATING BRIDGE, 1958. TRAFFIC ARRIVED; THE FERRY DIED THE SAME DAY.}
+\begin{body}
+\block{Every boom since has made the same promise, and every bust has been treated as a surprise. Fruit prices collapsed. Sawmills closed. The 2003 firestorm ate 239 homes while the city watched from the beach.}
+\block{This issue asks the impolite question: what if collapse isn’t the exception here — what if it’s the business model? The ledger two pages over has the receipts.}
+\end{body}
+\field{body2}{The fix isn’t mysterious: fund the clinic, train the staff, shorten the triangle. Cities that did it saw waits drop within two budget cycles. Ours pilots a task force instead. We’ll print the task force’s org chart when it produces one — the colouring page may get a sequel.}
+\field{proseLabel}{}
+\begin{seq}{quotes}
+\block{“My GP is great. My GP is also in Vancouver, where I don’t live.”}
+\block{“The pharmacist figured it out before any doctor did. Shout out Deb.”}
+\block{“I got my referral the same month my lease ended. Guess which one moved faster.”}
+\block{“Honestly? The group chat is the healthcare system.”}
+\end{seq}
+\field{note}{FOUR OF ELEVEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY}
+\field{colA}{ENTRY}
+\field{colB}{STATUS}
+\begin{seq}{table}
+\block{1913 | fruit prices crater; scrip economy begins | BUST | \#f0477d}
+\block{1930s | packinghouse layoffs, valley-wide | BUST | \#f0477d}
+\block{1958 | bridge opens; ferry workers obsolete overnight | PIVOT | \#fe9a0d}
+\block{1973 | ALR freezes orchard speculation (briefly) | PARRY | \#12b795}
+\block{1980s | sawmill era ends; wine era begins | PIVOT | \#fe9a0d}
+\block{2003 | firestorm; 239 homes, 30k evacuated | BURN | \#f0477d}
+\block{2017 | flood year — the lake takes the boardwalk | FLOOD | \#f0477d}
+\block{2021 | heat dome; hottest place in Canada, again | BURN | \#f0477d}
+\block{2024 | last dedicated queer venue closes | BUST | \#f0477d}
+\block{2026 | this magazine. your move, city. | RIPOSTE | \#12b795}
+\end{seq}
+\field{noteTag}{METHOD}
+\field{note2}{compiled from city archives, newspaper morgues, and elders who were there. Corrections welcome and expected: see Crumbs Mail.}
+\field{checkTitle}{WHAT ACTUALLY HELPS / CHECKLIST}
+\begin{seq}{checklist}
+\block{The informed-consent clinic list — updated quarterly, see directory}
+\block{Pharmacists can renew more than you think — ask directly}
+\block{Telehealth counts. Bad wifi is still shorter than 400 km}
+\block{Bring a friend to appointments. Bureaucracy respects witnesses}
+\end{seq}
+\end{page}
+
+% 08 · p06 · Body
+\begin{page}{p06}{Body}[image-text]
+\slug{v2-p06}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{01 · HISTORY}
+\chrome{headRight}{THEME: KELOWNA’S COLLAPSE}
+\chrome{docNo}{DB-006-A}
+\chrome{folio}{06}
+\field{scribble}{none}
+\field{scribble2}{none}
+\field{stamp}{none}
+\field{placeholder}{archival photo — orchard crews, 1910s}
+\field{imgH}{250px}
+\kicker{01 · HISTORY}
+\field{caption}{FIG. 2 — PICKING CREWS, RUTLAND BENCHES. THE APPLES WERE A PYRAMID SCHEME WITH ROOTS.}
+\begin{body}
+\block{The valley sold itself twice: first as Eden, then as equity. Fruit ranchers went broke so often the packinghouses printed their own scrip; when fruit died, the pitch became retirement sun; when the retirees priced out the pickers, the pitch became lakeside lofts.}
+\block{Each act ended the same way — with the people who did the work living further from the water. The queer history is braided through all of it: dance halls with unofficial nights, friendship networks that doubled as housing lists, a scene that survived by being useful and quiet until it didn’t have to be.}
+\end{body}
+\field{body2}{The fix isn’t mysterious: fund the clinic, train the staff, shorten the triangle. Cities that did it saw waits drop within two budget cycles. Ours pilots a task force instead. We’ll print the task force’s org chart when it produces one — the colouring page may get a sequel.}
+\field{proseLabel}{}
+\begin{seq}{quotes}
+\block{“My GP is great. My GP is also in Vancouver, where I don’t live.”}
+\block{“The pharmacist figured it out before any doctor did. Shout out Deb.”}
+\block{“I got my referral the same month my lease ended. Guess which one moved faster.”}
+\block{“Honestly? The group chat is the healthcare system.”}
+\end{seq}
+\field{note}{FOUR OF ELEVEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY}
+\field{colA}{ENTRY}
+\field{colB}{STATUS}
+\begin{seq}{table}
+\block{1913 | fruit prices crater; scrip economy begins | BUST | \#f0477d}
+\block{1930s | packinghouse layoffs, valley-wide | BUST | \#f0477d}
+\block{1958 | bridge opens; ferry workers obsolete overnight | PIVOT | \#fe9a0d}
+\block{1973 | ALR freezes orchard speculation (briefly) | PARRY | \#12b795}
+\block{1980s | sawmill era ends; wine era begins | PIVOT | \#fe9a0d}
+\block{2003 | firestorm; 239 homes, 30k evacuated | BURN | \#f0477d}
+\block{2017 | flood year — the lake takes the boardwalk | FLOOD | \#f0477d}
+\block{2021 | heat dome; hottest place in Canada, again | BURN | \#f0477d}
+\block{2024 | last dedicated queer venue closes | BUST | \#f0477d}
+\block{2026 | this magazine. your move, city. | RIPOSTE | \#12b795}
+\end{seq}
+\field{noteTag}{METHOD}
+\field{note2}{compiled from city archives, newspaper morgues, and elders who were there. Corrections welcome and expected: see Crumbs Mail.}
+\field{checkTitle}{WHAT ACTUALLY HELPS / CHECKLIST}
+\begin{seq}{checklist}
+\block{The informed-consent clinic list — updated quarterly, see directory}
+\block{Pharmacists can renew more than you think — ask directly}
+\block{Telehealth counts. Bad wifi is still shorter than 400 km}
+\block{Bring a friend to appointments. Bureaucracy respects witnesses}
+\end{seq}
+\end{page}
+
+% 09 · p07 · Body
+\begin{page}{p07}{Body}[ledger]
+\slug{v2-p07}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{01 · HISTORY}
+\chrome{headRight}{THEME: KELOWNA’S COLLAPSE}
+\chrome{docNo}{DB-007-A}
+\chrome{folio}{07}
+\field{scribble}{none}
+\field{scribble2}{none}
+\field{stamp}{none}
+\field{placeholder}{archival photo — orchard crews, 1910s}
+\field{imgH}{250px}
+\kicker{LEDGER / WHAT COLLAPSED WHEN}
+\field{caption}{FIG. 2 — PICKING CREWS, RUTLAND BENCHES. THE APPLES WERE A PYRAMID SCHEME WITH ROOTS.}
+\begin{body}
+\block{The valley sold itself twice: first as Eden, then as equity. Fruit ranchers went broke so often the packinghouses printed their own scrip; when fruit died, the pitch became retirement sun; when the retirees priced out the pickers, the pitch became lakeside lofts.}
+\block{Each act ended the same way — with the people who did the work living further from the water. The queer history is braided through all of it: dance halls with unofficial nights, friendship networks that doubled as housing lists, a scene that survived by being useful and quiet until it didn’t have to be.}
+\end{body}
+\field{body2}{The fix isn’t mysterious: fund the clinic, train the staff, shorten the triangle. Cities that did it saw waits drop within two budget cycles. Ours pilots a task force instead. We’ll print the task force’s org chart when it produces one — the colouring page may get a sequel.}
+\field{proseLabel}{}
+\begin{seq}{quotes}
+\block{“My GP is great. My GP is also in Vancouver, where I don’t live.”}
+\block{“The pharmacist figured it out before any doctor did. Shout out Deb.”}
+\block{“I got my referral the same month my lease ended. Guess which one moved faster.”}
+\block{“Honestly? The group chat is the healthcare system.”}
+\end{seq}
+\field{note}{FOUR OF ELEVEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY}
+\field{colA}{ENTRY}
+\field{colB}{STATUS}
+\begin{seq}{table}
+\block{1913 | fruit prices crater; scrip economy begins | BUST | \#f0477d}
+\block{1930s | packinghouse layoffs, valley-wide | BUST | \#f0477d}
+\block{1958 | bridge opens; ferry workers obsolete overnight | PIVOT | \#fe9a0d}
+\block{1973 | ALR freezes orchard speculation (briefly) | PARRY | \#12b795}
+\block{1980s | sawmill era ends; wine era begins | PIVOT | \#fe9a0d}
+\block{2003 | firestorm; 239 homes, 30k evacuated | BURN | \#f0477d}
+\block{2017 | flood year — the lake takes the boardwalk | FLOOD | \#f0477d}
+\block{2021 | heat dome; hottest place in Canada, again | BURN | \#f0477d}
+\block{2024 | last dedicated queer venue closes | BUST | \#f0477d}
+\block{2026 | this magazine. your move, city. | RIPOSTE | \#12b795}
+\end{seq}
+\field{noteTag}{METHOD}
+\field{note2}{compiled from city archives, newspaper morgues, and elders who were there. Corrections welcome and expected: see Crumbs Mail.}
+\field{checkTitle}{WHAT ACTUALLY HELPS / CHECKLIST}
+\begin{seq}{checklist}
+\block{The informed-consent clinic list — updated quarterly, see directory}
+\block{Pharmacists can renew more than you think — ask directly}
+\block{Telehealth counts. Bad wifi is still shorter than 400 km}
+\block{Bring a friend to appointments. Bureaucracy respects witnesses}
+\end{seq}
+\end{page}
+
+% 10 · p08 · Photo Essay
+\begin{page}{p08}{Photo Essay}[hero]
+\slug{v2-p08}
+\chrome{headLeft}{02 · PHOTO ESSAY}
+\chrome{headRight}{BERNARD AVE, 6AM}
+\chrome{docNo}{DB-008-A}
+\chrome{folio}{08}
+\headline{Vacancy}
+\standfirst{Six storefronts, one morning, zero people. A walking tour of what the “best downtown in Canada” looks like before the patios open — and after the leases triple.}
+\field{capA}{FIG. 3 — “FOR LEASE / GREAT EXPOSURE.” THE EXPOSURE IS DOING A LOT OF WORK.}
+\field{ph1}{photo — papered-over storefront window}
+\field{ph2}{photo — empty interior, cords on floor}
+\field{ph3}{photo — sun-bleached mannequin}
+\field{ph4}{photo — fourth frame}
+\end{page}
+
+% 11 · p09 · Photo Essay
+\begin{page}{p09}{Photo Essay}[title]
+\slug{v2-p09}
+\chrome{headLeft}{02 · PHOTO ESSAY}
+\chrome{headRight}{BERNARD AVE, 6AM}
+\chrome{docNo}{DB-009-A}
+\chrome{folio}{09}
+\headline{Vacancy}
+\standfirst{Six storefronts, one morning, zero people. A walking tour of what the “best downtown in Canada” looks like before the patios open — and after the leases triple.}
+\field{capA}{FIGS. 4–5 — SHOT ON EXPIRED FILM, APPROPRIATELY.}
+\field{ph1}{photo — papered-over storefront window}
+\field{ph2}{photo — empty interior, cords on floor}
+\field{ph3}{photo — sun-bleached mannequin}
+\field{ph4}{photo — fourth frame}
+\end{page}
+
+% 12 · p10 · Body
+\begin{page}{p10}{Body}[image-text]
+\slug{v2-p10}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{02 · PHOTO ESSAY}
+\chrome{headRight}{BERNARD AVE, 6AM}
+\chrome{docNo}{DB-010-A}
+\chrome{folio}{10}
+\field{scribble}{none}
+\field{scribble2}{none}
+\field{stamp}{none}
+\field{placeholder}{photo — last frame: hands taping a new poster up}
+\field{imgH}{430px}
+\kicker{01 · HISTORY}
+\field{caption}{FIG. 6 — SOMEBODY ALWAYS TAPES SOMETHING UP. THAT'S THE WHOLE THESIS.}
+\field{body}{Vacancy isn’t emptiness — it’s a waiting room. Every papered window downtown is a bet someone rich made against someone broke. The essay ends where the bets get called.}
+\field{body2}{The fix isn’t mysterious: fund the clinic, train the staff, shorten the triangle. Cities that did it saw waits drop within two budget cycles. Ours pilots a task force instead. We’ll print the task force’s org chart when it produces one — the colouring page may get a sequel.}
+\field{proseLabel}{}
+\begin{seq}{quotes}
+\block{“My GP is great. My GP is also in Vancouver, where I don’t live.”}
+\block{“The pharmacist figured it out before any doctor did. Shout out Deb.”}
+\block{“I got my referral the same month my lease ended. Guess which one moved faster.”}
+\block{“Honestly? The group chat is the healthcare system.”}
+\end{seq}
+\field{note}{FOUR OF ELEVEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY}
+\field{colA}{ENTRY}
+\field{colB}{STATUS}
+\begin{seq}{table}
+\block{1913 | fruit prices crater; scrip economy begins | BUST | \#f0477d}
+\block{1930s | packinghouse layoffs, valley-wide | BUST | \#f0477d}
+\block{1958 | bridge opens; ferry workers obsolete overnight | PIVOT | \#fe9a0d}
+\block{1973 | ALR freezes orchard speculation (briefly) | PARRY | \#12b795}
+\block{1980s | sawmill era ends; wine era begins | PIVOT | \#fe9a0d}
+\block{2003 | firestorm; 239 homes, 30k evacuated | BURN | \#f0477d}
+\block{2017 | flood year — the lake takes the boardwalk | FLOOD | \#f0477d}
+\block{2021 | heat dome; hottest place in Canada, again | BURN | \#f0477d}
+\block{2024 | last dedicated queer venue closes | BUST | \#f0477d}
+\block{2026 | this magazine. your move, city. | RIPOSTE | \#12b795}
+\end{seq}
+\field{noteTag}{METHOD}
+\field{note2}{compiled from city archives, newspaper morgues, and elders who were there. Corrections welcome and expected: see Crumbs Mail.}
+\field{checkTitle}{WHAT ACTUALLY HELPS / CHECKLIST}
+\begin{seq}{checklist}
+\block{The informed-consent clinic list — updated quarterly, see directory}
+\block{Pharmacists can renew more than you think — ask directly}
+\block{Telehealth counts. Bad wifi is still shorter than 400 km}
+\block{Bring a friend to appointments. Bureaucracy respects witnesses}
+\end{seq}
+\end{page}
+
+% 13 · p11 · Opinion
+\begin{page}{p11}{Opinion}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{03 · OPINION}
+\chrome{headRight}{YOUNG VOICES DESK}
+\chrome{docNo}{DB-011-A}
+\chrome{folio}{11}
+\field{note}{none}
+\pullquote{“Every viewing is forty people deep and one of them is always crying.”}
+\field{promise}{UNREVIEWED. UNEDITED. CORRECT. — THE YV DESK PROMISE}
+\field{scribble}{none}
+\field{tag}{YOUNG VOICES · REPORT 01}
+\field{meta}{AGE 19 · HOUSING}
+\headline{Nobody My Age Can Afford to Stay}
+\begin{body}
+\block{I work two jobs and split a two-bedroom with three people, and I’m the success story. My group chat is a slow-motion goodbye party: Vernon, Calgary, mom’s basement in Surrey. Every viewing is forty people deep and one of them is always crying.}
+\block{The city calls it a “supply challenge.” From down here it looks simpler: the people who own Kelowna decided the people who run Kelowna’s espresso machines should live somewhere else. I’m not asking for a condo. I’m asking to stay in the postal code where my life happens.}
+\end{body}
+\end{page}
+
+% 14 · p12 · Opinion
+\begin{page}{p12}{Opinion}
+\chrome{footer}{mono}
+\chrome{accent}{\#fe9a0d}
+\chrome{headLeft}{03 · OPINION}
+\chrome{headRight}{YOUNG VOICES DESK}
+\chrome{docNo}{DB-012-A}
+\chrome{folio}{12}
+\field{note}{none}
+\pullquote{none}
+\field{promise}{none}
+\field{scribble}{none}
+\field{tag}{YOUNG VOICES · REPORT 02}
+\field{meta}{AGE 22 · COMING OUT}
+\headline{Out at the Packinghouse}
+\begin{body}
+\block{I came out at a bush party in Glenmore and the worst thing that happened was a guy named Tyler said “cool” and asked if I could drive him home. That’s the Kelowna nobody writes about: not paradise, not hell — just a small city learning faster than its city council.}
+\block{The hard part isn’t hate. It’s geography. When the nearest queer bar is a five-hour drive, your community is whoever shows up to the lake at golden hour. So we built our own calendar. It’s on page 38. Show up.}
+\end{body}
+\end{page}
+
+% 15 · p13 · Opinion
+\begin{page}{p13}{Opinion}
+\chrome{footer}{mono}
+\chrome{accent}{\#12b795}
+\chrome{headLeft}{03 · OPINION}
+\chrome{headRight}{YOUNG VOICES DESK}
+\chrome{docNo}{DB-013-A}
+\chrome{folio}{13}
+\field{note}{none}
+\pullquote{“I am the precedent.”}
+\field{promise}{none}
+\field{scribble}{none}
+\field{tag}{YOUNG VOICES · REPORT 03}
+\field{meta}{AGE 17 · FIRE SEASON}
+\headline{I've Evacuated Twice and I Can't Vote Yet}
+\begin{body}
+\block{My childhood photos are sorted by smoke year. We packed the car in 2021 and again in 2023, and both times the adults on the radio called it unprecedented. It has precedent. I am the precedent.}
+\block{Here’s my ask, and it’s small: stop telling my generation to be resilient while approving hillside subdivisions with one road out. Resilience is what you demand from people after you’ve decided not to protect them.}
+\end{body}
+\end{page}
+
+% 16 · p14 · Comic
+\begin{page}{p14}{Comic}[page]
+\chrome{headLeft}{04 · COMIC}
+\chrome{headRight}{“CRUMBS” — EP.1 OF ∞}
+\chrome{docNo}{DB-014-A}
+\chrome{folio}{14}
+\chrome{footer}{mono}
+\headline{Crumbs}
+\field{endText}{none}
+\field{scribble}{none}
+\field{sub}{A SOURDOUGH GOLEM SEEKS HOUSING. EP.1}
+\begin{seq}{panels}
+\block{PANEL 1 — a sourdough starter in a jar watches an eviction notice slide under the door}
+\block{PANEL 2 — the starter OVERFLOWS. it has decided to become a person about this}
+\block{PANEL 3 — CRUMB (our golem, 4ft, crusty, kind eyes) reads the rental listings. horror}
+\block{PANEL 4 — “\$2,100. shared oven. no pets, no yeast.” Crumb: “I AM pets and yeast.”}
+\end{seq}
+\field{endNote}{no spoilers but the loaf unionizes}
+\field{credit}{STORY + ART: [CARTOONIST NAME] · DRAWN PAGES REPLACE THESE PANEL STUBS AT PASTE-UP}
+\field{guestTag}{GUEST STRIP / ROTATING SLOT}
+\field{guestText}{FULL-PAGE GUEST COMIC — a different local cartoonist every issue. №1 guest: [NAME], “Parallel Parking as Queer Praxis”}
+\end{page}
+
+% 17 · p15 · Comic
+\begin{page}{p15}{Comic}[page]
+\chrome{headLeft}{04 · COMIC}
+\chrome{headRight}{“CRUMBS” — EP.1 OF ∞}
+\chrome{docNo}{DB-015-A}
+\chrome{folio}{15}
+\chrome{footer}{mono}
+\headline{none}
+\field{endText}{TO BE CONTINUED ON PG 42…}
+\field{scribble}{none}
+\field{sub}{A SOURDOUGH GOLEM SEEKS HOUSING. EP.1}
+\begin{seq}{panels}
+\block{PANEL 5 — viewing line around the block. Crumb queues behind 40 humans and one ogopogo in a trench coat}
+\block{PANEL 6 — landlord sniffs: “do you have references?” Crumb produces a sourdough hobbyist’s tearful testimonial}
+\block{PANEL 7 — DENIED. Crumb sits on the curb. a pigeon shares its crumbs. irony noted}
+\block{PANEL 8 — wide shot: Crumb looks at the empty storefronts from the photo essay. a lightbulb (gas lamp, this is Kelowna) appears}
+\block{PANEL 9 — Crumb, measuring tape in hand, outside the old venue: “ZONING IS A SOCIAL CONSTRUCT”}
+\end{seq}
+\field{endNote}{no spoilers but the loaf unionizes}
+\field{credit}{STORY + ART: [CARTOONIST NAME] · DRAWN PAGES REPLACE THESE PANEL STUBS AT PASTE-UP}
+\field{guestTag}{GUEST STRIP / ROTATING SLOT}
+\field{guestText}{FULL-PAGE GUEST COMIC — a different local cartoonist every issue. №1 guest: [NAME], “Parallel Parking as Queer Praxis”}
+\end{page}
+
+% 18 · p16 · Interview
+\begin{page}{p16}{Interview}[portrait]
+\slug{v2-p16}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{05 · INTERVIEW}
+\chrome{headRight}{40 YEARS OF OKANAGAN QUEER LIFE}
+\chrome{docNo}{DB-016-A}
+\chrome{folio}{16}
+\field{qLabel}{DB}
+\field{aLabel}{MD}
+\begin{seq}{qa}
+\block{Q: You started performing here in 1986. What’s actually changed?}
+\block{A: The audience got younger and the rent got meaner. In ’86 the danger was people; now the danger is landlords. I know which fight I prefer — you can charm people.}
+\block{Q: Where did everyone go when the venues closed?}
+\block{A: Nowhere, sweetheart. That’s the secret. We’re all still here — we just meet in gymnasiums and orchards and each other’s kitchens. A scene isn’t an address.}
+\block{Q: Advice for the seventeen-year-olds reading this?}
+\block{A: Learn to sew, learn to drive, and never let a city tell you it doesn’t contain you. It does. It always did.}
+\end{seq}
+\kicker{Q\&A / UNCUT}
+\headline{Forty Years of Nerve}
+\pullquote{“We didn’t have a bar, darling. We had basements, and we had nerve.”}
+\field{caption}{FIG. 7 — “MISS DEMEANOUR,” PERFORMING SINCE 1986. HAIR BY GRAVITY DEFIANCE.}
+\field{placeholder}{portrait — Miss Demeanour in full regalia, backstage}
+\field{footNote}{FULL 90-MINUTE AUDIO IN THE №1 ARCHIVE · CONTINUED NEXT PAGE →}
+\end{page}
+
+% 19 · p17 · Interview
+\begin{page}{p17}{Interview}[qa]
+\slug{v2-p17}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{05 · INTERVIEW}
+\chrome{headRight}{40 YEARS OF OKANAGAN QUEER LIFE}
+\chrome{docNo}{DB-017-A}
+\chrome{folio}{17}
+\field{qLabel}{DB}
+\field{aLabel}{MD}
+\begin{seq}{qa}
+\block{Q: You started performing here in 1986. What’s actually changed?}
+\block{A: The audience got younger and the rent got meaner. In ’86 the danger was people; now the danger is landlords. I know which fight I prefer — you can charm people.}
+\block{Q: Where did everyone go when the venues closed?}
+\block{A: Nowhere, sweetheart. That’s the secret. We’re all still here — we just meet in gymnasiums and orchards and each other’s kitchens. A scene isn’t an address.}
+\block{Q: Advice for the seventeen-year-olds reading this?}
+\block{A: Learn to sew, learn to drive, and never let a city tell you it doesn’t contain you. It does. It always did.}
+\end{seq}
+\kicker{Q\&A / UNCUT}
+\headline{Forty Years of Nerve}
+\pullquote{“We didn’t have a bar, darling. We had basements, and we had nerve.”}
+\field{caption}{FIG. 7 — “MISS DEMEANOUR,” PERFORMING SINCE 1986. HAIR BY GRAVITY DEFIANCE.}
+\field{placeholder}{portrait — Miss Demeanour in full regalia, backstage}
+\field{footNote}{FULL 90-MINUTE AUDIO IN THE №1 ARCHIVE · CONTINUED NEXT PAGE →}
+\end{page}
+
+% 20 · p18 · Body
+\begin{page}{p18}{Body}[columns]
+\slug{v2-p18}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{05 · INTERVIEW}
+\chrome{headRight}{THE SHOEBOX FONDS}
+\chrome{docNo}{DB-018-A}
+\chrome{folio}{18}
+\field{scribble}{none}
+\field{scribble2}{none}
+\field{stamp}{ARCHIVED · SHOEBOX FONDS}
+\field{placeholder}{archival photo — orchard crews, 1910s}
+\field{imgH}{250px}
+\kicker{05 · INTERVIEW, CONT.}
+\field{caption}{FIG. 2 — PICKING CREWS, RUTLAND BENCHES. THE APPLES WERE A PYRAMID SCHEME WITH ROOTS.}
+\begin{body}
+\block{The valley sold itself twice: first as Eden, then as equity. Fruit ranchers went broke so often the packinghouses printed their own scrip; when fruit died, the pitch became retirement sun; when the retirees priced out the pickers, the pitch became lakeside lofts.}
+\block{Each act ended the same way — with the people who did the work living further from the water. The queer history is braided through all of it: dance halls with unofficial nights, friendship networks that doubled as housing lists, a scene that survived by being useful and quiet until it didn’t have to be.}
+\end{body}
+\field{body2}{People ask if I’m bitter about the decades in basements. Bitter? Those basements had better sound systems than half the clubs I’ve played since. We recorded everything on cassette. Someone’s nephew digitized it all last winter and I cried for a week. That’s your history project right there — a drag queen’s shoebox. The city archive called ME. I said darling, you’re forty years late and you’re paying for the shelving. They did. Progress is slow, then it’s sudden, then it sends an invoice.}
+\field{proseLabel}{MD, continued:}
+\begin{seq}{quotes}
+\block{“My GP is great. My GP is also in Vancouver, where I don’t live.”}
+\block{“The pharmacist figured it out before any doctor did. Shout out Deb.”}
+\block{“I got my referral the same month my lease ended. Guess which one moved faster.”}
+\block{“Honestly? The group chat is the healthcare system.”}
+\end{seq}
+\field{note}{FOUR OF ELEVEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY}
+\field{colA}{ENTRY}
+\field{colB}{STATUS}
+\begin{seq}{table}
+\block{1913 | fruit prices crater; scrip economy begins | BUST | \#f0477d}
+\block{1930s | packinghouse layoffs, valley-wide | BUST | \#f0477d}
+\block{1958 | bridge opens; ferry workers obsolete overnight | PIVOT | \#fe9a0d}
+\block{1973 | ALR freezes orchard speculation (briefly) | PARRY | \#12b795}
+\block{1980s | sawmill era ends; wine era begins | PIVOT | \#fe9a0d}
+\block{2003 | firestorm; 239 homes, 30k evacuated | BURN | \#f0477d}
+\block{2017 | flood year — the lake takes the boardwalk | FLOOD | \#f0477d}
+\block{2021 | heat dome; hottest place in Canada, again | BURN | \#f0477d}
+\block{2024 | last dedicated queer venue closes | BUST | \#f0477d}
+\block{2026 | this magazine. your move, city. | RIPOSTE | \#12b795}
+\end{seq}
+\field{noteTag}{METHOD}
+\field{note2}{compiled from city archives, newspaper morgues, and elders who were there. Corrections welcome and expected: see Crumbs Mail.}
+\field{checkTitle}{WHAT ACTUALLY HELPS / CHECKLIST}
+\begin{seq}{checklist}
+\block{The informed-consent clinic list — updated quarterly, see directory}
+\block{Pharmacists can renew more than you think — ask directly}
+\block{Telehealth counts. Bad wifi is still shorter than 400 km}
+\block{Bring a friend to appointments. Bureaucracy respects witnesses}
+\end{seq}
+\end{page}
+
+% 21 · p19 · Poetry
+\begin{page}{p19}{Poetry}
+\chrome{accent}{\#12b795}
+\chrome{headLeft}{06 · POETRY}
+\chrome{headRight}{SUBMISSIONS · LIT}
+\chrome{docNo}{DB-019-A}
+\chrome{folio}{19}
+\chrome{footer}{mono}
+\field{scribble}{none}
+\begin{seq}{poems}
+\block{Lake Effect | the ogopogo is real and she is tired / of being your tourism budget / she surfaces only for girls / who skip stones left-handed / and boys who came out in a parking lot / she keeps every ring ever thrown in. | — SUBMITTED FROM RUTLAND, AGE 20}
+\block{Harvest | my grandmother thinned apples so the rest grow large / i learned it as economics / she meant it as mercy / this town keeps thinning people / and calling the fruit a miracle. | — SUBMITTED FROM EAST KELOWNA, AGE 24}
+\end{seq}
+\kicker{06 · POETRY}
+\end{page}
+
+% 22 · p20 · Insert
+\begin{page}{p20}{Insert}[stickers]
+\slug{v2-p20}
+\chrome{headLeft}{09 · STICKERS (KISS-CUT)}
+\chrome{headRight}{STICK RESPONSIBLY(ISH)}
+\chrome{docNo}{DB-020-A}
+\chrome{folio}{20}
+\field{scribble}{none}
+\field{ripTag}{✂ RIP LINE — THE CREDIT MARGIN SURVIVES}
+\field{placeholder}{FEATURED LOCAL ARTIST — full-page A5 portrait artwork, 300dpi. Submissions: see The Wall page}
+\field{credit}{ARTIST NAME · @HANDLE · №1 FEATURED PIECE — THIS MARGIN SURVIVES THE RIP}
+\kicker{THE WALL / FEATURED ARTIST}
+\field{bio}{The two pieces you just passed (rip them out — that’s the point) are by a local artist who answered our open call. Each issue, one artist, two wall-worthy pages, printed on heavier stock, credited in the margin so the credit survives the rip.}
+\field{submitTitle}{SUBMIT / №2 — THE WALL}
+\begin{seq}{submitRows}
+\block{Two pieces, A5 portrait, 300dpi, any medium that scans}
+\block{Fee paid on selection · rights stay yours}
+\block{hello@dailybread.example · subject: WALL}
+\end{seq}
+\headline{Colour Your Own Collapse}
+\field{edition}{№1}
+\field{brief}{[ LINE-ART SATIRE CARTOON — COMMISSIONED PER ISSUE ] №1: city council, drawn as cheerful realtors, ride a saddled Ogopogo across the lake while towing the last queer venue on a “LUXURY LOFTS” barge. pure outlines · no fills · crayon-proof paper}
+\field{figLabel}{FIG. 8 — AISLIN-GRADE DISRESPECT, LOCAL EDITION}
+\field{crayonLabel}{TEST YOUR CRAYONS:}
+\field{crayonNote}{TAG US WITH YOUR FINISHED PAGE}
+\field{brand}{Peel Me}
+\field{brandSub}{DIE LINES DASHED · STICK RESPONSIBLY(ISH)}
+\begin{seq}{stickers}
+\block{FRESH DAILY (DREAD) | circle | \#f0477d | \#f6f1e7}
+\block{EAT THE RICH, SHARE THE BREAD | square | \#f6f1e7 | \#1d1a17}
+\block{OGOPOGO SAW YOU | circle | \#12b795 | \#f6f1e7}
+\block{DAILY BREAD — drip wordmark | square | \#1d1a17 | \#f6f1e7}
+\block{LOCAL PEACH, GENDER UNKNOWN | circle | \#fe9a0d | \#1d1a17}
+\block{I SURVIVED ANOTHER TOWER PROPOSAL | square | \#f6f1e7 | \#1d1a17}
+\block{QUIET UNTIL WE DIDN’T HAVE TO BE | square | \#1d1a17 | \#f6f1e7}
+\block{PARRY. RIPOSTE. | circle | \#f6f1e7 | \#1d1a17}
+\block{CRUMB 4 MAYOR | square | \#f0477d | \#f6f1e7}
+\end{seq}
+\end{page}
+
+% 23 · p21 · Insert
+\begin{page}{p21}{Insert}[colouring]
+\slug{v2-p21}
+\chrome{headLeft}{08 · SATIRE}
+\chrome{headRight}{CRAYON-PROOF PAPER}
+\chrome{docNo}{DB-021-A}
+\chrome{folio}{21}
+\field{scribble}{none}
+\field{ripTag}{✂ RIP LINE — THE CREDIT MARGIN SURVIVES}
+\field{placeholder}{FEATURED LOCAL ARTIST — full-page A5 portrait artwork, 300dpi. Submissions: see The Wall page}
+\field{credit}{ARTIST NAME · @HANDLE · №1 FEATURED PIECE — THIS MARGIN SURVIVES THE RIP}
+\kicker{THE WALL / FEATURED ARTIST}
+\field{bio}{The two pieces you just passed (rip them out — that’s the point) are by a local artist who answered our open call. Each issue, one artist, two wall-worthy pages, printed on heavier stock, credited in the margin so the credit survives the rip.}
+\field{submitTitle}{SUBMIT / №2 — THE WALL}
+\begin{seq}{submitRows}
+\block{Two pieces, A5 portrait, 300dpi, any medium that scans}
+\block{Fee paid on selection · rights stay yours}
+\block{hello@dailybread.example · subject: WALL}
+\end{seq}
+\headline{Colour Your Own Collapse}
+\field{edition}{№1}
+\field{brief}{[ LINE-ART SATIRE CARTOON — COMMISSIONED PER ISSUE ] №1: city council, drawn as cheerful realtors, ride a saddled Ogopogo across the lake while towing the last queer venue on a “LUXURY LOFTS” barge. pure outlines · no fills · crayon-proof paper}
+\field{figLabel}{FIG. 8 — AISLIN-GRADE DISRESPECT, LOCAL EDITION}
+\field{crayonLabel}{TEST YOUR CRAYONS:}
+\field{crayonNote}{TAG US WITH YOUR FINISHED PAGE}
+\field{brand}{Peel Me}
+\field{brandSub}{DIE LINES DASHED · STICK RESPONSIBLY(ISH)}
+\begin{seq}{stickers}
+\block{FRESH DAILY (DREAD) | circle | \#f0477d | \#f6f1e7}
+\block{EAT THE RICH, SHARE THE BREAD | square | \#f6f1e7 | \#1d1a17}
+\block{OGOPOGO SAW YOU | circle | \#12b795 | \#f6f1e7}
+\block{DAILY BREAD — drip wordmark | square | \#1d1a17 | \#f6f1e7}
+\block{LOCAL PEACH, GENDER UNKNOWN | circle | \#fe9a0d | \#1d1a17}
+\block{I SURVIVED ANOTHER TOWER PROPOSAL | square | \#f6f1e7 | \#1d1a17}
+\block{QUIET UNTIL WE DIDN’T HAVE TO BE | square | \#1d1a17 | \#f6f1e7}
+\block{PARRY. RIPOSTE. | circle | \#f6f1e7 | \#1d1a17}
+\block{CRUMB 4 MAYOR | square | \#f0477d | \#f6f1e7}
+\end{seq}
+\end{page}
+
+% 24 · p22 · Insert
+\begin{page}{p22}{Insert}[art]
+\slug{v2-p22}
+\chrome{headLeft}{}
+\chrome{headRight}{}
+\chrome{docNo}{DB-019-A}
+\chrome{folio}{19}
+\field{scribble}{none}
+\field{ripTag}{✂ RIP LINE — THE CREDIT MARGIN SURVIVES}
+\field{placeholder}{FEATURED LOCAL ARTIST — piece one of two. Full-page A5 portrait artwork, 300dpi}
+\field{credit}{ARTIST NAME · @HANDLE · №1 FEATURED PIECE 01 OF 02 — THIS MARGIN SURVIVES THE RIP}
+\kicker{THE WALL / FEATURED ARTIST}
+\field{bio}{The two pieces you just passed (rip them out — that’s the point) are by a local artist who answered our open call. Each issue, one artist, two wall-worthy pages, printed on heavier stock, credited in the margin so the credit survives the rip.}
+\field{submitTitle}{SUBMIT / №2 — THE WALL}
+\begin{seq}{submitRows}
+\block{Two pieces, A5 portrait, 300dpi, any medium that scans}
+\block{Fee paid on selection · rights stay yours}
+\block{hello@dailybread.example · subject: WALL}
+\end{seq}
+\headline{Colour Your Own Collapse}
+\field{edition}{№1}
+\field{brief}{[ LINE-ART SATIRE CARTOON — COMMISSIONED PER ISSUE ] №1: city council, drawn as cheerful realtors, ride a saddled Ogopogo across the lake while towing the last queer venue on a “LUXURY LOFTS” barge. pure outlines · no fills · crayon-proof paper}
+\field{figLabel}{FIG. 8 — AISLIN-GRADE DISRESPECT, LOCAL EDITION}
+\field{crayonLabel}{TEST YOUR CRAYONS:}
+\field{crayonNote}{TAG US WITH YOUR FINISHED PAGE}
+\field{brand}{Peel Me}
+\field{brandSub}{DIE LINES DASHED · STICK RESPONSIBLY(ISH)}
+\begin{seq}{stickers}
+\block{FRESH DAILY (DREAD) | circle | \#f0477d | \#f6f1e7}
+\block{EAT THE RICH, SHARE THE BREAD | square | \#f6f1e7 | \#1d1a17}
+\block{OGOPOGO SAW YOU | circle | \#12b795 | \#f6f1e7}
+\block{DAILY BREAD — drip wordmark | square | \#1d1a17 | \#f6f1e7}
+\block{LOCAL PEACH, GENDER UNKNOWN | circle | \#fe9a0d | \#1d1a17}
+\block{I SURVIVED ANOTHER TOWER PROPOSAL | square | \#f6f1e7 | \#1d1a17}
+\block{QUIET UNTIL WE DIDN’T HAVE TO BE | square | \#1d1a17 | \#f6f1e7}
+\block{PARRY. RIPOSTE. | circle | \#f6f1e7 | \#1d1a17}
+\block{CRUMB 4 MAYOR | square | \#f0477d | \#f6f1e7}
+\end{seq}
+\end{page}
+
+% 25 · p23 · Insert
+\begin{page}{p23}{Insert}[art]
+\slug{v2-p23}
+\chrome{headLeft}{}
+\chrome{headRight}{}
+\chrome{docNo}{DB-019-A}
+\chrome{folio}{19}
+\field{scribble}{none}
+\field{ripTag}{✂ RIP LINE — THE CREDIT MARGIN SURVIVES}
+\field{placeholder}{FEATURED LOCAL ARTIST — piece two of two. Full-page A5 portrait artwork, 300dpi}
+\field{credit}{ARTIST NAME · @HANDLE · №1 FEATURED PIECE 02 OF 02 — THIS MARGIN SURVIVES THE RIP}
+\kicker{THE WALL / FEATURED ARTIST}
+\field{bio}{The two pieces you just passed (rip them out — that’s the point) are by a local artist who answered our open call. Each issue, one artist, two wall-worthy pages, printed on heavier stock, credited in the margin so the credit survives the rip.}
+\field{submitTitle}{SUBMIT / №2 — THE WALL}
+\begin{seq}{submitRows}
+\block{Two pieces, A5 portrait, 300dpi, any medium that scans}
+\block{Fee paid on selection · rights stay yours}
+\block{hello@dailybread.example · subject: WALL}
+\end{seq}
+\headline{Colour Your Own Collapse}
+\field{edition}{№1}
+\field{brief}{[ LINE-ART SATIRE CARTOON — COMMISSIONED PER ISSUE ] №1: city council, drawn as cheerful realtors, ride a saddled Ogopogo across the lake while towing the last queer venue on a “LUXURY LOFTS” barge. pure outlines · no fills · crayon-proof paper}
+\field{figLabel}{FIG. 8 — AISLIN-GRADE DISRESPECT, LOCAL EDITION}
+\field{crayonLabel}{TEST YOUR CRAYONS:}
+\field{crayonNote}{TAG US WITH YOUR FINISHED PAGE}
+\field{brand}{Peel Me}
+\field{brandSub}{DIE LINES DASHED · STICK RESPONSIBLY(ISH)}
+\begin{seq}{stickers}
+\block{FRESH DAILY (DREAD) | circle | \#f0477d | \#f6f1e7}
+\block{EAT THE RICH, SHARE THE BREAD | square | \#f6f1e7 | \#1d1a17}
+\block{OGOPOGO SAW YOU | circle | \#12b795 | \#f6f1e7}
+\block{DAILY BREAD — drip wordmark | square | \#1d1a17 | \#f6f1e7}
+\block{LOCAL PEACH, GENDER UNKNOWN | circle | \#fe9a0d | \#1d1a17}
+\block{I SURVIVED ANOTHER TOWER PROPOSAL | square | \#f6f1e7 | \#1d1a17}
+\block{QUIET UNTIL WE DIDN’T HAVE TO BE | square | \#1d1a17 | \#f6f1e7}
+\block{PARRY. RIPOSTE. | circle | \#f6f1e7 | \#1d1a17}
+\block{CRUMB 4 MAYOR | square | \#f0477d | \#f6f1e7}
+\end{seq}
+\end{page}
+
+% 26 · p24 · Insert
+\begin{page}{p24}{Insert}[artist]
+\slug{v2-p24}
+\chrome{headLeft}{07 · ART}
+\chrome{headRight}{THE WALL}
+\chrome{docNo}{DB-024-A}
+\chrome{folio}{24}
+\field{scribble}{none}
+\field{ripTag}{✂ RIP LINE — THE CREDIT MARGIN SURVIVES}
+\field{placeholder}{FEATURED LOCAL ARTIST — full-page A5 portrait artwork, 300dpi. Submissions: see The Wall page}
+\field{credit}{ARTIST NAME · @HANDLE · №1 FEATURED PIECE — THIS MARGIN SURVIVES THE RIP}
+\kicker{THE WALL / FEATURED ARTIST}
+\field{bio}{The two pieces you just passed (rip them out — that’s the point) are by a local artist who answered our open call. Each issue, one artist, two wall-worthy pages, printed on heavier stock, credited in the margin so the credit survives the rip.}
+\field{submitTitle}{SUBMIT / №2 — THE WALL}
+\begin{seq}{submitRows}
+\block{Two pieces, A5 portrait, 300dpi, any medium that scans}
+\block{Fee paid on selection · rights stay yours}
+\block{hello@dailybread.example · subject: WALL}
+\end{seq}
+\headline{Colour Your Own Collapse}
+\field{edition}{№1}
+\field{brief}{[ LINE-ART SATIRE CARTOON — COMMISSIONED PER ISSUE ] №1: city council, drawn as cheerful realtors, ride a saddled Ogopogo across the lake while towing the last queer venue on a “LUXURY LOFTS” barge. pure outlines · no fills · crayon-proof paper}
+\field{figLabel}{FIG. 8 — AISLIN-GRADE DISRESPECT, LOCAL EDITION}
+\field{crayonLabel}{TEST YOUR CRAYONS:}
+\field{crayonNote}{TAG US WITH YOUR FINISHED PAGE}
+\field{brand}{Peel Me}
+\field{brandSub}{DIE LINES DASHED · STICK RESPONSIBLY(ISH)}
+\begin{seq}{stickers}
+\block{FRESH DAILY (DREAD) | circle | \#f0477d | \#f6f1e7}
+\block{EAT THE RICH, SHARE THE BREAD | square | \#f6f1e7 | \#1d1a17}
+\block{OGOPOGO SAW YOU | circle | \#12b795 | \#f6f1e7}
+\block{DAILY BREAD — drip wordmark | square | \#1d1a17 | \#f6f1e7}
+\block{LOCAL PEACH, GENDER UNKNOWN | circle | \#fe9a0d | \#1d1a17}
+\block{I SURVIVED ANOTHER TOWER PROPOSAL | square | \#f6f1e7 | \#1d1a17}
+\block{QUIET UNTIL WE DIDN’T HAVE TO BE | square | \#1d1a17 | \#f6f1e7}
+\block{PARRY. RIPOSTE. | circle | \#f6f1e7 | \#1d1a17}
+\block{CRUMB 4 MAYOR | square | \#f0477d | \#f6f1e7}
+\end{seq}
+\end{page}
+
+% 27 · p25 · Feature
+\begin{page}{p25}{Feature}[opener]
+\slug{v2-p25}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{10 · CURRENT ISSUES}
+\chrome{headRight}{THEME: KELOWNA’S COLLAPSE}
+\chrome{docNo}{DB-025-A}
+\chrome{folio}{25}
+\field{body}{The numbers are placeholder-real: swap in the verified figures before print. The shape of the story won’t change — everyone we interviewed described the same triangle of phone tag, referral limbo, and a highway.}
+\field{scribble}{none}
+\begin{seq}{stats}
+\block{14 | MONTHS · AVG GENDER CLINIC WAIT}
+\block{2 | PROVIDERS TAKING NEW PATIENTS}
+\block{400 | KM TO NEAREST ALTERNATIVE}
+\end{seq}
+\byline{none}
+\kicker{10 · CURRENT ISSUES}
+\headline{The Waitlist}
+\standfirst{Trying to find queer-competent healthcare in the Central Okanagan is a part-time job with no benefits. We phoned every clinic so you don’t have to.}
+\field{caption}{FIG. 1 — CAPTION SETS THE JOKE, THE IMAGE SETS THE SCENE.}
+\field{placeholder}{feature photo — drag and drop, 300dpi}
+\field{contNote}{CONTINUED NEXT PAGE → · STREET INTERVIEWS + WHAT ACTUALLY HELPS}
+\field{boxTitle}{CONTINUED IN №2 — “THE THAW”}
+\field{boxBody}{Serialized fiction runs across issues. Miss one and the lake keeps your bookmark.}
+\end{page}
+
+% 28 · p26 · Body
+\begin{page}{p26}{Body}[quotes]
+\slug{v2-p26}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{10 · CURRENT ISSUES}
+\chrome{headRight}{THE WAITLIST, CONT.}
+\chrome{docNo}{DB-026-A}
+\chrome{folio}{26}
+\field{scribble}{none}
+\field{scribble2}{none}
+\field{stamp}{none}
+\field{placeholder}{archival photo — orchard crews, 1910s}
+\field{imgH}{250px}
+\kicker{HEARD ON BERNARD / VERBATIM}
+\field{caption}{FIG. 2 — PICKING CREWS, RUTLAND BENCHES. THE APPLES WERE A PYRAMID SCHEME WITH ROOTS.}
+\begin{body}
+\block{The valley sold itself twice: first as Eden, then as equity. Fruit ranchers went broke so often the packinghouses printed their own scrip; when fruit died, the pitch became retirement sun; when the retirees priced out the pickers, the pitch became lakeside lofts.}
+\block{Each act ended the same way — with the people who did the work living further from the water. The queer history is braided through all of it: dance halls with unofficial nights, friendship networks that doubled as housing lists, a scene that survived by being useful and quiet until it didn’t have to be.}
+\end{body}
+\field{body2}{The fix isn’t mysterious: fund the clinic, train the staff, shorten the triangle. Cities that did it saw waits drop within two budget cycles. Ours pilots a task force instead. We’ll print the task force’s org chart when it produces one — the colouring page may get a sequel.}
+\field{proseLabel}{}
+\begin{seq}{quotes}
+\block{“My GP is great. My GP is also in Vancouver, where I don’t live.”}
+\block{“The pharmacist figured it out before any doctor did. Shout out Deb.”}
+\block{“I got my referral the same month my lease ended. Guess which one moved faster.”}
+\block{“Honestly? The group chat is the healthcare system.”}
+\end{seq}
+\field{note}{FOUR OF ELEVEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY}
+\field{colA}{ENTRY}
+\field{colB}{STATUS}
+\begin{seq}{table}
+\block{1913 | fruit prices crater; scrip economy begins | BUST | \#f0477d}
+\block{1930s | packinghouse layoffs, valley-wide | BUST | \#f0477d}
+\block{1958 | bridge opens; ferry workers obsolete overnight | PIVOT | \#fe9a0d}
+\block{1973 | ALR freezes orchard speculation (briefly) | PARRY | \#12b795}
+\block{1980s | sawmill era ends; wine era begins | PIVOT | \#fe9a0d}
+\block{2003 | firestorm; 239 homes, 30k evacuated | BURN | \#f0477d}
+\block{2017 | flood year — the lake takes the boardwalk | FLOOD | \#f0477d}
+\block{2021 | heat dome; hottest place in Canada, again | BURN | \#f0477d}
+\block{2024 | last dedicated queer venue closes | BUST | \#f0477d}
+\block{2026 | this magazine. your move, city. | RIPOSTE | \#12b795}
+\end{seq}
+\field{noteTag}{METHOD}
+\field{note2}{compiled from city archives, newspaper morgues, and elders who were there. Corrections welcome and expected: see Crumbs Mail.}
+\field{checkTitle}{WHAT ACTUALLY HELPS / CHECKLIST}
+\begin{seq}{checklist}
+\block{The informed-consent clinic list — updated quarterly, see directory}
+\block{Pharmacists can renew more than you think — ask directly}
+\block{Telehealth counts. Bad wifi is still shorter than 400 km}
+\block{Bring a friend to appointments. Bureaucracy respects witnesses}
+\end{seq}
+\end{page}
+
+% 29 · p27 · Body
+\begin{page}{p27}{Body}[checklist]
+\slug{v2-p27}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{10 · CURRENT ISSUES}
+\chrome{headRight}{THE WAITLIST, CONT.}
+\chrome{docNo}{DB-027-A}
+\chrome{folio}{27}
+\field{scribble}{none}
+\field{scribble2}{none}
+\field{stamp}{none}
+\field{placeholder}{archival photo — orchard crews, 1910s}
+\field{imgH}{250px}
+\kicker{}
+\field{caption}{FIG. 2 — PICKING CREWS, RUTLAND BENCHES. THE APPLES WERE A PYRAMID SCHEME WITH ROOTS.}
+\begin{body}
+\block{The valley sold itself twice: first as Eden, then as equity. Fruit ranchers went broke so often the packinghouses printed their own scrip; when fruit died, the pitch became retirement sun; when the retirees priced out the pickers, the pitch became lakeside lofts.}
+\block{Each act ended the same way — with the people who did the work living further from the water. The queer history is braided through all of it: dance halls with unofficial nights, friendship networks that doubled as housing lists, a scene that survived by being useful and quiet until it didn’t have to be.}
+\end{body}
+\field{body2}{The fix isn’t mysterious: fund the clinic, train the staff, shorten the triangle. Cities that did it saw waits drop within two budget cycles. Ours pilots a task force instead. We’ll print the task force’s org chart when it produces one — the colouring page may get a sequel.}
+\field{proseLabel}{}
+\begin{seq}{quotes}
+\block{“My GP is great. My GP is also in Vancouver, where I don’t live.”}
+\block{“The pharmacist figured it out before any doctor did. Shout out Deb.”}
+\block{“I got my referral the same month my lease ended. Guess which one moved faster.”}
+\block{“Honestly? The group chat is the healthcare system.”}
+\end{seq}
+\field{note}{FOUR OF ELEVEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY}
+\field{colA}{ENTRY}
+\field{colB}{STATUS}
+\begin{seq}{table}
+\block{1913 | fruit prices crater; scrip economy begins | BUST | \#f0477d}
+\block{1930s | packinghouse layoffs, valley-wide | BUST | \#f0477d}
+\block{1958 | bridge opens; ferry workers obsolete overnight | PIVOT | \#fe9a0d}
+\block{1973 | ALR freezes orchard speculation (briefly) | PARRY | \#12b795}
+\block{1980s | sawmill era ends; wine era begins | PIVOT | \#fe9a0d}
+\block{2003 | firestorm; 239 homes, 30k evacuated | BURN | \#f0477d}
+\block{2017 | flood year — the lake takes the boardwalk | FLOOD | \#f0477d}
+\block{2021 | heat dome; hottest place in Canada, again | BURN | \#f0477d}
+\block{2024 | last dedicated queer venue closes | BUST | \#f0477d}
+\block{2026 | this magazine. your move, city. | RIPOSTE | \#12b795}
+\end{seq}
+\field{noteTag}{METHOD}
+\field{note2}{compiled from city archives, newspaper morgues, and elders who were there. Corrections welcome and expected: see Crumbs Mail.}
+\field{checkTitle}{WHAT ACTUALLY HELPS / CHECKLIST}
+\begin{seq}{checklist}
+\block{The informed-consent clinic list — updated quarterly, see directory}
+\block{Pharmacists can renew more than you think — ask directly}
+\block{Telehealth counts. Bad wifi is still shorter than 400 km}
+\block{Bring a friend to appointments. Bureaucracy respects witnesses}
+\end{seq}
+\end{page}
+
+% 30 · p28 · Feature
+\begin{page}{p28}{Feature}[text-open]
+\slug{v2-p28}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{11 · FICTION}
+\chrome{headRight}{THEME: KELOWNA’S COLLAPSE}
+\chrome{docNo}{DB-028-A}
+\chrome{folio}{28}
+\begin{body}
+\block{The realtor said the house had lake access, and it did, the way a mouth has throat access. June found the stairs behind the lilac on the second day — forty-one steps of split cedar going down to a dock that wasn’t in the listing photos, because docks that old don’t photograph, they testify.}
+\block{Her grandmother had warned her about the lake in the language June only half-kept: it gives, but it keeps receipts. Every family on the bench had a story with the same shape — a ring, a brother, a hayfork, a name — something the water accepted and never gave back at the same size.}
+\end{body}
+\field{scribble}{none}
+\field{stats}{none}
+\byline{BY [AUTHOR] · ILLUSTRATION OPEN CALL}
+\kicker{SHORT FICTION}
+\headline{The Lake Takes}
+\standfirst{Trying to find queer-competent healthcare in the Central Okanagan is a part-time job with no benefits. We phoned every clinic so you don’t have to.}
+\field{caption}{FIG. 1 — CAPTION SETS THE JOKE, THE IMAGE SETS THE SCENE.}
+\field{placeholder}{feature photo — drag and drop, 300dpi}
+\field{contNote}{CONTINUED NEXT PAGE → · STREET INTERVIEWS + WHAT ACTUALLY HELPS}
+\field{boxTitle}{CONTINUED IN №2 — “THE THAW”}
+\field{boxBody}{Serialized fiction runs across issues. Miss one and the lake keeps your bookmark.}
+\end{page}
+
+% 31 · p29 · Feature
+\begin{page}{p29}{Feature}[text-cont]
+\slug{v2-p29}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{11 · FICTION}
+\chrome{headRight}{THEME: KELOWNA’S COLLAPSE}
+\chrome{docNo}{DB-029-A}
+\chrome{folio}{29}
+\begin{body}
+\block{On the dock she found the offerings the winter had rearranged: a doll’s shoe, a fishing licence from 1974, a phone in a sandwich bag, screen up, one notification still glowing like a lure. The lake was flat as a ledger. June, who had moved back for the cheap rent that no longer existed and the family that barely did, rolled her jeans and stepped down onto the first cold plank.}
+\block{“Okay,” she told the water, the town, the whole arranged marriage of valley and debt. “Show me what you kept.”}
+\end{body}
+\field{scribble}{none}
+\field{stats}{none}
+\byline{BY [AUTHOR] · ILLUSTRATION OPEN CALL}
+\kicker{SHORT FICTION}
+\headline{The Lake Takes}
+\standfirst{Trying to find queer-competent healthcare in the Central Okanagan is a part-time job with no benefits. We phoned every clinic so you don’t have to.}
+\field{caption}{FIG. 1 — CAPTION SETS THE JOKE, THE IMAGE SETS THE SCENE.}
+\field{placeholder}{feature photo — drag and drop, 300dpi}
+\field{contNote}{CONTINUED NEXT PAGE → · STREET INTERVIEWS + WHAT ACTUALLY HELPS}
+\field{boxTitle}{CONTINUED IN №2 — “THE THAW”}
+\field{boxBody}{Serialized fiction runs across issues. Miss one and the lake keeps your bookmark.}
+\end{page}
+
+% 32 · p30 · Lab
+\begin{page}{p30}{Lab}[disclosure]
+\chrome{headLeft}{RIPOSTE LABORATORIES INC.}
+\chrome{headRight}{EST. 2026 · REV. A}
+\chrome{docNo}{RL-DB-030}
+\chrome{folio}{30}
+\field{stamp}{FUNDER DISCLOSURE · SIGNED}
+\field{logoSub}{LABORATORIES INC.}
+\headline{From the Lab}
+\begin{body}
+\block{Full disclosure, printed large: this magazine is funded by Riposte Laboratories, a Kelowna outfit that counter-attacks waste — recycled-plastic injection molding and reclaimed-cell modular power. We share what we’re building here, in the same pages, at the same volume as everyone else.}
+\block{The deal, in writing: the Lab pays the printer and gets two pages. The editors answer to readers, not the funder. If that ever changes, the colouring page will let you know.}
+\end{body}
+\field{sig}{parry. riposte. recycle.}
+\field{statusLabel}{THIS QUARTER / STATUS BOARD}
+\field{statusTag}{Q3-26}
+\begin{seq}{status}
+\block{Plastic Works — molds v2, park benches from \#5 tubs | LIVE | \#12b795}
+\block{Project HEX — reclaimed-cell grading rig | WIP | \#fe9a0d}
+\block{Esh — shop assistant, currently a whiteboard | DRAWING | \#f0477d}
+\block{Daily Bread №2 — theme vote (see Crumbs Mail) | OPEN | \#1d1a17}
+\block{First Friday open doors — bring clean plastics | RECURRING | \#12b795}
+\end{seq}
+\field{whyTitle}{WHY FUND A MAGAZINE?}
+\field{whyBody}{Because a lab that fixes material waste in a town losing its cultural material would be doing half a job. Paper is infrastructure. So are drag nights. Line item approved.}
+\field{footNote}{TOUR THE SHOP: OPEN DOORS FIRST FRIDAYS · BRING CLEAN \#2 + \#5 PLASTICS}
+\end{page}
+
+% 33 · p31 · Lab
+\begin{page}{p31}{Lab}[status]
+\chrome{headLeft}{RIPOSTE LABORATORIES INC.}
+\chrome{headRight}{EST. 2026 · REV. A}
+\chrome{docNo}{RL-DB-031}
+\chrome{folio}{31}
+\field{stamp}{FUNDER DISCLOSURE · SIGNED}
+\field{logoSub}{LABORATORIES INC.}
+\headline{From the Lab}
+\begin{body}
+\block{Full disclosure, printed large: this magazine is funded by Riposte Laboratories, a Kelowna outfit that counter-attacks waste — recycled-plastic injection molding and reclaimed-cell modular power. We share what we’re building here, in the same pages, at the same volume as everyone else.}
+\block{The deal, in writing: the Lab pays the printer and gets two pages. The editors answer to readers, not the funder. If that ever changes, the colouring page will let you know.}
+\end{body}
+\field{sig}{parry. riposte. recycle.}
+\field{statusLabel}{THIS QUARTER / STATUS BOARD}
+\field{statusTag}{Q3-26}
+\begin{seq}{status}
+\block{Plastic Works — molds v2, park benches from \#5 tubs | LIVE | \#12b795}
+\block{Project HEX — reclaimed-cell grading rig | WIP | \#fe9a0d}
+\block{Esh — shop assistant, currently a whiteboard | DRAWING | \#f0477d}
+\block{Daily Bread №2 — theme vote (see Crumbs Mail) | OPEN | \#1d1a17}
+\block{First Friday open doors — bring clean plastics | RECURRING | \#12b795}
+\end{seq}
+\field{whyTitle}{WHY FUND A MAGAZINE?}
+\field{whyBody}{Because a lab that fixes material waste in a town losing its cultural material would be doing half a job. Paper is infrastructure. So are drag nights. Line item approved.}
+\field{footNote}{TOUR THE SHOP: OPEN DOORS FIRST FRIDAYS · BRING CLEAN \#2 + \#5 PLASTICS}
+\end{page}
+
+% 34 · p32 · Review
+\begin{page}{p32}{Review}[advice]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{12 · ADVICE}
+\chrome{headRight}{CERTIFIED · SINCE TUESDAY}
+\chrome{docNo}{DB-032-A}
+\chrome{folio}{32}
+\field{scribble}{none}
+\field{blurb}{none}
+\field{stamp}{none}
+\field{brand}{Ask a Local Gay}
+\field{brandSub}{CERTIFIED · SINCE TUESDAY}
+\begin{seq}{advice}
+\block{My parents keep introducing me as their “roommate’s friend.” The roommate is my wife. Escalate or let it ride? — TIRED IN LAKE COUNTRY | Send them a fridge magnet of your wedding photo every month. No note. Bureaucracy respects witnesses and parents respect fridges. By magnet six you’ll be “the girls.” By ten, they’re paying for brunch.}
+\block{Is it a red flag if a date says Kelowna has “no culture”? — DEFENSIVE DOWNTOWN | It’s a beige flag. Hand them this magazine, the calendar page, and a pen. If they come to one thing on the calendar, marry them. If they critique the font, you’ve met the editor — run.}
+\end{seq}
+\begin{seq}{features}
+\block{WINE BAR · LAKESHORE · \$\$\$\$ | 2/5 — GORGEOUS, HUNGRY | \#f0477d | The place that replaced the diner | The room is stunning, the playlist is a moodboard, and the “heritage tomato moment” is one tomato. Our server was the best actor in the valley: she said “great choice” about a \$19 plate of air with total conviction. We left elegant and starving, then bought gas-station taquitos. Verdict: it photographs like a meal.}
+\block{DINER · RUTLAND · \$ | 5/5 — PROTECT AT ALL COSTS | \#12b795 | The 24-hour survivor on Hwy 33 | Coffee refills arrive before you ask, the hashbrowns have structural integrity, and the night cook remembers your order and your pronouns. Every collapse in this issue is survivable from booth six. Bring cash, tip like rent is due, because theirs is too.}
+\end{seq}
+\field{rulesTag}{HOUSE RULES}
+\field{rules}{we pay full price · we book under fake names · patios judged by dog traffic · anywhere that feeds evacuation crews gets a permanent star}
+\kicker{REVIEWS / FIELD-TESTED}
+\begin{seq}{cards}
+\block{DRAG NIGHT · POP-UP | RIPS | \#12b795 | “Harvest Moon” at the community hall | A gymnasium, a rented fog machine, and the best crowd this valley has produced. The floor is lava and the lava is love. Next one: see calendar.}
+\block{BAKERY · DOWNTOWN | 4/5 | \#fe9a0d | The new sourdough place on Ellis | The loaf is honest, the queue is chatty, and the owner slips day-olds to anyone who compliments the playlist. Crumb declined to comment, citing family.}
+\block{CIVIC · ONGOING | 0/5 | \#f0477d | Council public-hearing livestream | Buffering as dramaturgy. Runtime: eternal. One star added for the councillor who said “housing is for people” out loud; four removed for the vote after.}
+\end{seq}
+\field{rotTitle}{Rotation}
+\field{rotLabel}{STAFF ROTATION / №1}
+\field{rotTag}{LOUD}
+\begin{seq}{tracks}
+\block{“Bench Water” — local EP | the connector, at night}
+\block{ballroom sets — Paris Is Burning warm-ups | pre-screening homework}
+\block{snotty coast punk — 7″ from a Rutland garage | paste-up fuel}
+\block{a syilx songwriter’s live tape | ask at the record stall}
+\block{disco edits for the beach assembly | aug 15, bring speakers}
+\block{the diner jukebox, booth six | field recording, honestly}
+\block{whatever the night cook hums | unreleased. protected.}
+\end{seq}
+\field{qrNote}{FULL PLAYLIST QR — UPDATED PER ISSUE}
+\field{qrSub}{SEND US ONE SONG + ONE SENTENCE}
+\end{page}
+
+% 35 · p33 · Review
+\begin{page}{p33}{Review}[cards]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{13 · REVIEWS}
+\chrome{headRight}{FIELD-TESTED}
+\chrome{docNo}{DB-033-A}
+\chrome{folio}{33}
+\field{scribble}{none}
+\field{blurb}{Want a review? We cover anything queer-adjacent and Okanagan-made: shows, menus, zines, hot sauce, city council meetings (as performance art). The only criterion is that we can attend, taste, or endure it in person.}
+\field{stamp}{ENDURED · 3/5}
+\field{brand}{Ask a Local Gay}
+\field{brandSub}{CERTIFIED · SINCE TUESDAY}
+\begin{seq}{advice}
+\block{My parents keep introducing me as their “roommate’s friend.” The roommate is my wife. Escalate or let it ride? — TIRED IN LAKE COUNTRY | Send them a fridge magnet of your wedding photo every month. No note. Bureaucracy respects witnesses and parents respect fridges. By magnet six you’ll be “the girls.” By ten, they’re paying for brunch.}
+\block{Is it a red flag if a date says Kelowna has “no culture”? — DEFENSIVE DOWNTOWN | It’s a beige flag. Hand them this magazine, the calendar page, and a pen. If they come to one thing on the calendar, marry them. If they critique the font, you’ve met the editor — run.}
+\end{seq}
+\begin{seq}{features}
+\block{WINE BAR · LAKESHORE · \$\$\$\$ | 2/5 — GORGEOUS, HUNGRY | \#f0477d | The place that replaced the diner | The room is stunning, the playlist is a moodboard, and the “heritage tomato moment” is one tomato. Our server was the best actor in the valley: she said “great choice” about a \$19 plate of air with total conviction. We left elegant and starving, then bought gas-station taquitos. Verdict: it photographs like a meal.}
+\block{DINER · RUTLAND · \$ | 5/5 — PROTECT AT ALL COSTS | \#12b795 | The 24-hour survivor on Hwy 33 | Coffee refills arrive before you ask, the hashbrowns have structural integrity, and the night cook remembers your order and your pronouns. Every collapse in this issue is survivable from booth six. Bring cash, tip like rent is due, because theirs is too.}
+\end{seq}
+\field{rulesTag}{HOUSE RULES}
+\field{rules}{we pay full price · we book under fake names · patios judged by dog traffic · anywhere that feeds evacuation crews gets a permanent star}
+\kicker{REVIEWS / FIELD-TESTED}
+\begin{seq}{cards}
+\block{DRAG NIGHT · POP-UP | RIPS | \#12b795 | “Harvest Moon” at the community hall | A gymnasium, a rented fog machine, and the best crowd this valley has produced. The floor is lava and the lava is love. Next one: see calendar.}
+\block{BAKERY · DOWNTOWN | 4/5 | \#fe9a0d | The new sourdough place on Ellis | The loaf is honest, the queue is chatty, and the owner slips day-olds to anyone who compliments the playlist. Crumb declined to comment, citing family.}
+\block{CIVIC · ONGOING | 0/5 | \#f0477d | Council public-hearing livestream | Buffering as dramaturgy. Runtime: eternal. One star added for the councillor who said “housing is for people” out loud; four removed for the vote after.}
+\end{seq}
+\field{rotTitle}{Rotation}
+\field{rotLabel}{STAFF ROTATION / №1}
+\field{rotTag}{LOUD}
+\begin{seq}{tracks}
+\block{“Bench Water” — local EP | the connector, at night}
+\block{ballroom sets — Paris Is Burning warm-ups | pre-screening homework}
+\block{snotty coast punk — 7″ from a Rutland garage | paste-up fuel}
+\block{a syilx songwriter’s live tape | ask at the record stall}
+\block{disco edits for the beach assembly | aug 15, bring speakers}
+\block{the diner jukebox, booth six | field recording, honestly}
+\block{whatever the night cook hums | unreleased. protected.}
+\end{seq}
+\field{qrNote}{FULL PLAYLIST QR — UPDATED PER ISSUE}
+\field{qrSub}{SEND US ONE SONG + ONE SENTENCE}
+\end{page}
+
+% 36 · p34 · Review
+\begin{page}{p34}{Review}[critique]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{15 · FOOD}
+\chrome{headRight}{NO FREE MEALS, NO MERCY}
+\chrome{docNo}{DB-034-A}
+\chrome{folio}{34}
+\field{scribble}{none}
+\field{blurb}{none}
+\field{stamp}{none}
+\field{brand}{The Bite Back}
+\field{brandSub}{RESTAURANT CRITIQUE · NO FREE MEALS, NO MERCY}
+\begin{seq}{advice}
+\block{My parents keep introducing me as their “roommate’s friend.” The roommate is my wife. Escalate or let it ride? — TIRED IN LAKE COUNTRY | Send them a fridge magnet of your wedding photo every month. No note. Bureaucracy respects witnesses and parents respect fridges. By magnet six you’ll be “the girls.” By ten, they’re paying for brunch.}
+\block{Is it a red flag if a date says Kelowna has “no culture”? — DEFENSIVE DOWNTOWN | It’s a beige flag. Hand them this magazine, the calendar page, and a pen. If they come to one thing on the calendar, marry them. If they critique the font, you’ve met the editor — run.}
+\end{seq}
+\begin{seq}{features}
+\block{WINE BAR · LAKESHORE · \$\$\$\$ | 2/5 — GORGEOUS, HUNGRY | \#f0477d | The place that replaced the diner | The room is stunning, the playlist is a moodboard, and the “heritage tomato moment” is one tomato. Our server was the best actor in the valley: she said “great choice” about a \$19 plate of air with total conviction. We left elegant and starving, then bought gas-station taquitos. Verdict: it photographs like a meal.}
+\block{DINER · RUTLAND · \$ | 5/5 — PROTECT AT ALL COSTS | \#12b795 | The 24-hour survivor on Hwy 33 | Coffee refills arrive before you ask, the hashbrowns have structural integrity, and the night cook remembers your order and your pronouns. Every collapse in this issue is survivable from booth six. Bring cash, tip like rent is due, because theirs is too.}
+\end{seq}
+\field{rulesTag}{HOUSE RULES}
+\field{rules}{we pay full price · we book under fake names · patios judged by dog traffic · anywhere that feeds evacuation crews gets a permanent star}
+\kicker{REVIEWS / FIELD-TESTED}
+\begin{seq}{cards}
+\block{DRAG NIGHT · POP-UP | RIPS | \#12b795 | “Harvest Moon” at the community hall | A gymnasium, a rented fog machine, and the best crowd this valley has produced. The floor is lava and the lava is love. Next one: see calendar.}
+\block{BAKERY · DOWNTOWN | 4/5 | \#fe9a0d | The new sourdough place on Ellis | The loaf is honest, the queue is chatty, and the owner slips day-olds to anyone who compliments the playlist. Crumb declined to comment, citing family.}
+\block{CIVIC · ONGOING | 0/5 | \#f0477d | Council public-hearing livestream | Buffering as dramaturgy. Runtime: eternal. One star added for the councillor who said “housing is for people” out loud; four removed for the vote after.}
+\end{seq}
+\field{rotTitle}{Rotation}
+\field{rotLabel}{STAFF ROTATION / №1}
+\field{rotTag}{LOUD}
+\begin{seq}{tracks}
+\block{“Bench Water” — local EP | the connector, at night}
+\block{ballroom sets — Paris Is Burning warm-ups | pre-screening homework}
+\block{snotty coast punk — 7″ from a Rutland garage | paste-up fuel}
+\block{a syilx songwriter’s live tape | ask at the record stall}
+\block{disco edits for the beach assembly | aug 15, bring speakers}
+\block{the diner jukebox, booth six | field recording, honestly}
+\block{whatever the night cook hums | unreleased. protected.}
+\end{seq}
+\field{qrNote}{FULL PLAYLIST QR — UPDATED PER ISSUE}
+\field{qrSub}{SEND US ONE SONG + ONE SENTENCE}
+\end{page}
+
+% 37 · p35 · Review
+\begin{page}{p35}{Review}[playlist]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{16 · LISTENING}
+\chrome{headRight}{LOUD IN THE PASTE-UP ROOM}
+\chrome{docNo}{DB-035-A}
+\chrome{folio}{35}
+\field{scribble}{none}
+\field{blurb}{none}
+\field{stamp}{none}
+\field{brand}{Ask a Local Gay}
+\field{brandSub}{CERTIFIED · SINCE TUESDAY}
+\begin{seq}{advice}
+\block{My parents keep introducing me as their “roommate’s friend.” The roommate is my wife. Escalate or let it ride? — TIRED IN LAKE COUNTRY | Send them a fridge magnet of your wedding photo every month. No note. Bureaucracy respects witnesses and parents respect fridges. By magnet six you’ll be “the girls.” By ten, they’re paying for brunch.}
+\block{Is it a red flag if a date says Kelowna has “no culture”? — DEFENSIVE DOWNTOWN | It’s a beige flag. Hand them this magazine, the calendar page, and a pen. If they come to one thing on the calendar, marry them. If they critique the font, you’ve met the editor — run.}
+\end{seq}
+\begin{seq}{features}
+\block{WINE BAR · LAKESHORE · \$\$\$\$ | 2/5 — GORGEOUS, HUNGRY | \#f0477d | The place that replaced the diner | The room is stunning, the playlist is a moodboard, and the “heritage tomato moment” is one tomato. Our server was the best actor in the valley: she said “great choice” about a \$19 plate of air with total conviction. We left elegant and starving, then bought gas-station taquitos. Verdict: it photographs like a meal.}
+\block{DINER · RUTLAND · \$ | 5/5 — PROTECT AT ALL COSTS | \#12b795 | The 24-hour survivor on Hwy 33 | Coffee refills arrive before you ask, the hashbrowns have structural integrity, and the night cook remembers your order and your pronouns. Every collapse in this issue is survivable from booth six. Bring cash, tip like rent is due, because theirs is too.}
+\end{seq}
+\field{rulesTag}{HOUSE RULES}
+\field{rules}{we pay full price · we book under fake names · patios judged by dog traffic · anywhere that feeds evacuation crews gets a permanent star}
+\kicker{16 · WHAT WE’RE LISTENING TO}
+\begin{seq}{cards}
+\block{DRAG NIGHT · POP-UP | RIPS | \#12b795 | “Harvest Moon” at the community hall | A gymnasium, a rented fog machine, and the best crowd this valley has produced. The floor is lava and the lava is love. Next one: see calendar.}
+\block{BAKERY · DOWNTOWN | 4/5 | \#fe9a0d | The new sourdough place on Ellis | The loaf is honest, the queue is chatty, and the owner slips day-olds to anyone who compliments the playlist. Crumb declined to comment, citing family.}
+\block{CIVIC · ONGOING | 0/5 | \#f0477d | Council public-hearing livestream | Buffering as dramaturgy. Runtime: eternal. One star added for the councillor who said “housing is for people” out loud; four removed for the vote after.}
+\end{seq}
+\field{rotTitle}{Rotation}
+\field{rotLabel}{STAFF ROTATION / №1}
+\field{rotTag}{LOUD}
+\begin{seq}{tracks}
+\block{“Bench Water” — local EP | the connector, at night}
+\block{ballroom sets — Paris Is Burning warm-ups | pre-screening homework}
+\block{snotty coast punk — 7″ from a Rutland garage | paste-up fuel}
+\block{a syilx songwriter’s live tape | ask at the record stall}
+\block{disco edits for the beach assembly | aug 15, bring speakers}
+\block{the diner jukebox, booth six | field recording, honestly}
+\block{whatever the night cook hums | unreleased. protected.}
+\end{seq}
+\field{qrNote}{FULL PLAYLIST QR — UPDATED PER ISSUE}
+\field{qrSub}{SEND US ONE SONG + ONE SENTENCE}
+\end{page}
+
+% 38 · p36 · Listings
+\begin{page}{p36}{Listings}[program]
+\chrome{footer}{duo}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{17 · FILM}
+\chrome{headRight}{CLASSICS, OUTDOORS}
+\chrome{docNo}{DB-036-A}
+\chrome{folio}{36}
+\field{scribble}{none}
+\field{rows}{}
+\headline{The Calendar}
+\field{boxLabel}{№1 PROGRAM / NOTES}
+\field{boxTag}{35MM ENERGY, DIGITAL BUDGET}
+\field{footNote}{LISTINGS ARE FREE · EMAIL BY THE 15TH · SOBER + ALL-AGES OPTIONS MARKED ◦}
+\field{dirKicker}{KEEP THIS PAGE / DIRECTORY}
+\field{brand}{The Rewind}
+\field{brandSub}{CRITERION-SHELF DEEP CUTS}
+\field{intro}{Old films, screened like they matter — because a town with no rep cinema deserves one anyway. Each issue: three from the queer canon, then we show them outside. Program notes below; lawn chairs next page.}
+\begin{seq}{notes}
+\block{Paris Is Burning (1990) | The ballroom documentary that gave the culture its vocabulary. Watch it with people; the applause is part of the text.}
+\block{My Own Private Idaho (1991) | River Phoenix falls asleep on every road in the Northwest. The campfire scene alone is worth the mosquitoes.}
+\block{The Watermelon Woman (1996) | Cheryl Dunye invents an archive because nobody kept one for her. Relevant to a magazine doing the same thing.}
+\end{seq}
+\kicker{MOVIES IN THE PARK / HOSTED BY DAILY BREAD}
+\field{schedLabel}{SUMMER SLATE / AT DUSK}
+\field{schedTag}{RAIN MOVES US TO THE LAB}
+\field{schedFoot}{FREE / PWYC · CAPTIONS ON · POWER: RECLAIMED CELLS, PROJECT HEX}
+\field{bringTag}{BRING}
+\field{bring}{a blanket · bug spray · someone you’re nervous around · a thermos (we sell none of these on purpose)}
+\field{voteTitle}{VOTE — №2 THEME}
+\begin{seq}{votes}
+\block{THE THAW (what comes back)}
+\block{WATER RIGHTS \& WRONGS}
+\block{NIGHT SHIFT (who runs 2AM Kelowna)}
+\end{seq}
+\field{voteNote}{MARK ONE · PHOTOGRAPH · SEND. DEMOCRACY.}
+\field{qrNote}{TIP JAR + SUBMISSIONS QR}
+\field{qrSub}{REPLACE WITH REAL CODE AT PASTE-UP}
+\end{page}
+
+% 39 · p37 · Listings
+\begin{page}{p37}{Listings}[screenings]
+\chrome{footer}{duo}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{17 · FILM}
+\chrome{headRight}{DUSK SCREENINGS · FREE / PWYC}
+\chrome{docNo}{DB-037-A}
+\chrome{folio}{37}
+\field{scribble}{none}
+\begin{seq}{rows}
+\block{AUG 14 | Paris Is Burning (1990) | City Park, at dusk}
+\block{SEP 04 | My Own Private Idaho (1991) | Ben Lee Park, at dusk}
+\block{SEP 25 | The Watermelon Woman (1996) | Rutland Centennial Park, at dusk}
+\end{seq}
+\headline{The Calendar}
+\field{boxLabel}{AUG — OCT 2026}
+\field{boxTag}{CLIP + FRIDGE}
+\field{footNote}{LICENSING PAID PER SCREENING · DATES ALSO ON THE CALENDAR}
+\field{dirKicker}{KEEP THIS PAGE / DIRECTORY}
+\field{brand}{Crumbs Mail}
+\field{brandSub}{READER CORRESPONDENCE · №0 EDITION}
+\field{intro}{This box is empty because you haven’t written yet. First issue problems. Fill it with fury, recipes, corrections, crushes (anonymized), and photos of the colouring page done wrong on purpose.}
+\begin{seq}{notes}
+\block{Paris Is Burning (1990) | The ballroom documentary that gave the culture its vocabulary. Watch it with people; the applause is part of the text.}
+\block{My Own Private Idaho (1991) | River Phoenix falls asleep on every road in the Northwest. The campfire scene alone is worth the mosquitoes.}
+\block{The Watermelon Woman (1996) | Cheryl Dunye invents an archive because nobody kept one for her. Relevant to a magazine doing the same thing.}
+\end{seq}
+\kicker{MOVIES IN THE PARK / HOSTED BY DAILY BREAD}
+\field{schedLabel}{SUMMER SLATE / AT DUSK}
+\field{schedTag}{RAIN MOVES US TO THE LAB}
+\field{schedFoot}{FREE / PWYC · CAPTIONS ON · POWER: RECLAIMED CELLS, PROJECT HEX}
+\field{bringTag}{BRING}
+\field{bring}{a blanket · bug spray · someone you’re nervous around · a thermos (we sell none of these on purpose)}
+\field{voteTitle}{VOTE — OCTOBER SCREENING}
+\begin{seq}{votes}
+\block{Portrait of a Lady on Fire (2019)}
+\block{Hedwig and the Angry Inch (2001)}
+\block{Bound (1996)}
+\end{seq}
+\field{voteNote}{MARK ONE · PHOTOGRAPH · SEND. DEMOCRACY.}
+\field{qrNote}{TIP JAR + SUBMISSIONS QR}
+\field{qrSub}{REPLACE WITH REAL CODE AT PASTE-UP}
+\end{page}
+
+% 40 · p38 · Listings
+\begin{page}{p38}{Listings}[calendar]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{14 · CALENDAR}
+\chrome{headRight}{AUG–OCT 2026}
+\chrome{docNo}{DB-038-A}
+\chrome{folio}{38}
+\field{scribble}{none}
+\begin{seq}{rows}
+\block{AUG 07 | First Friday at the Lab ◦ | Riposte shop floor — tours, benches, zines}
+\block{AUG 14 | Movies in the Park №1 ◦ | City Park — Paris Is Burning}
+\block{AUG 15 | Queer Beach Assembly ◦ | Gyro Beach, north end — bring shade to share}
+\block{AUG 22 | Harvest Moon drag night | community hall — PWYC at the door}
+\block{SEP 05 | Zine-making + submission clinic ◦ | library makerspace — bring your fury}
+\block{SEP 15 | №2 SUBMISSION DEADLINE | art, opinion, poems — see contents page}
+\block{SEP 19 | Orchard walk with an elder ◦ | East Kelowna benches — history underfoot}
+\block{OCT 03 | Cassette night: the Shoebox Fonds | venue TBA — Miss Demeanour presiding}
+\block{OCT 17 | Issue №2 launch + colouring contest | location in №2. obviously}
+\end{seq}
+\headline{The Calendar}
+\field{boxLabel}{AUG — OCT 2026}
+\field{boxTag}{CLIP + FRIDGE}
+\field{footNote}{LISTINGS ARE FREE · EMAIL BY THE 15TH · SOBER + ALL-AGES OPTIONS MARKED ◦}
+\field{dirKicker}{KEEP THIS PAGE / DIRECTORY}
+\field{brand}{Crumbs Mail}
+\field{brandSub}{READER CORRESPONDENCE · №0 EDITION}
+\field{intro}{This box is empty because you haven’t written yet. First issue problems. Fill it with fury, recipes, corrections, crushes (anonymized), and photos of the colouring page done wrong on purpose.}
+\begin{seq}{notes}
+\block{Paris Is Burning (1990) | The ballroom documentary that gave the culture its vocabulary. Watch it with people; the applause is part of the text.}
+\block{My Own Private Idaho (1991) | River Phoenix falls asleep on every road in the Northwest. The campfire scene alone is worth the mosquitoes.}
+\block{The Watermelon Woman (1996) | Cheryl Dunye invents an archive because nobody kept one for her. Relevant to a magazine doing the same thing.}
+\end{seq}
+\kicker{MOVIES IN THE PARK / HOSTED BY DAILY BREAD}
+\field{schedLabel}{SUMMER SLATE / AT DUSK}
+\field{schedTag}{RAIN MOVES US TO THE LAB}
+\field{schedFoot}{FREE / PWYC · CAPTIONS ON · POWER: RECLAIMED CELLS, PROJECT HEX}
+\field{bringTag}{BRING}
+\field{bring}{a blanket · bug spray · someone you’re nervous around · a thermos (we sell none of these on purpose)}
+\field{voteTitle}{VOTE — №2 THEME}
+\begin{seq}{votes}
+\block{THE THAW (what comes back)}
+\block{WATER RIGHTS \& WRONGS}
+\block{NIGHT SHIFT (who runs 2AM Kelowna)}
+\end{seq}
+\field{voteNote}{MARK ONE · PHOTOGRAPH · SEND. DEMOCRACY.}
+\field{qrNote}{TIP JAR + SUBMISSIONS QR}
+\field{qrSub}{REPLACE WITH REAL CODE AT PASTE-UP}
+\end{page}
+
+% 41 · p39 · Listings
+\begin{page}{p39}{Listings}[directory]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{18 · MUTUAL AID}
+\chrome{headRight}{KEEP THIS PAGE}
+\chrome{docNo}{DB-039-A}
+\chrome{folio}{39}
+\field{scribble}{none}
+\begin{seq}{rows}
+\block{Crisis line (24/7, trans-competent) | placeholder — verify before print}
+\block{Informed-consent clinic list | updated quarterly · this page}
+\block{Youth drop-in (14–24) ◦ | wed + sat · downtown}
+\block{Mutual aid pantry | rutland · no questions}
+\block{Legal aid — tenant defence | first mondays · library}
+\block{Elder queer social (55+) ◦ | thursdays · lakeshore}
+\block{Sober hangs ◦ | see calendar, marked ◦}
+\end{seq}
+\headline{The Calendar}
+\field{boxLabel}{VERIFIED QUARTERLY · TEAR OUT OK}
+\field{boxTag}{CLIP + FRIDGE}
+\field{footNote}{A RESOURCE MISSING? WRONG NUMBER? TELL US — THIS PAGE IS THE WHOLE POINT.}
+\field{dirKicker}{KEEP THIS PAGE / DIRECTORY}
+\field{brand}{Crumbs Mail}
+\field{brandSub}{READER CORRESPONDENCE · №0 EDITION}
+\field{intro}{This box is empty because you haven’t written yet. First issue problems. Fill it with fury, recipes, corrections, crushes (anonymized), and photos of the colouring page done wrong on purpose.}
+\begin{seq}{notes}
+\block{Paris Is Burning (1990) | The ballroom documentary that gave the culture its vocabulary. Watch it with people; the applause is part of the text.}
+\block{My Own Private Idaho (1991) | River Phoenix falls asleep on every road in the Northwest. The campfire scene alone is worth the mosquitoes.}
+\block{The Watermelon Woman (1996) | Cheryl Dunye invents an archive because nobody kept one for her. Relevant to a magazine doing the same thing.}
+\end{seq}
+\kicker{MOVIES IN THE PARK / HOSTED BY DAILY BREAD}
+\field{schedLabel}{SUMMER SLATE / AT DUSK}
+\field{schedTag}{RAIN MOVES US TO THE LAB}
+\field{schedFoot}{FREE / PWYC · CAPTIONS ON · POWER: RECLAIMED CELLS, PROJECT HEX}
+\field{bringTag}{BRING}
+\field{bring}{a blanket · bug spray · someone you’re nervous around · a thermos (we sell none of these on purpose)}
+\field{voteTitle}{VOTE — №2 THEME}
+\begin{seq}{votes}
+\block{THE THAW (what comes back)}
+\block{WATER RIGHTS \& WRONGS}
+\block{NIGHT SHIFT (who runs 2AM Kelowna)}
+\end{seq}
+\field{voteNote}{MARK ONE · PHOTOGRAPH · SEND. DEMOCRACY.}
+\field{qrNote}{TIP JAR + SUBMISSIONS QR}
+\field{qrSub}{REPLACE WITH REAL CODE AT PASTE-UP}
+\end{page}
+
+% 42 · p40 · Body
+\begin{page}{p40}{Body}[checklist]
+\slug{v2-p40}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{18 · SERVICE}
+\chrome{headRight}{FIRE SEASON — CLIP + FRIDGE}
+\chrome{docNo}{DB-040-A}
+\chrome{folio}{40}
+\field{scribble}{none}
+\field{scribble2}{none}
+\field{stamp}{none}
+\field{placeholder}{archival photo — orchard crews, 1910s}
+\field{imgH}{250px}
+\kicker{}
+\field{caption}{FIG. 2 — PICKING CREWS, RUTLAND BENCHES. THE APPLES WERE A PYRAMID SCHEME WITH ROOTS.}
+\begin{body}
+\block{The valley sold itself twice: first as Eden, then as equity. Fruit ranchers went broke so often the packinghouses printed their own scrip; when fruit died, the pitch became retirement sun; when the retirees priced out the pickers, the pitch became lakeside lofts.}
+\block{Each act ended the same way — with the people who did the work living further from the water. The queer history is braided through all of it: dance halls with unofficial nights, friendship networks that doubled as housing lists, a scene that survived by being useful and quiet until it didn’t have to be.}
+\end{body}
+\field{body2}{Two evacuations in five years says keep it packed, not planned. Know your route out, your meeting spot, and one person out of town who takes the check-in calls. The writer on page 13 shouldn't know this list better than city council does.}
+\field{proseLabel}{}
+\begin{seq}{quotes}
+\block{“My GP is great. My GP is also in Vancouver, where I don’t live.”}
+\block{“The pharmacist figured it out before any doctor did. Shout out Deb.”}
+\block{“I got my referral the same month my lease ended. Guess which one moved faster.”}
+\block{“Honestly? The group chat is the healthcare system.”}
+\end{seq}
+\field{note}{FOUR OF ELEVEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY}
+\field{colA}{ENTRY}
+\field{colB}{STATUS}
+\begin{seq}{table}
+\block{1913 | fruit prices crater; scrip economy begins | BUST | \#f0477d}
+\block{1930s | packinghouse layoffs, valley-wide | BUST | \#f0477d}
+\block{1958 | bridge opens; ferry workers obsolete overnight | PIVOT | \#fe9a0d}
+\block{1973 | ALR freezes orchard speculation (briefly) | PARRY | \#12b795}
+\block{1980s | sawmill era ends; wine era begins | PIVOT | \#fe9a0d}
+\block{2003 | firestorm; 239 homes, 30k evacuated | BURN | \#f0477d}
+\block{2017 | flood year — the lake takes the boardwalk | FLOOD | \#f0477d}
+\block{2021 | heat dome; hottest place in Canada, again | BURN | \#f0477d}
+\block{2024 | last dedicated queer venue closes | BUST | \#f0477d}
+\block{2026 | this magazine. your move, city. | RIPOSTE | \#12b795}
+\end{seq}
+\field{noteTag}{METHOD}
+\field{note2}{compiled from city archives, newspaper morgues, and elders who were there. Corrections welcome and expected: see Crumbs Mail.}
+\field{checkTitle}{THE GO-BAG / FIRE SEASON CHECKLIST}
+\begin{seq}{checklist}
+\block{Water — 4L per person, rotate it}
+\block{Meds + a photographed prescription list}
+\block{Documents in a freezer bag (ID, insurance, lease — ha)}
+\block{Chargers, battery bank, cash in small bills}
+\block{N95s from the smoke drawer. You have a smoke drawer}
+\block{The pets. Count them twice. Then the neighbour's}
+\block{This magazine — morale is supplies}
+\end{seq}
+\end{page}
+
+% 43 · p41 · Listings
+\begin{page}{p41}{Listings}[mail]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{19 · CORRESPONDENCE}
+\chrome{headRight}{WRITE TO US}
+\chrome{docNo}{DB-041-A}
+\chrome{folio}{41}
+\field{scribble}{none}
+\field{rows}{}
+\headline{The Calendar}
+\field{boxLabel}{AUG — OCT 2026}
+\field{boxTag}{CLIP + FRIDGE}
+\field{footNote}{LISTINGS ARE FREE · EMAIL BY THE 15TH · SOBER + ALL-AGES OPTIONS MARKED ◦}
+\field{dirKicker}{KEEP THIS PAGE / DIRECTORY}
+\field{brand}{Crumbs Mail}
+\field{brandSub}{READER CORRESPONDENCE · №0 EDITION}
+\field{intro}{This box is empty because you haven’t written yet. First issue problems. Fill it with fury, recipes, corrections, crushes (anonymized), and photos of the colouring page done wrong on purpose.}
+\begin{seq}{notes}
+\block{Paris Is Burning (1990) | The ballroom documentary that gave the culture its vocabulary. Watch it with people; the applause is part of the text.}
+\block{My Own Private Idaho (1991) | River Phoenix falls asleep on every road in the Northwest. The campfire scene alone is worth the mosquitoes.}
+\block{The Watermelon Woman (1996) | Cheryl Dunye invents an archive because nobody kept one for her. Relevant to a magazine doing the same thing.}
+\end{seq}
+\kicker{MOVIES IN THE PARK / HOSTED BY DAILY BREAD}
+\field{schedLabel}{SUMMER SLATE / AT DUSK}
+\field{schedTag}{RAIN MOVES US TO THE LAB}
+\field{schedFoot}{FREE / PWYC · CAPTIONS ON · POWER: RECLAIMED CELLS, PROJECT HEX}
+\field{bringTag}{BRING}
+\field{bring}{a blanket · bug spray · someone you’re nervous around · a thermos (we sell none of these on purpose)}
+\field{voteTitle}{VOTE — №2 THEME}
+\begin{seq}{votes}
+\block{THE THAW (what comes back)}
+\block{WATER RIGHTS \& WRONGS}
+\block{NIGHT SHIFT (who runs 2AM Kelowna)}
+\end{seq}
+\field{voteNote}{MARK ONE · PHOTOGRAPH · SEND. DEMOCRACY.}
+\field{qrNote}{TIP JAR + SUBMISSIONS QR}
+\field{qrSub}{REPLACE WITH REAL CODE AT PASTE-UP}
+\end{page}
+
+% 44 · p42 · Comic
+\begin{page}{p42}{Comic}[page]
+\chrome{headLeft}{04 · COMIC, CONT.}
+\chrome{headRight}{“CRUMBS” EP.1 — END}
+\chrome{docNo}{DB-042-A}
+\chrome{folio}{42}
+\chrome{footer}{mono}
+\headline{none}
+\field{endText}{none}
+\field{scribble}{none}
+\field{sub}{A SOURDOUGH GOLEM SEEKS HOUSING. EP.1}
+\begin{seq}{panels}
+\block{PANEL 10 — Crumb hosts a “tenants’ potluck” inside the vacant storefront. everyone brings bread. suspiciously communal}
+\block{PANEL 11 — bylaw officer arrives. Crumb offers focaccia. officer visibly conflicted}
+\block{PANEL 12 — “technically… a bakery is a permitted use.” paperwork montage. flour everywhere}
+\block{PANEL 13 — the storefront glows at night: BREAD + BOOKS + BAD KARAOKE. line around the block, again — but happy}
+\block{PANEL 14 — landlord returns: “rent’s tripling.” Crumb: “cool. we’re a co-op now. talk to our lawyer.”}
+\block{PANEL 15 — final: the lawyer is the ogopogo in the trench coat. END OF EP.1}
+\end{seq}
+\field{endNote}{no spoilers but the loaf unionizes}
+\field{credit}{“CRUMBS” RETURNS IN №2 · THE LOAF HAS A LAWYER NOW}
+\field{guestTag}{GUEST STRIP / ROTATING SLOT}
+\field{guestText}{FULL-PAGE GUEST COMIC — a different local cartoonist every issue. №1 guest: [NAME], “Parallel Parking as Queer Praxis”}
+\end{page}
+
+% 45 · p43 · Comic
+\begin{page}{p43}{Comic}[guest]
+\chrome{headLeft}{04 · COMIC}
+\chrome{headRight}{“CRUMBS” — EP.1 OF ∞}
+\chrome{docNo}{DB-043-A}
+\chrome{folio}{43}
+\chrome{footer}{mono}
+\headline{Crumbs}
+\field{endText}{none}
+\field{scribble}{none}
+\field{sub}{A SOURDOUGH GOLEM SEEKS HOUSING. EP.1}
+\begin{seq}{panels}
+\block{PANEL 1 — a sourdough starter in a jar watches an eviction notice slide under the door}
+\block{PANEL 2 — the starter OVERFLOWS. it has decided to become a person about this}
+\block{PANEL 3 — CRUMB (our golem, 4ft, crusty, kind eyes) reads the rental listings. horror}
+\block{PANEL 4 — “\$2,100. shared oven. no pets, no yeast.” Crumb: “I AM pets and yeast.”}
+\end{seq}
+\field{endNote}{no spoilers but the loaf unionizes}
+\field{credit}{STORY + ART: [CARTOONIST NAME] · DRAWN PAGES REPLACE THESE PANEL STUBS AT PASTE-UP}
+\field{guestTag}{GUEST STRIP / ROTATING SLOT}
+\field{guestText}{FULL-PAGE GUEST COMIC — a different local cartoonist every issue. №1 guest: [NAME], “Parallel Parking as Queer Praxis”}
+\end{page}
+
+% 46 · p44 · Colophon
+\begin{page}{p44}{Colophon}[staff]
+\slug{v2-p44}
+\chrome{headLeft}{20 · COLOPHON}
+\chrome{headRight}{SEE YOU IN №2}
+\chrome{docNo}{DB-044-A}
+\chrome{folio}{44}
+\field{brand}{Who Made This}
+\field{placeholder}{staff photo — everyone assembled, gremlin energy, timer on a ladder}
+\field{caption}{FIG. 9 — THE ENTIRE OPERATION. YES, THE DOG IS ON THE MASTHEAD.}
+\field{creditsLabel}{ATTRIBUTIONS / EVERY HAND}
+\begin{seq}{credits}
+\block{EDITOR | your name here}
+\block{YOUNG VOICES | three writers}
+\block{PHOTOGRAPHY | “Vacancy” — [photographer]}
+\block{COMICS | “Crumbs” — [cartoonist] · guest: [name]}
+\block{THE WALL | [featured artist], two pieces, №1}
+\block{SATIRE CARTOON | [illustrator], with apologies to council}
+\block{PROOFREADING | the patient one}
+\block{FUNDING | Riposte Laboratories Inc.}
+\block{PRINTER | [local print shop], 500 copies}
+\end{seq}
+\field{colophon}{Printed on unceded syilx Okanagan territory in a run of 500. Set in IBM Plex Mono and UnifrakturMaguntia. Errors are ours; corrections are yours; the leftover ink went into the stickers.}
+\field{slogan}{PARRY. RIPOSTE.}
+\field{adText}{This space is the inside back cover. In №2 it’s for sale to any local business that has never evicted anyone. Rates on request.}
+\field{sig}{see you at the thaw ✕}
+\end{page}
+
+% 47 · ibc · Colophon
+\begin{page}{ibc}{Colophon}[ad]
+\slug{colophon}
+\chrome{headLeft}{20 · COLOPHON}
+\chrome{headRight}{SEE YOU IN №2}
+\chrome{docNo}{DB-042-A}
+\chrome{folio}{IBC}
+\field{brand}{Who Made This}
+\field{placeholder}{staff photo — everyone assembled, gremlin energy, timer on a ladder}
+\field{caption}{FIG. 9 — THE ENTIRE OPERATION. YES, THE DOG IS ON THE MASTHEAD.}
+\field{creditsLabel}{ATTRIBUTIONS / EVERY HAND}
+\begin{seq}{credits}
+\block{EDITOR | your name here}
+\block{YOUNG VOICES | three writers}
+\block{PHOTOGRAPHY | “Vacancy” — [photographer]}
+\block{COMICS | “Crumbs” — [cartoonist] · guest: [name]}
+\block{THE WALL | [featured artist], two pieces, №1}
+\block{SATIRE CARTOON | [illustrator], with apologies to council}
+\block{PROOFREADING | the patient one}
+\block{FUNDING | Riposte Laboratories Inc.}
+\block{PRINTER | [local print shop], 500 copies}
+\end{seq}
+\field{colophon}{Printed on unceded syilx Okanagan territory in a run of 500. Set in IBM Plex Mono and UnifrakturMaguntia. Errors are ours; corrections are yours; the leftover ink went into the stickers.}
+\field{slogan}{PARRY. RIPOSTE.}
+\field{adText}{This space is the inside back cover. In №2 it’s for sale to any local business that has never evicted anyone. Rates on request.}
+\field{sig}{see you at the thaw ✕}
+\end{page}
+
+% 48 · bc · Cover
+\begin{page}{bc}{Cover}[back]
+\slug{cover}
+\field{art}{}
+\field{issueTag}{№1 — KELOWNA’S COLLAPSE}
+\field{price}{PAY WHAT YOU CAN}
+\field{publisher}{RIPOSTE LABORATORIES}
+\field{publisherLong}{RIPOSTE LABORATORIES INC.}
+\field{tagline}{Daily Bread is baked quarterly in Kelowna, BC. Free where you found it. Pay what you can where you can’t.}
+\field{issn}{ISSN PENDING}
+\field{edition}{№1 · SUMMER 2026}
+\end{page}
+
+\end{document}
