@@ -21,3 +21,6 @@ db-render/node_modules/
 
 # the print document compiled from content/issue-*.js by tools/print/build-print.js
 db-render/build-*.dc.html
+
+# db-latex output: PDFs, logs and the staged fonts link. tools/db-latex.py rebuilds it.
+build/
