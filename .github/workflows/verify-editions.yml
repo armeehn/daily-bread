@@ -123,7 +123,9 @@ jobs:
 
       # Standard library only: python3 for the parser, node for build.js.
       - name: Parse the .tex, rebuild the site, verify the proofs
-        run: python3 tools/db-latex.py check --edition issue-01 --web
+        run: |
+          python3 tools/db-latex.py check --edition issue-01 --web
+          python3 tools/db-latex.py check --edition issue-02 --web
 
   # 5. THE .tex MUST STILL TYPESET TO THE PRESS GEOMETRY
   # 48 A5 pages (420 x 594.96 pt) and 24 A4-landscape sides (841.92 x 594.96 pt),
@@ -145,7 +147,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Typeset both print outputs and measure them
-        run: python3 tools/db-latex.py check --edition issue-01 --print
+        run: |
+          python3 tools/db-latex.py check --edition issue-01 --print
+          python3 tools/db-latex.py check --edition issue-02 --print
 
       - name: Keep the PDFs
         if: always()
@@ -155,6 +159,8 @@ jobs:
           path: |
             build/latex/issue-01/print.pdf
             build/latex/issue-01/booklet.pdf
+            build/latex/issue-02/print.pdf
+            build/latex/issue-02/booklet.pdf
 
   live:
     name: live editions still hash to their signatures

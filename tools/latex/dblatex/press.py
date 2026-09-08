@@ -71,6 +71,11 @@ def _stage_fonts(repo, build):
     link = build / "fonts"
     if rl and not link.exists():
         link.symlink_to(rl / "fonts")
+    # The magazine's own display faces (UnifrakturMaguntia, Caveat; OFL) ride
+    # in the repo and appear as ./dbfonts for the same reason.
+    dbfonts = build / "dbfonts"
+    if not dbfonts.exists():
+        dbfonts.symlink_to(repo / "tools" / "latex" / "fonts")
 
 
 def _run(cmd, cwd, env, log):
@@ -87,7 +92,10 @@ def build_pdfs(repo, tex, build):
     common = [ENGINE, "-interaction=nonstopmode", "-halt-on-error",
               f"-output-directory={build}"]
 
-    _run(common + ["-jobname=print", str(tex)], build, env, build / "print.log")
+    # \dbassets is where the kit's image paths ("uploads/x.png") resolve.
+    assets = str(repo / "db-render") + "/"
+    _run(common + ["-jobname=print", r"\def\dbassets{%s}\input{%s}" % (assets, tex)],
+         build, env, build / "print.log")
 
     pages = pdf_geometry(build / "print.pdf")[0]
     sides = "\n".join(

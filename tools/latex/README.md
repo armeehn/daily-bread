@@ -92,3 +92,26 @@ source is silently absent from paper.
 The face is IBM Plex Mono (the kit's); riposte-latex supplies the palette,
 rules and the JetBrains fallback. The kit's Caveat and UnifrakturMaguntia
 are web fonts only and are not used on paper.
+
+## The look
+
+`dailybread.cls` v0.2 draws the page furniture of the `db-render/*.dc.html`
+kit in TeX, so a press PDF reads as Daily Bread without the browser:
+
+- running heads over the page's accent rule; `DOC NO.` and folio over a
+  full-bleed footer strip (`footer=mono` checkerboard, `footer=duo` diamonds),
+  painted from the shipout hook so one `lualatex` pass is enough;
+- ink-framed row tables with dashed rules, numbered chips and a right-hand
+  label; a `#hex` last field pins the chip colour;
+- dashed photo slots sized by the kit's `imgH` (`px` = 1/96 in), accent-barred
+  pull quotes, kiss-cut sticker die-lines, hatched comic panels;
+- UnifrakturMaguntia on the brands and the wordmark, Caveat on the sign-offs
+  (`tools/latex/fonts/`, OFL); IBM Plex Mono for everything else;
+- body copy justified and hyphenated with microtype protrusion.
+
+Front and back covers are full bleed; `art` paths resolve against
+`db-render/` (press.py passes `\dbassets`). Pixel identity with the Chromium
+kit is not a goal; the same 48 pages, chrome and imposition are.
+
+`content/issue-02.tex` (№2, "The Thaw") is the second edition and the proof
+the class generalises: `python3 tools/db-latex.py build --edition issue-02`.
