@@ -1,0 +1,1716 @@
+%% Daily Bread · the issue itself — SOURCE OF TRUTH
+%% ---------------------------------------------------------------------------
+%% One issue, one file. The web build and the print build both read this;
+%% see tools/latex/README.md for the pipeline and the macro set.
+%%
+%% NOTATION (inside a value, kept verbatim by both consumers)
+%%   "a | b | c"              fields within one row (no "|" in prose)
+%%   "line one / line two"    line breaks inside a poem
+%%   "Q: …" / "A: …"          speaker prefixes in interviews
+%%   "#f0477d" as a last field pins that row's accent (written \#f0477d)
+%%   "none"                   hides an optional element
+%%   \begin{seq}{name} … \block{…} … \end{seq}   a block sequence
+%%
+%% TeX specials are escaped: \# \$ \% \& \_ \{ \} \textbackslash{}
+%% ---------------------------------------------------------------------------
+
+\documentclass{dailybread}
+\issue{№2}
+\theme{The Thaw}
+\edition{№2 · WINTER 2026}
+\trim{A5}
+
+\begin{document}
+
+% 01 · fc · Cover
+\begin{page}{fc}{Cover}[front]
+\slug{v2-fc}
+\field{issueTag}{№2 — THE THAW}
+\field{price}{PAY WHAT YOU CAN}
+\field{publisher}{RIPOSTE LABORATORIES}
+\field{publisherLong}{RIPOSTE LABORATORIES INC.}
+\field{tagline}{Daily Bread is baked quarterly in Kelowna, BC. Free where you found it. Pay what you can where you can’t.}
+\field{issn}{ISSN PENDING}
+\field{edition}{№2 · WINTER 2026}
+\field{art}{uploads/thaw.png}
+\end{page}
+
+% 02 · ic · Letter
+\begin{page}{ic}{Letter}[masthead]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{DAILY BREAD №2 · KELOWNA BC}
+\chrome{headRight}{THEME: THE THAW}
+\chrome{docNo}{DB-100-A}
+\chrome{folio}{IC}
+\begin{body}
+\block{You came back. So did we. Issue one said this valley collapses on schedule, and the letters we got said: fine, then what? This is the then-what issue. The ice goes out on the lake in March whether anyone votes on it, and everything under it has been waiting.}
+\block{The thaw is not a happy ending. It is a wet, loud, muddy beginning: creeks over the road, the first patio chairs out too early, a drag brunch in a room that was a bank. What comes back never comes back the same. That is the point of it.}
+\block{Tear out the poster. Colour the council. Mail us what came back for you. Crumbs are still the price of admission.}
+\end{body}
+\field{lead}{HEY.}
+\field{stamp}{BATCH №2 · PROOFED}
+\field{wordmark}{Daily Bread}
+\field{subtitle}{A QUEER MAGAZINE FOR THE OKANAGAN}
+\field{mastheadLabel}{MASTHEAD / №2 · WINTER 2026}
+\begin{seq}{masthead}
+\block{EDITOR | still your name here}
+\block{ART + COMICS | open call — pg 24}
+\block{YOUNG VOICES DESK | pg 11}
+\block{PRINTED | on unceded syilx territory}
+\end{seq}
+\field{ack}{Daily Bread is published on the unceded, ancestral territory of the syilx Okanagan people. The lake was theirs before it was a view, and it will be theirs after the condos slide into it.}
+\field{funderLine}{FUNDED BY RIPOSTE LABORATORIES INC.}
+\field{funderNote}{EDITORIAL INDEPENDENCE CLAUSE: SEE FROM THE LAB}
+\kicker{00 · EDITOR’S LETTER}
+\headline{Our Daily Thaw}
+\field{signoff}{— the editors ✕}
+\end{page}
+
+% 03 · p01 · Letter
+\begin{page}{p01}{Letter}[letter]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{DAILY BREAD №2 · KELOWNA BC}
+\chrome{headRight}{THEME: THE THAW}
+\chrome{docNo}{DB-100-A}
+\chrome{folio}{01}
+\begin{body}
+\block{You came back. So did we. Issue one said this valley collapses on schedule, and the letters we got said: fine, then what? This is the then-what issue. The ice goes out on the lake in March whether anyone votes on it, and everything under it has been waiting.}
+\block{The thaw is not a happy ending. It is a wet, loud, muddy beginning: creeks over the road, the first patio chairs out too early, a drag brunch in a room that was a bank. What comes back never comes back the same. That is the point of it.}
+\block{Tear out the poster. Colour the council. Mail us what came back for you. Crumbs are still the price of admission.}
+\end{body}
+\field{lead}{HEY.}
+\field{stamp}{BATCH №2 · PROOFED}
+\field{wordmark}{Daily Bread}
+\field{subtitle}{A QUEER MAGAZINE FOR THE OKANAGAN}
+\field{mastheadLabel}{MASTHEAD / №2 · WINTER 2026}
+\begin{seq}{masthead}
+\block{EDITOR | still your name here}
+\block{ART + COMICS | open call — pg 24}
+\block{YOUNG VOICES DESK | pg 11}
+\block{PRINTED | on unceded syilx territory}
+\end{seq}
+\field{ack}{Daily Bread is published on the unceded, ancestral territory of the syilx Okanagan people. The lake was theirs before it was a view, and it will be theirs after the condos slide into it.}
+\field{funderLine}{FUNDED BY RIPOSTE LABORATORIES INC.}
+\field{funderNote}{EDITORIAL INDEPENDENCE CLAUSE: SEE FROM THE LAB}
+\kicker{00 · EDITOR’S LETTER}
+\headline{Our Daily Thaw}
+\field{signoff}{— the editors ✕}
+\end{page}
+
+% 04 · p02 · Contents
+\begin{page}{p02}{Contents}[manifest]
+\chrome{footer}{duo}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{DAILY BREAD №2 · KELOWNA BC}
+\chrome{headRight}{THEME: THE THAW}
+\chrome{docNo}{DB-102-A}
+\chrome{folio}{02}
+\field{scribble}{none}
+\begin{seq}{rows}
+\block{01 | Our Daily Thaw — editor’s letter | HOUSE}
+\block{04 | After the Burn — what grows back | HISTORY}
+\block{08 | Freshet — photo essay, Mission Creek | PHOTO}
+\block{11 | Young Voices — three field reports | OPINION}
+\block{14 | Crumbs — ep.2, the loaf has a lawyer | COMIC}
+\block{16 | Thirty Years of Thursdays — Auntie Pat | INTERVIEW}
+\block{19 | Ice Out / Graft — poems | LIT}
+\block{20 | Peel Me — sticker sheet, second pressing | STICKERS}
+\block{21 | Colour Your Own Comeback | SATIRE}
+\block{22 | The Wall — two pieces, centre rip-out | ART}
+\block{25 | Season Two — the Rutland rent strike | ISSUES}
+\block{28 | The Lake Gives — fiction pt.2 | LIT}
+\block{30 | From the Lab — funder disclosure | RIPOSTE}
+\block{32 | Ask a Local Gay / Reviews | SERVICE}
+\block{34 | The Bite Back / Rotation | FOOD+MUSIC}
+\block{36 | The Rewind + Movies in the Bank | FILM}
+\block{38 | Calendar / Directory / Freeze Kit | AID}
+\block{41 | Crumbs Mail · finale · guest strip | COMIC}
+\block{44 | Who Made This — staff, assembled | COLOPHON}
+\end{seq}
+\headline{Contents}
+\field{manifestLabel}{MANIFEST / №2}
+\field{manifestTag}{DB-TOC}
+\field{whoTag}{WHO’S IN HERE}
+\field{whoBlurb}{Nineteen contributors made №2: eleven writers, three photographers, two cartoonists, one potluck matriarch, one tenants’ union, and a reader who mailed us a pressed apple blossom. Every byline is local. Every fee got paid before the printer did.}
+\field{subTitle}{SUBMIT TO №3 — “WATER RIGHTS \& WRONGS”}
+\begin{seq}{subRows}
+\block{Art for The Wall | one page, yours, 300dpi. We pay.}
+\block{Opinion (under 25) | 500 words about who owns the lake.}
+\block{Poems, fiction, comics | wet welcome.}
+\block{Deadline | Feb 15 · hello@dailybread.example}
+\end{seq}
+\field{footNote}{DAILY BREAD IS FREE / PWYC · PRINT RUN 750 · FONTS: IBM PLEX MONO, UNIFRAKTUR MAGUNTIA}
+\end{page}
+
+% 05 · p03 · Contents
+\begin{page}{p03}{Contents}[contributors]
+\chrome{footer}{duo}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{DAILY BREAD №2 · KELOWNA BC}
+\chrome{headRight}{THEME: THE THAW}
+\chrome{docNo}{DB-102-A}
+\chrome{folio}{03}
+\field{scribble}{none}
+\begin{seq}{rows}
+\block{01 | Our Daily Thaw — editor’s letter | HOUSE}
+\block{04 | After the Burn — what grows back | HISTORY}
+\block{08 | Freshet — photo essay, Mission Creek | PHOTO}
+\block{11 | Young Voices — three field reports | OPINION}
+\block{14 | Crumbs — ep.2, the loaf has a lawyer | COMIC}
+\block{16 | Thirty Years of Thursdays — Auntie Pat | INTERVIEW}
+\block{19 | Ice Out / Graft — poems | LIT}
+\block{20 | Peel Me — sticker sheet, second pressing | STICKERS}
+\block{21 | Colour Your Own Comeback | SATIRE}
+\block{22 | The Wall — two pieces, centre rip-out | ART}
+\block{25 | Season Two — the Rutland rent strike | ISSUES}
+\block{28 | The Lake Gives — fiction pt.2 | LIT}
+\block{30 | From the Lab — funder disclosure | RIPOSTE}
+\block{32 | Ask a Local Gay / Reviews | SERVICE}
+\block{34 | The Bite Back / Rotation | FOOD+MUSIC}
+\block{36 | The Rewind + Movies in the Bank | FILM}
+\block{38 | Calendar / Directory / Freeze Kit | AID}
+\block{41 | Crumbs Mail · finale · guest strip | COMIC}
+\block{44 | Who Made This — staff, assembled | COLOPHON}
+\end{seq}
+\headline{Contents}
+\field{manifestLabel}{MANIFEST / №2}
+\field{manifestTag}{DB-TOC}
+\field{whoTag}{WHO’S IN HERE}
+\field{whoBlurb}{Nineteen contributors made №2: eleven writers, three photographers, two cartoonists, one potluck matriarch, one tenants’ union, and a reader who mailed us a pressed apple blossom. Every byline is local. Every fee got paid before the printer did.}
+\field{subTitle}{SUBMIT TO №3 — “WATER RIGHTS \& WRONGS”}
+\begin{seq}{subRows}
+\block{Art for The Wall | one page, yours, 300dpi. We pay.}
+\block{Opinion (under 25) | 500 words about who owns the lake.}
+\block{Poems, fiction, comics | wet welcome.}
+\block{Deadline | Feb 15 · hello@dailybread.example}
+\end{seq}
+\field{footNote}{DAILY BREAD IS FREE / PWYC · PRINT RUN 750 · FONTS: IBM PLEX MONO, UNIFRAKTUR MAGUNTIA}
+\end{page}
+
+% 06 · p04 · Feature
+\begin{page}{p04}{Feature}[opener]
+\slug{v2-p04}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{01 · HISTORY}
+\chrome{headRight}{THEME: THE THAW}
+\chrome{docNo}{DB-104-A}
+\chrome{folio}{04}
+\field{scribble}{none}
+\field{stats}{none}
+\field{caption}{FIG. 1 — CAPTION SETS THE JOKE, THE IMAGE SETS THE SCENE.}
+\field{placeholder}{feature photo — drag and drop, 300dpi}
+\field{boxTitle}{CONTINUED IN №3 — “WATER RIGHTS \& WRONGS”}
+\field{boxBody}{Serialized fiction runs across issues. Miss one and the lake keeps your place.}
+\begin{body}
+\block{AUGUST 2003 took two hundred and thirty-nine homes off the south slope and the valley decided, out loud and in the newspaper, that it would never be the same. By June it was purple. Fireweed does not wait for the inquiry; it wants the ash, and it got a whole mountain of it.}
+\block{This is the rude history of what grew back and what didn’t. The forest has a plan. The town has a budget. The difference between those two words is the whole story of this valley, and it is a story with a spring in it every single year.}
+\end{body}
+\byline{WORDS: STAFF · PHOTOS: BC WILDFIRE SERVICE, THE POTLUCK GUEST BOOK}
+\kicker{01 · HISTORY}
+\headline{After the Burn}
+\standfirst{The mountain regrew on schedule. The town is still filling out the form. A short, rude history of recovery in a place that does it for a living.}
+\field{contNote}{CONTINUED NEXT PAGE → FIREWEED FIRST, THEN THE PINES}
+\end{page}
+
+% 07 · p05 · Body
+\begin{page}{p05}{Body}[image-text]
+\slug{v2-p05}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{01 · HISTORY}
+\chrome{headRight}{THEME: THE THAW}
+\chrome{docNo}{DB-105-A}
+\chrome{folio}{05}
+\field{scribble}{none}
+\field{scribble2}{none}
+\field{stamp}{none}
+\field{placeholder}{archival photo — the burn from the lake, September 2003}
+\field{imgH}{250px}
+\kicker{01 · HISTORY}
+\field{caption}{FIG. 1 — THE SOUTH SLOPE, SEPTEMBER 2003. THE VIEW LOTS ARE STILL VIEW LOTS.}
+\begin{body}
+\block{Lodgepole pine keeps its seeds in cones sealed with resin, and the resin melts at about sixty degrees. The tree is built for the fire. So, it turns out, are the people who stayed: the ones who ran the muster point, the ones who fed the crews, the ones who slept in the curling rink for a month and then bought the curling rink a new freezer.}
+\block{Recovery in this valley has always been done by whoever was already there. The province arrived with forms. The neighbours arrived with lasagna. One of those is on this page and the other is on the next.}
+\end{body}
+\field{body2}{The fix isn’t mysterious here either: reopen the room, pay the person who unlocks it, and tell people. Most of what came back in this valley came back because one stubborn human kept the key.}
+\field{proseLabel}{}
+\begin{seq}{quotes}
+\block{“We got the rent rolled back four percent. It felt like winning a war.”}
+\block{“The landlord’s lawyer called us a collective. We put it on the t-shirts.”}
+\block{“My neighbour didn’t know what a strike was. She ran the phone tree.”}
+\block{“They fixed the elevator in a week. Nine years I asked.”}
+\end{seq}
+\field{note}{FOUR OF FOURTEEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY}
+\field{colA}{ENTRY}
+\field{colB}{STATUS}
+\begin{seq}{table}
+\block{2003 | Okanagan Mountain Park fire; 239 homes | BACK | \#12b795}
+\block{2004 | fireweed on the burn by June | BACK | \#12b795}
+\block{2008 | the last downtown rep cinema closes | GONE | \#f0477d}
+\block{2012 | the Thursday potluck moves to its fourth church | BACK | \#12b795}
+\block{2017 | lake floods the boardwalk; sandbags on Bernard | BACK | \#12b795}
+\block{2020 | every venue dark; the drag calendar goes to zero | PENDING | \#fe9a0d}
+\block{2021 | heat dome; the lake gives back a rowboat | BACK | \#12b795}
+\block{2023 | McDougall Creek fire; the bridge closes both ways | BACK | \#12b795}
+\block{2025 | Rutland tenants win a rollback | BACK | \#12b795}
+\block{2026 | the lake did not freeze | PENDING | \#fe9a0d}
+\end{seq}
+\field{noteTag}{METHOD}
+\field{note2}{compiled from fire-centre maps, newspaper morgues, the potluck’s guest book and people who stayed}
+\field{checkTitle}{WHAT ACTUALLY HELPS / CHECKLIST}
+\begin{seq}{checklist}
+\block{A tenants’ association needs three people and a group chat — start there}
+\block{Rent increases above the provincial cap are contestable, in writing, in 30 days}
+\block{The RTB dispute form is free; the notary is not — ask the directory first}
+\block{Photograph everything the day you move in, and the day the notice arrives}
+\end{seq}
+\end{page}
+
+% 08 · p06 · Body
+\begin{page}{p06}{Body}[image-text]
+\slug{v2-p06}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{01 · HISTORY}
+\chrome{headRight}{THEME: THE THAW}
+\chrome{docNo}{DB-106-A}
+\chrome{folio}{06}
+\field{scribble}{none}
+\field{scribble2}{none}
+\field{stamp}{none}
+\field{placeholder}{archival photo — fireweed on the burn, June 2004}
+\field{imgH}{250px}
+\kicker{01 · HISTORY}
+\field{caption}{FIG. 2 — FIREWEED, JUNE 2004. IT DID NOT ATTEND THE PUBLIC CONSULTATION.}
+\begin{body}
+\block{The venues were a different kind of forest. The rep cinema closed in 2008 and nothing sprouted where it was, because a room needs a lease and a lease needs a landlord who wants a cinema more than a phone store. Nobody did, for eighteen years.}
+\block{Then a bank branch closed, the way they all are, and a small design company signed for it because the vault was soundproof. Drag brunch first, films on Thursdays, the zine fair in December. Nothing about this was inevitable. Somebody kept the key.}
+\end{body}
+\field{body2}{The fix isn’t mysterious here either: reopen the room, pay the person who unlocks it, and tell people. Most of what came back in this valley came back because one stubborn human kept the key.}
+\field{proseLabel}{}
+\begin{seq}{quotes}
+\block{“We got the rent rolled back four percent. It felt like winning a war.”}
+\block{“The landlord’s lawyer called us a collective. We put it on the t-shirts.”}
+\block{“My neighbour didn’t know what a strike was. She ran the phone tree.”}
+\block{“They fixed the elevator in a week. Nine years I asked.”}
+\end{seq}
+\field{note}{FOUR OF FOURTEEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY}
+\field{colA}{ENTRY}
+\field{colB}{STATUS}
+\begin{seq}{table}
+\block{2003 | Okanagan Mountain Park fire; 239 homes | BACK | \#12b795}
+\block{2004 | fireweed on the burn by June | BACK | \#12b795}
+\block{2008 | the last downtown rep cinema closes | GONE | \#f0477d}
+\block{2012 | the Thursday potluck moves to its fourth church | BACK | \#12b795}
+\block{2017 | lake floods the boardwalk; sandbags on Bernard | BACK | \#12b795}
+\block{2020 | every venue dark; the drag calendar goes to zero | PENDING | \#fe9a0d}
+\block{2021 | heat dome; the lake gives back a rowboat | BACK | \#12b795}
+\block{2023 | McDougall Creek fire; the bridge closes both ways | BACK | \#12b795}
+\block{2025 | Rutland tenants win a rollback | BACK | \#12b795}
+\block{2026 | the lake did not freeze | PENDING | \#fe9a0d}
+\end{seq}
+\field{noteTag}{METHOD}
+\field{note2}{compiled from fire-centre maps, newspaper morgues, the potluck’s guest book and people who stayed}
+\field{checkTitle}{WHAT ACTUALLY HELPS / CHECKLIST}
+\begin{seq}{checklist}
+\block{A tenants’ association needs three people and a group chat — start there}
+\block{Rent increases above the provincial cap are contestable, in writing, in 30 days}
+\block{The RTB dispute form is free; the notary is not — ask the directory first}
+\block{Photograph everything the day you move in, and the day the notice arrives}
+\end{seq}
+\end{page}
+
+% 09 · p07 · Body
+\begin{page}{p07}{Body}[ledger]
+\slug{v2-p07}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{01 · HISTORY}
+\chrome{headRight}{THEME: THE THAW}
+\chrome{docNo}{DB-107-A}
+\chrome{folio}{07}
+\field{scribble}{none}
+\field{scribble2}{none}
+\field{stamp}{none}
+\field{placeholder}{archival photo — Okanagan Mountain Park, first green, 2004}
+\field{imgH}{250px}
+\kicker{LEDGER / WHAT CAME BACK WHEN}
+\field{caption}{FIG. 2 — FIREWEED ON THE BURN. IT IS CALLED THAT FOR A REASON.}
+\begin{body}
+\block{The valley has burned before and it has never once stayed burned. Fireweed first, then aspen, then the pines that only open their cones in heat. The regrowth has a schedule too, and it is faster than the permit office.}
+\block{What does not grow back on its own is the stuff people built: the venue, the clinic hours, the bus that ran past eleven. Those need somebody to decide they matter. This issue is about the deciding.}
+\end{body}
+\field{body2}{The fix isn’t mysterious here either: reopen the room, pay the person who unlocks it, and tell people. Most of what came back in this valley came back because one stubborn human kept the key.}
+\field{proseLabel}{}
+\begin{seq}{quotes}
+\block{“We got the rent rolled back four percent. It felt like winning a war.”}
+\block{“The landlord’s lawyer called us a collective. We put it on the t-shirts.”}
+\block{“My neighbour didn’t know what a strike was. She ran the phone tree.”}
+\block{“They fixed the elevator in a week. Nine years I asked.”}
+\end{seq}
+\field{note}{FOUR OF FOURTEEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY}
+\field{colA}{ENTRY}
+\field{colB}{STATUS}
+\begin{seq}{table}
+\block{2003 | Okanagan Mountain Park fire; 239 homes | BACK | \#12b795}
+\block{2004 | fireweed on the burn by June | BACK | \#12b795}
+\block{2008 | the last downtown rep cinema closes | GONE | \#f0477d}
+\block{2012 | the Thursday potluck moves to its fourth church | BACK | \#12b795}
+\block{2017 | lake floods the boardwalk; sandbags on Bernard | BACK | \#12b795}
+\block{2020 | every venue dark; the drag calendar goes to zero | PENDING | \#fe9a0d}
+\block{2021 | heat dome; the lake gives back a rowboat | BACK | \#12b795}
+\block{2023 | McDougall Creek fire; the bridge closes both ways | BACK | \#12b795}
+\block{2025 | Rutland tenants win a rollback | BACK | \#12b795}
+\block{2026 | the lake did not freeze | PENDING | \#fe9a0d}
+\end{seq}
+\field{noteTag}{METHOD}
+\field{note2}{compiled from fire-centre maps, newspaper morgues, the potluck’s guest book and people who stayed}
+\field{checkTitle}{WHAT ACTUALLY HELPS / CHECKLIST}
+\begin{seq}{checklist}
+\block{A tenants’ association needs three people and a group chat — start there}
+\block{Rent increases above the provincial cap are contestable, in writing, in 30 days}
+\block{The RTB dispute form is free; the notary is not — ask the directory first}
+\block{Photograph everything the day you move in, and the day the notice arrives}
+\end{seq}
+\end{page}
+
+% 10 · p08 · Photo Essay
+\begin{page}{p08}{Photo Essay}[hero]
+\slug{v2-p08}
+\chrome{headLeft}{02 · PHOTO ESSAY}
+\chrome{headRight}{MISSION CREEK, 6AM}
+\chrome{docNo}{DB-108-A}
+\chrome{folio}{08}
+\headline{Freshet}
+\standfirst{Mission Creek at six in the morning in April, the week the snow lets go. Nothing is dry, nothing is quiet, and the ducks have opinions.}
+\field{ph1}{photo — the creek over the greenway path}
+\field{ph2}{photo — a sandbag wall with a lawn chair on top}
+\field{ph3}{photo — cottonwood fluff on brown water}
+\field{ph4}{photo — fourth frame}
+\field{capA}{FIG. 3 — THE GREENWAY, UNDER A FOOT OF CREEK. THE SIGN SAYS “SHARED PATH.”}
+\end{page}
+
+% 11 · p09 · Photo Essay
+\begin{page}{p09}{Photo Essay}[title]
+\slug{v2-p09}
+\chrome{headLeft}{02 · PHOTO ESSAY}
+\chrome{headRight}{MISSION CREEK, 6AM}
+\chrome{docNo}{DB-109-A}
+\chrome{folio}{09}
+\headline{Freshet}
+\standfirst{Mission Creek at six in the morning in April, the week the snow lets go. Nothing is dry, nothing is quiet, and the ducks have opinions.}
+\field{ph1}{photo — the creek over the greenway path}
+\field{ph2}{photo — a sandbag wall with a lawn chair on top}
+\field{ph3}{photo — cottonwood fluff on brown water}
+\field{ph4}{photo — fourth frame}
+\field{capA}{FIGS. 4–5 — SHOT WITH WET FEET, APPROPRIATELY.}
+\end{page}
+
+% 12 · p10 · Body
+\begin{page}{p10}{Body}[image-text]
+\slug{v2-p10}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{02 · PHOTO ESSAY}
+\chrome{headRight}{MISSION CREEK, 6AM}
+\chrome{docNo}{DB-110-A}
+\chrome{folio}{10}
+\field{scribble}{none}
+\field{scribble2}{none}
+\field{stamp}{none}
+\field{placeholder}{photo — last frame: a kid launching a paper boat off the sandbags}
+\field{imgH}{430px}
+\kicker{02 · PHOTO ESSAY}
+\field{caption}{FIG. 6 — SOMEBODY ALWAYS LAUNCHES SOMETHING. THAT’S STILL THE WHOLE THESIS.}
+\field{body}{Freshet is the week the mountain lets go of winter all at once. It is not a flood, the city insists, until it is. Every spring the creek takes back the path, the parking lot, the good bench, and every spring someone is standing there at six in the morning to watch it happen, because it is the loudest the valley ever gets and it is free.}
+\field{body2}{The fix isn’t mysterious here either: reopen the room, pay the person who unlocks it, and tell people. Most of what came back in this valley came back because one stubborn human kept the key.}
+\field{proseLabel}{}
+\begin{seq}{quotes}
+\block{“We got the rent rolled back four percent. It felt like winning a war.”}
+\block{“The landlord’s lawyer called us a collective. We put it on the t-shirts.”}
+\block{“My neighbour didn’t know what a strike was. She ran the phone tree.”}
+\block{“They fixed the elevator in a week. Nine years I asked.”}
+\end{seq}
+\field{note}{FOUR OF FOURTEEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY}
+\field{colA}{ENTRY}
+\field{colB}{STATUS}
+\begin{seq}{table}
+\block{2003 | Okanagan Mountain Park fire; 239 homes | BACK | \#12b795}
+\block{2004 | fireweed on the burn by June | BACK | \#12b795}
+\block{2008 | the last downtown rep cinema closes | GONE | \#f0477d}
+\block{2012 | the Thursday potluck moves to its fourth church | BACK | \#12b795}
+\block{2017 | lake floods the boardwalk; sandbags on Bernard | BACK | \#12b795}
+\block{2020 | every venue dark; the drag calendar goes to zero | PENDING | \#fe9a0d}
+\block{2021 | heat dome; the lake gives back a rowboat | BACK | \#12b795}
+\block{2023 | McDougall Creek fire; the bridge closes both ways | BACK | \#12b795}
+\block{2025 | Rutland tenants win a rollback | BACK | \#12b795}
+\block{2026 | the lake did not freeze | PENDING | \#fe9a0d}
+\end{seq}
+\field{noteTag}{METHOD}
+\field{note2}{compiled from fire-centre maps, newspaper morgues, the potluck’s guest book and people who stayed}
+\field{checkTitle}{WHAT ACTUALLY HELPS / CHECKLIST}
+\begin{seq}{checklist}
+\block{A tenants’ association needs three people and a group chat — start there}
+\block{Rent increases above the provincial cap are contestable, in writing, in 30 days}
+\block{The RTB dispute form is free; the notary is not — ask the directory first}
+\block{Photograph everything the day you move in, and the day the notice arrives}
+\end{seq}
+\end{page}
+
+% 13 · p11 · Opinion
+\begin{page}{p11}{Opinion}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{03 · OPINION}
+\chrome{headRight}{YOUNG VOICES DESK}
+\chrome{docNo}{DB-111-A}
+\chrome{folio}{11}
+\field{note}{none}
+\field{scribble}{none}
+\pullquote{“I signed a lease and nobody died. I keep waiting.”}
+\field{promise}{UNREVIEWED. UNEDITED. CORRECT. — THE YV DESK PROMISE}
+\field{tag}{YOUNG VOICES · REPORT 01}
+\field{meta}{AGE 20 · HOUSING}
+\headline{I Signed a Lease and Nobody Died}
+\begin{body}
+\block{My name is on a piece of paper that says I can live somewhere for a year. It is a basement in Rutland with a window that faces a fence, and I cried in the parking lot of the notary. In №1 someone my age wrote that nobody could afford to stay. I am the footnote: one of us did, barely, and only because the building down the street went on strike and the landlords got nervous.}
+\block{Here is what nobody tells you about winning: it is very quiet. No one throws you a party for a two-bedroom. You just stop refreshing the listings at three in the morning and one day you notice you bought a plant. The plant is the thaw. I am not being poetic; it is a pothos and it is doing great.}
+\end{body}
+\end{page}
+
+% 14 · p12 · Opinion
+\begin{page}{p12}{Opinion}
+\chrome{footer}{mono}
+\chrome{accent}{\#fe9a0d}
+\chrome{headLeft}{03 · OPINION}
+\chrome{headRight}{YOUNG VOICES DESK}
+\chrome{docNo}{DB-112-A}
+\chrome{folio}{12}
+\field{note}{none}
+\field{scribble}{none}
+\pullquote{none}
+\field{promise}{none}
+\field{tag}{YOUNG VOICES · REPORT 02}
+\field{meta}{AGE 24 · RETURNING}
+\headline{I Left for Vancouver. I Came Back. Ask Me Why.}
+\begin{body}
+\block{Everyone asks like I failed a test. I had a job with a title, a room with a view of a different room, and a queer scene so big I never had to see the same face twice, which sounds like freedom until you notice it is also how strangers work. I could disappear there. That was the selling point and then it was the problem.}
+\block{Here I cannot disappear. The barista knows my ex. Auntie Pat knows my mother. That is suffocating at nineteen and it is a fire blanket at twenty-four. I came back for the potluck, honestly. Somebody had to carry the lasagna tray and the somebody kept being me. Apparently that is how it starts.}
+\end{body}
+\end{page}
+
+% 15 · p13 · Opinion
+\begin{page}{p13}{Opinion}
+\chrome{footer}{mono}
+\chrome{accent}{\#12b795}
+\chrome{headLeft}{03 · OPINION}
+\chrome{headRight}{YOUNG VOICES DESK}
+\chrome{docNo}{DB-113-A}
+\chrome{folio}{13}
+\field{note}{none}
+\field{scribble}{none}
+\pullquote{“The lake did not freeze. Write that down somewhere it will last.”}
+\field{promise}{none}
+\field{tag}{YOUNG VOICES · REPORT 03}
+\field{meta}{AGE 16 · WATER}
+\headline{The Lake Didn’t Freeze and That’s Not a Metaphor}
+\begin{body}
+\block{My grandfather has a photo of a truck on the lake ice at Peachland in 1969. My father skated on the bay in 1996. I have a photo of open water in January with a duck on it. Three generations, one lake, and the thing that used to be a season is now a story old people tell.}
+\block{The theme of this issue is what comes back. I am here to say: not everything. Some things are gone and the adults keep calling that a cycle. I can’t vote until 2028. Until then I am going to keep taking the January photo, every year, until it is boring or until it is ice.}
+\end{body}
+\end{page}
+
+% 16 · p14 · Comic
+\begin{page}{p14}{Comic}[page]
+\chrome{headLeft}{04 · COMIC}
+\chrome{headRight}{“CRUMBS” — EP.2 OF ∞}
+\chrome{docNo}{DB-114-A}
+\chrome{folio}{14}
+\chrome{footer}{mono}
+\field{scribble}{none}
+\field{sub}{THE LOAF HAS A LAWYER NOW. EP.2}
+\field{endNote}{no spoilers but the lawyer is a bagel}
+\field{credit}{STORY + ART: [CARTOONIST NAME] · DRAWN PAGES REPLACE THESE PANEL STUBS AT PASTE-UP}
+\field{guestTag}{GUEST STRIP / ROTATING SLOT}
+\field{guestText}{FULL-PAGE GUEST COMIC — a different local cartoonist every issue. №2 guest: [NAME], “Ice Out (A Love Story in Four Puddles)”}
+\headline{Crumbs}
+\field{endText}{none}
+\begin{seq}{panels}
+\block{PANEL 1 — Crumb, the sourdough golem, now the elected chair of a tenants’ union, sits at a folding table with a name plate that says CHAIR (LOAF).}
+\block{PANEL 2 — the union’s lawyer arrives. it is a bagel in a tie. “Everything,” says the bagel. “I bill everything.”}
+\block{PANEL 3 — the landlord’s lawyer enters: a very expensive croissant. the two lawyers regard each other. flakes fall.}
+\block{PANEL 4 — Crumb slides a demand letter across the table. it is a recipe. the croissant reads it and goes pale, which for a croissant is a big deal.}
+\end{seq}
+\end{page}
+
+% 17 · p15 · Comic
+\begin{page}{p15}{Comic}[page]
+\chrome{headLeft}{04 · COMIC}
+\chrome{headRight}{“CRUMBS” — EP.2 OF ∞}
+\chrome{docNo}{DB-115-A}
+\chrome{folio}{15}
+\chrome{footer}{mono}
+\field{scribble}{none}
+\field{sub}{THE LOAF HAS A LAWYER NOW. EP.2}
+\field{endNote}{no spoilers but the lawyer is a bagel}
+\field{credit}{STORY + ART: [CARTOONIST NAME] · DRAWN PAGES REPLACE THESE PANEL STUBS AT PASTE-UP}
+\field{guestTag}{GUEST STRIP / ROTATING SLOT}
+\field{guestText}{FULL-PAGE GUEST COMIC — a different local cartoonist every issue. №2 guest: [NAME], “Ice Out (A Love Story in Four Puddles)”}
+\headline{none}
+\field{endText}{TO BE CONTINUED ON PG 42…}
+\begin{seq}{panels}
+\block{PANEL 5 — the hearing. the arbitrator is a toaster. nobody comments on this.}
+\block{PANEL 6 — the croissant argues that rent is “market.” the bagel asks which market. the croissant cannot name one.}
+\block{PANEL 7 — Crumb testifies. Crumb’s testimony is forty tenants filing in behind, each holding a photo of the broken elevator.}
+\block{PANEL 8 — the toaster pops. ruling: four percent rollback, elevator by Friday. the bagel bills for the pop.}
+\block{PANEL 9 — outside, Crumb is lifted onto shoulders. someone shouts “CRUMBS FOR COUNCIL.” Crumb looks alarmed. a sticker of this exists on pg 20.}
+\end{seq}
+\end{page}
+
+% 18 · p16 · Interview
+\begin{page}{p16}{Interview}[portrait]
+\slug{v2-p16}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{05 · INTERVIEW}
+\chrome{headRight}{30 YEARS OF THURSDAYS}
+\chrome{docNo}{DB-116-A}
+\chrome{folio}{16}
+\field{qLabel}{DB}
+\field{aLabel}{AP}
+\begin{seq}{qa}
+\block{Q: You have hosted a queer potluck every Thursday since 1996. That is roughly fifteen hundred Thursdays. Why?}
+\block{A: Because somebody had to, and the somebody kept being me. In ’96 there was one bar and it was straight on weeknights. So I made lasagna and told six people. Six became forty. Forty became a church basement, then another church basement when the first one read the newsletter.}
+\block{Q: What came back after the pandemic years?}
+\block{A: The people came back. The room didn’t. We did it in a parking lot for a year. Folding tables, a generator, one very brave cake. Some of the elders never came back and I keep their chairs anyway.}
+\block{Q: What do the twenty-year-olds get wrong about the old days?}
+\block{A: They think it was sad. It was not sad, darling. It was Thursday.}
+\end{seq}
+\kicker{Q\&A / UNCUT}
+\headline{Thirty Years of Thursdays}
+\pullquote{“They think it was sad. It was not sad, darling. It was Thursday.”}
+\field{caption}{FIG. 7 — “AUNTIE PAT,” HOSTING SINCE 1996. THE LASAGNA IS ALSO PICTURED.}
+\field{placeholder}{portrait — Auntie Pat at the head of a folding table, ladle raised}
+\field{footNote}{FULL 2-HOUR AUDIO IN THE №2 ARCHIVE · CONTINUED NEXT PAGE →}
+\end{page}
+
+% 19 · p17 · Interview
+\begin{page}{p17}{Interview}[qa]
+\slug{v2-p17}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{05 · INTERVIEW}
+\chrome{headRight}{30 YEARS OF THURSDAYS}
+\chrome{docNo}{DB-117-A}
+\chrome{folio}{17}
+\field{qLabel}{DB}
+\field{aLabel}{AP}
+\begin{seq}{qa}
+\block{Q: You have hosted a queer potluck every Thursday since 1996. That is roughly fifteen hundred Thursdays. Why?}
+\block{A: Because somebody had to, and the somebody kept being me. In ’96 there was one bar and it was straight on weeknights. So I made lasagna and told six people. Six became forty. Forty became a church basement, then another church basement when the first one read the newsletter.}
+\block{Q: What came back after the pandemic years?}
+\block{A: The people came back. The room didn’t. We did it in a parking lot for a year. Folding tables, a generator, one very brave cake. Some of the elders never came back and I keep their chairs anyway.}
+\block{Q: What do the twenty-year-olds get wrong about the old days?}
+\block{A: They think it was sad. It was not sad, darling. It was Thursday.}
+\end{seq}
+\kicker{Q\&A / UNCUT}
+\headline{Thirty Years of Thursdays}
+\pullquote{“They think it was sad. It was not sad, darling. It was Thursday.”}
+\field{caption}{FIG. 7 — “AUNTIE PAT,” HOSTING SINCE 1996. THE LASAGNA IS ALSO PICTURED.}
+\field{placeholder}{portrait — Auntie Pat at the head of a folding table, ladle raised}
+\field{footNote}{FULL 2-HOUR AUDIO IN THE №2 ARCHIVE · CONTINUED NEXT PAGE →}
+\end{page}
+
+% 20 · p18 · Body
+\begin{page}{p18}{Body}[columns]
+\slug{v2-p18}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{05 · INTERVIEW}
+\chrome{headRight}{THE GUEST BOOK}
+\chrome{docNo}{DB-118-A}
+\chrome{folio}{18}
+\field{scribble}{none}
+\field{scribble2}{none}
+\field{stamp}{ARCHIVED · THE GUEST BOOK}
+\field{placeholder}{archival photo — Okanagan Mountain Park, first green, 2004}
+\field{imgH}{250px}
+\kicker{05 · INTERVIEW, CONT.}
+\field{caption}{FIG. 2 — FIREWEED ON THE BURN. IT IS CALLED THAT FOR A REASON.}
+\begin{body}
+\block{The valley has burned before and it has never once stayed burned. Fireweed first, then aspen, then the pines that only open their cones in heat. The regrowth has a schedule too, and it is faster than the permit office.}
+\block{What does not grow back on its own is the stuff people built: the venue, the clinic hours, the bus that ran past eleven. Those need somebody to decide they matter. This issue is about the deciding.}
+\end{body}
+\field{body2}{People ask what I want for the thirtieth. I want a room with a lease longer than my hip. I want the twenty-year-olds to fight about the music. I want someone to take the ladle from me and I want to be furious about it. That is the whole succession plan, darling. Write it down.}
+\field{proseLabel}{AP, continued:}
+\begin{seq}{quotes}
+\block{“We got the rent rolled back four percent. It felt like winning a war.”}
+\block{“The landlord’s lawyer called us a collective. We put it on the t-shirts.”}
+\block{“My neighbour didn’t know what a strike was. She ran the phone tree.”}
+\block{“They fixed the elevator in a week. Nine years I asked.”}
+\end{seq}
+\field{note}{FOUR OF FOURTEEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY}
+\field{colA}{ENTRY}
+\field{colB}{STATUS}
+\begin{seq}{table}
+\block{2003 | Okanagan Mountain Park fire; 239 homes | BACK | \#12b795}
+\block{2004 | fireweed on the burn by June | BACK | \#12b795}
+\block{2008 | the last downtown rep cinema closes | GONE | \#f0477d}
+\block{2012 | the Thursday potluck moves to its fourth church | BACK | \#12b795}
+\block{2017 | lake floods the boardwalk; sandbags on Bernard | BACK | \#12b795}
+\block{2020 | every venue dark; the drag calendar goes to zero | PENDING | \#fe9a0d}
+\block{2021 | heat dome; the lake gives back a rowboat | BACK | \#12b795}
+\block{2023 | McDougall Creek fire; the bridge closes both ways | BACK | \#12b795}
+\block{2025 | Rutland tenants win a rollback | BACK | \#12b795}
+\block{2026 | the lake did not freeze | PENDING | \#fe9a0d}
+\end{seq}
+\field{noteTag}{METHOD}
+\field{note2}{compiled from fire-centre maps, newspaper morgues, the potluck’s guest book and people who stayed}
+\field{checkTitle}{WHAT ACTUALLY HELPS / CHECKLIST}
+\begin{seq}{checklist}
+\block{A tenants’ association needs three people and a group chat — start there}
+\block{Rent increases above the provincial cap are contestable, in writing, in 30 days}
+\block{The RTB dispute form is free; the notary is not — ask the directory first}
+\block{Photograph everything the day you move in, and the day the notice arrives}
+\end{seq}
+\end{page}
+
+% 21 · p19 · Poetry
+\begin{page}{p19}{Poetry}
+\chrome{accent}{\#12b795}
+\chrome{headLeft}{06 · POETRY}
+\chrome{headRight}{SUBMISSIONS · LIT}
+\chrome{docNo}{DB-119-A}
+\chrome{folio}{19}
+\chrome{footer}{mono}
+\field{scribble}{none}
+\kicker{06 · POETRY}
+\begin{seq}{poems}
+\block{Ice Out | the lake lets go the way a hand does / all at once and then pretending it was gradual / by noon the bay is open water and the ducks / have already forgotten there was ever a floor / i want to be forgiven like that / i want to be a season somebody stops mentioning}
+\block{Graft | my uncle cut a branch from the old tree / before the burn and taped it to a stranger / now the stranger makes his apples / this is the only immigration story i trust / the tree does not ask where you are from / it asks whether you will take}
+\end{seq}
+\end{page}
+
+% 22 · p20 · Insert
+\begin{page}{p20}{Insert}[stickers]
+\slug{v2-p20}
+\chrome{headLeft}{09 · STICKERS (KISS-CUT)}
+\chrome{headRight}{STICK RESPONSIBLY(ISH)}
+\chrome{docNo}{DB-120-A}
+\chrome{folio}{20}
+\field{scribble}{none}
+\field{ripTag}{✂ RIP LINE — THE CREDIT MARGIN SURVIVES}
+\field{placeholder}{FEATURED LOCAL ARTIST — full-page A5 portrait artwork, 300dpi. Submissions: see pg 03.}
+\field{credit}{ARTIST NAME · @HANDLE · №2 FEATURED PIECE — THIS MARGIN SURVIVES THE RIP}
+\kicker{THE WALL / FEATURED ARTIST}
+\field{bio}{The two pieces you just passed (rip them out — that’s the point) are by a printmaker who moved back to Peachland after eleven years away and started cutting lino of the things that were still here. Both are hand-pulled; the smudge is real.}
+\field{submitTitle}{SUBMIT / №3 — THE WALL}
+\begin{seq}{submitRows}
+\block{Two pieces, A5 portrait, 300dpi, any medium that scans}
+\block{Fee paid on selection · rights stay yours}
+\block{Theme optional · water encouraged}
+\end{seq}
+\headline{Colour Your Own Comeback}
+\field{edition}{№2}
+\field{brief}{[ LINE-ART SATIRE CARTOON — COMMISSIONED PER ISSUE ] №2: city council cuts the ribbon on the same bridge for the third time, each councillor holding a bigger pair of scissors.}
+\field{figLabel}{FIG. 8 — AISLIN-GRADE DISRESPECT, LOCAL EDITION}
+\field{crayonLabel}{TEST YOUR CRAYONS:}
+\field{crayonNote}{TAG US WITH YOUR FINISHED PAGE}
+\field{brand}{Peel Me}
+\field{brandSub}{SECOND PRESSING · STICK RESPONSIBLY(ISH)}
+\begin{seq}{stickers}
+\block{FRESH DAILY (THAW) | circle | \#f0477d | \#f6f1e7}
+\block{THE LAKE REMEMBERS | square | \#f6f1e7 | \#1d1a17}
+\block{ICE OUT ✕ | circle | \#12b795 | \#1d1a17}
+\block{RENT STRIKE SEASON TWO | square | \#1d1a17 | \#f0477d}
+\block{IT WAS THURSDAY | circle | \#fe9a0d | \#1d1a17}
+\block{PAY WHAT YOU CAN | square | \#f0477d | \#f6f1e7}
+\block{MUD IS A SEASON | circle | \#f6f1e7 | \#12b795}
+\block{CRUMBS 4 COUNCIL | square | \#12b795 | \#f6f1e7}
+\block{DAILY BREAD · KELOWNA BC | circle | \#1d1a17 | \#f6f1e7}
+\end{seq}
+\end{page}
+
+% 23 · p21 · Insert
+\begin{page}{p21}{Insert}[colouring]
+\slug{v2-p21}
+\chrome{headLeft}{08 · SATIRE}
+\chrome{headRight}{CRAYON-PROOF PAPER}
+\chrome{docNo}{DB-121-A}
+\chrome{folio}{21}
+\field{scribble}{none}
+\field{ripTag}{✂ RIP LINE — THE CREDIT MARGIN SURVIVES}
+\field{placeholder}{FEATURED LOCAL ARTIST — full-page A5 portrait artwork, 300dpi. Submissions: see pg 03.}
+\field{credit}{ARTIST NAME · @HANDLE · №2 FEATURED PIECE — THIS MARGIN SURVIVES THE RIP}
+\kicker{THE WALL / FEATURED ARTIST}
+\field{bio}{The two pieces you just passed (rip them out — that’s the point) are by a printmaker who moved back to Peachland after eleven years away and started cutting lino of the things that were still here. Both are hand-pulled; the smudge is real.}
+\field{submitTitle}{SUBMIT / №3 — THE WALL}
+\begin{seq}{submitRows}
+\block{Two pieces, A5 portrait, 300dpi, any medium that scans}
+\block{Fee paid on selection · rights stay yours}
+\block{Theme optional · water encouraged}
+\end{seq}
+\headline{Colour Your Own Comeback}
+\field{edition}{№2}
+\field{brief}{[ LINE-ART SATIRE CARTOON — COMMISSIONED PER ISSUE ] №2: city council cuts the ribbon on the same bridge for the third time, each councillor holding a bigger pair of scissors.}
+\field{figLabel}{FIG. 8 — AISLIN-GRADE DISRESPECT, LOCAL EDITION}
+\field{crayonLabel}{TEST YOUR CRAYONS:}
+\field{crayonNote}{TAG US WITH YOUR FINISHED PAGE}
+\field{brand}{Peel Me}
+\field{brandSub}{SECOND PRESSING · STICK RESPONSIBLY(ISH)}
+\begin{seq}{stickers}
+\block{FRESH DAILY (THAW) | circle | \#f0477d | \#f6f1e7}
+\block{THE LAKE REMEMBERS | square | \#f6f1e7 | \#1d1a17}
+\block{ICE OUT ✕ | circle | \#12b795 | \#1d1a17}
+\block{RENT STRIKE SEASON TWO | square | \#1d1a17 | \#f0477d}
+\block{IT WAS THURSDAY | circle | \#fe9a0d | \#1d1a17}
+\block{PAY WHAT YOU CAN | square | \#f0477d | \#f6f1e7}
+\block{MUD IS A SEASON | circle | \#f6f1e7 | \#12b795}
+\block{CRUMBS 4 COUNCIL | square | \#12b795 | \#f6f1e7}
+\block{DAILY BREAD · KELOWNA BC | circle | \#1d1a17 | \#f6f1e7}
+\end{seq}
+\end{page}
+
+% 24 · p22 · Insert
+\begin{page}{p22}{Insert}[art]
+\slug{v2-p22}
+\chrome{headLeft}{}
+\chrome{headRight}{}
+\chrome{docNo}{DB-119-A}
+\chrome{folio}{19}
+\field{scribble}{none}
+\field{ripTag}{✂ RIP LINE — THE CREDIT MARGIN SURVIVES}
+\field{placeholder}{FEATURED LOCAL ARTIST — piece one of two. Full-page A5 portrait artwork, 300dpi. Lino: the bank vault door, open.}
+\field{credit}{ARTIST NAME · @HANDLE · №2 FEATURED PIECE 01 OF 02 — THIS MARGIN SURVIVES THE RIP}
+\kicker{THE WALL / FEATURED ARTIST}
+\field{bio}{The two pieces you just passed (rip them out — that’s the point) are by a printmaker who moved back to Peachland after eleven years away and started cutting lino of the things that were still here. Both are hand-pulled; the smudge is real.}
+\field{submitTitle}{SUBMIT / №3 — THE WALL}
+\begin{seq}{submitRows}
+\block{Two pieces, A5 portrait, 300dpi, any medium that scans}
+\block{Fee paid on selection · rights stay yours}
+\block{Theme optional · water encouraged}
+\end{seq}
+\headline{Colour Your Own Comeback}
+\field{edition}{№2}
+\field{brief}{[ LINE-ART SATIRE CARTOON — COMMISSIONED PER ISSUE ] №2: city council cuts the ribbon on the same bridge for the third time, each councillor holding a bigger pair of scissors.}
+\field{figLabel}{FIG. 8 — AISLIN-GRADE DISRESPECT, LOCAL EDITION}
+\field{crayonLabel}{TEST YOUR CRAYONS:}
+\field{crayonNote}{TAG US WITH YOUR FINISHED PAGE}
+\field{brand}{Peel Me}
+\field{brandSub}{SECOND PRESSING · STICK RESPONSIBLY(ISH)}
+\begin{seq}{stickers}
+\block{FRESH DAILY (THAW) | circle | \#f0477d | \#f6f1e7}
+\block{THE LAKE REMEMBERS | square | \#f6f1e7 | \#1d1a17}
+\block{ICE OUT ✕ | circle | \#12b795 | \#1d1a17}
+\block{RENT STRIKE SEASON TWO | square | \#1d1a17 | \#f0477d}
+\block{IT WAS THURSDAY | circle | \#fe9a0d | \#1d1a17}
+\block{PAY WHAT YOU CAN | square | \#f0477d | \#f6f1e7}
+\block{MUD IS A SEASON | circle | \#f6f1e7 | \#12b795}
+\block{CRUMBS 4 COUNCIL | square | \#12b795 | \#f6f1e7}
+\block{DAILY BREAD · KELOWNA BC | circle | \#1d1a17 | \#f6f1e7}
+\end{seq}
+\end{page}
+
+% 25 · p23 · Insert
+\begin{page}{p23}{Insert}[art]
+\slug{v2-p23}
+\chrome{headLeft}{}
+\chrome{headRight}{}
+\chrome{docNo}{DB-119-A}
+\chrome{folio}{19}
+\field{scribble}{none}
+\field{ripTag}{✂ RIP LINE — THE CREDIT MARGIN SURVIVES}
+\field{placeholder}{FEATURED LOCAL ARTIST — piece two of two. Full-page A5 portrait artwork, 300dpi. Lino: the creek over the path, one duck.}
+\field{credit}{ARTIST NAME · @HANDLE · №2 FEATURED PIECE 02 OF 02 — THIS MARGIN SURVIVES THE RIP}
+\kicker{THE WALL / FEATURED ARTIST}
+\field{bio}{The two pieces you just passed (rip them out — that’s the point) are by a printmaker who moved back to Peachland after eleven years away and started cutting lino of the things that were still here. Both are hand-pulled; the smudge is real.}
+\field{submitTitle}{SUBMIT / №3 — THE WALL}
+\begin{seq}{submitRows}
+\block{Two pieces, A5 portrait, 300dpi, any medium that scans}
+\block{Fee paid on selection · rights stay yours}
+\block{Theme optional · water encouraged}
+\end{seq}
+\headline{Colour Your Own Comeback}
+\field{edition}{№2}
+\field{brief}{[ LINE-ART SATIRE CARTOON — COMMISSIONED PER ISSUE ] №2: city council cuts the ribbon on the same bridge for the third time, each councillor holding a bigger pair of scissors.}
+\field{figLabel}{FIG. 8 — AISLIN-GRADE DISRESPECT, LOCAL EDITION}
+\field{crayonLabel}{TEST YOUR CRAYONS:}
+\field{crayonNote}{TAG US WITH YOUR FINISHED PAGE}
+\field{brand}{Peel Me}
+\field{brandSub}{SECOND PRESSING · STICK RESPONSIBLY(ISH)}
+\begin{seq}{stickers}
+\block{FRESH DAILY (THAW) | circle | \#f0477d | \#f6f1e7}
+\block{THE LAKE REMEMBERS | square | \#f6f1e7 | \#1d1a17}
+\block{ICE OUT ✕ | circle | \#12b795 | \#1d1a17}
+\block{RENT STRIKE SEASON TWO | square | \#1d1a17 | \#f0477d}
+\block{IT WAS THURSDAY | circle | \#fe9a0d | \#1d1a17}
+\block{PAY WHAT YOU CAN | square | \#f0477d | \#f6f1e7}
+\block{MUD IS A SEASON | circle | \#f6f1e7 | \#12b795}
+\block{CRUMBS 4 COUNCIL | square | \#12b795 | \#f6f1e7}
+\block{DAILY BREAD · KELOWNA BC | circle | \#1d1a17 | \#f6f1e7}
+\end{seq}
+\end{page}
+
+% 26 · p24 · Insert
+\begin{page}{p24}{Insert}[artist]
+\slug{v2-p24}
+\chrome{headLeft}{07 · ART}
+\chrome{headRight}{THE WALL}
+\chrome{docNo}{DB-124-A}
+\chrome{folio}{24}
+\field{scribble}{none}
+\field{ripTag}{✂ RIP LINE — THE CREDIT MARGIN SURVIVES}
+\field{placeholder}{FEATURED LOCAL ARTIST — full-page A5 portrait artwork, 300dpi. Submissions: see pg 03.}
+\field{credit}{ARTIST NAME · @HANDLE · №2 FEATURED PIECE — THIS MARGIN SURVIVES THE RIP}
+\kicker{THE WALL / FEATURED ARTIST}
+\field{bio}{The two pieces you just passed (rip them out — that’s the point) are by a printmaker who moved back to Peachland after eleven years away and started cutting lino of the things that were still here. Both are hand-pulled; the smudge is real.}
+\field{submitTitle}{SUBMIT / №3 — THE WALL}
+\begin{seq}{submitRows}
+\block{Two pieces, A5 portrait, 300dpi, any medium that scans}
+\block{Fee paid on selection · rights stay yours}
+\block{Theme optional · water encouraged}
+\end{seq}
+\headline{Colour Your Own Comeback}
+\field{edition}{№2}
+\field{brief}{[ LINE-ART SATIRE CARTOON — COMMISSIONED PER ISSUE ] №2: city council cuts the ribbon on the same bridge for the third time, each councillor holding a bigger pair of scissors.}
+\field{figLabel}{FIG. 8 — AISLIN-GRADE DISRESPECT, LOCAL EDITION}
+\field{crayonLabel}{TEST YOUR CRAYONS:}
+\field{crayonNote}{TAG US WITH YOUR FINISHED PAGE}
+\field{brand}{Peel Me}
+\field{brandSub}{SECOND PRESSING · STICK RESPONSIBLY(ISH)}
+\begin{seq}{stickers}
+\block{FRESH DAILY (THAW) | circle | \#f0477d | \#f6f1e7}
+\block{THE LAKE REMEMBERS | square | \#f6f1e7 | \#1d1a17}
+\block{ICE OUT ✕ | circle | \#12b795 | \#1d1a17}
+\block{RENT STRIKE SEASON TWO | square | \#1d1a17 | \#f0477d}
+\block{IT WAS THURSDAY | circle | \#fe9a0d | \#1d1a17}
+\block{PAY WHAT YOU CAN | square | \#f0477d | \#f6f1e7}
+\block{MUD IS A SEASON | circle | \#f6f1e7 | \#12b795}
+\block{CRUMBS 4 COUNCIL | square | \#12b795 | \#f6f1e7}
+\block{DAILY BREAD · KELOWNA BC | circle | \#1d1a17 | \#f6f1e7}
+\end{seq}
+\end{page}
+
+% 27 · p25 · Feature
+\begin{page}{p25}{Feature}[opener]
+\slug{v2-p25}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{10 · CURRENT ISSUES}
+\chrome{headRight}{THEME: THE THAW}
+\chrome{docNo}{DB-125-A}
+\chrome{folio}{25}
+\field{scribble}{none}
+\begin{seq}{stats}
+\block{4\% | RENT ROLLBACK · WON, IN WRITING}
+\block{112 | UNITS IN THE COMPLEX · 97 SIGNED}
+\block{9 | YEARS THE ELEVATOR WAS “PENDING”}
+\end{seq}
+\field{caption}{FIG. 1 — CAPTION SETS THE JOKE, THE IMAGE SETS THE SCENE.}
+\field{placeholder}{feature photo — drag and drop, 300dpi}
+\field{boxTitle}{CONTINUED IN №3 — “WATER RIGHTS \& WRONGS”}
+\field{boxBody}{Serialized fiction runs across issues. Miss one and the lake keeps your place.}
+\field{body}{The numbers are placeholder-real: swap in the verified figures from the RTB decision before paste-up. The tenants have the paperwork; they laminated it.}
+\byline{none}
+\kicker{10 · CURRENT ISSUES}
+\headline{Season Two}
+\standfirst{A Rutland apartment complex went on rent strike in the spring, and in the autumn the landlord blinked. This is how, from the people who ran the phone tree.}
+\field{contNote}{CONTINUED NEXT PAGE → · VERBATIM + HOW TO START ONE}
+\end{page}
+
+% 28 · p26 · Body
+\begin{page}{p26}{Body}[quotes]
+\slug{v2-p26}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{10 · CURRENT ISSUES}
+\chrome{headRight}{SEASON TWO, CONT.}
+\chrome{docNo}{DB-126-A}
+\chrome{folio}{26}
+\field{scribble}{none}
+\field{scribble2}{none}
+\field{stamp}{none}
+\field{placeholder}{archival photo — Okanagan Mountain Park, first green, 2004}
+\field{imgH}{250px}
+\kicker{HEARD IN THE STAIRWELL / VERBATIM}
+\field{caption}{FIG. 2 — FIREWEED ON THE BURN. IT IS CALLED THAT FOR A REASON.}
+\begin{body}
+\block{The valley has burned before and it has never once stayed burned. Fireweed first, then aspen, then the pines that only open their cones in heat. The regrowth has a schedule too, and it is faster than the permit office.}
+\block{What does not grow back on its own is the stuff people built: the venue, the clinic hours, the bus that ran past eleven. Those need somebody to decide they matter. This issue is about the deciding.}
+\end{body}
+\field{body2}{The fix isn’t mysterious here either: reopen the room, pay the person who unlocks it, and tell people. Most of what came back in this valley came back because one stubborn human kept the key.}
+\field{proseLabel}{}
+\begin{seq}{quotes}
+\block{“We got the rent rolled back four percent. It felt like winning a war.”}
+\block{“The landlord’s lawyer called us a collective. We put it on the t-shirts.”}
+\block{“My neighbour didn’t know what a strike was. She ran the phone tree.”}
+\block{“They fixed the elevator in a week. Nine years I asked.”}
+\end{seq}
+\field{note}{FOUR OF FOURTEEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY}
+\field{colA}{ENTRY}
+\field{colB}{STATUS}
+\begin{seq}{table}
+\block{2003 | Okanagan Mountain Park fire; 239 homes | BACK | \#12b795}
+\block{2004 | fireweed on the burn by June | BACK | \#12b795}
+\block{2008 | the last downtown rep cinema closes | GONE | \#f0477d}
+\block{2012 | the Thursday potluck moves to its fourth church | BACK | \#12b795}
+\block{2017 | lake floods the boardwalk; sandbags on Bernard | BACK | \#12b795}
+\block{2020 | every venue dark; the drag calendar goes to zero | PENDING | \#fe9a0d}
+\block{2021 | heat dome; the lake gives back a rowboat | BACK | \#12b795}
+\block{2023 | McDougall Creek fire; the bridge closes both ways | BACK | \#12b795}
+\block{2025 | Rutland tenants win a rollback | BACK | \#12b795}
+\block{2026 | the lake did not freeze | PENDING | \#fe9a0d}
+\end{seq}
+\field{noteTag}{METHOD}
+\field{note2}{compiled from fire-centre maps, newspaper morgues, the potluck’s guest book and people who stayed}
+\field{checkTitle}{WHAT ACTUALLY HELPS / CHECKLIST}
+\begin{seq}{checklist}
+\block{A tenants’ association needs three people and a group chat — start there}
+\block{Rent increases above the provincial cap are contestable, in writing, in 30 days}
+\block{The RTB dispute form is free; the notary is not — ask the directory first}
+\block{Photograph everything the day you move in, and the day the notice arrives}
+\end{seq}
+\end{page}
+
+% 29 · p27 · Body
+\begin{page}{p27}{Body}[checklist]
+\slug{v2-p27}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{10 · CURRENT ISSUES}
+\chrome{headRight}{SEASON TWO, CONT.}
+\chrome{docNo}{DB-127-A}
+\chrome{folio}{27}
+\field{scribble}{none}
+\field{scribble2}{none}
+\field{stamp}{none}
+\field{placeholder}{archival photo — Okanagan Mountain Park, first green, 2004}
+\field{imgH}{250px}
+\kicker{}
+\field{caption}{FIG. 2 — FIREWEED ON THE BURN. IT IS CALLED THAT FOR A REASON.}
+\begin{body}
+\block{The valley has burned before and it has never once stayed burned. Fireweed first, then aspen, then the pines that only open their cones in heat. The regrowth has a schedule too, and it is faster than the permit office.}
+\block{What does not grow back on its own is the stuff people built: the venue, the clinic hours, the bus that ran past eleven. Those need somebody to decide they matter. This issue is about the deciding.}
+\end{body}
+\field{body2}{The fix isn’t mysterious here either: reopen the room, pay the person who unlocks it, and tell people. Most of what came back in this valley came back because one stubborn human kept the key.}
+\field{proseLabel}{}
+\begin{seq}{quotes}
+\block{“We got the rent rolled back four percent. It felt like winning a war.”}
+\block{“The landlord’s lawyer called us a collective. We put it on the t-shirts.”}
+\block{“My neighbour didn’t know what a strike was. She ran the phone tree.”}
+\block{“They fixed the elevator in a week. Nine years I asked.”}
+\end{seq}
+\field{note}{FOUR OF FOURTEEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY}
+\field{colA}{ENTRY}
+\field{colB}{STATUS}
+\begin{seq}{table}
+\block{2003 | Okanagan Mountain Park fire; 239 homes | BACK | \#12b795}
+\block{2004 | fireweed on the burn by June | BACK | \#12b795}
+\block{2008 | the last downtown rep cinema closes | GONE | \#f0477d}
+\block{2012 | the Thursday potluck moves to its fourth church | BACK | \#12b795}
+\block{2017 | lake floods the boardwalk; sandbags on Bernard | BACK | \#12b795}
+\block{2020 | every venue dark; the drag calendar goes to zero | PENDING | \#fe9a0d}
+\block{2021 | heat dome; the lake gives back a rowboat | BACK | \#12b795}
+\block{2023 | McDougall Creek fire; the bridge closes both ways | BACK | \#12b795}
+\block{2025 | Rutland tenants win a rollback | BACK | \#12b795}
+\block{2026 | the lake did not freeze | PENDING | \#fe9a0d}
+\end{seq}
+\field{noteTag}{METHOD}
+\field{note2}{compiled from fire-centre maps, newspaper morgues, the potluck’s guest book and people who stayed}
+\field{checkTitle}{HOW TO START ONE / CHECKLIST}
+\begin{seq}{checklist}
+\block{A tenants’ association needs three people and a group chat — start there}
+\block{Rent increases above the provincial cap are contestable, in writing, in 30 days}
+\block{The RTB dispute form is free; the notary is not — ask the directory first}
+\block{Photograph everything the day you move in, and the day the notice arrives}
+\end{seq}
+\end{page}
+
+% 30 · p28 · Feature
+\begin{page}{p28}{Feature}[text-open]
+\slug{v2-p28}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{11 · FICTION}
+\chrome{headRight}{THEME: THE THAW}
+\chrome{docNo}{DB-128-A}
+\chrome{folio}{28}
+\field{scribble}{none}
+\field{stats}{none}
+\field{caption}{FIG. 1 — CAPTION SETS THE JOKE, THE IMAGE SETS THE SCENE.}
+\field{placeholder}{feature photo — drag and drop, 300dpi}
+\field{boxTitle}{CONTINUED IN №3 — “WATER RIGHTS \& WRONGS”}
+\field{boxBody}{Serialized fiction runs across issues. Miss one and the lake keeps your place.}
+\begin{body}
+\block{The lake gave the rowboat back in the heat dome, which was the first thing June understood about it: the water did not take, it borrowed, and it kept its own calendar. The boat came up green and whole off the point, oars shipped, as if someone had rowed it down there for the winter and rowed it back.}
+\block{Her grandmother had called the lake she, and June had thought it was a habit of the language. It was not a habit. It was a warning about pronouns, and about who got to decide when something was finished.}
+\end{body}
+\byline{BY [AUTHOR] · ILLUSTRATION OPEN CALL · PART TWO OF THREE}
+\kicker{SHORT FICTION}
+\headline{The Lake Gives}
+\standfirst{Part two. June has the house, the dock, and a rowboat the lake returned without explanation. Now the lake wants something for it.}
+\field{contNote}{CONTINUED NEXT PAGE → · THE BOAT HAS A NAME UNDER THE PAINT}
+\end{page}
+
+% 31 · p29 · Feature
+\begin{page}{p29}{Feature}[text-cont]
+\slug{v2-p29}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{11 · FICTION}
+\chrome{headRight}{THEME: THE THAW}
+\chrome{docNo}{DB-129-A}
+\chrome{folio}{29}
+\field{scribble}{none}
+\field{stats}{none}
+\field{caption}{FIG. 1 — CAPTION SETS THE JOKE, THE IMAGE SETS THE SCENE.}
+\field{placeholder}{feature photo — drag and drop, 300dpi}
+\field{boxTitle}{CONTINUED IN №3 — “WATER RIGHTS \& WRONGS”}
+\field{boxBody}{Serialized fiction runs across issues. Miss one and the lake keeps your place.}
+\begin{body}
+\block{She scraped the transom on a Tuesday, because it was the kind of thing you did on a Tuesday, and under three colours of paint there was a name that was also her grandmother’s name, in the hand that had written the warnings. June sat down on the dock. The lake, she noticed, sat down too.}
+\block{“All right,” she said, to the water, the town, the whole arranged marriage of valley and view. “What do you want for it.” And the lake, which had waited a hundred years to be asked, told her.}
+\end{body}
+\byline{BY [AUTHOR] · ILLUSTRATION OPEN CALL · PART TWO OF THREE}
+\kicker{SHORT FICTION}
+\headline{The Lake Gives}
+\standfirst{Part two. June has the house, the dock, and a rowboat the lake returned without explanation. Now the lake wants something for it.}
+\field{contNote}{CONCLUDES IN №3 · “WATER RIGHTS \& WRONGS”}
+\end{page}
+
+% 32 · p30 · Lab
+\begin{page}{p30}{Lab}[disclosure]
+\chrome{headLeft}{RIPOSTE LABORATORIES INC.}
+\chrome{headRight}{EST. 2026 · REV. B}
+\chrome{docNo}{RL-DB-130}
+\chrome{folio}{30}
+\field{stamp}{FUNDER DISCLOSURE · SIGNED}
+\field{logoSub}{LABORATORIES INC.}
+\headline{From the Lab}
+\begin{body}
+\block{Full disclosure, printed large again: this magazine is funded by Riposte Laboratories Inc., a small design company on the industrial side of the tracks that would rather fix things than talk about them. Nobody at the Lab reads the issue before you do.}
+\block{The deal is the same one as №1, in writing: the Lab pays the printer and gets two pages. The editors get everything else, including the right to print this paragraph and the right to be rude about the Lab in the other forty-six.}
+\end{body}
+\field{sig}{parry. riposte. recycle.}
+\field{statusLabel}{THIS QUARTER / STATUS BOARD}
+\field{statusTag}{Q4-26}
+\begin{seq}{status}
+\block{Plastic Works — park benches from \#5 tubs, first six installed | LIVE | \#12b795}
+\block{Project HEX — reclaimed-cell tiles, the screening rig runs on them | LIVE | \#12b795}
+\block{The Bank — lease signed on the old TD branch, drag brunch first | WIP | \#fe9a0d}
+\block{Print shop — a used Risograph, two drums, one colour at a time | WIP | \#fe9a0d}
+\block{Daily Bread №3 — “Water Rights \& Wrongs” | OPEN | \#f0477d}
+\end{seq}
+\field{whyTitle}{WHY KEEP FUNDING A MAGAZINE?}
+\field{whyBody}{Because №1 sold out of every pile we left it in and came back to us covered in notes. A town that writes in the margins is a town worth printing for. Also the benches needed somewhere to be announced.}
+\field{footNote}{TOUR THE SHOP: OPEN DOORS FIRST FRIDAYS · BRING CLEAN \#2 + \#5 PLASTICS}
+\end{page}
+
+% 33 · p31 · Lab
+\begin{page}{p31}{Lab}[status]
+\chrome{headLeft}{RIPOSTE LABORATORIES INC.}
+\chrome{headRight}{EST. 2026 · REV. B}
+\chrome{docNo}{RL-DB-131}
+\chrome{folio}{31}
+\field{stamp}{FUNDER DISCLOSURE · SIGNED}
+\field{logoSub}{LABORATORIES INC.}
+\headline{From the Lab}
+\begin{body}
+\block{Full disclosure, printed large again: this magazine is funded by Riposte Laboratories Inc., a small design company on the industrial side of the tracks that would rather fix things than talk about them. Nobody at the Lab reads the issue before you do.}
+\block{The deal is the same one as №1, in writing: the Lab pays the printer and gets two pages. The editors get everything else, including the right to print this paragraph and the right to be rude about the Lab in the other forty-six.}
+\end{body}
+\field{sig}{parry. riposte. recycle.}
+\field{statusLabel}{THIS QUARTER / STATUS BOARD}
+\field{statusTag}{Q4-26}
+\begin{seq}{status}
+\block{Plastic Works — park benches from \#5 tubs, first six installed | LIVE | \#12b795}
+\block{Project HEX — reclaimed-cell tiles, the screening rig runs on them | LIVE | \#12b795}
+\block{The Bank — lease signed on the old TD branch, drag brunch first | WIP | \#fe9a0d}
+\block{Print shop — a used Risograph, two drums, one colour at a time | WIP | \#fe9a0d}
+\block{Daily Bread №3 — “Water Rights \& Wrongs” | OPEN | \#f0477d}
+\end{seq}
+\field{whyTitle}{WHY KEEP FUNDING A MAGAZINE?}
+\field{whyBody}{Because №1 sold out of every pile we left it in and came back to us covered in notes. A town that writes in the margins is a town worth printing for. Also the benches needed somewhere to be announced.}
+\field{footNote}{TOUR THE SHOP: OPEN DOORS FIRST FRIDAYS · BRING CLEAN \#2 + \#5 PLASTICS}
+\end{page}
+
+% 34 · p32 · Review
+\begin{page}{p32}{Review}[advice]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{12 · ADVICE}
+\chrome{headRight}{CERTIFIED · SINCE TUESDAY}
+\chrome{docNo}{DB-132-A}
+\chrome{folio}{32}
+\field{scribble}{none}
+\field{blurb}{none}
+\field{stamp}{none}
+\field{brand}{Ask a Local Gay}
+\field{brandSub}{CERTIFIED · SINCE TUESDAY}
+\begin{seq}{advice}
+\block{I moved back after eight years in Vancouver and everyone keeps asking why like I lost a bet. Did I? — HOMEWARD, GLENMORE || You won one. Vancouver has more of everything and less of anyone who will notice if you don’t show up. Here, Auntie Pat notices. Bring a dish.}
+\block{My girlfriend wants to go ice fishing. The lake didn’t freeze. Is this a relationship problem or a climate problem? — THAWING, WEST KELOWNA || Both, but only one of them is yours to fix. Rent the hut anyway, put it on the dock, and fish for compliments. Wear the hat.}
+\end{seq}
+\begin{seq}{features}
+\block{DRAG BRUNCH · THE BANK · \$\$ | 5/5 — EGGS IN A VAULT | \#12b795 | The old TD branch on Bernard reopened as a room with a stage where the tellers were. The benedict is fine. The performer who came out of the safe-deposit door in full Ogopogo drag is not fine, she is transcendent. Book two weeks out; the vault seats forty.}
+\block{TAQUERIA · RUTLAND · \$ | 4/5 — LINE OUT THE DOOR, DESERVED | \#fe9a0d | Opened the week the rent strike settled, two doors down from the complex. Al pastor from a vertical spit you can see from the bus. Cash only, no seating, salsa verde that behaves like a threat. The line is the community centre now.}
+\end{seq}
+\field{rulesTag}{HOUSE RULES}
+\field{rules}{we pay full price · we book under fake names · patios judged by dog traffic · anywhere that feeds evacuation crews gets a permanent star}
+\kicker{REVIEWS / FIELD-TESTED}
+\begin{seq}{cards}
+\block{POTLUCK · THURSDAYS | RIPS | \#12b795 | Thirty years, four basements, one parking lot. Bring a dish; the dish is the ticket. | pg 16}
+\block{ZINE FAIR · THE BANK | 4/5 | \#fe9a0d | Forty tables, three risographs, and a teenager selling a comic about the bridge that made us cry. | Dec 6}
+\block{ICE-OUT SWIM · GYRO BEACH | ENDURED | \#f0477d | Nobody made us. Nobody could have stopped us. The lake was nine degrees and the towel situation was a scandal. | Mar 21}
+\end{seq}
+\field{rotTitle}{Rotation}
+\field{rotLabel}{STAFF ROTATION / №2}
+\field{rotTag}{LOUD}
+\begin{seq}{tracks}
+\block{“Freshet” — local single, recorded in a culvert | the greenway, when it floods}
+\block{disco edits — the brunch DJ’s vault set | eggs, allegedly}
+\block{a choir doing the Hockey Night theme, slow | the lake not freezing}
+\block{“Rollback” — the tenants’ union anthem, kazoo | the elevator working}
+\block{Auntie Pat’s lasagna playlist, 1996, cassette | Thursday}
+\block{anything with a snow-melt sample | mud season}
+\block{the rink’s Zamboni, field-recorded | goodbye for now}
+\end{seq}
+\field{qrNote}{FULL PLAYLIST QR — UPDATED PER ISSUE}
+\field{qrSub}{SEND US ONE SONG + ONE SENTENCE}
+\end{page}
+
+% 35 · p33 · Review
+\begin{page}{p33}{Review}[cards]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{13 · REVIEWS}
+\chrome{headRight}{FIELD-TESTED}
+\chrome{docNo}{DB-133-A}
+\chrome{folio}{33}
+\field{scribble}{none}
+\field{blurb}{Want a review? We cover anything queer-adjacent and Okanagan-made: shows, rooms, sandwiches, unions. We pay our own way and we bring a friend who disagrees.}
+\field{stamp}{ENDURED · 3/5}
+\field{brand}{Ask a Local Gay}
+\field{brandSub}{CERTIFIED · SINCE TUESDAY}
+\begin{seq}{advice}
+\block{I moved back after eight years in Vancouver and everyone keeps asking why like I lost a bet. Did I? — HOMEWARD, GLENMORE || You won one. Vancouver has more of everything and less of anyone who will notice if you don’t show up. Here, Auntie Pat notices. Bring a dish.}
+\block{My girlfriend wants to go ice fishing. The lake didn’t freeze. Is this a relationship problem or a climate problem? — THAWING, WEST KELOWNA || Both, but only one of them is yours to fix. Rent the hut anyway, put it on the dock, and fish for compliments. Wear the hat.}
+\end{seq}
+\begin{seq}{features}
+\block{DRAG BRUNCH · THE BANK · \$\$ | 5/5 — EGGS IN A VAULT | \#12b795 | The old TD branch on Bernard reopened as a room with a stage where the tellers were. The benedict is fine. The performer who came out of the safe-deposit door in full Ogopogo drag is not fine, she is transcendent. Book two weeks out; the vault seats forty.}
+\block{TAQUERIA · RUTLAND · \$ | 4/5 — LINE OUT THE DOOR, DESERVED | \#fe9a0d | Opened the week the rent strike settled, two doors down from the complex. Al pastor from a vertical spit you can see from the bus. Cash only, no seating, salsa verde that behaves like a threat. The line is the community centre now.}
+\end{seq}
+\field{rulesTag}{HOUSE RULES}
+\field{rules}{we pay full price · we book under fake names · patios judged by dog traffic · anywhere that feeds evacuation crews gets a permanent star}
+\kicker{REVIEWS / FIELD-TESTED}
+\begin{seq}{cards}
+\block{POTLUCK · THURSDAYS | RIPS | \#12b795 | Thirty years, four basements, one parking lot. Bring a dish; the dish is the ticket. | pg 16}
+\block{ZINE FAIR · THE BANK | 4/5 | \#fe9a0d | Forty tables, three risographs, and a teenager selling a comic about the bridge that made us cry. | Dec 6}
+\block{ICE-OUT SWIM · GYRO BEACH | ENDURED | \#f0477d | Nobody made us. Nobody could have stopped us. The lake was nine degrees and the towel situation was a scandal. | Mar 21}
+\end{seq}
+\field{rotTitle}{Rotation}
+\field{rotLabel}{STAFF ROTATION / №2}
+\field{rotTag}{LOUD}
+\begin{seq}{tracks}
+\block{“Freshet” — local single, recorded in a culvert | the greenway, when it floods}
+\block{disco edits — the brunch DJ’s vault set | eggs, allegedly}
+\block{a choir doing the Hockey Night theme, slow | the lake not freezing}
+\block{“Rollback” — the tenants’ union anthem, kazoo | the elevator working}
+\block{Auntie Pat’s lasagna playlist, 1996, cassette | Thursday}
+\block{anything with a snow-melt sample | mud season}
+\block{the rink’s Zamboni, field-recorded | goodbye for now}
+\end{seq}
+\field{qrNote}{FULL PLAYLIST QR — UPDATED PER ISSUE}
+\field{qrSub}{SEND US ONE SONG + ONE SENTENCE}
+\end{page}
+
+% 36 · p34 · Review
+\begin{page}{p34}{Review}[critique]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{15 · FOOD}
+\chrome{headRight}{NO FREE MEALS, NO MERCY}
+\chrome{docNo}{DB-134-A}
+\chrome{folio}{34}
+\field{scribble}{none}
+\field{blurb}{none}
+\field{stamp}{none}
+\field{brand}{The Bite Back}
+\field{brandSub}{RESTAURANT CRITIQUE · NO FREE MEALS, NO MERCY}
+\begin{seq}{advice}
+\block{I moved back after eight years in Vancouver and everyone keeps asking why like I lost a bet. Did I? — HOMEWARD, GLENMORE || You won one. Vancouver has more of everything and less of anyone who will notice if you don’t show up. Here, Auntie Pat notices. Bring a dish.}
+\block{My girlfriend wants to go ice fishing. The lake didn’t freeze. Is this a relationship problem or a climate problem? — THAWING, WEST KELOWNA || Both, but only one of them is yours to fix. Rent the hut anyway, put it on the dock, and fish for compliments. Wear the hat.}
+\end{seq}
+\begin{seq}{features}
+\block{DRAG BRUNCH · THE BANK · \$\$ | 5/5 — EGGS IN A VAULT | \#12b795 | The old TD branch on Bernard reopened as a room with a stage where the tellers were. The benedict is fine. The performer who came out of the safe-deposit door in full Ogopogo drag is not fine, she is transcendent. Book two weeks out; the vault seats forty.}
+\block{TAQUERIA · RUTLAND · \$ | 4/5 — LINE OUT THE DOOR, DESERVED | \#fe9a0d | Opened the week the rent strike settled, two doors down from the complex. Al pastor from a vertical spit you can see from the bus. Cash only, no seating, salsa verde that behaves like a threat. The line is the community centre now.}
+\end{seq}
+\field{rulesTag}{HOUSE RULES}
+\field{rules}{we pay full price · we book under fake names · patios judged by dog traffic · anywhere that feeds evacuation crews gets a permanent star}
+\kicker{REVIEWS / FIELD-TESTED}
+\begin{seq}{cards}
+\block{POTLUCK · THURSDAYS | RIPS | \#12b795 | Thirty years, four basements, one parking lot. Bring a dish; the dish is the ticket. | pg 16}
+\block{ZINE FAIR · THE BANK | 4/5 | \#fe9a0d | Forty tables, three risographs, and a teenager selling a comic about the bridge that made us cry. | Dec 6}
+\block{ICE-OUT SWIM · GYRO BEACH | ENDURED | \#f0477d | Nobody made us. Nobody could have stopped us. The lake was nine degrees and the towel situation was a scandal. | Mar 21}
+\end{seq}
+\field{rotTitle}{Rotation}
+\field{rotLabel}{STAFF ROTATION / №2}
+\field{rotTag}{LOUD}
+\begin{seq}{tracks}
+\block{“Freshet” — local single, recorded in a culvert | the greenway, when it floods}
+\block{disco edits — the brunch DJ’s vault set | eggs, allegedly}
+\block{a choir doing the Hockey Night theme, slow | the lake not freezing}
+\block{“Rollback” — the tenants’ union anthem, kazoo | the elevator working}
+\block{Auntie Pat’s lasagna playlist, 1996, cassette | Thursday}
+\block{anything with a snow-melt sample | mud season}
+\block{the rink’s Zamboni, field-recorded | goodbye for now}
+\end{seq}
+\field{qrNote}{FULL PLAYLIST QR — UPDATED PER ISSUE}
+\field{qrSub}{SEND US ONE SONG + ONE SENTENCE}
+\end{page}
+
+% 37 · p35 · Review
+\begin{page}{p35}{Review}[playlist]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{16 · LISTENING}
+\chrome{headRight}{LOUD IN THE PASTE-UP ROOM}
+\chrome{docNo}{DB-135-A}
+\chrome{folio}{35}
+\field{scribble}{none}
+\field{blurb}{none}
+\field{stamp}{none}
+\field{brand}{Ask a Local Gay}
+\field{brandSub}{CERTIFIED · SINCE TUESDAY}
+\begin{seq}{advice}
+\block{I moved back after eight years in Vancouver and everyone keeps asking why like I lost a bet. Did I? — HOMEWARD, GLENMORE || You won one. Vancouver has more of everything and less of anyone who will notice if you don’t show up. Here, Auntie Pat notices. Bring a dish.}
+\block{My girlfriend wants to go ice fishing. The lake didn’t freeze. Is this a relationship problem or a climate problem? — THAWING, WEST KELOWNA || Both, but only one of them is yours to fix. Rent the hut anyway, put it on the dock, and fish for compliments. Wear the hat.}
+\end{seq}
+\begin{seq}{features}
+\block{DRAG BRUNCH · THE BANK · \$\$ | 5/5 — EGGS IN A VAULT | \#12b795 | The old TD branch on Bernard reopened as a room with a stage where the tellers were. The benedict is fine. The performer who came out of the safe-deposit door in full Ogopogo drag is not fine, she is transcendent. Book two weeks out; the vault seats forty.}
+\block{TAQUERIA · RUTLAND · \$ | 4/5 — LINE OUT THE DOOR, DESERVED | \#fe9a0d | Opened the week the rent strike settled, two doors down from the complex. Al pastor from a vertical spit you can see from the bus. Cash only, no seating, salsa verde that behaves like a threat. The line is the community centre now.}
+\end{seq}
+\field{rulesTag}{HOUSE RULES}
+\field{rules}{we pay full price · we book under fake names · patios judged by dog traffic · anywhere that feeds evacuation crews gets a permanent star}
+\kicker{16 · WHAT WE’RE LISTENING TO}
+\begin{seq}{cards}
+\block{POTLUCK · THURSDAYS | RIPS | \#12b795 | Thirty years, four basements, one parking lot. Bring a dish; the dish is the ticket. | pg 16}
+\block{ZINE FAIR · THE BANK | 4/5 | \#fe9a0d | Forty tables, three risographs, and a teenager selling a comic about the bridge that made us cry. | Dec 6}
+\block{ICE-OUT SWIM · GYRO BEACH | ENDURED | \#f0477d | Nobody made us. Nobody could have stopped us. The lake was nine degrees and the towel situation was a scandal. | Mar 21}
+\end{seq}
+\field{rotTitle}{Rotation}
+\field{rotLabel}{STAFF ROTATION / №2}
+\field{rotTag}{LOUD}
+\begin{seq}{tracks}
+\block{“Freshet” — local single, recorded in a culvert | the greenway, when it floods}
+\block{disco edits — the brunch DJ’s vault set | eggs, allegedly}
+\block{a choir doing the Hockey Night theme, slow | the lake not freezing}
+\block{“Rollback” — the tenants’ union anthem, kazoo | the elevator working}
+\block{Auntie Pat’s lasagna playlist, 1996, cassette | Thursday}
+\block{anything with a snow-melt sample | mud season}
+\block{the rink’s Zamboni, field-recorded | goodbye for now}
+\end{seq}
+\field{qrNote}{FULL PLAYLIST QR — UPDATED PER ISSUE}
+\field{qrSub}{SEND US ONE SONG + ONE SENTENCE}
+\end{page}
+
+% 38 · p36 · Listings
+\begin{page}{p36}{Listings}[program]
+\chrome{footer}{duo}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{17 · FILM}
+\chrome{headRight}{CLASSICS, INDOORS}
+\chrome{docNo}{DB-136-A}
+\chrome{folio}{36}
+\field{scribble}{none}
+\field{rows}{}
+\headline{The Calendar}
+\field{boxLabel}{№2 PROGRAM / NOTES}
+\field{boxTag}{35MM ENERGY, DIGITAL BUDGET}
+\field{footNote}{LISTINGS ARE FREE · EMAIL BY THE 15TH · SOBER + ALL-AGES OPTIONS MARKED ◦}
+\field{dirKicker}{KEEP THIS PAGE / DIRECTORY}
+\field{brand}{The Rewind}
+\field{brandSub}{CRITERION-SHELF DEEP CUTS}
+\field{intro}{Old films, screened like they matter — indoors this time, in a bank, because it is winter and the projector is not waterproof. The vault is the green room.}
+\begin{seq}{notes}
+\block{But I’m a Cheerleader (1999) | The conversion-camp comedy in nine shades of pink. We are screening it in a former financial institution on purpose.}
+\block{Tangerine (2015) | Shot on three iPhones in one L.A. Christmas Eve. Loud, kind, fast. The best Christmas movie; fight us in the vault.}
+\block{Fire (1996) | Deepa Mehta’s New Delhi love story, banned and unbanned. Thirty years old this year and the argument is not over.}
+\end{seq}
+\kicker{MOVIES IN THE BANK / HOSTED BY DAILY BREAD}
+\field{schedLabel}{WINTER SLATE / 7PM}
+\field{schedTag}{THE VAULT IS THE GREEN ROOM}
+\field{schedFoot}{FREE / PWYC · CAPTIONS ON · POWER: RECLAIMED CELLS, PROJECT HEX}
+\field{bringTag}{BRING}
+\field{bring}{socks (the marble floor is honest) · someone who left and came back · a thermos (we know)}
+\field{voteTitle}{VOTE — №3 THEME}
+\begin{seq}{votes}
+\block{WATER RIGHTS \& WRONGS}
+\block{SMOKE SEASON (again)}
+\block{WHO OWNS THE VIEW}
+\end{seq}
+\field{voteNote}{MARK ONE · PHOTOGRAPH · SEND. DEMOCRACY.}
+\field{qrNote}{TIP JAR + SUBMISSIONS QR}
+\field{qrSub}{REPLACE WITH REAL CODE AT PASTE-UP}
+\end{page}
+
+% 39 · p37 · Listings
+\begin{page}{p37}{Listings}[screenings]
+\chrome{footer}{duo}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{17 · FILM}
+\chrome{headRight}{THURSDAY SCREENINGS · FREE / PWYC}
+\chrome{docNo}{DB-137-A}
+\chrome{folio}{37}
+\field{scribble}{none}
+\begin{seq}{rows}
+\block{NOV 20 | But I’m a Cheerleader (1999) | The Bank, 7pm}
+\block{DEC 18 | Tangerine (2015) | The Bank, 7pm}
+\block{JAN 22 | Fire (1996) | The Bank, 7pm}
+\end{seq}
+\headline{The Calendar}
+\field{boxLabel}{NOV 2026 — JAN 2027}
+\field{boxTag}{CLIP + FRIDGE}
+\field{footNote}{LICENSING PAID PER SCREENING · DATES ALSO ON THE CALENDAR}
+\field{dirKicker}{KEEP THIS PAGE / DIRECTORY}
+\field{brand}{Crumbs Mail}
+\field{brandSub}{READER CORRESPONDENCE · №1 EDITION}
+\field{intro}{You wrote. Forty-one letters, two pressed flowers, one cease-and-desist that turned out to be a joke from the bagel. Selected replies on pg 41.}
+\begin{seq}{notes}
+\block{But I’m a Cheerleader (1999) | The conversion-camp comedy in nine shades of pink. We are screening it in a former financial institution on purpose.}
+\block{Tangerine (2015) | Shot on three iPhones in one L.A. Christmas Eve. Loud, kind, fast. The best Christmas movie; fight us in the vault.}
+\block{Fire (1996) | Deepa Mehta’s New Delhi love story, banned and unbanned. Thirty years old this year and the argument is not over.}
+\end{seq}
+\kicker{MOVIES IN THE BANK / HOSTED BY DAILY BREAD}
+\field{schedLabel}{WINTER SLATE / 7PM}
+\field{schedTag}{THE VAULT IS THE GREEN ROOM}
+\field{schedFoot}{FREE / PWYC · CAPTIONS ON · POWER: RECLAIMED CELLS, PROJECT HEX}
+\field{bringTag}{BRING}
+\field{bring}{socks (the marble floor is honest) · someone who left and came back · a thermos (we know)}
+\field{voteTitle}{VOTE — FEBRUARY SCREENING}
+\begin{seq}{votes}
+\block{Bound (1996)}
+\block{The Watermelon Woman (1996)}
+\block{Happy Together (1997)}
+\end{seq}
+\field{voteNote}{MARK ONE · PHOTOGRAPH · SEND. DEMOCRACY.}
+\field{qrNote}{TIP JAR + SUBMISSIONS QR}
+\field{qrSub}{REPLACE WITH REAL CODE AT PASTE-UP}
+\end{page}
+
+% 40 · p38 · Listings
+\begin{page}{p38}{Listings}[calendar]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{14 · CALENDAR}
+\chrome{headRight}{NOV 2026 – JAN 2027}
+\chrome{docNo}{DB-138-A}
+\chrome{folio}{38}
+\field{scribble}{none}
+\begin{seq}{rows}
+\block{NOV 06 | First Friday at the Lab ◦ | Riposte shop floor — the benches, the tiles, the Riso}
+\block{NOV 13 | Drag brunch, the Bank | 11am seatings · the vault seats forty}
+\block{NOV 20 | Movies in the Bank №1 ◦ | But I’m a Cheerleader}
+\block{NOV 27 | Tenants’ union — how to start one ◦ | Rutland library, phone tree provided}
+\block{DEC 04 | First Friday at the Lab ◦ | plastics drop-off · bring \#2 + \#5}
+\block{DEC 06 | Zine fair, the Bank ◦ | forty tables · three risographs · all ages}
+\block{DEC 18 | Movies in the Bank №2 ◦ | Tangerine · bring socks}
+\block{JAN 08 | Auntie Pat’s Thursday, 30th anniversary ◦ | bring a dish · the dish is the ticket}
+\block{JAN 22 | Movies in the Bank №3 ◦ | Fire · discussion after, in the vault}
+\end{seq}
+\headline{The Calendar}
+\field{boxLabel}{NOV 2026 — JAN 2027}
+\field{boxTag}{CLIP + FRIDGE}
+\field{footNote}{LISTINGS ARE FREE · EMAIL BY THE 15TH · SOBER + ALL-AGES OPTIONS MARKED ◦}
+\field{dirKicker}{KEEP THIS PAGE / DIRECTORY}
+\field{brand}{The Rewind}
+\field{brandSub}{CRITERION-SHELF DEEP CUTS}
+\field{intro}{Old films, screened like they matter — indoors this time, in a bank, because it is winter and the projector is not waterproof. The vault is the green room.}
+\begin{seq}{notes}
+\block{But I’m a Cheerleader (1999) | The conversion-camp comedy in nine shades of pink. We are screening it in a former financial institution on purpose.}
+\block{Tangerine (2015) | Shot on three iPhones in one L.A. Christmas Eve. Loud, kind, fast. The best Christmas movie; fight us in the vault.}
+\block{Fire (1996) | Deepa Mehta’s New Delhi love story, banned and unbanned. Thirty years old this year and the argument is not over.}
+\end{seq}
+\kicker{MOVIES IN THE BANK / HOSTED BY DAILY BREAD}
+\field{schedLabel}{WINTER SLATE / 7PM}
+\field{schedTag}{THE VAULT IS THE GREEN ROOM}
+\field{schedFoot}{FREE / PWYC · CAPTIONS ON · POWER: RECLAIMED CELLS, PROJECT HEX}
+\field{bringTag}{BRING}
+\field{bring}{socks (the marble floor is honest) · someone who left and came back · a thermos (we know)}
+\field{voteTitle}{VOTE — №3 THEME}
+\begin{seq}{votes}
+\block{WATER RIGHTS \& WRONGS}
+\block{SMOKE SEASON (again)}
+\block{WHO OWNS THE VIEW}
+\end{seq}
+\field{voteNote}{MARK ONE · PHOTOGRAPH · SEND. DEMOCRACY.}
+\field{qrNote}{TIP JAR + SUBMISSIONS QR}
+\field{qrSub}{REPLACE WITH REAL CODE AT PASTE-UP}
+\end{page}
+
+% 41 · p39 · Listings
+\begin{page}{p39}{Listings}[directory]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{18 · MUTUAL AID}
+\chrome{headRight}{KEEP THIS PAGE}
+\chrome{docNo}{DB-139-A}
+\chrome{folio}{39}
+\field{scribble}{none}
+\begin{seq}{rows}
+\block{Crisis line (24/7, trans-competent) | placeholder — verify before print}
+\block{Informed-consent clinic list | updated quarterly · this page}
+\block{Residential Tenancy Branch — disputes | free to file · directory has the form}
+\block{Rutland tenants’ union | phone tree · they will call you back}
+\block{Thursday potluck | 6pm · ask anyone · bring a dish}
+\block{Warming centre (Nov–Mar) | the Bank lobby · no questions}
+\block{Daily Bread | hello@dailybread.example · we read everything}
+\end{seq}
+\headline{The Calendar}
+\field{boxLabel}{VERIFIED QUARTERLY · TEAR OUT OK}
+\field{boxTag}{CLIP + FRIDGE}
+\field{footNote}{A RESOURCE MISSING? WRONG NUMBER? TELL US — THIS PAGE IS STILL THE WHOLE POINT}
+\field{dirKicker}{KEEP THIS PAGE / DIRECTORY}
+\field{brand}{The Rewind}
+\field{brandSub}{CRITERION-SHELF DEEP CUTS}
+\field{intro}{Old films, screened like they matter — indoors this time, in a bank, because it is winter and the projector is not waterproof. The vault is the green room.}
+\begin{seq}{notes}
+\block{But I’m a Cheerleader (1999) | The conversion-camp comedy in nine shades of pink. We are screening it in a former financial institution on purpose.}
+\block{Tangerine (2015) | Shot on three iPhones in one L.A. Christmas Eve. Loud, kind, fast. The best Christmas movie; fight us in the vault.}
+\block{Fire (1996) | Deepa Mehta’s New Delhi love story, banned and unbanned. Thirty years old this year and the argument is not over.}
+\end{seq}
+\kicker{MOVIES IN THE BANK / HOSTED BY DAILY BREAD}
+\field{schedLabel}{WINTER SLATE / 7PM}
+\field{schedTag}{THE VAULT IS THE GREEN ROOM}
+\field{schedFoot}{FREE / PWYC · CAPTIONS ON · POWER: RECLAIMED CELLS, PROJECT HEX}
+\field{bringTag}{BRING}
+\field{bring}{socks (the marble floor is honest) · someone who left and came back · a thermos (we know)}
+\field{voteTitle}{VOTE — №3 THEME}
+\begin{seq}{votes}
+\block{WATER RIGHTS \& WRONGS}
+\block{SMOKE SEASON (again)}
+\block{WHO OWNS THE VIEW}
+\end{seq}
+\field{voteNote}{MARK ONE · PHOTOGRAPH · SEND. DEMOCRACY.}
+\field{qrNote}{TIP JAR + SUBMISSIONS QR}
+\field{qrSub}{REPLACE WITH REAL CODE AT PASTE-UP}
+\end{page}
+
+% 42 · p40 · Body
+\begin{page}{p40}{Body}[checklist]
+\slug{v2-p40}
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{18 · SERVICE}
+\chrome{headRight}{FREEZE KIT — CLIP + FRIDGE}
+\chrome{docNo}{DB-140-A}
+\chrome{folio}{40}
+\field{scribble}{none}
+\field{scribble2}{none}
+\field{stamp}{none}
+\field{placeholder}{archival photo — Okanagan Mountain Park, first green, 2004}
+\field{imgH}{250px}
+\kicker{}
+\field{caption}{FIG. 2 — FIREWEED ON THE BURN. IT IS CALLED THAT FOR A REASON.}
+\begin{body}
+\block{The valley has burned before and it has never once stayed burned. Fireweed first, then aspen, then the pines that only open their cones in heat. The regrowth has a schedule too, and it is faster than the permit office.}
+\block{What does not grow back on its own is the stuff people built: the venue, the clinic hours, the bus that ran past eleven. Those need somebody to decide they matter. This issue is about the deciding.}
+\end{body}
+\field{body2}{The lake didn’t freeze but the pipes will. Two winters of warming-centre shifts say: keep it packed, not planned. Know which neighbour has a generator and which one has a truck.}
+\field{proseLabel}{}
+\begin{seq}{quotes}
+\block{“We got the rent rolled back four percent. It felt like winning a war.”}
+\block{“The landlord’s lawyer called us a collective. We put it on the t-shirts.”}
+\block{“My neighbour didn’t know what a strike was. She ran the phone tree.”}
+\block{“They fixed the elevator in a week. Nine years I asked.”}
+\end{seq}
+\field{note}{FOUR OF FOURTEEN INTERVIEWS · ALL ANONYMIZED · METHODOLOGY: SEE DIRECTORY}
+\field{colA}{ENTRY}
+\field{colB}{STATUS}
+\begin{seq}{table}
+\block{2003 | Okanagan Mountain Park fire; 239 homes | BACK | \#12b795}
+\block{2004 | fireweed on the burn by June | BACK | \#12b795}
+\block{2008 | the last downtown rep cinema closes | GONE | \#f0477d}
+\block{2012 | the Thursday potluck moves to its fourth church | BACK | \#12b795}
+\block{2017 | lake floods the boardwalk; sandbags on Bernard | BACK | \#12b795}
+\block{2020 | every venue dark; the drag calendar goes to zero | PENDING | \#fe9a0d}
+\block{2021 | heat dome; the lake gives back a rowboat | BACK | \#12b795}
+\block{2023 | McDougall Creek fire; the bridge closes both ways | BACK | \#12b795}
+\block{2025 | Rutland tenants win a rollback | BACK | \#12b795}
+\block{2026 | the lake did not freeze | PENDING | \#fe9a0d}
+\end{seq}
+\field{noteTag}{METHOD}
+\field{note2}{compiled from fire-centre maps, newspaper morgues, the potluck’s guest book and people who stayed}
+\field{checkTitle}{THE FREEZE KIT / WINTER CHECKLIST}
+\begin{seq}{checklist}
+\block{Water — 4L per person, and a tap left dripping below minus fifteen}
+\block{Meds + a photographed prescription list}
+\block{A headlamp, not a phone light — the phone is for the phone tree}
+\block{The warming-centre address, written down, for when the phone dies}
+\block{Wool everything; cotton is a rumour}
+\block{Someone else’s spare key, and yours with someone else}
+\block{This page, on the fridge, under the calendar}
+\end{seq}
+\end{page}
+
+% 43 · p41 · Listings
+\begin{page}{p41}{Listings}[mail]
+\chrome{footer}{mono}
+\chrome{accent}{\#f0477d}
+\chrome{headLeft}{19 · CORRESPONDENCE}
+\chrome{headRight}{WRITE TO US}
+\chrome{docNo}{DB-141-A}
+\chrome{folio}{41}
+\field{scribble}{none}
+\field{rows}{}
+\headline{The Calendar}
+\field{boxLabel}{№2 PROGRAM / NOTES}
+\field{boxTag}{35MM ENERGY, DIGITAL BUDGET}
+\field{footNote}{LISTINGS ARE FREE · EMAIL BY THE 15TH · SOBER + ALL-AGES OPTIONS MARKED ◦}
+\field{dirKicker}{KEEP THIS PAGE / DIRECTORY}
+\field{brand}{Crumbs Mail}
+\field{brandSub}{READER CORRESPONDENCE · №1 EDITION}
+\field{intro}{“You said nobody my age could stay. I stayed. Print a correction.” — Rutland, age 20. Printed, on pg 11. “The sticker sheet was the best part.” — everyone. Noted; there are nine again. “Is the loaf single?” — West Kelowna. The loaf is a public figure and does not comment.}
+\begin{seq}{notes}
+\block{But I’m a Cheerleader (1999) | The conversion-camp comedy in nine shades of pink. We are screening it in a former financial institution on purpose.}
+\block{Tangerine (2015) | Shot on three iPhones in one L.A. Christmas Eve. Loud, kind, fast. The best Christmas movie; fight us in the vault.}
+\block{Fire (1996) | Deepa Mehta’s New Delhi love story, banned and unbanned. Thirty years old this year and the argument is not over.}
+\end{seq}
+\kicker{MOVIES IN THE BANK / HOSTED BY DAILY BREAD}
+\field{schedLabel}{WINTER SLATE / 7PM}
+\field{schedTag}{THE VAULT IS THE GREEN ROOM}
+\field{schedFoot}{FREE / PWYC · CAPTIONS ON · POWER: RECLAIMED CELLS, PROJECT HEX}
+\field{bringTag}{BRING}
+\field{bring}{socks (the marble floor is honest) · someone who left and came back · a thermos (we know)}
+\field{voteTitle}{VOTE — №3 THEME}
+\begin{seq}{votes}
+\block{WATER RIGHTS \& WRONGS}
+\block{SMOKE SEASON (again)}
+\block{WHO OWNS THE VIEW}
+\end{seq}
+\field{voteNote}{MARK ONE · PHOTOGRAPH · SEND. DEMOCRACY.}
+\field{qrNote}{TIP JAR + SUBMISSIONS QR}
+\field{qrSub}{REPLACE WITH REAL CODE AT PASTE-UP}
+\end{page}
+
+% 44 · p42 · Comic
+\begin{page}{p42}{Comic}[page]
+\chrome{headLeft}{04 · COMIC, CONT.}
+\chrome{headRight}{“CRUMBS” EP.2 — END}
+\chrome{docNo}{DB-142-A}
+\chrome{folio}{42}
+\chrome{footer}{mono}
+\field{scribble}{none}
+\field{sub}{THE LOAF HAS A LAWYER NOW. EP.2}
+\field{endNote}{no spoilers but the lawyer is a bagel}
+\field{credit}{“CRUMBS” RETURNS IN №3 · THE LOAF IS RUNNING}
+\field{guestTag}{GUEST STRIP / ROTATING SLOT}
+\field{guestText}{FULL-PAGE GUEST COMIC — a different local cartoonist every issue. №2 guest: [NAME], “Ice Out (A Love Story in Four Puddles)”}
+\headline{none}
+\field{endText}{none}
+\begin{seq}{panels}
+\block{PANEL 10 — Crumb, alone, back in the jar on the windowsill. the window faces a fence. the pothos is doing great.}
+\block{PANEL 11 — a knock. it is the croissant. flaking, humbled, holding a casserole dish. “I heard there’s a potluck.”}
+\block{PANEL 12 — Crumb considers. Crumb has been considered by so many. Crumb opens the door.}
+\block{PANEL 13 — Thursday. a folding table. a very old woman with a ladle. the bagel is there. the toaster is there. nobody comments on the toaster.}
+\block{PANEL 14 — the croissant’s casserole is, of course, bread pudding. it is accepted. the dish is the ticket.}
+\block{PANEL 15 — last panel, wide: the whole table from above. someone has stuck a “CRUMBS 4 COUNCIL” sticker on the ladle. Crumb has not noticed yet.}
+\end{seq}
+\end{page}
+
+% 45 · p43 · Comic
+\begin{page}{p43}{Comic}[guest]
+\chrome{headLeft}{04 · COMIC}
+\chrome{headRight}{GUEST STRIP}
+\chrome{docNo}{DB-143-A}
+\chrome{folio}{43}
+\chrome{footer}{mono}
+\field{scribble}{none}
+\field{sub}{THE LOAF HAS A LAWYER NOW. EP.2}
+\field{endNote}{no spoilers but the lawyer is a bagel}
+\field{credit}{STORY + ART: [CARTOONIST NAME] · DRAWN PAGES REPLACE THESE PANEL STUBS AT PASTE-UP}
+\field{guestTag}{GUEST STRIP / ROTATING SLOT}
+\field{guestText}{FULL-PAGE GUEST COMIC — a different local cartoonist every issue. №2 guest: [NAME], “Ice Out (A Love Story in Four Puddles)”}
+\headline{Crumbs}
+\field{endText}{none}
+\begin{seq}{panels}
+\block{PANEL 1 — placeholder: the guest strip’s first panel lands here at paste-up}
+\block{PANEL 2 — placeholder}
+\block{PANEL 3 — placeholder}
+\block{PANEL 4 — placeholder}
+\end{seq}
+\end{page}
+
+% 46 · p44 · Colophon
+\begin{page}{p44}{Colophon}[staff]
+\slug{v2-p44}
+\chrome{headLeft}{20 · COLOPHON}
+\chrome{headRight}{SEE YOU IN №3}
+\chrome{docNo}{DB-144-A}
+\chrome{folio}{44}
+\field{brand}{Who Made This}
+\field{placeholder}{staff photo — everyone assembled on the bank steps, one person still holding the ladle}
+\field{caption}{FIG. 9 — THE ENTIRE OPERATION, WINTER EDITION. THE DOG HAS A COAT NOW.}
+\field{creditsLabel}{ATTRIBUTIONS / EVERY HAND}
+\begin{seq}{credits}
+\block{EDITOR | still your name here}
+\block{YOUNG VOICES | three writers, one returned}
+\block{PHOTOGRAPHY | “Freshet” — [photographer] · wet socks uncredited}
+\block{COMICS | “Crumbs” — [cartoonist] · guest: [name]}
+\block{THE WALL | [featured printmaker], two pieces, №2}
+\block{SATIRE CARTOON | [illustrator], with apologies to the scissors}
+\block{PROOFREADING | the patient one, and a second one}
+\block{FUNDING | Riposte Laboratories Inc.}
+\block{PRINTER | [local print shop], 750 copies}
+\end{seq}
+\field{colophon}{Printed on unceded syilx Okanagan territory in a run of 750. Set in IBM Plex Mono and UnifrakturMaguntia. Errors are ours; corrections are yours; the leftover ink went into the stickers again.}
+\field{slogan}{PARRY. RIPOSTE.}
+\field{adText}{THIS SPACE WAS FOR SALE AND SOMEBODY BOUGHT IT. Rutland Taqueria — al pastor, cash only, two doors down from the strike. “We fed the phone tree. Now we feed you.” Open till the spit runs out.}
+\field{sig}{see you at the water ✕}
+\end{page}
+
+% 47 · ibc · Colophon
+\begin{page}{ibc}{Colophon}[ad]
+\slug{colophon}
+\chrome{headLeft}{20 · COLOPHON}
+\chrome{headRight}{SEE YOU IN №3}
+\chrome{docNo}{DB-142-A}
+\chrome{folio}{IBC}
+\field{brand}{Who Made This}
+\field{placeholder}{staff photo — everyone assembled on the bank steps, one person still holding the ladle}
+\field{caption}{FIG. 9 — THE ENTIRE OPERATION, WINTER EDITION. THE DOG HAS A COAT NOW.}
+\field{creditsLabel}{ATTRIBUTIONS / EVERY HAND}
+\begin{seq}{credits}
+\block{EDITOR | still your name here}
+\block{YOUNG VOICES | three writers, one returned}
+\block{PHOTOGRAPHY | “Freshet” — [photographer] · wet socks uncredited}
+\block{COMICS | “Crumbs” — [cartoonist] · guest: [name]}
+\block{THE WALL | [featured printmaker], two pieces, №2}
+\block{SATIRE CARTOON | [illustrator], with apologies to the scissors}
+\block{PROOFREADING | the patient one, and a second one}
+\block{FUNDING | Riposte Laboratories Inc.}
+\block{PRINTER | [local print shop], 750 copies}
+\end{seq}
+\field{colophon}{Printed on unceded syilx Okanagan territory in a run of 750. Set in IBM Plex Mono and UnifrakturMaguntia. Errors are ours; corrections are yours; the leftover ink went into the stickers again.}
+\field{slogan}{PARRY. RIPOSTE.}
+\field{adText}{THIS SPACE WAS FOR SALE AND SOMEBODY BOUGHT IT. Rutland Taqueria — al pastor, cash only, two doors down from the strike. “We fed the phone tree. Now we feed you.” Open till the spit runs out.}
+\field{sig}{see you at the water ✕}
+\end{page}
+
+% 48 · bc · Cover
+\begin{page}{bc}{Cover}[back]
+\slug{cover}
+\field{issueTag}{№2 — THE THAW}
+\field{price}{PAY WHAT YOU CAN}
+\field{publisher}{RIPOSTE LABORATORIES}
+\field{publisherLong}{RIPOSTE LABORATORIES INC.}
+\field{tagline}{Daily Bread is baked quarterly in Kelowna, BC. Free where you found it. Pay what you can where you can’t.}
+\field{issn}{ISSN PENDING}
+\field{edition}{№2 · WINTER 2026}
+\field{art}{}
+\end{page}
+
+\end{document}

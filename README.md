@@ -263,6 +263,14 @@ Fastest path if you don't want to move `ourdailybre.ad`.
 
 ---
 
+## Source — the issue is one LaTeX file
+
+`content/issue-01.tex` is the issue; `content/issue-01.js` is generated from
+it and is what the web build reads. `python3 tools/db-latex.py build` produces
+the site and both press PDFs (48 x A5, 24 x A4 landscape) from that one file;
+`check` proves the round-trip and runs in CI on every pull request. See
+[tools/latex/README.md](tools/latex/README.md).
+
 ## Brand
 
 Daily Bread is an independent publication **funded by** Riposte Laboratories Inc. — it is not
