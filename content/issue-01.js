@@ -49,7 +49,7 @@ module.exports = {
         "subtitle": "A QUEER MAGAZINE FOR THE OKANAGAN",
         "mastheadLabel": "MASTHEAD / №1 · SUMMER 2026",
         "masthead": [
-          "EDITOR | your name here",
+          "EDITOR | Sasha Zero",
           "ART + COMICS | open call — pg 24",
           "YOUNG VOICES DESK | pg 11",
           "PRINTED | on unceded syilx territory"
@@ -86,7 +86,7 @@ module.exports = {
         "subtitle": "A QUEER MAGAZINE FOR THE OKANAGAN",
         "mastheadLabel": "MASTHEAD / №1 · SUMMER 2026",
         "masthead": [
-          "EDITOR | your name here",
+          "EDITOR | Sasha Zero",
           "ART + COMICS | open call — pg 24",
           "YOUNG VOICES DESK | pg 11",
           "PRINTED | on unceded syilx territory"
@@ -1867,7 +1867,7 @@ module.exports = {
         "caption": "FIG. 9 — THE ENTIRE OPERATION. YES, THE DOG IS ON THE MASTHEAD.",
         "creditsLabel": "ATTRIBUTIONS / EVERY HAND",
         "credits": [
-          "EDITOR | your name here",
+          "EDITOR | Sasha Zero",
           "YOUNG VOICES | three writers",
           "PHOTOGRAPHY | “Vacancy” — [photographer]",
           "COMICS | “Crumbs” — [cartoonist] · guest: [name]",
@@ -1900,7 +1900,7 @@ module.exports = {
         "caption": "FIG. 9 — THE ENTIRE OPERATION. YES, THE DOG IS ON THE MASTHEAD.",
         "creditsLabel": "ATTRIBUTIONS / EVERY HAND",
         "credits": [
-          "EDITOR | your name here",
+          "EDITOR | Sasha Zero",
           "YOUNG VOICES | three writers",
           "PHOTOGRAPHY | “Vacancy” — [photographer]",
           "COMICS | “Crumbs” — [cartoonist] · guest: [name]",

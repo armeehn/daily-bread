@@ -49,7 +49,7 @@ module.exports = {
         "subtitle": "A QUEER MAGAZINE FOR THE OKANAGAN",
         "mastheadLabel": "MASTHEAD / №2 · WINTER 2026",
         "masthead": [
-          "EDITOR | still your name here",
+          "EDITOR | Sasha Zero",
           "ART + COMICS | open call — pg 24",
           "YOUNG VOICES DESK | pg 11",
           "PRINTED | on unceded syilx territory"
@@ -86,7 +86,7 @@ module.exports = {
         "subtitle": "A QUEER MAGAZINE FOR THE OKANAGAN",
         "mastheadLabel": "MASTHEAD / №2 · WINTER 2026",
         "masthead": [
-          "EDITOR | still your name here",
+          "EDITOR | Sasha Zero",
           "ART + COMICS | open call — pg 24",
           "YOUNG VOICES DESK | pg 11",
           "PRINTED | on unceded syilx territory"
@@ -1867,7 +1867,7 @@ module.exports = {
         "caption": "FIG. 9 — THE ENTIRE OPERATION, WINTER EDITION. THE DOG HAS A COAT NOW.",
         "creditsLabel": "ATTRIBUTIONS / EVERY HAND",
         "credits": [
-          "EDITOR | still your name here",
+          "EDITOR | Sasha Zero",
           "YOUNG VOICES | three writers, one returned",
           "PHOTOGRAPHY | “Freshet” — [photographer] · wet socks uncredited",
           "COMICS | “Crumbs” — [cartoonist] · guest: [name]",
@@ -1900,7 +1900,7 @@ module.exports = {
         "caption": "FIG. 9 — THE ENTIRE OPERATION, WINTER EDITION. THE DOG HAS A COAT NOW.",
         "creditsLabel": "ATTRIBUTIONS / EVERY HAND",
         "credits": [
-          "EDITOR | still your name here",
+          "EDITOR | Sasha Zero",
           "YOUNG VOICES | three writers, one returned",
           "PHOTOGRAPHY | “Freshet” — [photographer] · wet socks uncredited",
           "COMICS | “Crumbs” — [cartoonist] · guest: [name]",
