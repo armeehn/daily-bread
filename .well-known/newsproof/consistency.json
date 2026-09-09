@@ -1,12 +1,12 @@
 [
   {
     "old_size": 16,
-    "new_size": 47,
+    "new_size": 63,
     "old_root": "5224f77ef9170edcf3537931ac58fa9a459a803ffcc0210215423450e8cd4ece",
-    "new_root": "18739d310f3d30166aa27fcf22f4ddaa6676cc6070791f99b4c2ac5e6f42f77f",
+    "new_root": "c26405449f76775983fa67449d8ba3134175f7ba1874f877089b09412e97d52a",
     "path": [
       "cc55f55d0217dfa55e5b72d29995f34d09c91e2c63dd77967dd02fe5e646cf8f",
-      "50a27a54f9fc3472dcb8992e6207cd9ec7bcb1c4a3b0b3917a63573146a897ed"
+      "62351f9fc881d7350a130dd85cc3870a66f9f2cb75eec7f7716f9a1c4c2c6197"
     ]
   }
 ]
