@@ -38,6 +38,12 @@
   .btn.pink:hover{background:var(--pink);color:var(--bone)}
   .btn.teal{border-color:var(--teal);color:var(--teal)}
   .btn.teal:hover{background:var(--teal);color:var(--ink)}
+  .btn[disabled]{opacity:.35;cursor:default}
+  .btn[disabled]:hover{background:transparent;color:inherit}
+  /* the edition switcher and its four single-glyph actions read as one control */
+  header.bar .eds{display:flex;align-items:center;gap:4px}
+  header.bar .eds select.btn{max-width:200px;text-overflow:ellipsis}
+  .btn.sq{padding:6px 8px;font-size:12px;letter-spacing:0}
   select.btn{-webkit-appearance:none;appearance:none;padding-right:22px;
     background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='6'><path d='M0 0l4 6 4-6z' fill='%23f6f1e7'/></svg>") right 8px center no-repeat}
 
@@ -228,6 +234,13 @@
     <span class="brand">Daily&nbsp;Bread</span>
     <span class="sub">Studio<br>edit &amp; configure</span>
     <div class="spacer"></div>
+    <div class="eds">
+      <select class="btn" id="editionSel" title="Switch edition. Each edition keeps its own content, theme and arranged layout in this browser, so several issues can be prepped side by side."></select>
+      <button class="btn sq" id="edNewBtn" title="Start another edition from the built-in default">+</button>
+      <button class="btn sq" id="edDupBtn" title="Copy this edition into a new one">⧉</button>
+      <button class="btn sq" id="edRenBtn" title="Rename this edition">✎</button>
+      <button class="btn sq pink" id="edDelBtn" title="Delete this edition">✕</button>
+    </div>
     <select class="btn" id="themeSel" title="Apply a theme preset"><option value="">Theme preset…</option></select>
     <button class="btn" id="importBtn">Import JSON</button>
     <button class="btn" id="exportBtn">Export JSON</button>
@@ -277,16 +290,57 @@
 <script src="db.js"></script>
 <script>
 "use strict";
-const KEY = "dailybread:model:v1";
+const KEY = "dailybread:model:v1";      // pre-editions: one bare model, migrated once
+const EKEY = "dailybread:editions:v1";
 const $ = s => document.querySelector(s);
 
-/* ---------- state ---------- */
-let model = load();
-function load(){
-  let m;
-  try{ const s = localStorage.getItem(KEY); if(s) m = JSON.parse(s); }catch(e){}
-  if(!m) m = DB.clone(DB.DEFAULT_MODEL);
-  return migrate(m, DB.DEFAULT_MODEL);
+/* ---------- state ----------
+   Issues are prepped in parallel, so the studio holds a SHELF of models rather
+   than one. An edition owns everything in `model` — content, theme, arranged
+   positions — and exactly one of them is live in the editor at a time:
+
+     { current:"ed_k3f9", order:["ed_k3f9", ...], items:{ ed_k3f9:{name, model} } }
+
+   The pre-editions key held a bare model. It is folded in as the first edition
+   and then removed, so the model has exactly one home. */
+const hadSaved = !!(localStorage.getItem(EKEY) || localStorage.getItem(KEY));
+let shelf = loadShelf();
+let model = loadModel();
+
+function newId(){ return "ed_" + Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+// a new edition is named after the issue it starts from, not "Untitled"
+function editionName(m){
+  const meta = (m && m.meta) || {};
+  return [meta.issueNo, meta.issueName].filter(Boolean).join(" · ") || "Untitled edition";
+}
+
+function loadShelf(){
+  let sh = null;
+  try{ sh = JSON.parse(localStorage.getItem(EKEY)); }catch(e){}
+  if(sh && sh.items && Array.isArray(sh.order) && sh.order.length){
+    if(!sh.items[sh.current]) sh.current = sh.order[0];
+    return sh;
+  }
+  let old = null;
+  try{ const raw = localStorage.getItem(KEY); if(raw) old = JSON.parse(raw); }catch(e){}
+  const m = old || DB.clone(DB.DEFAULT_MODEL), id = newId();
+  sh = { current:id, order:[id], items:{} };
+  sh.items[id] = { name: editionName(m), model: m };
+  saveShelf(sh);
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  return sh;
+}
+
+// writing can fail: a few editions carrying embedded images fill the quota
+function saveShelf(sh){
+  try{ localStorage.setItem(EKEY, JSON.stringify(sh || shelf)); return true; }
+  catch(e){ return false; }
+}
+
+function loadModel(){
+  const ed = shelf.items[shelf.current];
+  return migrate(ed ? ed.model : DB.clone(DB.DEFAULT_MODEL), DB.DEFAULT_MODEL);
 }
 // backfill keys added to the schema after a model was saved (e.g. new section
 // headings) without disturbing existing edits or list contents
@@ -307,7 +361,61 @@ function loadLabels(){ try{ return JSON.parse(localStorage.getItem(LKEY)) || {};
 function saveLabels(){ try{ localStorage.setItem(LKEY, JSON.stringify(labels)); }catch(e){} }
 function sectionLabel(sec){ const v=labels[sec.id]; return (v!=null && v!=="") ? v : sec.title; }
 function save(){
-  try{ localStorage.setItem(KEY, JSON.stringify(model)); }catch(e){}
+  const ed = shelf.items[shelf.current];
+  if(ed) ed.model = model;
+  if(saveShelf()) return true;
+  // silence here would let a whole session of edits evaporate on the next reload
+  setStatus("Storage full — not saved", true);
+  toast("This browser is out of storage. Export this edition, then delete one you no longer need.");
+  return false;
+}
+
+/* ---------- editions ---------- */
+function populateEditionSelect(){
+  const sel = $("#editionSel"); sel.innerHTML = "";
+  shelf.order.forEach(id=>{
+    const o = document.createElement("option");
+    o.value = id; o.textContent = shelf.items[id].name;
+    sel.appendChild(o);
+  });
+  sel.value = shelf.current;
+  $("#edDelBtn").disabled = shelf.order.length < 2;
+}
+
+// A swap replaces the whole model, so design mode's selection now points into
+// the edition that just left the screen. Drop it and rebuild the inspector.
+function afterSwap(){
+  sel = null; inspStale = true;
+  populateEditionSelect(); buildEditor(); renderPreview();
+}
+
+// commit whatever is on screen before putting a different edition there
+function switchEdition(id){
+  if(!shelf.items[id] || id === shelf.current) return;
+  save();
+  shelf.current = id;
+  model = loadModel();
+  saveShelf();
+  afterSwap();
+  setStatus("Opened ✓", false);
+  toast("Editing: " + shelf.items[id].name);
+}
+
+function addEdition(name, m, note){
+  save();
+  const id = newId(), prev = shelf.current;
+  shelf.items[id] = { name: name, model: m };
+  shelf.order.push(id);
+  shelf.current = id;
+  if(!saveShelf()){                     // out of room: leave the shelf as it was
+    delete shelf.items[id]; shelf.order.pop(); shelf.current = prev;
+    toast("This browser is out of storage — export and delete an edition first");
+    return;
+  }
+  model = migrate(m, DB.DEFAULT_MODEL);
+  afterSwap();
+  setStatus("Saved ✓", false);
+  toast(note || ("New edition: " + name));
 }
 
 /* ---------- path helpers ---------- */
@@ -323,7 +431,7 @@ let t=null, imgFor=null;
 function schedule(){
   setStatus("Saving…", true);
   clearTimeout(t);
-  t=setTimeout(()=>{ renderPreview(); save(); setStatus("Saved ✓", false); }, 160);
+  t=setTimeout(()=>{ renderPreview(); if(save()) setStatus("Saved ✓", false); }, 160);
 }
 function renderPreview(){
   try{ $("#preview").srcdoc = DB.render(model); }
@@ -540,7 +648,10 @@ function download(name, text, type){
 }
 
 $("#exportBtn").addEventListener("click",()=>{
-  const name = "daily-bread-"+(model.meta.issueNo||"issue").replace(/[^\w-]/g,"")+".json";
+  // editions can share an issue number, so the file is named for the edition
+  const slug = (shelf.items[shelf.current].name || model.meta.issueNo || "issue")
+    .replace(/[^\w-]+/g,"-").replace(/^-+|-+$/g,"");
+  const name = "daily-bread-"+(slug||"issue")+".json";
   download(name, JSON.stringify(model,null,2), "application/json");
   toast("Exported "+name);
 });
@@ -623,7 +734,10 @@ $("#importBtn").addEventListener("click",()=> $("#fileImport").click());
 $("#fileImport").addEventListener("change",e=>{
   const file=e.target.files[0]; if(!file) return;
   const r=new FileReader();
-  r.onload=()=>{ try{ model=migrate(JSON.parse(r.result), DB.DEFAULT_MODEL); sel=null; inspStale=true; buildEditor(); renderPreview(); save(); toast("Imported "+file.name); setStatus("Saved ✓",false);}catch(err){ alert("Invalid JSON: "+err.message);} };
+  r.onload=()=>{ try{
+    const m = migrate(JSON.parse(r.result), DB.DEFAULT_MODEL);
+    addEdition(file.name.replace(/\.json$/i,"") || editionName(m), m, "Imported "+file.name+" as a new edition");
+  }catch(err){ alert("Invalid JSON: "+err.message);} };
   r.readAsText(file); e.target.value="";
 });
 $("#fileImage").addEventListener("change",e=>{
@@ -633,8 +747,40 @@ $("#fileImage").addEventListener("change",e=>{
   r.readAsDataURL(file); e.target.value="";
 });
 $("#resetBtn").addEventListener("click",()=>{
-  if(!confirm("Reset all content to the built-in Daily Bread №1 default? Your current edits will be lost.")) return;
+  if(!confirm("Reset “"+shelf.items[shelf.current].name+"” to the built-in Daily Bread №1 default? Its edits will be lost. Other editions are untouched.")) return;
   model=DB.clone(DB.DEFAULT_MODEL); sel=null; inspStale=true; buildEditor(); renderPreview(); save(); toast("Reset to default");
+});
+
+$("#editionSel").addEventListener("change", e=> switchEdition(e.target.value));
+$("#edNewBtn").addEventListener("click",()=>{
+  const fallback = "Issue "+(shelf.order.length+1);
+  const name = prompt("Name the new edition", fallback);
+  if(name===null) return;
+  addEdition(name.trim() || fallback, DB.clone(DB.DEFAULT_MODEL));
+});
+$("#edDupBtn").addEventListener("click",()=>{
+  const fallback = shelf.items[shelf.current].name+" copy";
+  const name = prompt("Name the copy", fallback);
+  if(name===null) return;
+  save();
+  addEdition(name.trim() || fallback, DB.clone(model));
+});
+$("#edRenBtn").addEventListener("click",()=>{
+  const ed = shelf.items[shelf.current];
+  const name = prompt("Rename this edition", ed.name);
+  if(name===null || !name.trim()) return;
+  ed.name = name.trim(); saveShelf(); populateEditionSelect(); toast("Renamed");
+});
+$("#edDelBtn").addEventListener("click",()=>{
+  if(shelf.order.length < 2){ toast("The last edition cannot be deleted — use Reset"); return; }
+  const ed = shelf.items[shelf.current];
+  if(!confirm("Delete the edition “"+ed.name+"”? Everything in it goes with it. Export it first if you may want it back.")) return;
+  const i = shelf.order.indexOf(shelf.current);
+  shelf.order.splice(i,1); delete shelf.items[shelf.current];
+  shelf.current = shelf.order[Math.min(i, shelf.order.length-1)];
+  model = loadModel(); saveShelf();
+  afterSwap();
+  toast("Deleted — now editing "+shelf.items[shelf.current].name);
 });
 
 /* ============================================================================
@@ -1672,10 +1818,11 @@ function wireImageDrop(row, path, img, tx){
 }
 
 /* ---------- boot ---------- */
+populateEditionSelect();
 buildEditor();
 renderInspector();
 renderPreview();
-setStatus(localStorage.getItem(KEY)?"Restored ✓":"Loaded default", false);
+setStatus(hadSaved?"Restored ✓":"Loaded default", false);
 </script>
 </body>
 </html>
