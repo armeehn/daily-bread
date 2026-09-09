@@ -231,29 +231,34 @@ const kept = await state();
 check("cancelling the confirm keeps the edition", kept.n === del.n && kept.curId === del.curId);
 check("the menu closes after an action", kept.menuOpen === false);
 
-/* ---- 11. the bar the switcher sits in still holds its contents ----
+/* ---- 11. nothing in the top bar hangs out of it ----
    It was `height:52px` AND `flex-wrap:wrap`, so a bar too full to fit put its
-   last controls on a second row that landed on top of the pane below. */
-// measure the worst case: the select is capped, so a name long enough to hit
-// the cap is the widest the switcher can ever be
+   last controls on a second row the bar had no height for, landing on top of
+   the pane below. That already bit at narrow widths before the switcher was
+   added: at f5afbba the status hung 7px over the pane at 1400 and Reset 22px
+   at 1280. A width sweep is the only thing that catches it, so sweep. */
 await page.evaluate(() => { window.__prompt = "A Very Long Edition Name That Never Ends"; });
 await act("#edRenBtn");
 const bars = [];
-for (const w of [1920, 1600, 1400, 1280]) {
+for (const w of [1920, 1600, 1440, 1400, 1280]) {
   await page.setViewportSize({ width: w, height: 900 });
   await page.waitForTimeout(250);
   bars.push([w, await page.evaluate(() => {
-    const bar = document.querySelector("header.bar").getBoundingClientRect();
-    const st = document.querySelector("#status").getBoundingClientRect();
-    return { h: Math.round(bar.height), inside: st.bottom <= bar.bottom + 1,
-             wide: document.body.scrollWidth > window.innerWidth };
+    const bar = document.querySelector("header.bar"), b = bar.getBoundingClientRect();
+    let over = 0, who = "";
+    for (const el of bar.children) {
+      const r = el.getBoundingClientRect();
+      if (r.bottom - b.bottom > over) { over = Math.round(r.bottom - b.bottom); who = el.id || el.className; }
+    }
+    return { h: Math.round(b.height), over, who, wide: document.body.scrollWidth > window.innerWidth };
   })]);
 }
 check("the top bar is one row at the studio's design width, longest name and all",
   bars.filter(([w]) => w >= 1600).every(([, m]) => m.h === 52),
   bars.map(([w, m]) => w + ":" + m.h).join(" "));
 check("a fuller bar grows instead of covering the pane below",
-  bars.every(([, m]) => m.inside), bars.map(([w, m]) => w + ":" + m.inside).join(" "));
+  bars.every(([, m]) => m.over === 0),
+  bars.map(([w, m]) => w + ":" + (m.over ? m.over + "px " + m.who : "clear")).join(" "));
 check("nothing pushes the page sideways", bars.every(([, m]) => !m.wide));
 
 await browser.close();
