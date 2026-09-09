@@ -25,7 +25,7 @@
   /* ---- app shell ---- */
   .app{display:grid;grid-template-rows:auto 1fr;height:100vh}
   header.bar{display:flex;align-items:center;gap:14px;background:var(--ink);color:var(--bone);
-    padding:0 16px;height:52px;border-bottom:2px solid var(--bone);flex-wrap:wrap;z-index:5}
+    padding:0 16px;min-height:52px;border-bottom:2px solid var(--bone);flex-wrap:wrap;z-index:5}
   header.bar .brand{font-family:var(--frak);font-size:26px;line-height:1}
   header.bar .sub{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#b7ad9e}
   header.bar .spacer{flex:1}
@@ -41,9 +41,19 @@
   .btn[disabled]{opacity:.35;cursor:default}
   .btn[disabled]:hover{background:transparent;color:inherit}
   /* the edition switcher and its four single-glyph actions read as one control */
-  header.bar .eds{display:flex;align-items:center;gap:4px}
-  header.bar .eds select.btn{max-width:200px;text-overflow:ellipsis}
+  header.bar .eds{position:relative;display:flex;align-items:center;gap:3px;min-width:0}
+  header.bar .eds select.btn{max-width:150px;overflow:hidden;text-overflow:ellipsis}
   .btn.sq{padding:6px 8px;font-size:12px;letter-spacing:0}
+  .edmenu{position:absolute;top:calc(100% + 6px);left:0;z-index:20;min-width:190px;
+    background:var(--ink);border:2px solid var(--bone);display:flex;flex-direction:column}
+  .edmenu.off{display:none}
+  .edmenu button{background:transparent;border:0;color:var(--bone);text-align:left;cursor:pointer;
+    padding:9px 12px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+  .edmenu button:hover{background:var(--bone);color:var(--ink)}
+  .edmenu button.danger{color:var(--pink)}
+  .edmenu button.danger:hover{background:var(--pink);color:var(--bone)}
+  .edmenu button[disabled]{opacity:.35;cursor:default}
+  .edmenu button[disabled]:hover{background:transparent;color:var(--bone)}
   select.btn{-webkit-appearance:none;appearance:none;padding-right:22px;
     background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='6'><path d='M0 0l4 6 4-6z' fill='%23f6f1e7'/></svg>") right 8px center no-repeat}
 
@@ -236,10 +246,13 @@
     <div class="spacer"></div>
     <div class="eds">
       <select class="btn" id="editionSel" title="Switch edition. Each edition keeps its own content, theme and arranged layout in this browser, so several issues can be prepped side by side."></select>
-      <button class="btn sq" id="edNewBtn" title="Start another edition from the built-in default">+</button>
-      <button class="btn sq" id="edDupBtn" title="Copy this edition into a new one">⧉</button>
-      <button class="btn sq" id="edRenBtn" title="Rename this edition">✎</button>
-      <button class="btn sq pink" id="edDelBtn" title="Delete this edition">✕</button>
+      <button class="btn sq" id="edMenuBtn" title="New, copy, rename or delete an edition" aria-haspopup="true" aria-expanded="false">⋯</button>
+      <div class="edmenu off" id="edMenu">
+        <button id="edNewBtn">New edition…</button>
+        <button id="edDupBtn">Duplicate…</button>
+        <button id="edRenBtn">Rename…</button>
+        <button id="edDelBtn" class="danger">Delete…</button>
+      </div>
     </div>
     <select class="btn" id="themeSel" title="Apply a theme preset"><option value="">Theme preset…</option></select>
     <button class="btn" id="importBtn">Import JSON</button>
@@ -752,6 +765,19 @@ $("#resetBtn").addEventListener("click",()=>{
 });
 
 $("#editionSel").addEventListener("change", e=> switchEdition(e.target.value));
+
+// the bar has no room for four more buttons, so the verbs live behind one
+function editionMenu(open){
+  $("#edMenu").classList.toggle("off", !open);
+  $("#edMenuBtn").setAttribute("aria-expanded", open ? "true" : "false");
+}
+$("#edMenuBtn").addEventListener("click", e=>{
+  e.stopPropagation();
+  editionMenu($("#edMenu").classList.contains("off"));
+});
+document.addEventListener("click", e=>{ if(!e.target.closest(".eds")) editionMenu(false); });
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") editionMenu(false); });
+$("#edMenu").addEventListener("click", ()=> editionMenu(false));
 $("#edNewBtn").addEventListener("click",()=>{
   const fallback = "Issue "+(shelf.order.length+1);
   const name = prompt("Name the new edition", fallback);
