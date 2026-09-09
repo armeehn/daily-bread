@@ -147,6 +147,33 @@ git switch studio        # or: git worktree add ../db-studio studio
 Everything works from `file://`: autosave, import/export, and Publish. To put it
 online behind a login, see **Private online access** below.
 
+**Two ways to edit.** The left pane has a **Design** tab and an **All fields** tab.
+
+- **Design** — click anything on the page and it opens in the panel. A contents
+  line brings its page number, title, kicker *and* chip colour, none of which the
+  page itself gives you a handle for. Double-click a line of text to type straight
+  onto the page. Drag a row — a TOC line, a badge, a calendar event — to a new
+  position, with a drop line showing where it lands. Drop an image file on a
+  picture to replace it. A selected row also gets Up / Down / Duplicate / Add
+  below / Delete.
+- **All fields** — the section-by-section accordion below, every field in the
+  schema, with a `⠿` grip on each list row for dragging.
+
+Design mode works out which element on the page came from which model field on
+its own. It renders a second, invisible copy of the model with a marker appended
+to every text value, notes which element each marker landed in, and replays that
+address against the live preview; tag names are checked on the way and a node is
+dropped rather than guessed at when the two disagree. So `db.js` gains no editing
+hooks and none of this reaches the published `index.html`.
+
+`node db-render/test-studio-design.mjs` asserts that last point along with the
+click, type, drag and drop behaviour, in a real browser. It needs playwright in
+`db-render/node_modules` (gitignored, as for the other scripts there) and is not
+wired into CI.
+
+**Arrange** (in the preview bar) is still there for free positioning, and takes
+over from Design while it is on.
+
 **What you can edit** — every section is a form: masthead & issue metadata, the
 cover (upload an image or point at a path), the editor's letter, contents/TOC,
 the collapse ledger, young-voices reports, the waitlist stats, the interview
