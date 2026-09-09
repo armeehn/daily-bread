@@ -180,6 +180,46 @@
   .wbtn:hover{background:var(--ink);color:var(--bone)}
   .wbtn.teal{border-color:var(--teal);color:var(--teal)} .wbtn.teal:hover{background:var(--teal);color:var(--bone)}
   .wbtn[disabled]{opacity:.4;cursor:default} .wbtn[disabled]:hover{background:transparent;color:var(--ink)}
+
+  /* ---- design mode: the edit pane switches between the inspector and all fields ---- */
+  .pane.edit{display:flex;flex-direction:column;overflow:hidden}
+  .modebar{display:flex;background:var(--ink);flex:none}
+  .modebar button{flex:1;background:transparent;border:0;border-bottom:3px solid transparent;
+    color:#b7ad9e;padding:9px 6px;font-size:10px;font-weight:700;letter-spacing:.12em;
+    text-transform:uppercase;cursor:pointer;font-family:inherit}
+  .modebar button.on{color:var(--bone);border-bottom-color:var(--pink)}
+  .scroller{flex:1;min-height:0;overflow:auto}
+  .scroller.off{display:none}
+
+  /* the inspector: only the fields behind whatever is selected on the page */
+  .insp{padding:14px 15px 26px}
+  .insp .crumb{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .insp .what{font-weight:700;font-size:15px;line-height:1.3;margin:3px 0 12px}
+  .insp .acts{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 15px}
+  .insp .acts button{border:1.5px solid var(--ink);background:#fff;padding:5px 9px;cursor:pointer;
+    font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+  .insp .acts button:hover{background:var(--ink);color:var(--bone)}
+  .insp .acts button.del:hover{background:var(--pink);border-color:var(--pink);color:var(--bone)}
+
+  /* nothing selected yet — say how the thing works */
+  .blank{padding:30px 22px;text-align:center}
+  .blank .big{font-size:38px;line-height:1;margin-bottom:14px}
+  .blank h3{font-size:14px;margin-bottom:9px}
+  .blank p{font-size:11.5px;line-height:1.7;color:var(--muted);margin-bottom:9px}
+  .blank .sep{border-top:1px solid var(--line);margin:16px 0 12px}
+  .blank .lab{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .jump{display:flex;flex-wrap:wrap;gap:4px;justify-content:center}
+  .jump button{border:1.5px solid var(--line);background:#fff;color:var(--ink);padding:4px 8px;
+    cursor:pointer;font-size:10px;letter-spacing:.04em;font-family:inherit}
+  .jump button:hover{border-color:var(--ink);background:var(--ink);color:var(--bone)}
+
+  /* drag-to-reorder inside the sidebar lists */
+  .item > .itophd .grip{cursor:grab;color:var(--muted);font-size:12px;line-height:1;user-select:none}
+  .item > .itophd .grip:active{cursor:grabbing}
+  .item.dragging{opacity:.4}
+  .item.dropbefore{box-shadow:0 -3px 0 var(--pink)}
+  .item.dropafter{box-shadow:0 3px 0 var(--pink)}
+  .imgrow.hot{outline:2px dashed var(--teal);outline-offset:3px}
 </style>
 </head>
 <body>
@@ -204,7 +244,14 @@
   </div>
 
   <div class="main">
-    <div class="pane edit" id="editPane"></div>
+    <div class="pane edit" id="editPane">
+      <div class="modebar">
+        <button id="modeDesign" class="on" title="Click anything on the page to edit it">Design</button>
+        <button id="modeFields" title="Every field of every section">All fields</button>
+      </div>
+      <div class="scroller" id="designPane"></div>
+      <div class="scroller off" id="fieldsPane"></div>
+    </div>
     <div class="pane preview" id="previewPane">
       <div class="pvbar">
         <span>Live preview · exactly what publishes</span>
@@ -294,7 +341,7 @@ function itemLabel(tpl, obj){
 }
 
 function buildEditor(){
-  const pane = $("#editPane"); pane.innerHTML="";
+  const pane = $("#fieldsPane"); pane.innerHTML="";
   DB.SCHEMA.forEach((sec, si)=>{
     const wrap = document.createElement("div");
     wrap.className = "sec" + (si===0 ? " open" : "");
@@ -369,6 +416,7 @@ function fieldEl(f){
     pick.addEventListener("click",()=>{ imgFor={path:f.path, img, tx}; $("#fileImage").click(); });
     tx.addEventListener("input",()=>{ setPath(model,f.path,tx.value); img.src=tx.value; schedule(); });
     row.appendChild(img); row.appendChild(pick); row.appendChild(tx);
+    wireImageDrop(row, f.path, img, tx);
     d.appendChild(row); return d;
   }
   if(f.type==="select"){
@@ -415,13 +463,15 @@ function redrawList(wrap, l){
   arr.forEach((it, i)=>{
     const item=document.createElement("div"); item.className="item"+(l.strings?" str":"");
     const hd=document.createElement("div"); hd.className="itophd";
-    hd.innerHTML=`<span class="ix">${String(i+1).padStart(2,"0")}</span>`+
+    hd.innerHTML=`<span class="grip" draggable="true" title="Drag to reorder">⠿</span>`+
+      `<span class="ix">${String(i+1).padStart(2,"0")}</span>`+
       `<span class="name">${esc(l.strings? String(it).slice(0,60) : itemLabel(l.item, it))}</span>`;
     const ctl=document.createElement("div"); ctl.className="ctl";
     ctl.appendChild(mini("↑", ()=>move(l,i,-1,wrap)));
     ctl.appendChild(mini("↓", ()=>move(l,i,1,wrap)));
     ctl.appendChild(mini("✕", ()=>remove(l,i,wrap), true));
     hd.appendChild(ctl); item.appendChild(hd);
+    wireRowDrag(item, hd, l, i, wrap);
 
     const ib=document.createElement("div"); ib.className="ibody";
     if(l.strings){
@@ -573,7 +623,7 @@ $("#importBtn").addEventListener("click",()=> $("#fileImport").click());
 $("#fileImport").addEventListener("change",e=>{
   const file=e.target.files[0]; if(!file) return;
   const r=new FileReader();
-  r.onload=()=>{ try{ model=migrate(JSON.parse(r.result), DB.DEFAULT_MODEL); buildEditor(); renderPreview(); save(); toast("Imported "+file.name); setStatus("Saved ✓",false);}catch(err){ alert("Invalid JSON: "+err.message);} };
+  r.onload=()=>{ try{ model=migrate(JSON.parse(r.result), DB.DEFAULT_MODEL); sel=null; inspStale=true; buildEditor(); renderPreview(); save(); toast("Imported "+file.name); setStatus("Saved ✓",false);}catch(err){ alert("Invalid JSON: "+err.message);} };
   r.readAsText(file); e.target.value="";
 });
 $("#fileImage").addEventListener("change",e=>{
@@ -584,7 +634,7 @@ $("#fileImage").addEventListener("change",e=>{
 });
 $("#resetBtn").addEventListener("click",()=>{
   if(!confirm("Reset all content to the built-in Daily Bread №1 default? Your current edits will be lost.")) return;
-  model=DB.clone(DB.DEFAULT_MODEL); buildEditor(); renderPreview(); save(); toast("Reset to default");
+  model=DB.clone(DB.DEFAULT_MODEL); sel=null; inspStale=true; buildEditor(); renderPreview(); save(); toast("Reset to default");
 });
 
 /* ============================================================================
@@ -993,14 +1043,26 @@ function drawGuides(doc, bv, bh, rect, dx, dy){
 }
 
 // Re-attach after every preview reload (srcdoc is replaced on each edit / width change keeps it).
-$("#preview").addEventListener("load", ()=>{ if(arrangeOn) enterArrange(); });
+$("#preview").addEventListener("load", ()=>{
+  if(arrangeOn){ enterArrange(); return; }
+  if(!designOn) return;
+  enterDesign();
+  buildMap();                                   // re-applies the selection outline
+  if(inspStale){ inspStale = false; renderInspector(); }
+});
 
 $("#arrangeBtn").addEventListener("click",()=>{
   arrangeOn = !arrangeOn;
   $("#arrangeBtn").classList.toggle("on", arrangeOn);
   $("#clearArrangeBtn").style.display = arrangeOn ? "" : "none";
-  if(arrangeOn){ enterArrange(); toast("Arrange: drag elements — they snap to guides. Double-click one to reset it."); }
-  else exitArrange();
+  if(arrangeOn){
+    exitDesign();
+    enterArrange();
+    toast("Arrange: drag elements — they snap to guides. Double-click one to reset it.");
+  } else {
+    exitArrange();
+    if(designOn){ enterDesign(); buildMap(); }
+  }
 });
 $("#clearArrangeBtn").addEventListener("click",()=>{
   if(!confirm("Reset every element to its default position?")) return;
@@ -1018,8 +1080,600 @@ function swap(which){
   $("#tabPreview").classList.toggle("on", which==="preview");
 }
 
+
+/* ============================================================================
+   Design mode — edit the magazine by clicking and dragging the page itself
+   ----------------------------------------------------------------------------
+   db.js emits no editing hooks, and we do not want any in the published file, so
+   the studio works out which DOM node came from which model path on its own. It
+   renders a *probe* copy of the model with an invisible token appended to every
+   prose value:
+
+       letter.headline "Dear reader"  ->  "Dear reader⁣ 7 ⁣"
+
+   The probe is parsed but never displayed. Each token names the element it landed
+   in; that element's child-index path is then replayed against the live preview.
+   Same model, same render code, so the two trees have the same shape — and we
+   check tag names as we go and drop a node rather than guess when they disagree.
+
+       model ──DB.render──> preview  (what you see)
+         │
+         └──tokens──DB.render──> probe (parsed, thrown away) ──> path ↔ node map
+
+   From that map: click selects a field, double-click edits it in place, a row
+   drags to a new position, and an image file dropped on a picture replaces it.
+   ========================================================================== */
+const TOK = "⁣";                        /* invisible separator: survives esc() and rich() */
+const TOK_RE = /⁣(\d+)⁣/g;
+/* Values that are geometry, markup or a URL rather than prose. A token in one of
+   these would be read as CSS or a font name, and none of them is a thing you click. */
+const NOT_PROSE = /(^print\.|^fonts\.|^theme\.|^meta\.maxw$|href$|Src$|Alt$)/;
+const CLIMB_MAX = 7;                         /* how far an item block may grow past its fields */
+const DRAG_SLOP = 5;                         /* px of travel before a press becomes a drag */
+
+/* every schema field, keyed by path with list indices folded to "#" */
+const FIELDS = {};
+DB.SCHEMA.forEach(sec=>{
+  (sec.fields||[]).forEach(f=>{ FIELDS[f.path] = {label:f.label, type:f.type, opts:f.opts, hint:f.hint, sec}; });
+  (sec.lists||[]).forEach(l=>{
+    if(l.strings) FIELDS[l.path+".#"] = {label:l.label.replace(/s$/,""), type:l.area?"area":"text", sec, list:l};
+    else (l.fields||[]).forEach(sf=>{
+      FIELDS[l.path+".#."+sf.path] = {label:sf.label, type:sf.type, opts:sf.opts, sec, list:l, sub:sf};
+    });
+  });
+});
+const LISTS = {};
+DB.SCHEMA.forEach(sec => (sec.lists||[]).forEach(l=>{ LISTS[l.path] = { list:l, sec }; }));
+function tplPath(p){ return p.replace(/\.\d+(?=\.|$)/g, ".#"); }
+function fieldInfo(p){ return FIELDS[tplPath(p)]; }
+/* "letter.masthead.2.role" — or the bare row "letter.masthead.2" — -> its list */
+function itemOf(p){
+  const m = String(p).match(/^(.+?)\.(\d+)(?:\.|$)/);
+  if(!m) return null;
+  const L = LISTS[tplPath(m[1])];
+  if(!L) return null;
+  return { list: L.list, listPath: m[1], idx: +m[2], sec: L.sec };
+}
+
+let MAP = null;          /* { entries:[{el,paths}], items:[{key,path,idx,el}] } */
+let sel = null;          /* selection survives re-renders as a path, not a node */
+let designOn = true;
+let inlineEl = null;     /* element currently being typed into on the page */
+let inspStale = false;   /* rebuild the panel after the next render (row order changed) */
+let fieldsDirty = false; /* the accordion is rebuilt lazily when you switch to it */
+
+/* ---------- probe render → path ↔ node map ---------- */
+
+/* every prose value worth tagging: non-empty text/area fields, list rows included */
+function proseTargets(){
+  const out = [];
+  const push = p => {
+    const info = fieldInfo(p);
+    if(!info || (info.type!=="text" && info.type!=="area")) return;
+    if(NOT_PROSE.test(p)) return;
+    const v = getPath(model, p);
+    if(typeof v==="string" && v.trim()) out.push(p);
+  };
+  DB.SCHEMA.forEach(sec=>{
+    (sec.fields||[]).forEach(f=> push(f.path));
+    (sec.lists||[]).forEach(l=>{
+      (getPath(model, l.path)||[]).forEach((it,i)=>{
+        if(l.strings) push(l.path+"."+i);
+        else (l.fields||[]).forEach(sf=> push(l.path+"."+i+"."+sf.path));
+      });
+    });
+  });
+  return out;
+}
+
+/* address an element by its child index at every level, from <html> down */
+function idxPath(el){
+  const out = [];
+  while(el && el.parentElement){
+    out.unshift(Array.prototype.indexOf.call(el.parentElement.children, el));
+    el = el.parentElement;
+  }
+  return out;
+}
+function resolveIdx(doc, ip){
+  let el = doc.documentElement;
+  for(let i=0;i<ip.length;i++){ if(!el || !el.children[ip[i]]) return null; el = el.children[ip[i]]; }
+  return el;
+}
+
+function buildMap(){
+  MAP = null;
+  const doc = ifDoc(); if(!doc || !doc.body) return;
+  const paths = proseTargets(); if(!paths.length) return;
+
+  const probe = DB.clone(model);
+  paths.forEach((p,i)=> setPath(probe, p, getPath(probe,p) + TOK + i + TOK));
+  let pdoc;
+  try{ pdoc = new DOMParser().parseFromString(DB.render(probe), "text/html"); }
+  catch(e){ console.warn("design map: probe render failed", e); return; }
+
+  const found = new Map();                       // probe element -> [path index…]
+  const w = pdoc.createTreeWalker(pdoc.documentElement, NodeFilter.SHOW_TEXT);
+  for(let n=w.nextNode(); n; n=w.nextNode()){
+    if(n.nodeValue.indexOf(TOK) < 0) continue;
+    const pel = n.parentElement;
+    if(!pel || !pdoc.body.contains(pel)) continue;   // <title> and friends are not clickable
+    let m; TOK_RE.lastIndex = 0;
+    while((m = TOK_RE.exec(n.nodeValue))){
+      const a = found.get(pel) || []; a.push(+m[1]); found.set(pel, a);
+    }
+  }
+
+  const entries = [];
+  found.forEach((ids, pel)=>{
+    const el = resolveIdx(doc, idxPath(pel));
+    if(!el || el.tagName !== pel.tagName) return;   // the trees disagree here — leave it alone
+    el.setAttribute("data-dbp", entries.length);
+    entries.push({ el, paths: ids.map(i=>paths[i]) });
+  });
+  if(!entries.length) return;
+
+  MAP = { entries, items: markItems(doc, entries) };
+  markImages(doc);
+  applySelection(doc);
+}
+
+/* A row's block on the page: start at the fields of row i and climb while the
+   parent would not swallow a field belonging to some other row or section. */
+function markItems(doc, entries){
+  const byItem = new Map();
+  entries.forEach(en => en.paths.forEach(p=>{
+    const it = itemOf(p); if(!it) return;
+    const key = it.listPath+"#"+it.idx, a = byItem.get(key) || [];
+    if(a.indexOf(en.el) < 0) a.push(en.el);
+    byItem.set(key, a);
+  }));
+  const all = entries.map(e=>e.el), items = [];
+  byItem.forEach((els, key)=>{
+    const mine = new Set(els), outside = all.filter(e=>!mine.has(e));
+    let a = els[0];
+    while(a && !els.every(e=>a.contains(e))) a = a.parentElement;   // common ancestor
+    if(!a) return;
+    for(let n=0; n<CLIMB_MAX; n++){
+      const up = a.parentElement;
+      if(!up || up === doc.body || outside.some(o=>up.contains(o))) break;
+      a = up;
+    }
+    if(a === doc.body || a === doc.documentElement) return;
+    a.setAttribute("data-dbi", key);
+    items.push({ key, path:key.split("#")[0], idx:+key.split("#")[1], el:a });
+  });
+  return items;
+}
+
+/* image fields, matched by the src they rendered as — a dropped file replaces one */
+function markImages(doc){
+  DB.SCHEMA.forEach(sec => (sec.fields||[]).forEach(f=>{
+    if(f.type !== "image") return;
+    const v = getPath(model, f.path); if(!v) return;
+    doc.querySelectorAll("img").forEach(im=>{
+      if(im.getAttribute("src") === v) im.setAttribute("data-dbimg", f.path);
+    });
+  }));
+}
+
+/* ---------- what the preview looks like while you are editing it ---------- */
+const DZ_STYLE = `
+  body.dz-on [data-dbp]{cursor:text}
+  body.dz-on [data-dbp]:hover{outline:1.5px dashed rgba(240,71,125,.8); outline-offset:2px}
+  body.dz-on [data-dbi]:hover{outline:1.5px dashed rgba(18,183,149,.85); outline-offset:5px}
+  body.dz-on [data-dbimg]{cursor:copy}
+  body.dz-on .dz-sel{outline:2.5px solid #f0477d !important; outline-offset:3px}
+  body.dz-on .dz-hot{outline:3px dashed #12b795 !important; outline-offset:5px}
+  body.dz-on .dz-lift{opacity:.35}
+  body.dz-on .dz-edit{outline:2.5px solid #12b795 !important; outline-offset:3px}
+  .dz-line{position:fixed; background:#12b795; z-index:2147483646; pointer-events:none}
+  .dz-line.h{height:3px} .dz-line.v{width:3px}`;
+
+function enterDesign(){
+  const doc = ifDoc(); if(!doc || !doc.body) return;
+  if(!doc.getElementById("dz-style")){
+    const st = doc.createElement("style"); st.id="dz-style"; st.textContent=DZ_STYLE;
+    doc.head.appendChild(st);
+  }
+  doc.body.classList.add("dz-on");
+  wireDesign(doc);
+}
+function exitDesign(){
+  const doc = ifDoc(); if(!doc) return;
+  const st = doc.getElementById("dz-style"); if(st) st.remove();
+  doc.body && doc.body.classList.remove("dz-on");
+  clearDropLine(doc);
+}
+
+function hasFiles(e){
+  return !!(e.dataTransfer && Array.prototype.indexOf.call(e.dataTransfer.types||[], "Files") >= 0);
+}
+function live(){ return designOn && !arrangeOn; }
+
+function wireDesign(doc){
+  if(doc.__dzWired) return;
+  let press = null, drag = null;
+
+  doc.__dzDown = e=>{
+    if(!live() || inlineEl || e.button !== 0) return;
+    const item = e.target.closest && e.target.closest("[data-dbi]");
+    press = { x:e.clientX, y:e.clientY, item };
+  };
+  doc.__dzMove = e=>{
+    if(!press) return;
+    if(!drag){
+      // a still pointer is a click; only past a few pixels does it become a drag
+      if(!press.item || Math.abs(e.clientX-press.x) + Math.abs(e.clientY-press.y) < DRAG_SLOP) return;
+      drag = startRowDrag(doc, press.item);
+      if(!drag){ press = null; return; }
+    }
+    e.preventDefault();
+    moveRowDrag(doc, drag, e);
+  };
+  doc.__dzUp = ()=>{
+    if(drag){ dropRowDrag(doc, drag); drag = null; }
+    press = null;
+  };
+  doc.__dzClick = e=>{
+    if(!live() || !e.target.closest) return;
+    if(inlineEl && e.target.closest(".dz-edit")) return;
+    const t = e.target.closest("[data-dbp]") || e.target.closest("[data-dbi]");
+    if(t || e.target.closest("a")){ e.preventDefault(); e.stopPropagation(); }
+    if(inlineEl) endInline(true);
+    pick(t);
+  };
+  doc.__dzDbl = e=>{
+    if(!live()) return;
+    const el = e.target.closest && e.target.closest("[data-dbp]");
+    if(!el) return;
+    e.preventDefault();
+    beginInline(el);
+  };
+  doc.__dzOver = e=>{
+    if(!live() || !hasFiles(e)) return;
+    e.preventDefault();
+    const im = e.target.closest && e.target.closest("[data-dbimg]");
+    e.dataTransfer.dropEffect = im ? "copy" : "none";
+    doc.querySelectorAll(".dz-hot").forEach(n=>n.classList.remove("dz-hot"));
+    if(im) im.classList.add("dz-hot");
+  };
+  doc.__dzDrop = e=>{
+    if(!live() || !hasFiles(e)) return;
+    e.preventDefault();
+    doc.querySelectorAll(".dz-hot").forEach(n=>n.classList.remove("dz-hot"));
+    const im = e.target.closest && e.target.closest("[data-dbimg]");
+    const f = e.dataTransfer.files && e.dataTransfer.files[0];
+    if(!im || !f || !/^image\//.test(f.type)){ toast("Drop an image file onto a picture"); return; }
+    readImageInto(f, im.getAttribute("data-dbimg"));
+  };
+
+  doc.addEventListener("pointerdown", doc.__dzDown, true);
+  doc.addEventListener("pointermove", doc.__dzMove, true);
+  doc.addEventListener("pointerup",   doc.__dzUp,   true);
+  doc.addEventListener("click",       doc.__dzClick, true);
+  doc.addEventListener("dblclick",    doc.__dzDbl,  true);
+  doc.addEventListener("dragover",    doc.__dzOver, true);
+  doc.addEventListener("drop",        doc.__dzDrop, true);
+  doc.__dzWired = true;
+}
+
+function readImageInto(file, path){
+  const r = new FileReader();
+  r.onload = ()=>{ setPath(model, path, r.result); touched(); toast("Image replaced"); };
+  r.readAsDataURL(file);
+}
+
+/* ---------- drag a row to a new position ---------- */
+function rowIdx(el){ return +el.getAttribute("data-dbi").split("#")[1]; }
+
+function startRowDrag(doc, el){
+  const path = el.getAttribute("data-dbi").split("#")[0];
+  const sibs = Array.prototype.filter.call(el.parentElement.children, n=>{
+    const k = n.getAttribute && n.getAttribute("data-dbi");
+    return k && k.split("#")[0] === path;
+  });
+  if(sibs.length < 2) return null;
+
+  // rows laid out side by side (badges, sticker sheet) drop on the X axis instead
+  const a = sibs[0].getBoundingClientRect(), b = sibs[1].getBoundingClientRect();
+  const horiz = Math.abs(b.left - a.left) > Math.abs(b.top - a.top);
+  el.classList.add("dz-lift");
+  return { el, path, from:rowIdx(el), sibs, horiz, to:null };
+}
+function moveRowDrag(doc, d, e){
+  const p = d.horiz ? e.clientX : e.clientY;
+  let to = d.sibs.length;
+  for(let i=0;i<d.sibs.length;i++){
+    const r = d.sibs[i].getBoundingClientRect();
+    if(p < (d.horiz ? r.left + r.width/2 : r.top + r.height/2)){ to = i; break; }
+  }
+  d.to = to;
+  drawDropLine(doc, d, to);
+}
+function dropRowDrag(doc, d){
+  d.el.classList.remove("dz-lift"); clearDropLine(doc);
+  if(d.to == null) return;
+  const last = d.sibs[d.sibs.length-1];
+  const to = d.to >= d.sibs.length ? rowIdx(last) + 1 : rowIdx(d.sibs[d.to]);
+  const arr = getPath(model, d.path);
+  if(!arr || to === d.from || to === d.from + 1) return;
+  const [row] = arr.splice(d.from, 1);
+  arr.splice(to > d.from ? to - 1 : to, 0, row);
+  sel = null;
+  touched("panel"); toast("Moved");
+}
+function clearDropLine(doc){ doc && doc.querySelectorAll(".dz-line").forEach(n=>n.remove()); }
+function drawDropLine(doc, d, to){
+  clearDropLine(doc);
+  const at = to >= d.sibs.length ? d.sibs[d.sibs.length-1] : d.sibs[to];
+  const r = at.getBoundingClientRect(), end = to >= d.sibs.length;
+  const g = doc.createElement("div");
+  g.className = "dz-line " + (d.horiz ? "v" : "h");
+  if(d.horiz){
+    g.style.left = ((end ? r.right : r.left) - 1) + "px";
+    g.style.top = r.top + "px"; g.style.height = r.height + "px";
+  } else {
+    g.style.top = ((end ? r.bottom : r.top) - 1) + "px";
+    g.style.left = r.left + "px"; g.style.width = r.width + "px";
+  }
+  doc.body.appendChild(g);
+}
+
+/* ---------- type straight onto the page ---------- */
+function beginInline(el){
+  const en = entryFor(el); if(!en || en.paths.length !== 1) { pick(el); return; }
+  const path = en.paths[0], v = getPath(model, path);
+  // Only plain text can round-trip through the page: anything the renderer
+  // rewrote (markup, a newline that became <br>) is edited in the panel instead.
+  if(typeof v !== "string" || el.textContent.trim() !== v.trim()){
+    pick(el); toast("This one has formatting — edit it in the panel");
+    return;
+  }
+  pick(el);
+  inlineEl = el;
+  el.contentEditable = "true";
+  el.classList.add("dz-edit");
+  el.__dzPath = path;
+  el.focus();
+  const doc = ifDoc(), r = doc.createRange();
+  r.selectNodeContents(el); doc.defaultView.getSelection().removeAllRanges();
+  doc.defaultView.getSelection().addRange(r);
+  el.__dzBlur = ()=> endInline(true);
+  el.__dzKey = e=>{
+    if(e.key === "Escape"){ e.preventDefault(); endInline(false); }
+    else if(e.key === "Enter" && fieldInfo(path).type !== "area"){ e.preventDefault(); endInline(true); }
+  };
+  el.addEventListener("blur", el.__dzBlur);
+  el.addEventListener("keydown", el.__dzKey);
+  setStatus("Editing…", true);
+}
+function endInline(commit){
+  const el = inlineEl; if(!el) return;
+  inlineEl = null;
+  el.removeEventListener("blur", el.__dzBlur);
+  el.removeEventListener("keydown", el.__dzKey);
+  el.contentEditable = "false";
+  el.classList.remove("dz-edit");
+  const path = el.__dzPath, was = getPath(model, path);
+  if(!commit){ el.textContent = was; setStatus("Saved ✓", false); return; }
+  const now = el.textContent.replace(/\s+$/,"");
+  if(now === was){ setStatus("Saved ✓", false); return; }
+  setPath(model, path, now);
+  touched("panel");
+}
+
+/* ---------- selection + the inspector ---------- */
+function entryFor(el){ return MAP && MAP.entries.find(en=> en.el === el); }
+function selEl(){
+  if(!sel || !MAP) return null;
+  const p = sel.paths[0];
+  const en = MAP.entries.find(e=> e.paths.indexOf(p) >= 0);
+  if(en) return en.el;
+  const it = itemOf(p);
+  const row = it && MAP.items.find(x=> x.key === it.listPath+"#"+it.idx);
+  return row ? row.el : null;
+}
+function applySelection(doc){
+  if(!doc || !doc.body) return;
+  doc.querySelectorAll(".dz-sel").forEach(n=>n.classList.remove("dz-sel"));
+  const el = selEl(); if(el) el.classList.add("dz-sel");
+}
+function pick(el){
+  const en = el && entryFor(el);
+  if(en) sel = { paths: en.paths.slice() };
+  else if(el && el.getAttribute && el.getAttribute("data-dbi")){
+    const it = MAP && MAP.items.find(x=>x.el === el);
+    sel = it ? { paths:[it.path+"."+it.idx] } : null;
+  } else sel = null;
+  applySelection(ifDoc());
+  renderInspector();
+}
+
+/* the model changed from the page side: re-render, re-map, mark the accordion stale */
+function touched(stale){
+  fieldsDirty = true;
+  if(stale === "panel") inspStale = true;
+  schedule();
+}
+
+function renderInspector(){
+  const pane = $("#designPane"); pane.innerHTML = "";
+  if(!sel){ pane.appendChild(blankPanel()); return; }
+
+  const box = document.createElement("div"); box.className = "insp";
+  const first = sel.paths[0], it = itemOf(first);
+  const info = fieldInfo(first) || (it ? {label:it.list.label, type:"text", sec:it.sec}
+                                       : {label:first, type:"text"});
+  const sec = (it && it.sec) || info.sec;
+
+  const crumb = document.createElement("div"); crumb.className = "crumb";
+  crumb.textContent = sec ? sectionLabel(sec) : "Model";
+  const what = document.createElement("div"); what.className = "what";
+  what.textContent = it ? (it.list.label + " · row " + (it.idx+1)) : info.label;
+  box.appendChild(crumb); box.appendChild(what);
+
+  if(it) box.appendChild(rowActions(it));
+
+  // A row shows every field it has — including the colours and links the page
+  // gives you nothing to click on. A lone field shows itself and its neighbours
+  // in the same element (a chip that renders two values, say).
+  const fields = it ? rowFields(it) : sel.paths.map(p=>({ path:p, info:fieldInfo(p) }));
+  fields.forEach(f=>{
+    if(!f.info) return;
+    box.appendChild(fieldEl({ path:f.path, label:f.info.label, type:f.info.type,
+                              opts:f.info.opts, hint:f.info.hint }));
+  });
+
+  const go = document.createElement("button"); go.className = "additem";
+  go.textContent = "Open in all fields";
+  go.addEventListener("click", ()=> revealInFields(sec));
+  box.appendChild(go);
+  pane.appendChild(box);
+}
+function rowFields(it){
+  const l = it.list, base = it.listPath + "." + it.idx;
+  if(l.strings) return [{ path:base, info:FIELDS[l.path+".#"] }];
+  return (l.fields||[]).map(sf=>({ path: base + "." + sf.path, info: FIELDS[l.path+".#."+sf.path] }));
+}
+function rowActions(it){
+  const bar = document.createElement("div"); bar.className = "acts";
+  const arr = ()=> getPath(model, it.listPath) || [];
+  const act = (txt, title, fn, del)=>{
+    const b = document.createElement("button"); b.textContent = txt; b.title = title;
+    if(del) b.className = "del";
+    b.addEventListener("click", fn); bar.appendChild(b);
+  };
+  const after = i => { sel = { paths:[it.listPath+"."+i] }; touched("panel"); };
+  act("↑ Up", "Move this row up", ()=>{
+    const a = arr(); if(it.idx <= 0) return;
+    a.splice(it.idx-1, 0, a.splice(it.idx,1)[0]); after(it.idx-1);
+  });
+  act("↓ Down", "Move this row down", ()=>{
+    const a = arr(); if(it.idx >= a.length-1) return;
+    a.splice(it.idx+1, 0, a.splice(it.idx,1)[0]); after(it.idx+1);
+  });
+  act("Duplicate", "Copy this row below", ()=>{
+    const a = arr(); a.splice(it.idx+1, 0, DB.clone(a[it.idx])); after(it.idx+1);
+  });
+  act("+ Add below", "Insert an empty row below", ()=>{
+    const a = arr(), l = it.list;
+    a.splice(it.idx+1, 0, l.strings ? (l.def!=null?l.def:"") : DB.clone(l.def||{}));
+    after(it.idx+1);
+  });
+  act("Delete", "Remove this row", ()=>{
+    if(!confirm("Delete this row?")) return;
+    arr().splice(it.idx, 1); sel = null; touched("panel");
+  }, true);
+  return bar;
+}
+function blankPanel(){
+  const d = document.createElement("div"); d.className = "blank";
+  d.innerHTML =
+    '<div class="big">☞</div>'+
+    '<h3>Click anything on the page</h3>'+
+    '<p>Whatever you click opens here, ready to edit. Double-click a line of text to type straight onto the page.</p>'+
+    '<p>Drag a row — a contents line, a badge, an event — to move it. Drop an image file on a picture to replace it.</p>'+
+    '<div class="sep"></div><div class="lab">Jump to</div>';
+  const jump = document.createElement("div"); jump.className = "jump";
+  (model.nav||[]).forEach(n=>{
+    if(!n.href || n.href.charAt(0) !== "#") return;
+    const b = document.createElement("button"); b.textContent = n.label;
+    b.addEventListener("click", ()=>{
+      const doc = ifDoc(), t = doc && doc.querySelector(n.href);
+      if(t) t.scrollIntoView({behavior:"smooth", block:"start"});
+    });
+    jump.appendChild(b);
+  });
+  d.appendChild(jump);
+  return d;
+}
+/* open the accordion at the section behind the selection and scroll to it */
+function revealInFields(sec){
+  showMode("fields");
+  if(!sec) return;
+  const i = DB.SCHEMA.indexOf(sec);
+  const el = $("#fieldsPane").children[i];
+  if(!el) return;
+  el.classList.add("open");
+  el.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+/* ---------- edit-pane mode switch ---------- */
+function showMode(m){
+  const design = m === "design";
+  if(!design && fieldsDirty){ buildEditor(); fieldsDirty = false; }
+  $("#designPane").classList.toggle("off", !design);
+  $("#fieldsPane").classList.toggle("off", design);
+  $("#modeDesign").classList.toggle("on", design);
+  $("#modeFields").classList.toggle("on", !design);
+  designOn = design;
+  if(design){ enterDesign(); renderInspector(); }
+  else { exitDesign(); }
+}
+$("#modeDesign").addEventListener("click", ()=> showMode("design"));
+$("#modeFields").addEventListener("click", ()=> showMode("fields"));
+
+/* ---------- drag a row in the sidebar list ---------- */
+let rowDragFrom = null;
+function clearDropMarks(wrap){
+  wrap.querySelectorAll(".dropbefore,.dropafter").forEach(n=>n.classList.remove("dropbefore","dropafter"));
+}
+function wireRowDrag(item, hd, l, i, wrap){
+  const grip = hd.querySelector(".grip");
+  grip.addEventListener("dragstart", e=>{
+    rowDragFrom = { path:l.path, i };
+    item.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+    try{ e.dataTransfer.setData("text/plain", String(i)); }catch(_){}
+  });
+  grip.addEventListener("dragend", ()=>{
+    item.classList.remove("dragging"); clearDropMarks(wrap); rowDragFrom = null;
+  });
+  const side = e => {
+    const r = item.getBoundingClientRect();
+    return (e.clientY - r.top) > r.height/2 ? "after" : "before";
+  };
+  item.addEventListener("dragover", e=>{
+    if(!rowDragFrom || rowDragFrom.path !== l.path) return;
+    e.preventDefault();
+    clearDropMarks(wrap);
+    item.classList.add("drop" + side(e));
+  });
+  item.addEventListener("drop", e=>{
+    if(!rowDragFrom || rowDragFrom.path !== l.path) return;
+    e.preventDefault();
+    const from = rowDragFrom.i, to = i + (side(e) === "after" ? 1 : 0);
+    rowDragFrom = null;
+    clearDropMarks(wrap);
+    if(to === from || to === from + 1){ redrawList(wrap, l); return; }
+    const a = getPath(model, l.path);
+    a.splice(to > from ? to - 1 : to, 0, a.splice(from, 1)[0]);
+    redrawList(wrap, l); schedule();
+  });
+}
+
+/* an image field takes a dropped file as well as a click */
+function wireImageDrop(row, path, img, tx){
+  row.addEventListener("dragover", e=>{
+    if(!hasFiles(e)) return;
+    e.preventDefault(); e.dataTransfer.dropEffect = "copy"; row.classList.add("hot");
+  });
+  row.addEventListener("dragleave", ()=> row.classList.remove("hot"));
+  row.addEventListener("drop", e=>{
+    if(!hasFiles(e)) return;
+    e.preventDefault(); row.classList.remove("hot");
+    const f = e.dataTransfer.files[0];
+    if(!f || !/^image\//.test(f.type)){ toast("That is not an image"); return; }
+    const r = new FileReader();
+    r.onload = ()=>{ setPath(model, path, r.result); img.src = r.result; tx.value = "(embedded image)"; touched(); toast("Image embedded"); };
+    r.readAsDataURL(f);
+  });
+}
+
 /* ---------- boot ---------- */
 buildEditor();
+renderInspector();
 renderPreview();
 setStatus(localStorage.getItem(KEY)?"Restored ✓":"Loaded default", false);
 </script>
