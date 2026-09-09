@@ -195,7 +195,24 @@ jobs:
       # hand to diff against the tracked file, and a step after a failing one never
       # runs.
       - name: Upload the rendered PDF
+        if: ${{ contains(github.server_url, 'github.com') }}
         uses: actions/upload-artifact@v4
+        with:
+          name: print-pdf
+          path: |
+            db-render/out/Daily Bread №1 — print.pdf
+            db-render/out/magazine-render.json
+          if-no-files-found: error
+          retention-days: 30
+
+      # Same upload, the one action Gitea can serve. Gitea Actions speaks the v1/v3
+      # artifact protocol; actions/upload-artifact@v4 asks for the v4 backend, gets a
+      # GHESNotSupportedError and fails the job -- after the render, the safe-area
+      # guard and the determinism check have all already passed. verify-editions.yml
+      # uploads its PDFs through this same fork.
+      - name: Upload the rendered PDF (Gitea)
+        if: ${{ !contains(github.server_url, 'github.com') }}
+        uses: ChristopherHX/gitea-upload-artifact@v4
         with:
           name: print-pdf
           path: |
@@ -240,8 +257,14 @@ jobs:
       # The exact drift this guard exists for left modelHash completely unchanged at
       # 5a715b94cf6f: the model was identical and db.js's print stylesheet had moved
       # underneath it, 33 sheets to 19. A modelHash comparison would have passed.
+      # GitHub only, and that is not a loophole: the tracked bytes are defined by the
+      # pinned runner image (see A COROLLARY THAT SURPRISES PEOPLE, above), and the
+      # Gitea runner is a different image. Its render is the same 19 sheets at the
+      # same geometry and different bytes, so running this there reports the host,
+      # not the artifact. The two steps that DO travel -- the render itself and the
+      # safe-area guard on the committed file -- still run on both.
       - name: The committed PDF must be byte-identical to this render
-        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.commit) }}
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.commit) && contains(github.server_url, 'github.com') }}
         working-directory: db-render
         run: |
           epoch=$(node -e 'const m=require("/tmp/committed.json"); if(!m.sourceDateEpoch) process.exit(1); process.stdout.write(String(m.sourceDateEpoch))') \
@@ -303,8 +326,10 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       # Opt-in only. Never runs on push or pull_request.
+      # GitHub only, for the same reason the guard is: this step is the producer of
+      # the tracked artifact, so it has to run on the image the guard measures.
       - name: Commit the rendered PDF (explicit opt-in only)
-        if: github.event_name == 'workflow_dispatch' && inputs.commit
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.commit && contains(github.server_url, 'github.com') }}
         run: |
           # The repo's commits are attributed to Sasha Zero. A distinct bot identity
           # also made GitHub treat this commit as one from a first-time contributor,
