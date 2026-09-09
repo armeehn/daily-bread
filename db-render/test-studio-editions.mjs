@@ -90,7 +90,15 @@ const state = () => page.evaluate(() => ({
   opts: Array.from(document.querySelectorAll("#editionSel option")).map(o => o.textContent),
   optVal: document.querySelector("#editionSel").value,
   delOff: document.querySelector("#edDelBtn").disabled,
+  menuOpen: !document.querySelector("#edMenu").classList.contains("off"),
 }));
+
+// the edition verbs live behind one menu button, so every action opens it first
+async function act(id) {
+  await page.click("#edMenuBtn");
+  await page.click(id);
+  await page.waitForTimeout(300);
+}
 
 // edit through the studio's own debounced save path, not by poking the store
 async function setBrand(v) {
@@ -118,8 +126,7 @@ check("Delete is off while one edition is left", mig.delOff === true);
 /* ---- 2. a second edition, started from the default ---- */
 const firstId = mig.curId;
 await page.evaluate(() => { window.__prompt = "The Thaw"; });
-await page.click("#edNewBtn");
-await page.waitForTimeout(300);
+await act("#edNewBtn");
 const two = await state();
 const defBrand = await page.evaluate(() => DB.DEFAULT_MODEL.meta.brand);
 check("New adds an edition and opens it", two.n === 2 && two.cur === "The Thaw", two.names.join(" | "));
@@ -141,8 +148,7 @@ check("the edit made in the second edition survived the round trip", fwd.brand =
 
 /* ---- 4. duplicate copies what is on screen ---- */
 await page.evaluate(() => { window.__prompt = "Thaw copy"; });
-await page.click("#edDupBtn");
-await page.waitForTimeout(300);
+await act("#edDupBtn");
 const dup = await state();
 check("Copy adds a third edition and opens it", dup.n === 3 && dup.cur === "Thaw copy", dup.names.join(" | "));
 check("the copy carries the live content", dup.brand === "THAW BRAND", dup.brand);
@@ -154,8 +160,7 @@ check("editing the copy leaves its source alone", src.brand === "THAW BRAND", sr
 
 /* ---- 5. rename touches one edition ---- */
 await page.evaluate(() => { window.__prompt = "The Thaw №2"; });
-await page.click("#edRenBtn");
-await page.waitForTimeout(200);
+await act("#edRenBtn");
 const ren = await state();
 check("Rename renames the open edition", ren.cur === "The Thaw №2", ren.cur);
 check("Rename leaves the other names alone",
@@ -210,8 +215,7 @@ check("nothing stays outlined in the new edition", swapped.outlined === 0, swapp
 /* ---- 9. delete removes one edition and lands on a neighbour ---- */
 const before = await state();
 await page.evaluate(() => { window.__confirm = true; });
-await page.click("#edDelBtn");
-await page.waitForTimeout(300);
+await act("#edDelBtn");
 const del = await state();
 const gone = before.ids.indexOf(before.curId);
 const rest = before.ids.filter(id => id !== before.curId);
@@ -222,10 +226,35 @@ check("the switcher drops the deleted edition", del.opts.length === del.n);
 
 /* ---- 10. a refused confirm deletes nothing ---- */
 await page.evaluate(() => { window.__confirm = false; });
-await page.click("#edDelBtn");
-await page.waitForTimeout(300);
+await act("#edDelBtn");
 const kept = await state();
 check("cancelling the confirm keeps the edition", kept.n === del.n && kept.curId === del.curId);
+check("the menu closes after an action", kept.menuOpen === false);
+
+/* ---- 11. the bar the switcher sits in still holds its contents ----
+   It was `height:52px` AND `flex-wrap:wrap`, so a bar too full to fit put its
+   last controls on a second row that landed on top of the pane below. */
+// measure the worst case: the select is capped, so a name long enough to hit
+// the cap is the widest the switcher can ever be
+await page.evaluate(() => { window.__prompt = "A Very Long Edition Name That Never Ends"; });
+await act("#edRenBtn");
+const bars = [];
+for (const w of [1920, 1600, 1400, 1280]) {
+  await page.setViewportSize({ width: w, height: 900 });
+  await page.waitForTimeout(250);
+  bars.push([w, await page.evaluate(() => {
+    const bar = document.querySelector("header.bar").getBoundingClientRect();
+    const st = document.querySelector("#status").getBoundingClientRect();
+    return { h: Math.round(bar.height), inside: st.bottom <= bar.bottom + 1,
+             wide: document.body.scrollWidth > window.innerWidth };
+  })]);
+}
+check("the top bar is one row at the studio's design width, longest name and all",
+  bars.filter(([w]) => w >= 1600).every(([, m]) => m.h === 52),
+  bars.map(([w, m]) => w + ":" + m.h).join(" "));
+check("a fuller bar grows instead of covering the pane below",
+  bars.every(([, m]) => m.inside), bars.map(([w, m]) => w + ":" + m.inside).join(" "));
+check("nothing pushes the page sideways", bars.every(([, m]) => !m.wide));
 
 await browser.close();
 server.close();
