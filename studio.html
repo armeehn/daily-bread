@@ -670,8 +670,28 @@ function populateThemeSelect(){
     sel.appendChild(g2);
   }
 }
+/* Content colours (contents chips, ledger, stats, stickers) are stored as hex,
+   and the defaults are Kelowna's roles verbatim. A preset used to re-theme the
+   stylesheet and leave every chip Kelowna pink, so light presets looked
+   unchanged and dark ones lost the ink-coloured chips. Retint: a content hex
+   equal to an outgoing role becomes the incoming theme's same role. */
+const THEME_ROLES = ["ink","bone","panel","paper2","dark","muted","pink","teal","orange"];
+function retint(node, from, to){
+  if(Array.isArray(node)){ node.forEach((v,i)=>{ node[i]=retint(v,from,to); }); return node; }
+  if(node && typeof node==="object"){ Object.keys(node).forEach(k=>{ node[k]=retint(node[k],from,to); }); return node; }
+  if(typeof node!=="string" || !isHex(node)) return node;
+
+  const role = THEME_ROLES.find(r=> isHex(from[r]) && from[r].toLowerCase()===node.toLowerCase());
+  return role && isHex(to[role]) ? to[role] : node;
+}
+function setTheme(next){
+  const from = model.theme || {};
+  Object.keys(model).forEach(k=>{ if(k!=="theme") model[k]=retint(model[k], from, next); });
+  model.theme = DB.clone(next);
+}
+
 function applyTheme(th, note){
-  model.theme = DB.clone(th);
+  setTheme(th);
   buildEditor(); renderPreview(); save(); toast(note || ("Applied theme: "+(th.name||"custom")));
 }
 $("#themeSel").addEventListener("change",()=>{
@@ -699,12 +719,12 @@ function openThemeWizard(){
 }
 function closeWizard(restore){
   if(!wiz) return;
-  if(restore && wiz.orig){ model.theme = wiz.orig; renderPreview(); }
+  if(restore && wiz.orig){ setTheme(wiz.orig); renderPreview(); }
   if(wiz.back) wiz.back.remove();
   wiz = null;
 }
 function applyDraftLive(){
-  model.theme = DB.clone(wiz.draft);   // live preview only; not saved until "Save preset"
+  setTheme(wiz.draft);   // live preview only; not saved until "Save preset"
   renderPreview();
 }
 function buildWizardShell(){
