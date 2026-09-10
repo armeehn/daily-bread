@@ -1,5 +1,6 @@
-# Typesets the press booklet the studio's "Magazine PDF" button downloads, proves
-# the typesetting reproducible, and keeps the tracked copy honest.
+# Typesets the press booklet the studio's "Magazine PDF" button falls back to
+# when press.hq (typesetting on demand) is out of reach, proves the typesetting
+# reproducible, and keeps the tracked copy honest.
 #
 # WHAT SHIPS
 # press/<edition>/booklet.pdf is the TeX press: content/<edition>.tex typeset by
