@@ -5,9 +5,9 @@
   "pageWidthPt": 887.04,
   "pageHeightPt": 641.04,
   "trim": "custom",
-  "pdfSha256": "1617e8aa20677d4e22b7de87d55e9afa15bbd77c16136136cb18eaad26cc5010",
-  "pdfBytes": 779341,
-  "sourceDateEpoch": 1787500166,
+  "pdfSha256": "0fcb02485306d581fe19654b8f12f42d0ae2fdd2126940680348529b1292fcdf",
+  "pdfBytes": 779055,
+  "sourceDateEpoch": 1789037619,
   "unpinnedFonts": {},
   "renderer": "render-studio-pdf.js (DB.render(model) — the document the studio shows)",
   "booklet": {
@@ -30,8 +30,8 @@
       "12|9",
       "10|11"
     ],
-    "pdfSha256": "804e30cbaa8ec4bb6e374507e4cd3ce9153db8f0b03a37cab3e0a0f369123204",
-    "pdfBytes": 1456177,
+    "pdfSha256": "bfbbd778ef2bfd15903b53e791ec235e9c870c5b8411c315eaa9a1e851b92eeb",
+    "pdfBytes": 1456111,
     "imposer": "impose-booklet.js (tools/print/imposition.js, fold-simulated)"
   }
 }
