@@ -258,8 +258,8 @@
     <button class="btn" id="importBtn">Import JSON</button>
     <button class="btn" id="exportBtn">Export JSON</button>
     <button class="btn teal" id="publishBtn" title="Download index.html to commit">Publish → index.html</button>
-    <button class="btn" id="pdfBtn" title="Export exactly what is on screen, right now, through your browser's print dialog: cover, then one page per section, at the trim size set under Print. Choose 'Save as PDF', Margins None, Background graphics ON. Same document as 'Magazine PDF' — use this one when you have unsaved edits, since it prints the live model instead of the last render CI committed.">Web PDF</button>
-    <button class="btn teal" id="magPdfBtn" title="Download the print-ready magazine PDF. CI renders it from THIS model — render-studio-pdf.js prints DB.render(model), the same document in the preview above — at the trim, bleed and crop marks set under Print. One click, no print dialog. If the rendered file on the server came from a different model than the one you are editing, this button tells you before downloading.">Magazine PDF ⤓</button>
+    <button class="btn" id="pdfBtn" title="Export exactly what is on screen, right now, through your browser's print dialog: cover, then one page per section, at the trim size set under Print. Choose 'Save as PDF', Margins None, Background graphics ON. Same document as 'Magazine PDF', in reading order rather than imposed — use this one when you have unsaved edits, since it prints the live model instead of the last render CI committed.">Web PDF</button>
+    <button class="btn teal" id="magPdfBtn" title="Download the print-ready magazine as a saddle-stitched booklet. CI renders THIS model — render-studio-pdf.js prints DB.render(model), the same document in the preview above, at the trim, bleed and crop marks set under Print — then impose-booklet.js pairs the pages two to a side so the folded, stapled stack reads in order. One click, no print dialog. If the file on the server came from a different model than the one you are editing, this button tells you before downloading.">Magazine PDF ⤓</button>
     <button class="btn pink" id="resetBtn">Reset</button>
     <span class="status" id="status">Loaded</span>
   </header>
@@ -710,13 +710,14 @@ $("#magPdfBtn").addEventListener("click", async ()=>{
   // The file behind this button is rendered by CI from DB.render(model) — the very
   // document the preview above shows — by db-render/render-studio-pdf.js. It is no
   // longer a separate hand-built layout, so "what the studio shows" and "what the
-  // printer gets" are the same document, paginated by db.js's own print CSS.
+  // printer gets" are the same document, paginated by db.js's own print CSS, then
+  // imposed two-up by db-render/impose-booklet.js so it folds into a booklet.
   //
   // One gap remains that no renderer can close: the committed render is of the
   // model as committed, and you may have edited since. The sidecar manifest carries
   // the fingerprint of the model it was rendered from, so say so plainly rather
   // than handing over a PDF that quietly disagrees with the editor.
-  const name = "Daily Bread №1 — print.pdf";
+  const name = "Daily Bread №1 — booklet.pdf";
   const grab = ()=>{
     const a=document.createElement("a");
     a.href="/db-render/out/"+encodeURIComponent(name);
@@ -729,19 +730,23 @@ $("#magPdfBtn").addEventListener("click", async ()=>{
     if(r.ok) man=await r.json();
   }catch(e){}
   const mine=await modelFingerprint(model);
+  // "20 pages on 5 sheets" when the manifest knows the booklet; page count otherwise.
+  const shape=m=> m.booklet
+    ? m.booklet.pages+" pages on "+m.booklet.sheets+" sheets, "+m.booklet.sheetWidthPt+"×"+m.booklet.sheetHeightPt+" pt"
+    : m.pages+" pages, "+m.pageWidthPt+"×"+m.pageHeightPt+" pt";
   if(man && mine && man.modelHash!==mine){
     const ok=confirm(
       "The rendered PDF on the server was made from a different model than the one you are editing.\n\n"+
-      "On the server: "+man.pages+" pages, "+man.pageWidthPt+"×"+man.pageHeightPt+" pt, model "+man.modelHash.slice(0,12)+"\n"+
+      "On the server: "+shape(man)+", model "+man.modelHash.slice(0,12)+"\n"+
       "Yours:        model "+mine.slice(0,12)+"\n\n"+
       "Download the server's file anyway?\n\n"+
       "Cancel, then use \u201cWeb PDF\u201d, to export exactly what you see on screen.");
     if(!ok) return;
   }
   grab();
-  if(man && mine && man.modelHash===mine) toast("Downloading the magazine — "+man.pages+" pages, rendered from this exact model");
-  else if(man) toast("Downloading the magazine — "+man.pages+" pages");
-  else toast("Downloading the print-ready magazine");
+  if(man && mine && man.modelHash===mine) toast("Downloading the booklet — "+shape(man)+", rendered from this exact model");
+  else if(man) toast("Downloading the booklet — "+shape(man));
+  else toast("Downloading the saddle-stitched booklet");
 });
 $("#importBtn").addEventListener("click",()=> $("#fileImport").click());
 $("#fileImport").addEventListener("change",e=>{

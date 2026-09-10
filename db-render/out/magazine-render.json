@@ -9,5 +9,29 @@
   "pdfBytes": 779341,
   "sourceDateEpoch": 1787500166,
   "unpinnedFonts": {},
-  "renderer": "render-studio-pdf.js (DB.render(model) — the document the studio shows)"
+  "renderer": "render-studio-pdf.js (DB.render(model) — the document the studio shows)",
+  "booklet": {
+    "file": "Daily Bread №1 — booklet.pdf",
+    "pages": 20,
+    "blankPages": 1,
+    "sides": 10,
+    "sheets": 5,
+    "sheetWidthPt": 1728.73,
+    "sheetHeightPt": 641.04,
+    "order": [
+      "20|1",
+      "2|19",
+      "18|3",
+      "4|17",
+      "16|5",
+      "6|15",
+      "14|7",
+      "8|13",
+      "12|9",
+      "10|11"
+    ],
+    "pdfSha256": "804e30cbaa8ec4bb6e374507e4cd3ce9153db8f0b03a37cab3e0a0f369123204",
+    "pdfBytes": 1456177,
+    "imposer": "impose-booklet.js (tools/print/imposition.js, fold-simulated)"
+  }
 }
