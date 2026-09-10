@@ -145,7 +145,6 @@ function readManifest() {
 
   if (!manifest.data) { console.log(`manifest none beside ${IN}; nothing recorded`); return; }
   manifest.data.booklet = {
-    file: path.basename(OUT),
     pages: N, blankPages: blanks, sides: sides.length, sheets: sides.length / 2,
     sheetWidthPt: +sheetW.toFixed(2), sheetHeightPt: +H.toFixed(2),
     order: pairs,
