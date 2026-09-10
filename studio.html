@@ -258,8 +258,8 @@
     <button class="btn" id="importBtn">Import JSON</button>
     <button class="btn" id="exportBtn">Export JSON</button>
     <button class="btn teal" id="publishBtn" title="Download index.html to commit">Publish → index.html</button>
-    <button class="btn" id="pdfBtn" title="Export exactly what is on screen, right now, through your browser's print dialog: cover, then one page per section, at the trim size set under Print. Choose 'Save as PDF', Margins None, Background graphics ON. Same document as 'Magazine PDF', in reading order rather than imposed — use this one when you have unsaved edits, since it prints the live model instead of the last render CI committed.">Web PDF</button>
-    <button class="btn teal" id="magPdfBtn" title="Download the print-ready magazine as a saddle-stitched booklet. CI renders THIS model — render-studio-pdf.js prints DB.render(model), the same document in the preview above, at the trim, bleed and crop marks set under Print — then impose-booklet.js pairs the pages two to a side so the folded, stapled stack reads in order. One click, no print dialog. If the file on the server came from a different model than the one you are editing, this button tells you before downloading.">Magazine PDF ⤓</button>
+    <button class="btn" id="pdfBtn" title="Export exactly what is on screen, right now, through your browser's print dialog: cover, then one page per section, at the trim size set under Print. Choose 'Save as PDF', Margins None, Background graphics ON. This is the studio's own document; 'Magazine PDF' is the TeX press booklet, typeset from the .tex.">Web PDF</button>
+    <button class="btn teal" id="magPdfBtn" title="Download this issue's press booklet: 48 A5 pages typeset by the TeX press (tools/db-latex.py press) from content/&lt;issue&gt;.tex, imposed two to an A4-landscape side so the folded, stapled stack reads in order. The press is typeset from the .tex, not from this model — edits made here do not reach it. One click, no print dialog.">Magazine PDF ⤓</button>
     <button class="btn pink" id="resetBtn">Reset</button>
     <span class="status" id="status">Loaded</span>
   </header>
@@ -686,67 +686,35 @@ $("#pdfBtn").addEventListener("click",()=>{
   }
   toast("Print → Save as PDF · Margins: None · Background graphics: ON");
 });
-/* Fingerprint of the model, matching db-render/render-studio-pdf.js exactly: keys
-   sorted so a round-trip through localStorage or an exported JSON file cannot change
-   the digest for identical content. Returns null where crypto.subtle is unavailable
-   (a non-secure context, e.g. opening this file over file://), in which case the
-   drift check below simply stays quiet rather than guessing. */
-function canonicalJSON(v){
-  if(Array.isArray(v)) return "["+v.map(canonicalJSON).join(",")+"]";
-  if(v && typeof v==="object")
-    return "{"+Object.keys(v).sort().map(k=>JSON.stringify(k)+":"+canonicalJSON(v[k])).join(",")+"}";
-  return JSON.stringify(v===undefined?null:v);
-}
-async function modelFingerprint(m){
-  try{
-    if(!(window.crypto && crypto.subtle)) return null;
-    const buf=new TextEncoder().encode(canonicalJSON(m));
-    const h=await crypto.subtle.digest("SHA-256", buf);
-    return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,"0")).join("");
-  }catch(e){ return null; }
+/* content/<edition>.tex is the press's source; an edition maps to it by issue
+   number: "№1" → issue-01. Anything without a number has no press booklet. */
+function pressEdition(m){
+  const n=String((m.meta&&m.meta.issueNo)||"").match(/\d+/);
+  return n ? "issue-"+n[0].padStart(2,"0") : null;
 }
 
 $("#magPdfBtn").addEventListener("click", async ()=>{
-  // The file behind this button is rendered by CI from DB.render(model) — the very
-  // document the preview above shows — by db-render/render-studio-pdf.js. It is no
-  // longer a separate hand-built layout, so "what the studio shows" and "what the
-  // printer gets" are the same document, paginated by db.js's own print CSS, then
-  // imposed two-up by db-render/impose-booklet.js so it folds into a booklet.
-  //
-  // One gap remains that no renderer can close: the committed render is of the
-  // model as committed, and you may have edited since. The sidecar manifest carries
-  // the fingerprint of the model it was rendered from, so say so plainly rather
-  // than handing over a PDF that quietly disagrees with the editor.
-  const name = "Daily Bread №1 — booklet.pdf";
-  const grab = ()=>{
-    const a=document.createElement("a");
-    a.href="/db-render/out/"+encodeURIComponent(name);
-    a.download=name; a.rel="noopener";
-    document.body.appendChild(a); a.click(); a.remove();
-  };
+  // The file behind this button is the TeX press booklet — 48 A5 pages typeset by
+  // tools/db-latex.py press from content/<edition>.tex and imposed two to an
+  // A4-landscape side (press/<edition>/booklet.pdf, published by CI). It is NOT a
+  // render of this model: the studio is the web edition, the .tex is the print
+  // edition. The manifest beside it says what is being handed over.
+  const ed=pressEdition(model);
+  if(!ed){ toast("No press booklet: this edition has no issue number (Meta → Issue №)"); return; }
   let man=null;
   try{
-    const r=await fetch("/db-render/out/magazine-render.json",{cache:"no-store"});
+    const r=await fetch("/press/"+ed+"/booklet.json",{cache:"no-store"});
     if(r.ok) man=await r.json();
   }catch(e){}
-  const mine=await modelFingerprint(model);
-  // "20 pages on 5 sheets" when the manifest knows the booklet; page count otherwise.
-  const shape=m=> m.booklet
-    ? m.booklet.pages+" pages on "+m.booklet.sheets+" sheets, "+m.booklet.sheetWidthPt+"×"+m.booklet.sheetHeightPt+" pt"
-    : m.pages+" pages, "+m.pageWidthPt+"×"+m.pageHeightPt+" pt";
-  if(man && mine && man.modelHash!==mine){
-    const ok=confirm(
-      "The rendered PDF on the server was made from a different model than the one you are editing.\n\n"+
-      "On the server: "+shape(man)+", model "+man.modelHash.slice(0,12)+"\n"+
-      "Yours:        model "+mine.slice(0,12)+"\n\n"+
-      "Download the server's file anyway?\n\n"+
-      "Cancel, then use \u201cWeb PDF\u201d, to export exactly what you see on screen.");
-    if(!ok) return;
-  }
-  grab();
-  if(man && mine && man.modelHash===mine) toast("Downloading the booklet — "+shape(man)+", rendered from this exact model");
-  else if(man) toast("Downloading the booklet — "+shape(man));
-  else toast("Downloading the saddle-stitched booklet");
+  if(!man){ toast("No press booklet for "+ed+" — content/"+ed+".tex has not been typeset"); return; }
+  // ASCII on purpose: Chromium drops a download name it cannot sanitise and
+  // saves the file as "download".
+  const name="daily-bread-"+ed+"-booklet.pdf";
+  const a=document.createElement("a");
+  a.href="/press/"+ed+"/"+"booklet.pdf";
+  a.download=name; a.rel="noopener";
+  document.body.appendChild(a); a.click(); a.remove();
+  toast("Downloading the press booklet — "+man.pages+" pages on "+man.sheets+" sheets, typeset from "+man.source);
 });
 $("#importBtn").addEventListener("click",()=> $("#fileImport").click());
 $("#fileImport").addEventListener("change",e=>{

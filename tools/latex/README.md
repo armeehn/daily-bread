@@ -35,8 +35,17 @@ python3 tools/db-latex.py build --edition issue-01          # web + print
 python3 tools/db-latex.py build --edition issue-01 --web    # only the site
 python3 tools/db-latex.py build --edition issue-01 --print  # only the PDFs
 python3 tools/db-latex.py check --edition issue-01          # the round-trip (CI)
+python3 tools/db-latex.py press --edition issue-01          # publish press/issue-01/
 python3 tools/db-latex.py import --edition issue-01         # old .js -> .tex, once
 ```
+
+`press` typesets, runs the print checks, and copies `booklet.pdf` to
+`press/<edition>/` with a `booklet.json` beside it (source, geometry, sha256,
+engine). That directory is what the studio's **Magazine PDF** button downloads,
+and it is tracked: `.gitea/workflows/press-booklet.yml` typesets it twice,
+requires the tracked copy to match, and only commits on a manual
+`commit = true` run. Do not typeset it on a workstation and commit that: a
+different TeX Live and font set give the same pages and different bytes.
 
 `check` proves, in order: tex -> issue -> tex loses nothing; the issue equals
 the committed `content/<edition>.js`; rebuilding the site from the .tex
