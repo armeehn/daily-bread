@@ -1,9 +1,8 @@
 /**
  * studio-model.js — the model the studio is showing, and its print geometry in pt.
  *
- * Shared by render-studio-pdf.js (which paginates DB.render(model)) and
- * impose-booklet.js (which folds that render into a saddle-stitched booklet), so the
- * two can never resolve a different model or disagree on where the trim line is.
+ * Used by render-studio-pdf.js (which paginates DB.render(model)); kept apart so a
+ * second consumer can never resolve a different model or disagree on the trim line.
  *
  * Precedence: --model > MAGAZINE_MODEL > <repo>/magazine.model.json > DB.DEFAULT_MODEL.
  * The studio's "Export JSON" writes exactly this shape, so committing that file is
