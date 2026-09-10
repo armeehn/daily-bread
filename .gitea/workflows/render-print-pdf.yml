@@ -14,6 +14,14 @@
 # stylesheet, driven by the model's "Print & bleed" panel. Change the trim in the
 # studio and this PDF follows; nothing here hardcodes a paper size.
 #
+# THE BOOKLET
+# The studio's "Magazine PDF" button downloads the saddle-stitched booklet, not the
+# reading-order render: db-render/impose-booklet.js pairs the rendered sheets two
+# to a side (tools/print/imposition.js, verified by simulating the fold) so the
+# folded, stapled stack reads in order. It is pure JavaScript over the render, so
+# it is byte-stable wherever its input is, and it is tracked and guarded exactly
+# like the render it comes from.
+#
 # WHICH MODEL
 # db-render/render-studio-pdf.js resolves, in order: --model, $MAGAZINE_MODEL,
 # <repo>/magazine.model.json, then DB.DEFAULT_MODEL. Committing the studio's
@@ -74,6 +82,9 @@ on:
       - 'magazine.model.json'
       - 'assets/**'
       - 'db-render/render-studio-pdf.js'
+      - 'db-render/studio-model.js'
+      - 'db-render/impose-booklet.js'
+      - 'tools/print/imposition.js'
       # pdf-dates.js pins /CreationDate and /ModDate, which is the exact mechanism
       # the byte-equality guard below depends on: edit it and the tracked PDF's
       # bytes change. It is as much an input as the renderer itself.
@@ -91,6 +102,9 @@ on:
       - 'magazine.model.json'
       - 'assets/**'
       - 'db-render/render-studio-pdf.js'
+      - 'db-render/studio-model.js'
+      - 'db-render/impose-booklet.js'
+      - 'tools/print/imposition.js'
       # pdf-dates.js pins /CreationDate and /ModDate, which is the exact mechanism
       # the byte-equality guard below depends on: edit it and the tracked PDF's
       # bytes change. It is as much an input as the renderer itself.
@@ -118,6 +132,7 @@ concurrency:
 
 env:
   PDF: out/Daily Bread №1 — print.pdf
+  BOOKLET: out/Daily Bread №1 — booklet.pdf
   MANIFEST: out/magazine-render.json
 
 jobs:
@@ -142,7 +157,7 @@ jobs:
       - name: Install Playwright + Chromium
         working-directory: db-render
         run: |
-          npm install playwright@1.61.0 --no-save
+          npm install playwright@1.61.0 pdf-lib@1.17.1 --no-save
           npx playwright install --with-deps chromium
 
       - name: Install poppler-utils
@@ -159,10 +174,17 @@ jobs:
         working-directory: db-render
         run: node render-studio-pdf.js "$PDF"
 
+      # Two pages to a side, paired for the fold. Adds a booklet block to the
+      # manifest, which is why it runs before anything reads or uploads that file.
+      - name: Impose the saddle-stitched booklet
+        working-directory: db-render
+        run: node impose-booklet.js "$PDF" "$BOOKLET"
+
       - name: Report what came out
         working-directory: db-render
         run: |
           pdfinfo "$PDF" | grep -E "Pages|Page size|File size"
+          pdfinfo "$BOOKLET" | grep -E "Pages|Page size|File size"
           pages=$(pdfinfo "$PDF" | awk '/^Pages:/{print $2}')
           [ "${pages:-0}" -ge 1 ] || { echo "::error::the render produced no pages"; exit 1; }
 
@@ -187,7 +209,8 @@ jobs:
           # the two renders are identical, which is the very thing being tested here.
           mkdir -p out/second
           node render-studio-pdf.js "out/second/second.pdf" >/dev/null
-          if cmp -s "$PDF" "out/second/second.pdf"; then
+          node impose-booklet.js "out/second/second.pdf" "out/second/booklet.pdf" >/dev/null
+          if cmp -s "$PDF" "out/second/second.pdf" && cmp -s "$BOOKLET" "out/second/booklet.pdf"; then
             echo "deterministic: two renders are byte-identical ($(sha256sum "$PDF" | cut -c1-16))"
           else
             echo "::error::render is NOT deterministic — two runs of the same source differ"
@@ -211,6 +234,7 @@ jobs:
           name: print-pdf
           path: |
             db-render/out/Daily Bread №1 — print.pdf
+            db-render/out/Daily Bread №1 — booklet.pdf
             db-render/out/magazine-render.json
           if-no-files-found: error
           retention-days: 30
@@ -224,6 +248,8 @@ jobs:
         run: |
           git show "HEAD:db-render/$PDF" > /tmp/committed.pdf 2>/dev/null \
             || { echo "::error::no PDF is committed at db-render/$PDF — the tracked file is what ships"; exit 1; }
+          git show "HEAD:db-render/$BOOKLET" > /tmp/committed-booklet.pdf 2>/dev/null \
+            || { echo "::error::no booklet is committed at db-render/$BOOKLET — the studio's download button serves it"; exit 1; }
           git show "HEAD:db-render/$MANIFEST" > /tmp/committed.json 2>/dev/null \
             || { echo "::error::db-render/$MANIFEST is not committed; it records the epoch its PDF was rendered at"; exit 1; }
 
@@ -264,8 +290,10 @@ jobs:
           echo "the committed manifest says it was rendered at SOURCE_DATE_EPOCH=$epoch"
           mkdir -p out/cmp
           SOURCE_DATE_EPOCH="$epoch" node render-studio-pdf.js "out/cmp/against-committed.pdf" >/dev/null
+          SOURCE_DATE_EPOCH="$epoch" node impose-booklet.js "out/cmp/against-committed.pdf" "out/cmp/booklet.pdf" >/dev/null
           rc=0
           cmp -s "out/cmp/against-committed.pdf" /tmp/committed.pdf || rc=1
+          cmp -s "out/cmp/booklet.pdf" /tmp/committed-booklet.pdf || rc=1
           # The manifest is committed alongside the PDF and the epoch above is READ
           # from it, so leaving it unchecked would let a wrong manifest be reported as
           # a stale PDF. Every field in it derives from the same source and the same
@@ -277,6 +305,8 @@ jobs:
             echo "::error::the committed artifact is NOT what this recipe renders — it is stale, or it was produced outside CI"
             echo "committed   sha256 $(sha256sum /tmp/committed.pdf | cut -d' ' -f1)  pages $(pdfinfo /tmp/committed.pdf | awk '/^Pages:/{print $2}')  $(stat -c%s /tmp/committed.pdf) bytes"
             echo "this recipe sha256 $(sha256sum "out/cmp/against-committed.pdf" | cut -d' ' -f1)  pages $(pdfinfo "out/cmp/against-committed.pdf" | awk '/^Pages:/{print $2}')  $(stat -c%s "out/cmp/against-committed.pdf") bytes"
+            echo "committed booklet   sha256 $(sha256sum /tmp/committed-booklet.pdf | cut -d' ' -f1)  $(stat -c%s /tmp/committed-booklet.pdf) bytes"
+            echo "this recipe booklet sha256 $(sha256sum "out/cmp/booklet.pdf" | cut -d' ' -f1)  $(stat -c%s "out/cmp/booklet.pdf") bytes"
             diff -u /tmp/committed.json "out/cmp/magazine-render.json" || true
             cmp -l "out/cmp/against-committed.pdf" /tmp/committed.pdf | head -10 || true
             echo "Do NOT re-render this locally and commit it: a workstation render"
@@ -310,6 +340,13 @@ jobs:
             echo "sha256 $(sha256sum "$PDF" | cut -d' ' -f1)"
             echo '```'
             echo
+            echo "Saddle-stitched booklet (what the studio's button downloads):"
+            echo
+            echo '```'
+            pdfinfo "$BOOKLET" | grep -E "Pages|Page size|File size"
+            echo "sha256 $(sha256sum "$BOOKLET" | cut -d' ' -f1)"
+            echo '```'
+            echo
             echo "Model fingerprint and per-render detail:"
             echo
             echo '```json'
@@ -328,7 +365,7 @@ jobs:
           # which parked the pull_request runs it queued at action_required.
           git config user.name "Sasha Zero"
           git config user.email "sasha@ripostelabs.xyz"
-          git add -f "db-render/$PDF" "db-render/$MANIFEST"
+          git add -f "db-render/$PDF" "db-render/$BOOKLET" "db-render/$MANIFEST"
           if git diff --cached --quiet; then
             echo "no change in the rendered PDF"
             exit 0

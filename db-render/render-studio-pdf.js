@@ -39,9 +39,8 @@ const path = require("path");
 const { chromium } = require("playwright");
 const { pinPdfDates } = require("./pdf-dates");
 
-const ROOT = path.resolve(__dirname, "..");
+const { ROOT, DB, resolveModel } = require("./studio-model");
 const VENDOR = path.join(__dirname, "vendor");
-const DB = require(path.join(ROOT, "db.js"));
 
 /* ---- args ------------------------------------------------------------- */
 const argv = process.argv.slice(2);
@@ -50,27 +49,6 @@ const OUT = argv.filter((a, i) => !a.startsWith("--") && !(i > 0 && argv[i - 1].
 const MODEL_ARG = opt("--model");
 const EMIT_HTML = opt("--emit-html");
 if (!OUT) { console.error('usage: node render-studio-pdf.js "<out.pdf>" [--model <model.json>] [--emit-html <file>]'); process.exit(2); }
-
-/* ---- the model the studio is showing ----------------------------------
-   Precedence: --model > MAGAZINE_MODEL > <repo>/magazine.model.json > DB.DEFAULT_MODEL.
-   The studio's "Export JSON" writes exactly this shape, so committing that file is
-   what makes an edit in the studio reach the PDF. With no file present the default
-   model is used, which is what a freshly-opened studio shows. */
-function resolveModel() {
-  const candidates = [
-    MODEL_ARG && { why: "--model", file: path.resolve(MODEL_ARG) },
-    process.env.MAGAZINE_MODEL && { why: "MAGAZINE_MODEL", file: path.resolve(process.env.MAGAZINE_MODEL) },
-    { why: "magazine.model.json", file: path.join(ROOT, "magazine.model.json") },
-  ].filter(Boolean);
-  for (const c of candidates) {
-    if (fs.existsSync(c.file)) {
-      const m = JSON.parse(fs.readFileSync(c.file, "utf8"));
-      return { model: m, source: `${c.why} (${path.relative(ROOT, c.file)})` };
-    }
-    if (c.why !== "magazine.model.json") { console.error(`model not found: ${c.file}`); process.exit(2); }
-  }
-  return { model: DB.clone(DB.DEFAULT_MODEL), source: "DB.DEFAULT_MODEL (db.js) — what a freshly-opened studio shows" };
-}
 
 /* ---- split "calc(a) calc(b)" on top-level whitespace -------------------- */
 function splitTopLevel(s) {
@@ -157,7 +135,7 @@ function countPages(buf) {
   return c;
 }
 
-const { model, source: modelSource } = resolveModel();
+const { model, source: modelSource } = resolveModel(MODEL_ARG);
 const html = DB.render(model);
 if (EMIT_HTML) { fs.mkdirSync(path.dirname(path.resolve(EMIT_HTML)), { recursive: true }); fs.writeFileSync(EMIT_HTML, html); }
 
