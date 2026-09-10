@@ -226,16 +226,18 @@ shows exactly what will publish, at full / tablet / phone widths.
   ```
 
   It resolves the model in this order: `--model <file>`, `$MAGAZINE_MODEL`,
-  `magazine.model.json` in the repo root, then `DB.DEFAULT_MODEL`. **Committing the
-  studio's "Export JSON" output as `magazine.model.json` is what makes an edit in
-  the studio reach the PDF**; with no such file it renders the default model, which
-  is what a freshly-opened studio shows. Alongside the PDF it writes
-  `out/magazine-render.json`, whose model fingerprint the studio's "Magazine PDF"
-  button reads so it can warn you when the file on the server was rendered from a
-  different model than the one you are editing. That button downloads
-  `out/Daily Bread №1 — booklet.pdf`: `db-render/impose-booklet.js` pairs the
-  rendered sheets two to a side (`tools/print/imposition.js`, checked by simulating
-  the fold) so the folded, stapled stack reads in order.
+  `magazine.model.json` in the repo root, then `DB.DEFAULT_MODEL`. Alongside the
+  PDF it writes `out/magazine-render.json` with the model's fingerprint. This is
+  the studio document on paper, a proof of the web edition; it is not what the
+  printer gets.
+
+  **The studio's "Magazine PDF" button downloads the TeX press booklet**,
+  `press/<edition>/booklet.pdf`: `content/<edition>.tex` typeset by lualatex into
+  A5 pages and imposed two to an A4-landscape side in saddle-stitch order
+  (`python3 tools/db-latex.py press`, see `tools/latex/README.md`). The edition
+  maps to its `.tex` by issue number (№1 → `issue-01`). CI typesets it in
+  `.gitea/workflows/press-booklet.yml` and only ever commits it on a manual
+  `commit = true` run.
 
   The render is reproducible: fonts are served from `db-render/vendor/`, and the
   script rewrites the PDF's `/CreationDate` and `/ModDate` from `SOURCE_DATE_EPOCH`
@@ -248,10 +250,7 @@ shows exactly what will publish, at full / tablet / phone widths.
 
   The older `render-print-pdf.js` and the `*.dc.html` kit beside it built a
   separate, hand-laid-out 24-page magazine that no studio edit could reach. They are
-  kept for reference only; `db-render/out/Daily Bread №1 — print.pdf` is now the
-  studio's own render. CI still never replaces it on its own — that takes
-  `workflow_dispatch` with `commit = true` — so a file a printer has proofed cannot
-  be overwritten by a push.
+  kept for reference only. `db-render/out/` is not tracked.
 
 - **`assets/fonts/db-symbols.woff2`** is a 9-glyph subset of DejaVu Sans (rebuild:
   `python3 tools/make-symbol-font.py`) carrying `→ ⌘ ▸ ◦ ☐ ♥ ✂ ✕ ✦`, the marks none

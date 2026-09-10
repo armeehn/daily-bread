@@ -11,9 +11,8 @@ commands that produced `out/booklet.pdf` and `out/print.pdf` (verified 2026-07-2
    to 1228, so install that exact version (any other version tries to download a
    different build, which the sandbox blocks):
    ```
-   cd db-render && npm install playwright@1.61.0 pdf-lib@1.17.1
+   cd db-render && npm install playwright@1.61.0
    ```
-   (`pdf-lib` is for `impose-booklet.js`, which folds the render into the booklet.)
 2. **Chromium needs the vendored system libs** (this Arch box lacks nspr/nss/gbm/…).
    They live at `~/.local/pwlibs`; put them on the linker path when running:
    ```
