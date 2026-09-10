@@ -95,6 +95,11 @@ def check_print(issue, tex, build):
         print("%s: %d pages, %.2f x %.2f pt" % ((pdf.name,) + got))
         if got[0] != n or abs(got[1] - w) > EPS_PT or abs(got[2] - h) > EPS_PT:
             failures.append(f"{pdf.name}: want {n} pages {w} x {h} pt, got {got}")
+    clipped = press.clipped_sides(booklet)
+    print("%s: %d side(s) with ink in the printer's %.1f mm dead band"
+          % (booklet.name, len(clipped), press.PRINTER_CLIP_MM))
+    if clipped:
+        failures.append(f"{booklet.name}: a desktop laser would clip sides {clipped}")
     over = press.overfull_boxes(build / "print.log")
     if over:
         print(f"warning: {over} page box(es) overfull (content runs past the trim)")
@@ -148,7 +153,7 @@ def cmd_press(args):
         "pdfSha256": hashlib.sha256(pdf).hexdigest(), "pdfBytes": len(pdf),
         "sourceDateEpoch": int(press.source_date_epoch()),
         "engine": press.engine_version(REPO),
-        "press": "tools/db-latex.py press (lualatex + dailybread.cls; pdfpages saddle-stitch)",
+        "press": "tools/db-latex.py press (lualatex + dailybread.cls; saddle-stitch on Letter)",
     }
     (out / BOOKLET_MANIFEST).write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
     print("press: %s  %d pages on %d sides  sha256 %s" % (

@@ -17,10 +17,10 @@
   tools/strings/from-issue.js            build/latex/<edition>/print.pdf
                |                          48 x A5, 420 x 594.96 pt
    tools/build.js  (unchanged)                     |
-               |                         pdfpages, saddle-stitch order
+               |                         graphicx, saddle-stitch order
    48 pages, newsproof proofs                      |
    (bytes identical, still signed)       build/latex/<edition>/booklet.pdf
-                                          24 x A4 landscape, 841.92 x 594.96 pt
+                                          24 x Letter landscape, 792 x 612 pt
 ```
 
 Layers talk only to their neighbour: `cli` -> `web` / `press` -> `reader` /
@@ -57,12 +57,14 @@ what `tools/press-server.py` does for the studio's button, on demand, as
 `check` proves, in order: tex -> issue -> tex loses nothing; the issue equals
 the committed `content/<edition>.js`; rebuilding the site from the .tex
 changes no file (so every newsproof signature still verifies, checked with
-`check_live.py --offline`); both PDFs have the page count and page size the
-Chromium pipeline yields (`pdfinfo`). It is the `latex` and `latex-print`
+`check_live.py --offline`); both PDFs have the page count and page size
+`press.py` declares (`pdfinfo`), and no side of the booklet has ink in the
+4.2 mm a desktop laser cannot print (`pdftoppm`, every side). It is the
+`latex` and `latex-print`
 jobs of `.gitea/workflows/verify-editions.yml`, and both run on pull
 requests.
 
-Print needs `/opt/texlive` (lualatex) and `pdfinfo`. It finds riposte-latex
+Print needs `/opt/texlive` (lualatex) and poppler-utils. It finds riposte-latex
 at `$RIPOSTE_LATEX` or the sibling checkout `../riposte-latex`; without it
 the class shims the brand layer (same geometry, plainer page).
 
@@ -94,6 +96,21 @@ Interview, Poetry, Insert, Lab, Review, Listings, Colophon). Two pages that
 share one content bag (Letter masthead/letter, Contents, Interview, Lab,
 Colophon) carry it twice in the .tex; the class lays out the half its variant
 owns.
+
+## Printing the booklet
+
+`booklet.pdf` is made for the estate's Brother MFC-L2710DW and any desktop
+duplex laser like it: Letter, landscape, two A5 pages a side, saddle-stitch
+order. Print it at **actual size (100%), two-sided, flip on the short
+edge**; the file carries that as its viewer preference, so a dialog that
+honours it opens pre-set. Fold the stack down the middle, staple the spine.
+
+The pages are scaled to 0.909 and sit flush at the fold, leaving 5 mm at the
+outer edge and 12.5 mm head and foot: a laser leaves the outer 4.2 mm of a
+sheet white whatever it is sent, and nothing is trimmed after folding, so
+what bleeds in the design ends at that band. Every side has a white frame.
+A true bleed (ink to the paper's edge) needs oversize stock and a guillotine,
+which this pipeline does not target.
 
 ## Print layout
 

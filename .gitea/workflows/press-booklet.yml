@@ -4,8 +4,9 @@
 #
 # WHAT SHIPS
 # press/<edition>/booklet.pdf is the TeX press: content/<edition>.tex typeset by
-# lualatex + tools/latex/dailybread.cls into A5 pages, imposed by pdfpages two to an
-# A4-landscape side in saddle-stitch order (tools/db-latex.py press). Beside it,
+# lualatex + tools/latex/dailybread.cls into A5 pages, imposed two to a Letter-
+# landscape side in saddle-stitch order, clear of a desktop laser's unprintable
+# band (tools/db-latex.py press). Beside it,
 # booklet.json names the source, the geometry and the bytes; the studio reads it to
 # say what it is handing over.
 #
