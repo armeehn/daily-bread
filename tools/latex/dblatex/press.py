@@ -67,6 +67,13 @@ def _env(repo, build):
     env = dict(os.environ)
     env["PATH"] = TEXLIVE_BIN + os.pathsep + env.get("PATH", "")
     env["LC_ALL"] = "C.UTF-8"
+    # luaotfload caches a parsed font under the ABSOLUTE path it was first seen
+    # at, and the kit's faces are reached through ./dbfonts in the build dir. One
+    # build dir deleted (a studio overlay is temporary) and every later build on
+    # the box dies at font embedding with "cannot find file ''". So each build
+    # keeps its own cache, inside itself, and takes it to the grave. ~1.5 s.
+    if build is not None:
+        env["TEXMFVAR"] = str(Path(build) / "texmf-var")
     env["SOURCE_DATE_EPOCH"] = source_date_epoch()
     env["FORCE_SOURCE_DATE"] = "1"
     inputs = [str(repo / "tools" / "latex")]
