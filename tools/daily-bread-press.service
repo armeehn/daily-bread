@@ -1,0 +1,24 @@
+[Unit]
+Description=Daily Bread press — typeset the studio's edition on demand (press.hq)
+Documentation=file:/home/user/daily-bread/tools/press-server.py
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=user
+Group=user
+# The main checkout: `git pull` here after a merge, then restart this unit.
+WorkingDirectory=/home/user/daily-bread
+ExecStart=/usr/bin/python3 tools/press-server.py
+Environment=PRESS_PORT=8091
+Restart=on-failure
+RestartSec=5
+
+# lualatex is a whole core for several seconds on a shared, RAM-oversubscribed
+# host; one typesetting at a time is enforced in the server, and it yields.
+Nice=5
+MemoryMax=2G
+
+[Install]
+WantedBy=multi-user.target

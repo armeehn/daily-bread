@@ -67,6 +67,13 @@ def _env(repo, build):
     env = dict(os.environ)
     env["PATH"] = TEXLIVE_BIN + os.pathsep + env.get("PATH", "")
     env["LC_ALL"] = "C.UTF-8"
+    # luaotfload caches a parsed font under the ABSOLUTE path it was first seen
+    # at, and the kit's faces are reached through ./dbfonts in the build dir. One
+    # build dir deleted (a studio overlay is temporary) and every later build on
+    # the box dies at font embedding with "cannot find file ''". So each build
+    # keeps its own cache, inside itself, and takes it to the grave. ~1.5 s.
+    if build is not None:
+        env["TEXMFVAR"] = str(Path(build) / "texmf-var")
     env["SOURCE_DATE_EPOCH"] = source_date_epoch()
     env["FORCE_SOURCE_DATE"] = "1"
     inputs = [str(repo / "tools" / "latex")]
@@ -98,15 +105,16 @@ def _run(cmd, cwd, env, log):
         raise RuntimeError(f"{cmd[0]} failed:\n{tail}")
 
 
-def build_pdfs(repo, tex, build):
+def build_pdfs(repo, tex, build, assets=None):
     build.mkdir(parents=True, exist_ok=True)
     _stage_fonts(repo, build)
     env = _env(repo, build)
     common = [ENGINE, "-interaction=nonstopmode", "-halt-on-error",
               f"-output-directory={build}"]
 
-    # \dbassets is where the kit's image paths ("uploads/x.png") resolve.
-    assets = str(repo / "db-render") + "/"
+    # \dbassets is where the kit's image paths ("uploads/x.png") resolve: the
+    # kit's own db-render/, or a staging dir the studio overlay put its images in.
+    assets = str(Path(assets) if assets else repo / "db-render") + "/"
     _run(common + ["-jobname=print", r"\def\dbassets{%s}\input{%s}" % (assets, tex)],
          build, env, build / "print.log")
 

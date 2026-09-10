@@ -6,8 +6,10 @@ shape tools/strings/from-issue.js and tools/print/build-print.js consume.
 """
 import re
 
-# Macros that carry the issue's metadata, in emission order.
-META_KEYS = ("issue", "theme", "edition", "trim")
+# Macros that carry the issue's metadata, in emission order. `palette` is the
+# studio's theme as seven hex values (ink,bone,pink,orange,teal,panel,muted);
+# only an overlay writes it, the committed .tex files carry none.
+META_KEYS = ("issue", "theme", "edition", "trim", "palette")
 
 # Semantic sugar: a documented macro name per common prop. Anything else is
 # written as \field{name}{value}. Same table serves both directions.

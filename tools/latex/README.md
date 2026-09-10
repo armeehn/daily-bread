@@ -41,11 +41,18 @@ python3 tools/db-latex.py import --edition issue-01         # old .js -> .tex, o
 
 `press` typesets, runs the print checks, and copies `booklet.pdf` to
 `press/<edition>/` with a `booklet.json` beside it (source, geometry, sha256,
-engine). That directory is what the studio's **Magazine PDF** button downloads,
-and it is tracked: `.gitea/workflows/press-booklet.yml` typesets it twice,
-requires the tracked copy to match, and only commits on a manual
-`commit = true` run. Do not typeset it on a workstation and commit that: a
-different TeX Live and font set give the same pages and different bytes.
+engine). That directory is the studio's **Magazine PDF** fallback when
+`press.hq` is out of reach, and it is tracked: `.gitea/workflows/press-booklet.yml`
+typesets it twice, requires the tracked copy to match, and only commits on a
+manual `commit = true` run. Do not typeset it on a workstation and commit that:
+a different TeX Live and font set give the same pages and different bytes.
+
+`press --model <studio.json> --out <pdf>` lays the studio's edition over the
+`.tex` first (`dblatex/overlay.py`): the theme becomes `\palette{…}` in the
+preamble, and every studio field with a print counterpart replaces it, cased
+like the print copy; the other pages are typeset untouched. This is exactly
+what `tools/press-server.py` does for the studio's button, on demand, as
+`daily-bread-press.service` in LXC 111 behind `press.hq`.
 
 `check` proves, in order: tex -> issue -> tex loses nothing; the issue equals
 the committed `content/<edition>.js`; rebuilding the site from the .tex
