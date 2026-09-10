@@ -1,14 +1,16 @@
 /**
- * test-studio-press.mjs — the studio's "Magazine PDF" button hands over the TeX
- * press booklet for the edition on screen, byte for byte.
+ * test-studio-press.mjs — the studio's "Magazine PDF" button typesets the edition
+ * in view through the press, and falls back to the CI booklet when it cannot.
  *
  *   node db-render/test-studio-press.mjs
  *
- * Serves the repo root, opens studio.html, clicks the button, and checks that what
- * the browser downloads is press/<edition>/booklet.pdf — the .tex typeset and
- * imposed, not a render of the studio's model — and that an edition maps to its
- * .tex by issue number. Needs playwright and a chromium, so it runs on the build
- * host only and is NOT in CI.
+ * Serves the repo root, opens studio.html with the press pointed at a routed
+ * origin, and checks: (1) the button POSTs {edition, model} for the edition on
+ * screen and the browser saves exactly the bytes the press returns; (2) with the
+ * press unreachable it downloads press/<edition>/booklet.pdf and the toast says
+ * the edits are not in it; (3) an edition maps to its .tex by issue number.
+ * Needs playwright and a chromium, so it runs on the build host only and is NOT
+ * in CI. The press itself is proven by `db-latex.py press --model`.
  */
 import http from "node:http";
 import fs from "node:fs";
@@ -22,6 +24,8 @@ const ROOT = path.join(HERE, "..");
 const TYPES = { ".html": "text/html", ".js": "text/javascript", ".json": "application/json",
                 ".css": "text/css", ".png": "image/png", ".pdf": "application/pdf" };
 const EDITION = "issue-01";      // what a fresh studio shows: DB.DEFAULT_MODEL, "№1"
+const PRESS = "http://press.test";
+const FAKE_PDF = Buffer.from("%PDF-1.7\n% typeset by the routed press\n%%EOF\n");
 
 const ok = [], bad = [];
 const check = (name, cond, extra) => (cond ? ok : bad).push(name + (extra ? " — " + extra : ""));
@@ -62,39 +66,66 @@ function findChrome() {
 }
 const exe = findChrome();
 const browser = await chromium.launch({ args: ["--no-sandbox"], ...(exe ? { executablePath: exe } : {}) });
-const ctx = await browser.newContext({ acceptDownloads: true });
-const page = await ctx.newPage();
-await page.goto(URL_, { waitUntil: "networkidle" });
 
-/* the edition on screen maps to its .tex by issue number */
-const map = await page.evaluate(() => [
-  pressEdition({ meta: { issueNo: "№1" } }),
-  pressEdition({ meta: { issueNo: "№12" } }),
-  pressEdition({ meta: { issueNo: "" } }),
-  pressEdition({ meta: {} }),
-]);
-check("№1 → issue-01", map[0] === "issue-01", map[0]);
-check("№12 → issue-12", map[1] === "issue-12", map[1]);
-check("no number → no press", map[2] === null && map[3] === null);
+async function open(pressRoute) {
+  const ctx = await browser.newContext({ acceptDownloads: true });
+  await ctx.addInitScript(p => { window.DB_PRESS_URL = p; }, PRESS);
+  await ctx.route(PRESS + "/**", pressRoute);
+  const page = await ctx.newPage();
+  await page.goto(URL_, { waitUntil: "networkidle" });
+  return { ctx, page };
+}
+const toastText = (page) => page.evaluate(() => document.querySelector("#toast")?.textContent || "");
 
-/* the button fetches the manifest, then downloads the booklet */
-const requests = [];
-page.on("request", r => requests.push(new URL(r.url()).pathname));
-const [download] = await Promise.all([
-  page.waitForEvent("download", { timeout: 15000 }),
-  page.click("#magPdfBtn"),
-]);
-const got = fs.readFileSync(await download.path());
-const want = fs.readFileSync(path.join(ROOT, "press", EDITION, "booklet.pdf"));
-check("reads the manifest first", requests.includes(`/press/${EDITION}/booklet.json`));
-check("downloads press/<edition>/booklet.pdf", download.url().endsWith(`/press/${EDITION}/booklet.pdf`), download.url());
-check("suggested name carries the edition", download.suggestedFilename() === `daily-bread-${EDITION}-booklet.pdf`, download.suggestedFilename());
-check("bytes are the tracked press booklet", sha(got) === sha(want), `${got.length} vs ${want.length} bytes`);
-check("nothing under db-render/out is asked for", !requests.some(p => p.startsWith("/db-render/out/")));
+/* ---- (1) the press is reachable: POST the edition in view, save the reply ---- */
+{
+  let posted = null;
+  const { ctx, page } = await open(async route => {
+    const req = route.request();
+    const cors = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "Content-Type",
+                   "Access-Control-Expose-Headers": "X-Press-Pages, X-Press-Sheets, X-Press-Seconds, X-Press-Overfull" };
+    if (req.method() === "OPTIONS") return route.fulfill({ status: 204, headers: cors });
+    posted = JSON.parse(req.postData() || "null");
+    return route.fulfill({ status: 200, body: FAKE_PDF, contentType: "application/pdf",
+      headers: { ...cors, "X-Press-Pages": "48", "X-Press-Sheets": "12", "X-Press-Seconds": "7.0", "X-Press-Overfull": "0" } });
+  });
+  const map = await page.evaluate(() => [
+    pressEdition({ meta: { issueNo: "№1" } }), pressEdition({ meta: { issueNo: "№12" } }),
+    pressEdition({ meta: { issueNo: "" } }), pressEdition({ meta: {} }),
+  ]);
+  check("№1 → issue-01, №12 → issue-12", map[0] === "issue-01" && map[1] === "issue-12", map.join(","));
+  check("no number → no press", map[2] === null && map[3] === null);
 
-/* the toast says what was handed over */
-const toast = await page.evaluate(() => document.querySelector("#toast")?.textContent || "");
-check("toast names the source", /typeset from content\/issue-01\.tex/.test(toast), toast);
+  const [download] = await Promise.all([
+    page.waitForEvent("download", { timeout: 20000 }),
+    page.click("#magPdfBtn"),
+  ]);
+  const got = fs.readFileSync(await download.path());
+  check("POSTs the edition on screen", posted && posted.edition === EDITION, JSON.stringify(posted && posted.edition));
+  check("POSTs the model in view", posted && posted.model && posted.model.meta && posted.model.meta.issueNo === "№1");
+  check("saves exactly what the press returned", sha(got) === sha(FAKE_PDF), `${got.length} bytes`);
+  check("suggested name carries the edition", download.suggestedFilename() === `daily-bread-${EDITION}-booklet.pdf`, download.suggestedFilename());
+  const t = await toastText(page);
+  check("toast says it typeset the edition in view", /Typeset the edition in view — 48 pages on 12 sheets/.test(t), t);
+  check("button is usable again", await page.evaluate(() => !document.querySelector("#magPdfBtn").disabled));
+  await ctx.close();
+}
+
+/* ---- (2) the press is out of reach: the CI booklet, and an honest toast ---- */
+{
+  const { ctx, page } = await open(route => route.abort("connectionrefused"));
+  const [download] = await Promise.all([
+    page.waitForEvent("download", { timeout: 20000 }),
+    page.click("#magPdfBtn"),
+  ]);
+  const got = fs.readFileSync(await download.path());
+  const want = fs.readFileSync(path.join(ROOT, "press", EDITION, "booklet.pdf"));
+  check("falls back to press/<edition>/booklet.pdf", download.url().endsWith(`/press/${EDITION}/booklet.pdf`), download.url());
+  check("fallback bytes are the tracked CI booklet", sha(got) === sha(want), `${got.length} vs ${want.length} bytes`);
+  const t = await toastText(page);
+  check("toast says the edits are not in it", /out of reach/.test(t) && /without your edits/.test(t), t);
+  await ctx.close();
+}
 
 await browser.close();
 server.close();
