@@ -151,6 +151,26 @@
 \newcommand{\edition}[1]{\gdef\db@edition{#1}}
 \newcommand{\trim}[1]{\gdef\db@trim{#1}}
 \issue{}\theme{}\edition{}\trim{A5}
+% \palette{ink,bone,pink,orange,teal,panel,muted,scheme}: seven hex values, no
+% "#", then upright|inverted. The studio's theme laid over the brand layer
+% (riposte.sty or the shim above): the five core colours are redefined and every
+% derived colour re-mixed (\colorlet snapshots, so the DB* aliases below would
+% otherwise keep the old bone). An inverted scheme (light ink on dark bone) puts
+% the ink-coloured logo on the back cover: the logos are fixed-colour PDFs.
+\def\db@logoback{logo-bone.pdf}
+\def\db@setpalette#1,#2,#3,#4,#5,#6,#7,#8\@nil{%
+  \definecolor{RipInk}{HTML}{#1}\definecolor{RipBone}{HTML}{#2}%
+  \definecolor{RipPink}{HTML}{#3}\definecolor{RipOrange}{HTML}{#4}%
+  \definecolor{RipTeal}{HTML}{#5}%
+  \definecolor{RipBoneDim}{HTML}{#6}%
+  \colorlet{RipText}{RipInk}\colorlet{RipLine}{RipInk}%
+  \definecolor{RipTextMuted}{HTML}{#7}%
+  \colorlet{RipInkRaised}{RipInk!95!RipBone}\colorlet{RipInkHead}{RipInk!90!RipBone}%
+  \colorlet{RipInkLine}{RipInk!70!RipBone}%
+  \colorlet{DBPaper}{RipBone}\colorlet{DBPad}{RipInk!6!RipBone}\colorlet{DBMuted}{RipInk!55!RipBone}%
+  \ifstrequal{#8}{inverted}{\gdef\db@logoback{logo.pdf}}{}%
+  \pagecolor{RipBone}\color{RipText}}
+\newcommand{\palette}[1]{\edef\db@tmp{#1}\expandafter\db@setpalette\db@tmp\@nil}
 
 % ---------------------------------------------------------------------------
 % STORAGE — props live in \db@p@<name>; a block sequence is \db@p@<name>@<i>
@@ -480,7 +500,7 @@
     \db@diamonds{\paperheight-12mm}
     \fill[RipTeal](0,\paperheight-12mm)rectangle(\paperwidth,\paperheight-6mm);
     \foreach \x in {0,1,...,25}{\fill[RipPink](\x*6mm,\paperheight-12mm)--++(3mm,6mm)--++(3mm,-6mm)--cycle;}
-    \node[anchor=center]at(0.5\paperwidth,0.5\paperheight+22mm){\includegraphics[width=52mm]{\dbassets../tools/latex/assets/logo-bone.pdf}};
+    \node[anchor=center]at(0.5\paperwidth,0.5\paperheight+22mm){\includegraphics[width=52mm]{\dbassets../tools/latex/assets/\db@logoback}};
     \node[anchor=center,font=\db@xs,text=DBPaper]at(0.5\paperwidth,0.5\paperheight+10mm){\db@caps{\db@val{publisherLong}}};
     \node[anchor=north,font=\db@bodysize,text=DBPaper,text width=62mm,align=center]at(0.5\paperwidth,0.5\paperheight+4mm){\db@val{tagline}};
     \begin{scope}[shift={(0.5\paperwidth-24mm,0.5\paperheight-24mm)}]
