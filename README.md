@@ -231,13 +231,17 @@ shows exactly what will publish, at full / tablet / phone widths.
   the studio document on paper, a proof of the web edition; it is not what the
   printer gets.
 
-  **The studio's "Magazine PDF" button downloads the TeX press booklet**,
-  `press/<edition>/booklet.pdf`: `content/<edition>.tex` typeset by lualatex into
-  A5 pages and imposed two to an A4-landscape side in saddle-stitch order
-  (`python3 tools/db-latex.py press`, see `tools/latex/README.md`). The edition
-  maps to its `.tex` by issue number (№1 → `issue-01`). CI typesets it in
-  `.gitea/workflows/press-booklet.yml` and only ever commits it on a manual
-  `commit = true` run.
+  **The studio's "Magazine PDF" button typesets the edition in view as the TeX
+  press booklet**: the model is laid over `content/<edition>.tex`
+  (`tools/latex/dblatex/overlay.py` — theme, cover, letter, contents, voices,
+  interview, waitlist, lab, listings, colophon; pages the studio has no field for
+  stay as the `.tex` has them), typeset by lualatex into A5 pages and imposed two
+  to an A4-landscape side in saddle-stitch order. The edition maps to its `.tex`
+  by issue number (№1 → `issue-01`). The typesetting runs on `press.hq`
+  (`tools/press-server.py`, LXC 111), about ten seconds. Off the estate the
+  button falls back to `press/<edition>/booklet.pdf`, the CI typesetting of the
+  plain `.tex`, and says so. `python3 tools/db-latex.py press --model <json>` is
+  the same path from the command line; see `tools/latex/README.md`.
 
   The render is reproducible: fonts are served from `db-render/vendor/`, and the
   script rewrites the PDF's `/CreationDate` and `/ModDate` from `SOURCE_DATE_EPOCH`

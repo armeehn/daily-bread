@@ -98,15 +98,16 @@ def _run(cmd, cwd, env, log):
         raise RuntimeError(f"{cmd[0]} failed:\n{tail}")
 
 
-def build_pdfs(repo, tex, build):
+def build_pdfs(repo, tex, build, assets=None):
     build.mkdir(parents=True, exist_ok=True)
     _stage_fonts(repo, build)
     env = _env(repo, build)
     common = [ENGINE, "-interaction=nonstopmode", "-halt-on-error",
               f"-output-directory={build}"]
 
-    # \dbassets is where the kit's image paths ("uploads/x.png") resolve.
-    assets = str(repo / "db-render") + "/"
+    # \dbassets is where the kit's image paths ("uploads/x.png") resolve: the
+    # kit's own db-render/, or a staging dir the studio overlay put its images in.
+    assets = str(Path(assets) if assets else repo / "db-render") + "/"
     _run(common + ["-jobname=print", r"\def\dbassets{%s}\input{%s}" % (assets, tex)],
          build, env, build / "print.log")
 
