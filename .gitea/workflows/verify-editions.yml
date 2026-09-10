@@ -36,7 +36,8 @@
 # screen-reader user unable to tell the header nav from the contents rail. A check
 # nobody runs is not a check, which is why this job exists.
 #
-# Gitea Actions also reads .github/workflows, so this file works on either.
+# Runs on this server (Gitea Actions) only: github.com/armeehn/daily-bread is a
+# mirror pushed by mirror-to-github.yml, and GitHub ignores .gitea/.
 name: verify-editions
 
 on:
@@ -130,12 +131,11 @@ jobs:
   # 5. THE .tex MUST STILL TYPESET TO THE PRESS GEOMETRY
   # 48 A5 pages (420 x 594.96 pt) and 24 A4-landscape sides (841.92 x 594.96 pt),
   # the sizes db-render/out/*.pdf measure. Needs TeX, so it runs in the TeX Live
-  # image on the self-hosted runners only (2.7 GB, pulled once there; never on
-  # github.com). Without riposte-latex on the runner the class uses its shim,
-  # which changes the face and colours but not the geometry this job asserts.
+  # image (2.7 GB, pulled once per runner). Without riposte-latex on the runner
+  # the class uses its shim, which changes the face and colours but not the
+  # geometry this job asserts.
   latex-print:
     name: the .tex typesets to the press geometry
-    if: ${{ !contains(github.server_url, 'github.com') }}
     runs-on: ubuntu-latest
     container: texlive/texlive:latest-full
     steps:

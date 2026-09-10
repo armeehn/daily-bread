@@ -43,7 +43,7 @@ the committed `content/<edition>.js`; rebuilding the site from the .tex
 changes no file (so every newsproof signature still verifies, checked with
 `check_live.py --offline`); both PDFs have the page count and page size the
 Chromium pipeline yields (`pdfinfo`). It is the `latex` and `latex-print`
-jobs of `.github/workflows/verify-editions.yml`, and both run on pull
+jobs of `.gitea/workflows/verify-editions.yml`, and both run on pull
 requests.
 
 Print needs `/opt/texlive` (lualatex) and `pdfinfo`. It finds riposte-latex
