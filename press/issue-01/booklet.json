@@ -7,8 +7,8 @@
   "sheets": 12,
   "pageWidthPt": 420.0,
   "pageHeightPt": 594.96,
-  "sheetWidthPt": 841.92,
-  "sheetHeightPt": 594.96,
+  "sheetWidthPt": 792.0,
+  "sheetHeightPt": 612.0,
   "order": [
     "48|1",
     "2|47",
@@ -35,9 +35,9 @@
     "26|23",
     "24|25"
   ],
-  "pdfSha256": "a1e881ecaa657b91aa3445c6ac6e9d9f8459e11771b60e62bd39dcd385fdc516",
-  "pdfBytes": 2968558,
+  "pdfSha256": "5308ad02751c0d7fdff04f855c397849d88b29038d47b37a6119d0e78b18b2e2",
+  "pdfBytes": 2987822,
   "sourceDateEpoch": 0,
   "engine": "This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)",
-  "press": "tools/db-latex.py press (lualatex + dailybread.cls; pdfpages saddle-stitch)"
+  "press": "tools/db-latex.py press (lualatex + dailybread.cls; saddle-stitch on Letter)"
 }

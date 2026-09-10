@@ -1,34 +1,73 @@
-"""content/<edition>.tex -> print.pdf (A5 one-up) and booklet.pdf (A4 two-up).
+"""content/<edition>.tex -> print.pdf (A5 one-up) and booklet.pdf (Letter two-up).
 
-Same page geometry the Chromium pipeline yields (db-render/out/*.pdf):
-    print.pdf    48 pages  420 x 594.96 pt  (A5)
-    booklet.pdf  24 sides  841.92 x 594.96 pt  (A4 landscape)
+    print.pdf    48 pages  420 x 594.96 pt  (A5, the trim every template is drawn at)
+    booklet.pdf  24 sides  792 x 612 pt     (Letter landscape, the paper in the printer)
 The A5 pages are typeset by lualatex + dailybread.cls; the booklet is those
-pages re-imposed with pdfpages in saddle-stitch order (tools/print/imposition.js
-derives the same pairing for the Chromium path).
+pages re-imposed in saddle-stitch order (tools/print/imposition.js derives the
+same pairing for the Chromium path), sized for a desktop duplex laser: print,
+fold, staple. Nothing is trimmed.
 """
 import os
 import re
 import shutil
 import subprocess
+import tempfile
 from pathlib import Path
 
 ENGINE = os.environ.get("RIPOSTE_ENGINE", "lualatex")
 TEXLIVE_BIN = "/opt/texlive/2026/bin/x86_64-linux"
 
-# Trim and sheet, in PostScript points: what the existing PDFs measure.
-A5_PT = (420.0, 594.96)
-SHEET_PT = (841.92, 594.96)
-PAGES_PER_SIDE = 2
+MM_PT = 72 / 25.4
 
+# Trim, in PostScript points: what the one-up PDF has always measured.
+A5_PT = (420.0, 594.96)
+
+# The sheet is the paper in the printer, not the trim doubled: Letter, landscape,
+# two pages a side. A desktop laser (the estate Brother MFC-L2710DW) leaves the
+# outer 4.2 mm of every sheet white whatever it is sent, and nothing is trimmed
+# after folding, so each page is scaled to clear that band with slack and sits
+# flush at the fold. What bleeds in the design ends at the band.
+#
+#   +---------------------------------------------+  ^
+#   |   band                                      |  |
+#   |  +------------------+------------------+    |  |
+#   |  |                  |                  |    |  |
+#   |  |     page 48      |     page 1       |    |  612 pt (Letter short edge)
+#   |  |                  |                  |    |  |
+#   |  +------------------+------------------+    |  |
+#   |                    fold                     |  v
+#   +---------------------------------------------+
+#   <------------------- 792 pt ------------------>
+SHEET_PT = (792.0, 612.0)
+PAGES_PER_SIDE = 2
+PRINTER_CLIP_MM = 4.2          # what the laser cannot ink; clipped_sides() measures it
+BAND_PT = 5 * MM_PT            # what the pages clear: the clip, plus feed slack
+FOOT_SLACK_PT = 1              # so a page exactly as tall as the text area still fits
+
+# Duplex, short-edge flip: a landscape sheet folded down its centre reads that
+# way, and the print dialog opens pre-set where the viewer honours the hint.
 BOOKLET_TEX = r"""\documentclass{article}
-\usepackage[paperwidth=%(w)sbp,paperheight=%(h)sbp,margin=0pt]{geometry}
-\usepackage{pdfpages}
+\usepackage[paperwidth=%(w)sbp,paperheight=%(h)sbp,left=%(band)sbp,right=%(band)sbp,
+  top=%(head)sbp,bottom=%(foot)sbp,noheadfoot,nomarginpar]{geometry}
+\usepackage{graphicx}
 \pagestyle{empty}
+\setlength{\parindent}{0pt}\setlength{\parskip}{0pt}\setlength{\topskip}{0pt}
+\pdfextension catalog{/ViewerPreferences<</Duplex/DuplexFlipShortEdge/PickTrayByPDFSize true>>}
 \begin{document}
 %(sides)s
 \end{document}
 """
+SIDE_TEX = (r"\makebox[0pt][l]{\includegraphics[page=%d,width=%s]{print.pdf}"
+            r"\includegraphics[page=%d,width=%s]{print.pdf}}")
+
+
+def page_fit():
+    """(scale, width_pt, height_pt) of one A5 page on the sheet: the largest that
+    clears the band at the outer edge, head and foot. Letter: 0.909, 381.8 x 540.9."""
+    cell_w = SHEET_PT[0] / PAGES_PER_SIDE - BAND_PT
+    cell_h = SHEET_PT[1] - 2 * BAND_PT
+    scale = min(cell_w / A5_PT[0], cell_h / A5_PT[1])
+    return scale, A5_PT[0] * scale, A5_PT[1] * scale
 
 
 def riposte_dir(repo):
@@ -119,11 +158,15 @@ def build_pdfs(repo, tex, build, assets=None):
          build, env, build / "print.log")
 
     pages = pdf_geometry(build / "print.pdf")[0]
-    sides = "\n".join(
-        r"\includepdf[pages={%d,%d},nup=2x1,noautoscale=true,delta=0pt 0pt]{print.pdf}" % lr
-        for lr in saddle_stitch(pages))
+    _, page_w, page_h = page_fit()
+    width = "%.2fbp" % page_w
+    head = (SHEET_PT[1] - page_h) / 2
+    sides = "\n\\newpage\n".join(
+        SIDE_TEX % (left, width, right, width) for left, right in saddle_stitch(pages))
     (build / "booklet.tex").write_text(
-        BOOKLET_TEX % {"w": SHEET_PT[0], "h": SHEET_PT[1], "sides": sides})
+        BOOKLET_TEX % {"w": SHEET_PT[0], "h": SHEET_PT[1], "band": "%.2f" % BAND_PT,
+                       "head": "%.2f" % head, "foot": "%.2f" % (head - FOOT_SLACK_PT),
+                       "sides": sides})
     _run(common + ["-jobname=booklet", "booklet.tex"], build, env, build / "booklet.log")
 
     return build / "print.pdf", build / "booklet.pdf"
@@ -142,3 +185,29 @@ def pdf_geometry(pdf):
     pages = int(re.search(r"^Pages:\s+(\d+)", out, re.M).group(1))
     w, h = re.search(r"^Page size:\s+([\d.]+) x ([\d.]+) pts", out, re.M).groups()
     return pages, float(w), float(h)
+
+
+def _pgm_sides(pdf, dpi):
+    """Every side of the PDF as (width, height, pixels): 8-bit grey, one byte a pixel."""
+    if not shutil.which("pdftoppm"):
+        raise RuntimeError("pdftoppm (poppler-utils) is required to check the booklet")
+    with tempfile.TemporaryDirectory() as tmp:
+        subprocess.run(["pdftoppm", "-gray", "-r", str(dpi), str(pdf), tmp + "/s"], check=True)
+        for pgm in sorted(Path(tmp).glob("s-*.pgm")):
+            _, dims, _, px = pgm.read_bytes().split(b"\n", 3)
+            w, h = map(int, dims.split())
+            yield w, h, px
+
+
+def clipped_sides(booklet, dpi=72):
+    """1-based sides with ink inside the printer's dead band: what the laser
+    would cut off. Rasterises every side; [] means it prints as it looks."""
+    band = int(-(-PRINTER_CLIP_MM * dpi // 25.4))     # ceil, in pixels
+    paper = 250                                        # anti-aliasing counts as ink
+    bad = []
+    for n, (w, h, px) in enumerate(_pgm_sides(booklet, dpi), 1):
+        rows = [px[y * w:(y + 1) * w] for y in range(h)]
+        edges = rows[:band] + rows[-band:] + [r[:band] + r[-band:] for r in rows]
+        if any(v < paper for r in edges for v in r):
+            bad.append(n)
+    return bad
