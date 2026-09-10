@@ -24,14 +24,14 @@ and wall tee are skipped and said so; the placeholder page is not merch.
 
 Needs: python3 + Pillow, rsvg-convert, node (to read the model), IBM Plex Mono
 installed, and the repo's own UnifrakturMaguntia (tools/latex/fonts) which this
-script hands to fontconfig itself.  --publish needs SHOPIFY_ADMIN_TOKEN, or
-the root-only file /etc/rl-secrets/shopify-admin-token on x, and SHOPIFY_SHOP.
+script hands to fontconfig itself.  --publish needs credentials: see token().
 """
 import json
 import os
 import re
 import subprocess
 import sys
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -593,15 +593,48 @@ def build(edition, out, publish):
 API = "2025-07"
 
 
-def token():
+HELD = Path("/etc/rl-secrets")
+
+
+def held(name):
+    """A root-only file on x, the estate's one-copy convention; else None."""
+    p = HELD / name
+    return p.read_text().strip() if p.exists() else None
+
+
+def token(shop):
+    """An Admin API token, in order of preference:
+
+    1. SHOPIFY_ADMIN_TOKEN, a token somebody already holds;
+    2. a client-credentials grant from the store's own app (client id +
+       secret, env or /etc/rl-secrets/shopify-client-{id,secret}), which
+       mints a 24-hour token at call time so none is stored anywhere;
+    3. /etc/rl-secrets/shopify-admin-token."""
     t = os.environ.get("SHOPIFY_ADMIN_TOKEN")
     if t:
         return t
-    # the estate's held-secret convention: one root-only file, no copies
-    held = Path("/etc/rl-secrets/shopify-admin-token")
-    if held.exists():
-        return held.read_text().strip()
-    sys.exit("--publish needs SHOPIFY_ADMIN_TOKEN or /etc/rl-secrets/shopify-admin-token")
+    cid = os.environ.get("SHOPIFY_CLIENT_ID") or held("shopify-client-id")
+    sec = os.environ.get("SHOPIFY_CLIENT_SECRET") or held("shopify-client-secret")
+    if cid and sec:
+        req = urllib.request.Request(
+            f"https://{shop}/admin/oauth/access_token",
+            data=json.dumps({"client_id": cid, "client_secret": sec,
+                             "grant_type": "client_credentials"}).encode(),
+            headers={"Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(req) as r:
+                return json.loads(r.read())["access_token"]
+        except urllib.error.HTTPError as e:
+            # Shopify answers 400 with an HTML page whose title names the fault
+            body = e.read().decode(errors="replace")
+            m = re.search(r"<title>(.*?)</title>", body)
+            sys.exit(f"token exchange failed: {m.group(1) if m else e}"
+                     " (is the app installed on the store, with write_products and write_files?)")
+    t = held("shopify-admin-token")
+    if t:
+        return t
+    sys.exit("--publish needs SHOPIFY_ADMIN_TOKEN, or SHOPIFY_CLIENT_ID + SHOPIFY_CLIENT_SECRET, "
+             "or the same under /etc/rl-secrets/")
 
 
 def gql(shop, tok, query, variables=None):
@@ -686,7 +719,7 @@ def variant_inputs(p, urls):
 
 def publish_all(manifest, out):
     shop = os.environ.get("SHOPIFY_SHOP", "h23y0x-fd.myshopify.com")
-    tok = token()
+    tok = token(shop)
     cols = [collection_id(shop, tok, manifest["collection"], manifest["collectionTitle"])]
     d = gql(shop, tok, 'query($q:String){collections(first:1,query:$q){nodes{id}}}', {"q": f"handle:{APPAREL_COLLECTION}"})
     apparel_col = d["collections"]["nodes"][0]["id"] if d["collections"]["nodes"] else None
