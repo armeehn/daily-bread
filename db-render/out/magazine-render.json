@@ -11,7 +11,6 @@
   "unpinnedFonts": {},
   "renderer": "render-studio-pdf.js (DB.render(model) — the document the studio shows)",
   "booklet": {
-    "file": "Daily Bread №1 — booklet.pdf",
     "pages": 20,
     "blankPages": 1,
     "sides": 10,
