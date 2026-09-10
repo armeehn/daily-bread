@@ -1,0 +1,168 @@
+# Typesets the press booklet the studio's "Magazine PDF" button downloads, proves
+# the typesetting reproducible, and keeps the tracked copy honest.
+#
+# WHAT SHIPS
+# press/<edition>/booklet.pdf is the TeX press: content/<edition>.tex typeset by
+# lualatex + tools/latex/dailybread.cls into A5 pages, imposed by pdfpages two to an
+# A4-landscape side in saddle-stitch order (tools/db-latex.py press). Beside it,
+# booklet.json names the source, the geometry and the bytes; the studio reads it to
+# say what it is handing over.
+#
+# The studio is the web edition and the .tex is the print edition. Nothing here
+# renders the studio's model. The previous recipe (render-print-pdf.yml) printed
+# DB.render(model) through Chromium, one A4-landscape sheet per section; it is
+# retired because the magazine is bound as a saddle-stitched booklet and the press
+# is what was designed for that.
+#
+# DETERMINISM
+# press.py pins SOURCE_DATE_EPOCH=0 and FORCE_SOURCE_DATE=1, so one .tex typesets to
+# one set of bytes on one TeX Live. The container below is a floating tag: when it
+# moves, the bytes may move with it, the guard goes red on a change that touched
+# nothing, and the fix is a commit=true run -- loud and safe. A workstation
+# typesetting differs the same way (fonts, TeX Live build), so "typeset it locally
+# and commit" can never satisfy the guard either.
+#
+# THE TRACKED COPY IS THIS RECIPE'S OUTPUT
+# No push or pull request writes press/. The run fails if the tracked files are not
+# byte-identical to what it typesets; workflow_dispatch with commit=true is the one
+# path that commits, and it commits this recipe's own output.
+name: press-booklet
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'content/*.tex'
+      - 'tools/latex/**'
+      - 'tools/db-latex.py'
+      # \dbassets: the kit's image paths resolve under db-render/.
+      - 'db-render/uploads/**'
+      # The tracked artifact is guarded below, so a change to IT must run this too.
+      - 'press/**'
+      - '.gitea/workflows/press-booklet.yml'
+  pull_request:
+    paths:
+      - 'content/*.tex'
+      - 'tools/latex/**'
+      - 'tools/db-latex.py'
+      - 'db-render/uploads/**'
+      - 'press/**'
+      - '.gitea/workflows/press-booklet.yml'
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: 'Commit the re-typeset booklets over the tracked ones — the supported way to clear a byte-equality failure'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: press-booklet-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  press:
+    runs-on: ubuntu-latest
+    container: texlive/texlive:latest-full
+    steps:
+      # FIRST, before checkout: a TeX image has no node and every `uses:` step
+      # is a JS action. pdfinfo is what press.py measures the PDFs with.
+      - name: Install node, python and poppler
+        run: apt-get update -qq && apt-get install -y -qq nodejs python3 poppler-utils
+
+      - uses: actions/checkout@v4
+
+      # One booklet per content/<edition>.tex. `press` refuses to publish a PDF whose
+      # page count or geometry is not what the issue implies.
+      - name: Typeset every edition
+        run: |
+          for tex in content/*.tex; do
+            python3 tools/db-latex.py press --edition "$(basename "$tex" .tex)"
+          done
+
+      # A claim of determinism that wasn't tested twice is not evidence.
+      - name: Typeset a second time and require byte-identical output
+        run: |
+          cp -r press /tmp/first
+          rm -rf build
+          for tex in content/*.tex; do
+            python3 tools/db-latex.py press --edition "$(basename "$tex" .tex)" >/dev/null
+          done
+          if diff -r /tmp/first press >/dev/null; then
+            echo "deterministic: two typesettings are byte-identical"
+          else
+            echo "::error::the press is NOT deterministic — two runs of the same .tex differ"
+            diff -r /tmp/first press | head -20
+            exit 1
+          fi
+
+      # Uploaded BEFORE the guard, deliberately: when the guard fails it tells a human
+      # to re-typeset, and they need this recipe's own output in hand to compare.
+      - name: Upload the booklets
+        uses: ChristopherHX/gitea-upload-artifact@v4
+        with:
+          name: press-booklets
+          path: press/
+          if-no-files-found: error
+          retention-days: 30
+
+      # THE GUARD. Anything stale, typeset elsewhere, or edited by hand fails here.
+      # The recipe writes straight into press/, so the question is simply whether the
+      # tree changed.
+      - name: The tracked booklets must be what this recipe typesets
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.commit) }}
+        run: |
+          git config --global --add safe.directory "$PWD"
+          if [ -z "$(git status --porcelain -- press)" ]; then
+            echo "the tracked press/ is exactly what this recipe typesets"
+            exit 0
+          fi
+          echo "::error::the tracked press/ is NOT what this recipe typesets — it is stale, or it was produced outside CI"
+          git status --porcelain -- press
+          for f in press/*/booklet.pdf; do
+            echo "$f  this recipe $(sha256sum "$f" | cut -c1-16)  tracked $(git show "HEAD:$f" 2>/dev/null | sha256sum | cut -c1-16)"
+          done
+          echo "Do NOT typeset this locally and commit it: a workstation's TeX Live and"
+          echo "fonts give the same pages and different bytes. Update it the only"
+          echo "supported way:  Actions -> press-booklet -> Run workflow -> commit = true"
+          exit 1
+
+      - name: Summarise the press on the run page
+        if: ${{ always() }}
+        run: |
+          {
+            echo "### Press booklets — typeset from content/*.tex"
+            echo
+            for f in press/*/booklet.pdf; do
+              [ -f "$f" ] || continue
+              echo '```'
+              echo "$f"
+              pdfinfo "$f" | grep -E "Pages|Page size|File size"
+              echo "sha256 $(sha256sum "$f" | cut -d' ' -f1)"
+              echo '```'
+            done
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # Opt-in only. Never runs on push or pull_request. Pushes to the ref the run
+      # was started on.
+      - name: Commit the typeset booklets (explicit opt-in only)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.commit }}
+        run: |
+          git config --global --add safe.directory "$PWD"
+          git config user.name "Sasha Zero"
+          git config user.email "sasha@ripostelabs.xyz"
+          git add press
+          if git diff --cached --quiet; then
+            echo "no change in the typeset booklets"
+            exit 0
+          fi
+          git commit -m "ci: re-typeset the press booklets (manual opt-in)"
+          git push
+
+      - name: Note that nothing was committed
+        if: ${{ always() && !(github.event_name == 'workflow_dispatch' && inputs.commit) }}
+        run: |
+          echo "The tracked press/ was left untouched — no push or pull request ever writes it. This run's output is the \`press-booklets\` artifact." >> "$GITHUB_STEP_SUMMARY"
+          echo "If the guard failed, run this workflow from the Actions tab with **commit = true**." >> "$GITHUB_STEP_SUMMARY"

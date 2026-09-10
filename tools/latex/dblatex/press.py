@@ -50,11 +50,24 @@ def saddle_stitch(n):
     return sides
 
 
+def source_date_epoch():
+    """The timestamp every PDF carries: $SOURCE_DATE_EPOCH, else 0. Fixed, so two
+    typesettings of one .tex are byte-identical and a re-run changes nothing."""
+    return os.environ.get("SOURCE_DATE_EPOCH", "0")
+
+
+def engine_version(repo):
+    """First line of `lualatex --version`: which TeX produced the bytes."""
+    res = subprocess.run([ENGINE, "--version"], env=_env(repo, None),
+                         capture_output=True, text=True)
+    return res.stdout.splitlines()[0] if res.stdout else ENGINE
+
+
 def _env(repo, build):
     env = dict(os.environ)
     env["PATH"] = TEXLIVE_BIN + os.pathsep + env.get("PATH", "")
     env["LC_ALL"] = "C.UTF-8"
-    env.setdefault("SOURCE_DATE_EPOCH", "0")
+    env["SOURCE_DATE_EPOCH"] = source_date_epoch()
     env["FORCE_SOURCE_DATE"] = "1"
     inputs = [str(repo / "tools" / "latex")]
     rl = riposte_dir(repo)
