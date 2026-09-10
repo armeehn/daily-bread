@@ -108,7 +108,7 @@ the two ways it breaks:
   explicitly if it sees them.
 
 Exit status: `0` all verified, `1` stale proofs, `2` a serving mismatch.
-CI runs it daily — see `.github/workflows/verify-editions.yml`.
+CI runs it daily — see `.gitea/workflows/verify-editions.yml`.
 
 ⚠ **Never run `dbproof init` on a checkout that has no key.** Its only guard is
 whether `store/keys/publisher-private.json` already exists, so on a host where
