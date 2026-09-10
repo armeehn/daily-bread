@@ -7,7 +7,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from . import press, web
+from . import overlay, press, web
 from .reader import read_tex
 from .writer import write_tex
 
@@ -103,9 +103,26 @@ def check_print(issue, tex, build):
 
 def cmd_press(args):
     """Typeset the edition and publish its saddle-stitched booklet to press/<edition>/,
-    the path the studio's "Magazine PDF" button downloads. Beside it goes a manifest
-    that names the source and the bytes, so the studio can say what it is handing
-    over and CI can tell a stale copy from a fresh one."""
+    the fallback the studio's "Magazine PDF" button downloads when the press service
+    is out of reach. Beside it goes a manifest that names the source and the bytes,
+    so the studio can say what it is handing over and CI can tell a stale copy from
+    a fresh one.
+
+    With --model, the studio's edition JSON is laid over the .tex first (overlay.py)
+    and the booklet goes to --out instead: the same path the press service takes,
+    so the CLI can prove it."""
+    if args.model:
+        model = json.loads(Path(args.model).read_text())
+        work = REPO / "build" / "latex" / f"{args.edition}-studio"
+        shutil.rmtree(work, ignore_errors=True)
+        booklet, info = overlay.typeset(REPO, args.edition, model, work)
+        out = Path(args.out) if args.out else work / BOOKLET_PDF
+        out.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(booklet, out)
+        print("press: %s  %d pages on %d sides  overlaid %d page(s): %s" % (
+            out, info["pages"], info["sides"], len(info["touched"]), " ".join(info["touched"])))
+        return 0
+
     tex, _, build = paths(args.edition)
     issue = read_tex(tex.read_text())
     failures = check_print(issue, tex, build)
@@ -149,6 +166,9 @@ def main(argv=None):
         if name in ("build", "check"):
             s.add_argument("--web", action="store_true")
             s.add_argument("--print", action="store_true")
+        if name == "press":
+            s.add_argument("--model", help="studio edition JSON to lay over the .tex")
+            s.add_argument("--out", help="where the overlaid booklet goes (with --model)")
         s.set_defaults(fn=fn)
     args = p.parse_args(argv)
     if args.cmd in ("build", "check") and not (args.web or args.print):

@@ -1,0 +1,15 @@
+# press.hq.ripostelabs.xyz -> 10.0.1.12:8091 (LXC 111, daily-bread-press.service)
+# no forward-auth — deliberately: the caller is the Daily Bread studio served from
+# db.ripostelabs.xyz (Cloudflare), a cross-origin fetch that carries no auth.hq
+# cookie and cannot follow a 302 to the gate. The server itself allows only the
+# studio's origins (CORS) and typesets one edition at a time. LAN/Tailscale only.
+@press host press.hq.ripostelabs.xyz
+handle @press {
+	reverse_proxy 10.0.1.12:8091 {
+		header_up Host {host}
+		# a typesetting is ~10 s; do not cut it off
+		transport http {
+			response_header_timeout 180s
+		}
+	}
+}
