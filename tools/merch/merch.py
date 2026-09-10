@@ -478,8 +478,10 @@ def publish_all(manifest, out):
         files, urls = [], {}
         for key, rel in p["images"].items():
             urls[key] = staged_upload(shop, tok, str(out / rel))
+            # REPLACE keeps re-runs from piling up copies; it needs the filename
             files.append({"originalSource": urls[key], "contentType": "IMAGE",
-                          "alt": f"{p['title']}, {key.lower()}", "duplicateResolutionMode": "REPLACE"})
+                          "filename": os.path.basename(rel), "alt": f"{p['title']}, {key.lower()}",
+                          "duplicateResolutionMode": "REPLACE"})
         variants = []
         for v in p["variants"]:
             ov = [{"optionName": "Size", "name": v["size"]}] if v["colour"] else [{"optionName": "Title", "name": "Default Title"}]
