@@ -11,7 +11,7 @@ One .tex per edition is the source of truth. Two consumers:
             |  web.py                           |  press.py
             v                                   v
     content/<edition>.js               build/latex/<edition>/print.pdf   (A5, one-up)
-    node tools/build.js                build/latex/<edition>/booklet.pdf (A4 landscape, 2-up)
+    node tools/build.js                build/latex/<edition>/booklet.pdf (Letter landscape, 2-up)
     (unchanged renderer + newsproof)   via lualatex + tools/latex/dailybread.cls
 
 Layers only talk to their neighbour: cli -> {web, press} -> reader/writer ->
