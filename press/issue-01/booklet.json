@@ -35,8 +35,8 @@
     "26|23",
     "24|25"
   ],
-  "pdfSha256": "484f17a4b5f076f79dd8a241d401625ae73428e367cc6c93c3ef0d1f4ec091be",
-  "pdfBytes": 2987519,
+  "pdfSha256": "a1e881ecaa657b91aa3445c6ac6e9d9f8459e11771b60e62bd39dcd385fdc516",
+  "pdfBytes": 2968558,
   "sourceDateEpoch": 0,
   "engine": "This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)",
   "press": "tools/db-latex.py press (lualatex + dailybread.cls; pdfpages saddle-stitch)"
