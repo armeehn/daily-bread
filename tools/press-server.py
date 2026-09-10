@@ -12,6 +12,7 @@ repo — LXC 111 on the estate, published by Caddy as press.hq.ripostelabs.xyz.
     POST /press      {"edition": "issue-01", "model": {…}}   -> application/pdf
                      X-Press-Pages / -Sides / -Overfull / -Touched say what it is
     GET  /health     {"ok": true, "editions": [...], "engine": "..."}
+    GET  /           a status page for a person who opened press.hq in a browser
 
 One typesetting at a time: lualatex is a whole core for several seconds and the
 box is shared. Requests queue on the lock rather than fail. Bodies are capped
@@ -47,6 +48,18 @@ EDITION = re.compile(r"^issue-\d{2}$")
 WORK = REPO / "build" / "studio"    # one temp dir per request, removed after
 
 lock = threading.Lock()
+
+STATUS_PAGE = """<!doctype html><meta charset="utf-8"><title>Daily Bread press</title>
+<style>body{{font:15px/1.5 "IBM Plex Mono",ui-monospace,monospace;max-width:40em;margin:3em auto;padding:0 1em;color:#1d1a17;background:#f6f1e7}}
+h1{{font-size:1.2em}}code{{background:#eae4d6;padding:0 .3em}}</style>
+<h1>Daily Bread press</h1>
+<p>This is the typesetting service behind the studio&rsquo;s <b>Magazine PDF</b> button:
+the edition on screen laid over <code>content/&lt;edition&gt;.tex</code>, set by lualatex,
+imposed as a saddle-stitched booklet. Nothing to see here; press the button in the studio.</p>
+<p>Editions: <code>{editions}</code><br>Engine: <code>{engine}</code><br>State: <code>{busy}</code></p>
+<p><code>GET /health</code> is this as JSON. <code>POST /press</code> takes
+<code>{{"edition", "model"}}</code> and answers with the PDF.</p>
+"""
 
 
 def editions():
@@ -92,10 +105,17 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
-        if self.path.split("?")[0] != "/health":
-            return self.fail(HTTPStatus.NOT_FOUND, "no such route")
-        self.reply(HTTPStatus.OK, {"ok": True, "editions": editions(),
-                                   "engine": press.engine_version(REPO), "busy": lock.locked()})
+        route = self.path.split("?")[0]
+        status = {"ok": True, "editions": editions(),
+                  "engine": press.engine_version(REPO), "busy": lock.locked()}
+        if route == "/health":
+            return self.reply(HTTPStatus.OK, status)
+        if route == "/":
+            return self.reply(HTTPStatus.OK, STATUS_PAGE.format(
+                editions=", ".join(status["editions"]), engine=status["engine"],
+                busy="typesetting now" if status["busy"] else "idle").encode(),
+                "text/html; charset=utf-8")
+        self.fail(HTTPStatus.NOT_FOUND, "no such route: GET /health or POST /press")
 
     def do_POST(self):
         if self.path.split("?")[0] != "/press":
