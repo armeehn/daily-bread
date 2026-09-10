@@ -763,11 +763,35 @@ $("#fileImport").addEventListener("change",e=>{
   }catch(err){ alert("Invalid JSON: "+err.message);} };
   r.readAsText(file); e.target.value="";
 });
+/* ---------- embedding images ----------
+   Every edition rides in ONE localStorage key (~5 MB per origin), so a raw
+   phone photo (8 MB → 11 MB of base64) fills it on its own. Decode, cap the
+   long edge, re-encode. PNG sources keep PNG (alpha); everything else becomes
+   JPEG. A source the browser cannot decode (SVG without size) is kept raw. */
+const EMBED_MAX_EDGE_PX = 2400;   // ≈290 dpi across an A5 short edge
+const EMBED_JPEG_QUALITY = 0.85;
+function embedImage(file, done){
+  const r=new FileReader();
+  r.onload=()=>{
+    const raw=r.result, img=new Image();
+    img.onload=()=>{
+      const scale=Math.min(1, EMBED_MAX_EDGE_PX/Math.max(img.width, img.height));
+      const c=document.createElement("canvas");
+      c.width=Math.round(img.width*scale); c.height=Math.round(img.height*scale);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      const png = file.type==="image/png";
+      const out = png ? c.toDataURL("image/png") : c.toDataURL("image/jpeg", EMBED_JPEG_QUALITY);
+      done(out.length < raw.length ? out : raw);
+    };
+    img.onerror=()=> done(raw);
+    img.src=raw;
+  };
+  r.readAsDataURL(file);
+}
 $("#fileImage").addEventListener("change",e=>{
   const file=e.target.files[0]; if(!file||!imgFor) return;
-  const r=new FileReader();
-  r.onload=()=>{ setPath(model, imgFor.path, r.result); imgFor.img.src=r.result; imgFor.tx.value="(embedded image)"; schedule(); toast("Image embedded"); };
-  r.readAsDataURL(file); e.target.value="";
+  embedImage(file, src=>{ setPath(model, imgFor.path, src); imgFor.img.src=src; imgFor.tx.value="(embedded image)"; schedule(); toast("Image embedded"); });
+  e.target.value="";
 });
 $("#resetBtn").addEventListener("click",()=>{
   if(!confirm("Reset “"+shelf.items[shelf.current].name+"” to the built-in Daily Bread №1 default? Its edits will be lost. Other editions are untouched.")) return;
@@ -1541,9 +1565,7 @@ function wireDesign(doc){
 }
 
 function readImageInto(file, path){
-  const r = new FileReader();
-  r.onload = ()=>{ setPath(model, path, r.result); touched(); toast("Image replaced"); };
-  r.readAsDataURL(file);
+  embedImage(file, src=>{ setPath(model, path, src); touched(); toast("Image replaced"); });
 }
 
 /* ---------- drag a row to a new position ---------- */
@@ -1847,9 +1869,7 @@ function wireImageDrop(row, path, img, tx){
     e.preventDefault(); row.classList.remove("hot");
     const f = e.dataTransfer.files[0];
     if(!f || !/^image\//.test(f.type)){ toast("That is not an image"); return; }
-    const r = new FileReader();
-    r.onload = ()=>{ setPath(model, path, r.result); img.src = r.result; tx.value = "(embedded image)"; touched(); toast("Image embedded"); };
-    r.readAsDataURL(f);
+    embedImage(f, src=>{ setPath(model, path, src); img.src = src; tx.value = "(embedded image)"; touched(); toast("Image embedded"); });
   });
 }
 
