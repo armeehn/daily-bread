@@ -232,7 +232,10 @@ shows exactly what will publish, at full / tablet / phone widths.
   is what a freshly-opened studio shows. Alongside the PDF it writes
   `out/magazine-render.json`, whose model fingerprint the studio's "Magazine PDF"
   button reads so it can warn you when the file on the server was rendered from a
-  different model than the one you are editing.
+  different model than the one you are editing. That button downloads
+  `out/Daily Bread №1 — booklet.pdf`: `db-render/impose-booklet.js` pairs the
+  rendered sheets two to a side (`tools/print/imposition.js`, checked by simulating
+  the fold) so the folded, stapled stack reads in order.
 
   The render is reproducible: fonts are served from `db-render/vendor/`, and the
   script rewrites the PDF's `/CreationDate` and `/ModDate` from `SOURCE_DATE_EPOCH`
