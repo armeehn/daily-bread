@@ -24,3 +24,6 @@ db-render/build-*.dc.html
 
 # db-latex output: PDFs, logs and the staged fonts link. tools/db-latex.py rebuilds it.
 build/
+
+# merch pipeline output (tools/merch/merch.py); CI keeps it as an artifact
+/merch/
