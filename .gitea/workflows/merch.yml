@@ -1,0 +1,61 @@
+# Merch for one edition, on demand: cover tee and crewneck, The Wall poster and
+# tee, the Peel Me sticker sheet.  Everything comes from the edition's own model
+# (content/<edition>.js) and assets; tools/merch/merch.py invents nothing.
+#
+# The button: Actions -> merch -> Run workflow -> pick the edition.  Print files
+# (PNG at 300 dpi, PDF at true size), mockups and products.json land in the run's
+# artifact.  Tick publish to upsert the products into Shopify as DRAFTs; that needs
+# the SHOPIFY_ADMIN_TOKEN secret (a custom-app Admin API token with write_products
+# and write_files), and is idempotent by product handle so a re-run updates rather
+# than duplicates.
+name: merch
+on:
+  workflow_dispatch:
+    inputs:
+      edition:
+        description: 'Edition to merchandise (content/<edition>.js)'
+        type: string
+        default: issue-02
+      publish:
+        description: 'Upsert the products into Shopify as drafts'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: merch-${{ inputs.edition }}
+  cancel-in-progress: true
+jobs:
+  merch:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install the renderer, Pillow and IBM Plex
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq librsvg2-bin python3-pil fonts-ibm-plex poppler-utils
+      - name: Make the merch
+        run: python3 tools/merch/merch.py "${{ inputs.edition }}"
+      - name: Report what came out
+        run: |
+          for f in merch/${{ inputs.edition }}/pdf/*.pdf; do
+            echo "$f: $(pdfinfo "$f" | awk -F': *' '/Page size/{print $2}')"
+          done
+          python3 -c "import json;m=json.load(open('merch/${{ inputs.edition }}/products.json'));print(len(m['products']),'products:',*[p['handle'] for p in m['products']])"
+      - name: Publish to Shopify
+        if: ${{ inputs.publish }}
+        env:
+          SHOPIFY_ADMIN_TOKEN: ${{ secrets.SHOPIFY_ADMIN_TOKEN }}
+          SHOPIFY_SHOP: ${{ vars.SHOPIFY_SHOP || 'h23y0x-fd.myshopify.com' }}
+        run: python3 tools/merch/merch.py "${{ inputs.edition }}" --publish
+      - uses: actions/upload-artifact@v3
+        with:
+          name: merch-${{ inputs.edition }}
+          path: |
+            merch/${{ inputs.edition }}/print
+            merch/${{ inputs.edition }}/pdf
+            merch/${{ inputs.edition }}/mockup
+            merch/${{ inputs.edition }}/products.json
