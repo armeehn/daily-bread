@@ -1,10 +1,10 @@
 {
   "sth": {
     "schema": "newsproof/v1/sth",
-    "tree_size": 111,
-    "root_sha256": "18d20599c706836fa8174f606b949d831e9a65340484f6c1dc8dbfad283bbe0e",
-    "timestamp": "2026-09-11T17:33:15Z"
+    "tree_size": 127,
+    "root_sha256": "a821d4f59fe14df1201d00957c0db8626698562943ca562675ad4dfba45b9aab",
+    "timestamp": "2026-09-11T17:55:25Z"
   },
   "log_key_id": "ca8f1397d1cf96dd",
-  "log_signature": "LJzQ8gi/8DI07OsR2HeiDE150BLGpfkya0lY48DPGokuUWwPRPVN6t3YMioZOt6ttskIfZw8fCJ/DJv86JJhCA=="
+  "log_signature": "/JupQ05KO8onnDDZ7LJeVjqi7EdRCa1f/Mco357OYEu5X7AfI0yHmnXjUGP7Jr3GYXZR2jbWhLl4K6kyE8/YBw=="
 }
