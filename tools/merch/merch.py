@@ -717,14 +717,25 @@ def variant_inputs(p, urls):
     return variants, options
 
 
+def online_store_id(shop, tok):
+    """The Online Store publication id, or None if the app's grant lacks
+    read_publications: products then go up but stay off the channel, and
+    the run says so instead of dying."""
+    try:
+        d = gql(shop, tok, 'query{publications(first:10){nodes{id name}}}')
+    except SystemExit:
+        print("note: no read_publications scope; put new products on the Online Store channel by hand")
+        return None
+    return next((n["id"] for n in d["publications"]["nodes"] if n["name"] == "Online Store"), None)
+
+
 def publish_all(manifest, out):
     shop = os.environ.get("SHOPIFY_SHOP", "h23y0x-fd.myshopify.com")
     tok = token(shop)
     cols = [collection_id(shop, tok, manifest["collection"], manifest["collectionTitle"])]
     d = gql(shop, tok, 'query($q:String){collections(first:1,query:$q){nodes{id}}}', {"q": f"handle:{APPAREL_COLLECTION}"})
     apparel_col = d["collections"]["nodes"][0]["id"] if d["collections"]["nodes"] else None
-    d = gql(shop, tok, 'query{publications(first:10){nodes{id name}}}')
-    online_store = next((n["id"] for n in d["publications"]["nodes"] if n["name"] == "Online Store"), None)
+    online_store = online_store_id(shop, tok)
     for c in cols:
         if online_store:
             gql(shop, tok, """mutation($id:ID!,$pub:ID!){publishablePublish(id:$id,input:[{publicationId:$pub}]){userErrors{message}}}""",
