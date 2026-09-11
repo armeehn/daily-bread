@@ -29,6 +29,7 @@ script hands to fontconfig itself.  --publish needs credentials: see token().
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import urllib.error
@@ -165,12 +166,13 @@ def cover_inner(model, tmp, name, sw=PW, sh=PH, aw=ART_W, ah=ART_H):
     k = aw / ART_W  # type scales with the art
     return "\n".join([
         f'<image x="{x0}" y="{y0}" width="{aw}" height="{ah}" xlink:href="{art_png.name}"/>',
-        # masthead over the art: ink with a bone keyline so it holds on any art
-        f'<g font-family="{FRAKTUR}" font-size="{640 * k:.0f}" text-anchor="middle" '
-        f'stroke="{BONE}" stroke-width="{28 * k:.0f}" stroke-linejoin="round" paint-order="stroke" fill="{INK}">'
-        f'<text x="{cx}" y="{y0 + 1900 * k:.0f}">Daily</text><text x="{cx}" y="{y0 + 2520 * k:.0f}">Bread</text></g>',
-        text(cx, y0 + 260 * k, tag, 84 * k, PLEX, 700, BONE, "0.3em"),
-        text(cx, y0 + ah - 140 * k, edition, 72 * k, PLEX, 700, BONE, "0.3em"),
+        # masthead across the top like a magazine, never over the picture's subject;
+        # ink with a bone keyline so it holds on any art
+        f'<g font-family="{FRAKTUR}" font-size="{400 * k:.0f}" text-anchor="middle" '
+        f'stroke="{BONE}" stroke-width="{22 * k:.0f}" stroke-linejoin="round" paint-order="stroke" fill="{INK}">'
+        f'<text x="{cx}" y="{y0 + 470 * k:.0f}">Daily Bread</text></g>',
+        text(cx, y0 + 600 * k, tag, 72 * k, PLEX, 700, BONE, "0.3em"),
+        text(cx, y0 + ah - 120 * k, edition, 64 * k, PLEX, 700, BONE, "0.3em"),
     ])
 
 
@@ -202,6 +204,36 @@ def wall_inner(svg, width):
     body = svg[svg.index(">", svg.index("<svg")) + 1:svg.rindex("</svg>")]
     return (f'<svg x="{x}" y="{y}" width="{width}" height="{ph}" viewBox="0 0 {w} {h}">'
             f'{body}</svg>')
+
+
+def outline_pdf(model):
+    """assets/outline-NN.pdf: the edition's line drawing as delivered for DTF.
+    Printed as-is at its own size; black on bone, white on ink."""
+    _, nn = issue_no(model)
+    p = REPO / "assets" / f"outline-{nn}.pdf"
+    return p if p.exists() else None
+
+
+def outline_pngs(pdf, tmp, name):
+    """Render the PDF transparent at 300 dpi, centred on the 12 x 16 sheet;
+    return {'Bone': png of black lines, 'Ink': png of white lines}."""
+    subprocess.run(["pdftocairo", "-png", "-transp", "-r", str(DPI), "-singlefile", str(pdf), str(tmp / f"{name}-raw")], check=True)
+    raw = Image.open(tmp / f"{name}-raw.png").convert("RGBA")
+    # fit on the sheet if the page is bigger than the print area; never enlarge
+    k = min(1.0, ART_W / raw.width, ART_H / raw.height)
+    if k < 1.0:
+        raw = raw.resize((int(raw.width * k), int(raw.height * k)), Image.LANCZOS)
+    out = {}
+    for ground, colour in (("Bone", (29, 26, 23)), ("Ink", (246, 241, 231))):
+        sheet_img = Image.new("RGBA", (PW, PH), (0, 0, 0, 0))
+        alpha = raw.split()[3]
+        ink = Image.new("RGBA", raw.size, colour + (0,))
+        ink.putalpha(alpha)
+        sheet_img.paste(ink, ((PW - raw.width) // 2, (PH - raw.height) // 2), ink)
+        path = tmp / f"{name}-{ground.lower()}.png"
+        sheet_img.save(path, "PNG", optimize=True)
+        out[ground] = path
+    return out
 
 
 def sticker_items(model):
@@ -452,6 +484,53 @@ def build(edition, out, publish):
         "images": {"Default": str(pimg.relative_to(out))},
     })
     print("cover:", "tee + crewneck + tote + poster")
+
+    # 1a. the outline: DTF line drawing, tee / crewneck / tote / poster
+    opdf = outline_pdf(model)
+    if opdf:
+        pngs = outline_pngs(opdf, out / "tmp", f"db-{nn}-outline")
+        imgs = {"tee": {}, "crew": {}}
+        for ground, src in pngs.items():
+            g = ground.lower()
+            shutil.copy(src, out / "print" / f"db-{nn}-outline-{g}.png")
+            for kind in ("tee", "crew"):
+                png = out / "mockup" / f"db-{nn}-outline-{kind}-{g}.png"
+                photomock.compose(f"{kind}-{g}", str(src), str(png), line_boost=3)
+                imgs[kind][ground] = str(png.relative_to(out))
+        body = (f"<p>The №{n} cover as a line drawing, the DTF print as delivered: black on bone, white on ink. "
+                f"11 × 14 in, front.</p><p>Funded by Riposte Laboratories Inc.</p>")
+        products.append(apparel(f"db-{nn}-outline-tee", f"Daily Bread {label} · Outline Tee", body, "tee", f"DB{nn}-OLT", PRICE_TEE, imgs["tee"]))
+        products.append(apparel(f"db-{nn}-outline-crewneck", f"Daily Bread {label} · Outline Crewneck", body, "crew", f"DB{nn}-OLC", PRICE_CREW, imgs["crew"]))
+        # tote, natural canvas, black lines
+        timg = out / "mockup" / f"db-{nn}-outline-tote.png"
+        photomock.compose("tote-bone", str(pngs["Bone"]), str(timg), line_boost=3)
+        products.append({
+            "handle": f"db-{nn}-outline-tote", "title": f"Daily Bread {label} \u00b7 Outline Tote",
+            "descriptionHtml": f"<p>The №{n} cover as a line drawing on a natural canvas tote.</p><p>Funded by Riposte Laboratories Inc.</p>",
+            "productType": "Tote Bag", "tags": ["tote", "daily-bread", "merch:auto"], "options": ["Title"],
+            "variants": [{"size": "Default Title", "colour": None, "sku": f"DB{nn}-OLB", "price": PRICE_TOTE, "image": str(timg.relative_to(out))}],
+            "images": {"Default": str(timg.relative_to(out))},
+        })
+        # poster: the drawing on bone, 12 x 18, one inch off the edges
+        ob = Image.open(pngs["Bone"])
+        bb = ob.getbbox()
+        pw_, ph_ = POSTER_W, POSTER_H
+        kk = min((pw_ - 2 * DPI) / (bb[2] - bb[0]), (ph_ - 2 * DPI) / (bb[3] - bb[1]))
+        crop = ob.crop(bb).resize((int((bb[2] - bb[0]) * kk), int((bb[3] - bb[1]) * kk)), Image.LANCZOS)
+        poster = Image.new("RGB", (pw_, ph_), (246, 241, 231))
+        poster.paste(crop, ((pw_ - crop.width) // 2, (ph_ - crop.height) // 2), crop)
+        poster.save(out / "print" / f"db-{nn}-outline-poster.png", "PNG", optimize=True)
+        poster.save(out / "pdf" / f"db-{nn}-outline-poster.pdf", "PDF", resolution=DPI)
+        pimg = out / "mockup" / f"db-{nn}-outline-poster.png"
+        photomock.poster_mockup(str(out / "print" / f"db-{nn}-outline-poster.png"), str(pimg))
+        products.append({
+            "handle": f"db-{nn}-outline-poster", "title": f"Daily Bread {label} \u00b7 Outline Poster",
+            "descriptionHtml": f"<p>The №{n} cover as a line drawing, 12 × 18 in on bone paper.</p><p>Funded by Riposte Laboratories Inc.</p>",
+            "productType": "Poster", "tags": ["poster", "daily-bread", "merch:auto"], "options": ["Title"],
+            "variants": [{"size": "Default Title", "colour": None, "sku": f"DB{nn}-OLP", "price": PRICE_POSTER, "image": str(pimg.relative_to(out))}],
+            "images": {"Default": str(pimg.relative_to(out))},
+        })
+        print("outline:", opdf.name, "-> tee + crewneck + tote + poster")
 
     # 1b. the quotes, one tee, a variant per quote
     qs = quotes(model)
