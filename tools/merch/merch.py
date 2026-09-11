@@ -723,6 +723,12 @@ def publish_all(manifest, out):
     cols = [collection_id(shop, tok, manifest["collection"], manifest["collectionTitle"])]
     d = gql(shop, tok, 'query($q:String){collections(first:1,query:$q){nodes{id}}}', {"q": f"handle:{APPAREL_COLLECTION}"})
     apparel_col = d["collections"]["nodes"][0]["id"] if d["collections"]["nodes"] else None
+    d = gql(shop, tok, 'query{publications(first:10){nodes{id name}}}')
+    online_store = next((n["id"] for n in d["publications"]["nodes"] if n["name"] == "Online Store"), None)
+    for c in cols:
+        if online_store:
+            gql(shop, tok, """mutation($id:ID!,$pub:ID!){publishablePublish(id:$id,input:[{publicationId:$pub}]){userErrors{message}}}""",
+                {"id": c, "pub": online_store})
 
     for p in manifest["products"]:
         # idempotent by handle: an existing product is updated in place
@@ -738,15 +744,23 @@ def publish_all(manifest, out):
         variants, options = variant_inputs(p, urls)
         inp = {"title": p["title"], "handle": p["handle"], "descriptionHtml": p["descriptionHtml"],
                "vendor": manifest["vendor"], "productType": p["productType"], "tags": p["tags"],
-               "status": "DRAFT", "files": files, "productOptions": options, "variants": variants,
+               "files": files, "productOptions": options, "variants": variants,
                "collections": cols + ([apparel_col] if apparel_col and "apparel" in p["tags"] else [])}
+        # a new product starts as a draft; a re-run must not demote a live one
         if existing:
             inp["id"] = existing[0]["id"]
+        else:
+            inp["status"] = "DRAFT"
         d = gql(shop, tok, """mutation($i:ProductSetInput!){productSet(synchronous:true,input:$i){
             product{id handle} userErrors{field message}}}""", {"i": inp})
         errs = d["productSet"]["userErrors"]
         if errs:
             sys.exit(f"{p['handle']}: {errs}")
+        pid = d["productSet"]["product"]["id"]
+        # on the Online Store channel from the start, so flipping ACTIVE is the only step left
+        if online_store:
+            gql(shop, tok, """mutation($id:ID!,$pub:ID!){publishablePublish(id:$id,input:[{publicationId:$pub}]){userErrors{message}}}""",
+                {"id": pid, "pub": online_store})
         print("published:", d["productSet"]["product"]["handle"], "(updated)" if existing else "(new)")
 
 
