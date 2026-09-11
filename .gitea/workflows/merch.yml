@@ -5,9 +5,10 @@
 # The button: Actions -> merch -> Run workflow -> pick the edition.  Print files
 # (PNG at 300 dpi, PDF at true size), mockups and products.json land in the run's
 # artifact.  Tick publish to upsert the products into Shopify as DRAFTs; that needs
-# the SHOPIFY_ADMIN_TOKEN secret (a custom-app Admin API token with write_products
-# and write_files), and is idempotent by product handle so a re-run updates rather
-# than duplicates.
+# either the SHOPIFY_CLIENT_ID + SHOPIFY_CLIENT_SECRET secrets (the store's own app,
+# installed with write_products and write_files; the script mints a 24-hour token
+# from them) or a SHOPIFY_ADMIN_TOKEN secret.  Idempotent by product handle, so a
+# re-run updates rather than duplicates.
 name: merch
 on:
   workflow_dispatch:
@@ -49,6 +50,8 @@ jobs:
         if: ${{ inputs.publish }}
         env:
           SHOPIFY_ADMIN_TOKEN: ${{ secrets.SHOPIFY_ADMIN_TOKEN }}
+          SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
+          SHOPIFY_CLIENT_SECRET: ${{ secrets.SHOPIFY_CLIENT_SECRET }}
           SHOPIFY_SHOP: ${{ vars.SHOPIFY_SHOP || 'h23y0x-fd.myshopify.com' }}
         run: python3 tools/merch/merch.py "${{ inputs.edition }}" --publish
       - uses: actions/upload-artifact@v3
