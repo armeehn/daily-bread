@@ -13,137 +13,137 @@
   },
   "publisher_key_id": "dc93d30cf93f629a",
   "log_key_id": "ca8f1397d1cf96dd",
-  "tree_size": 191,
-  "root_sha256": "c1e83c6e568e2e67bd0fbf8760ae3886cbbbf181fbf2d84390c857378e5a4caf",
-  "sth_timestamp": "2026-09-11T19:12:11Z",
+  "tree_size": 207,
+  "root_sha256": "15a0e86d60ae4be970d0b9cb21c6bf20fe1a61d9d60baf63dc222aeb011354f3",
+  "sth_timestamp": "2026-09-11T22:29:18Z",
   "editions": [
     {
       "code": "en",
       "endo": "English",
       "url": "/",
       "proof": "proofs/en.proof.json",
-      "version": 11,
-      "leaf_index": 175
+      "version": 12,
+      "leaf_index": 191
     },
     {
       "code": "fr",
       "endo": "Fran\u00e7ais",
       "url": "/fr/",
       "proof": "proofs/fr.proof.json",
-      "version": 12,
-      "leaf_index": 176
+      "version": 13,
+      "leaf_index": 192
     },
     {
       "code": "es",
       "endo": "Espa\u00f1ol",
       "url": "/es/",
       "proof": "proofs/es.proof.json",
-      "version": 12,
-      "leaf_index": 177
+      "version": 13,
+      "leaf_index": 193
     },
     {
       "code": "it",
       "endo": "Italiano",
       "url": "/it/",
       "proof": "proofs/it.proof.json",
-      "version": 12,
-      "leaf_index": 178
+      "version": 13,
+      "leaf_index": 194
     },
     {
       "code": "pl",
       "endo": "Polski",
       "url": "/pl/",
       "proof": "proofs/pl.proof.json",
-      "version": 12,
-      "leaf_index": 179
+      "version": 13,
+      "leaf_index": 195
     },
     {
       "code": "la",
       "endo": "Latina",
       "url": "/la/",
       "proof": "proofs/la.proof.json",
-      "version": 12,
-      "leaf_index": 180
+      "version": 13,
+      "leaf_index": 196
     },
     {
       "code": "zh-hans",
       "endo": "\u7b80\u4f53\u4e2d\u6587",
       "url": "/zh-hans/",
       "proof": "proofs/zh-hans.proof.json",
-      "version": 12,
-      "leaf_index": 181
+      "version": 13,
+      "leaf_index": 197
     },
     {
       "code": "zh-hant",
       "endo": "\u7e41\u9ad4\u4e2d\u6587",
       "url": "/zh-hant/",
       "proof": "proofs/zh-hant.proof.json",
-      "version": 12,
-      "leaf_index": 182
+      "version": 13,
+      "leaf_index": 198
     },
     {
       "code": "pa",
       "endo": "\u0a2a\u0a70\u0a1c\u0a3e\u0a2c\u0a40",
       "url": "/pa/",
       "proof": "proofs/pa.proof.json",
-      "version": 12,
-      "leaf_index": 183
+      "version": 13,
+      "leaf_index": 199
     },
     {
       "code": "ko",
       "endo": "\ud55c\uad6d\uc5b4",
       "url": "/ko/",
       "proof": "proofs/ko.proof.json",
-      "version": 12,
-      "leaf_index": 184
+      "version": 13,
+      "leaf_index": 200
     },
     {
       "code": "ja",
       "endo": "\u65e5\u672c\u8a9e",
       "url": "/ja/",
       "proof": "proofs/ja.proof.json",
-      "version": 12,
-      "leaf_index": 185
+      "version": 13,
+      "leaf_index": 201
     },
     {
       "code": "tl",
       "endo": "Tagalog",
       "url": "/tl/",
       "proof": "proofs/tl.proof.json",
-      "version": 12,
-      "leaf_index": 186
+      "version": 13,
+      "leaf_index": 202
     },
     {
       "code": "vi",
       "endo": "Ti\u1ebfng Vi\u1ec7t",
       "url": "/vi/",
       "proof": "proofs/vi.proof.json",
-      "version": 12,
-      "leaf_index": 187
+      "version": 13,
+      "leaf_index": 203
     },
     {
       "code": "hi",
       "endo": "\u0939\u093f\u0928\u094d\u0926\u0940",
       "url": "/hi/",
       "proof": "proofs/hi.proof.json",
-      "version": 12,
-      "leaf_index": 188
+      "version": 13,
+      "leaf_index": 204
     },
     {
       "code": "ar",
       "endo": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629",
       "url": "/ar/",
       "proof": "proofs/ar.proof.json",
-      "version": 12,
-      "leaf_index": 189
+      "version": 13,
+      "leaf_index": 205
     },
     {
       "code": "fa",
       "endo": "\u0641\u0627\u0631\u0633\u06cc",
       "url": "/fa/",
       "proof": "proofs/fa.proof.json",
-      "version": 12,
-      "leaf_index": 190
+      "version": 13,
+      "leaf_index": 206
     }
   ]
 }
