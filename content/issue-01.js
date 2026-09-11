@@ -15,7 +15,7 @@ module.exports = {
       "variant": "front",
       "slug": "v2-fc",
       "content": {
-        "art": "uploads/lalalalala.png",
+        "art": "uploads/cover-01.png",
         "issueTag": "№1 — KELOWNA’S COLLAPSE",
         "price": "PAY WHAT YOU CAN",
         "publisher": "RIPOSTE LABORATORIES",
