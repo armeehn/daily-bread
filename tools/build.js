@@ -86,6 +86,7 @@ const TABS = [
   {id:'directory', key:'directory', no:'18'},
   {id:'submit',    key:'submit',    no:'19'},
   {id:'lab',       key:'lab',       no:'16'},
+  {id:'shop',      key:'shop',      no:'17'},
   {id:'stickers',  key:'stickers',  no:'24'},
 ];
 
@@ -256,6 +257,28 @@ function screeningRows(t){
 function dirRows(t){
   return [0,1,2,3,4,5,6].map(i=>`<div class="li"><span class="t" style="font-weight:700">${esc(t['dir.'+i+'.t'])}</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">${esc(t['dir.'+i+'.w'])}</span></div>`).join('');
 }
+/* ---- the shop: shop/catalogue.json, a static export of the store collections
+   (tools/merch/catalogue.py writes it after the merch pipeline runs). Rendered
+   here, at build time, so the page needs no script and no token for a rack of
+   shirts; the store itself is behind Shopify's password until a plan is chosen.
+   Images only in the full rendering; lite and eink get the list. ---- */
+const CATALOGUE = JSON.parse(fs.readFileSync(path.join(ROOT, 'shop', 'catalogue.json'), 'utf8'));
+function money(p){ return (p.min===p.max ? '' : 'from ') + '$' + Number(p.min).toFixed(0) + ' ' + p.currency; }
+function shopCards(t, variant){
+  return CATALOGUE.collections.map(c => `
+      <div class="shop-col">
+        <div class="hd"><span>${esc(c.title)}</span><span class="r"><a href="${c.url}" rel="noopener">${t['shop.all']} →</a></span></div>
+        <div class="shop-grid">${c.products.map(p => `
+          <a class="shop-card" href="${p.url}" rel="noopener">
+            ${variant==='full' && p.image ? `<img src="${p.image.src}" alt="${attr(p.image.alt)}" loading="lazy" width="600" height="600">` : ''}
+            <span class="shop-name">${esc(p.title.startsWith(c.title + " · ") ? p.title.slice(c.title.length + 3) : p.title)}</span>
+            <span class="shop-type">${esc(p.type)}</span>
+            <span class="shop-price">${money(p.price)}</span>
+          </a>`).join('')}
+        </div>
+      </div>`).join('');
+}
+
 function labRows(t){
   return LABBOARD.map((j,i)=>`<div class="li"><span class="t">${esc(t['lab.'+i+'.t'])}</span><span class="end"><span class="statuschip" style="background:${j.c}">${esc(t['lab.'+i+'.s'])}</span></span></div>`).join('');
 }
@@ -976,6 +999,23 @@ ${rail(t)}
         <p class="meta" style="margin-top:14px;line-height:1.7">${t['lab.tour']}</p>
       </div>
     </div>
+  </div>
+</section>
+
+<div class="band harl br"></div>
+
+</div><!-- /pane -->
+
+<div class="pane" id="shop">
+<!-- ============ SHOP ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.17</span><span class="tag">${t['shop.tag']}</span></div>
+    <span class="kicker">${t['shop.kicker']}</span>
+    <h2 class="display" style="margin-top:14px">${t['shop.h']}</h2>
+    <p class="dek" style="max-width:62ch">${t['shop.lead']}</p>
+    ${shopCards(t, variant)}
+    <p class="meta" style="margin-top:22px;line-height:1.7">${t['shop.note']}</p>
   </div>
 </section>
 

@@ -182,6 +182,7 @@
     body:has(#directory:target) .rail a[href="#directory"],
     body:has(#submit:target) .rail a[href="#submit"],
     body:has(#lab:target) .rail a[href="#lab"],
+    body:has(#shop:target) .rail a[href="#shop"],
     body:has(#stickers:target) .rail a[href="#stickers"],
     body:not(:has(.pane:target)) .rail a[href="#letter"]{
       --edge:var(--pink);--no:var(--muted);
@@ -492,3 +493,18 @@
   [dir="rtl"] .pull.teal{border-right-color:var(--teal)}
   [dir="rtl"] .list .li .end{margin-left:0;margin-right:auto}
   [dir="rtl"] .masthead-list .li .val{margin-left:0;margin-right:auto}
+
+  /* ---- the shop (Sec.17): cards on the paper, hard ink offset like .card ---- */
+  .shop-col{margin-top:26px}
+  .shop-col .hd{display:flex;justify-content:space-between;gap:12px;align-items:center;
+    border-bottom:2px solid var(--ink);padding-bottom:8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+  .shop-col .hd .r a{font-weight:700}
+  .shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:18px;margin-top:16px}
+  .shop-card{display:block;border:2px solid var(--ink);background:var(--bone);color:var(--ink);text-decoration:none;
+    box-shadow:6px 6px 0 var(--pink);padding:0 0 12px}
+  .shop-card:hover{box-shadow:6px 6px 0 var(--teal)}
+  .shop-card img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border-bottom:2px solid var(--ink);background:var(--panel);margin-bottom:10px}
+  .shop-card > span{display:block;padding:0 12px}
+  .shop-name{font-weight:700;font-size:13px;line-height:1.35;margin-top:10px}
+  .shop-type{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+  .shop-price{font-size:12px;margin-top:8px}
