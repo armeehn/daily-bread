@@ -1,6 +1,6 @@
 {
  "shop": "https://h23y0x-fd.myshopify.com",
- "generated": "2026-09-11T17:03:05+00:00",
+ "generated": "2026-09-11T17:30:43+00:00",
  "collections": [
   {
    "handle": "db-01",
@@ -16,7 +16,7 @@
       "max": "68.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-01-cover-crewneck",
+     "url": "https://shop.ripostelabs.xyz/products/db-01-cover-crewneck",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-crew-bone.png?v=1789142454",
       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Crewneck, bone"
@@ -61,7 +61,7 @@
       "max": "28.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-01-cover-poster",
+     "url": "https://shop.ripostelabs.xyz/products/db-01-cover-poster",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-poster.png?v=1789142457",
       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Poster, default"
@@ -83,7 +83,7 @@
       "max": "38.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-01-cover-tee",
+     "url": "https://shop.ripostelabs.xyz/products/db-01-cover-tee",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-tee-bone.png?v=1789142451",
       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Tee, bone"
@@ -128,7 +128,7 @@
       "max": "28.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-01-cover-tote",
+     "url": "https://shop.ripostelabs.xyz/products/db-01-cover-tote",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-tote.png?v=1789142455",
       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Tote, default"
@@ -150,7 +150,7 @@
       "max": "38.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-01-quotes-tee",
+     "url": "https://shop.ripostelabs.xyz/products/db-01-quotes-tee",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-1-bone.png?v=1789142463",
       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q1 bone"
@@ -228,7 +228,7 @@
       "max": "3.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-01-sticker-singles",
+     "url": "https://shop.ripostelabs.xyz/products/db-01-sticker-singles",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-sticker-1.png?v=1789142475",
       "alt": "Peel Me CRUMB 4 MAYOR · Singles, 01 fresh daily (dread)"
@@ -297,7 +297,7 @@
       "max": "8.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-01-stickers",
+     "url": "https://shop.ripostelabs.xyz/products/db-01-stickers",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-stickers.png?v=1789142469",
       "alt": "Peel Me №1 — Kelowna's Collapse · Sticker Sheet, default"
@@ -319,7 +319,7 @@
       "max": "28.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-01-wall-poster",
+     "url": "https://shop.ripostelabs.xyz/products/db-01-wall-poster",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-wall-poster.png?v=1789142465",
       "alt": "The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Poster, default"
@@ -341,7 +341,7 @@
       "max": "38.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-01-wall-tee",
+     "url": "https://shop.ripostelabs.xyz/products/db-01-wall-tee",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-wall-tee-bone.png?v=1789142467",
       "alt": "The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Tee, bone"
@@ -393,7 +393,7 @@
       "max": "68.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-02-cover-crewneck",
+     "url": "https://shop.ripostelabs.xyz/products/db-02-cover-crewneck",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-crew-bone.png?v=1789142505",
       "alt": "Daily Bread №2 — The Thaw · Cover Crewneck, bone"
@@ -438,7 +438,7 @@
       "max": "28.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-02-cover-poster",
+     "url": "https://shop.ripostelabs.xyz/products/db-02-cover-poster",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-poster.png?v=1789142509",
       "alt": "Daily Bread №2 — The Thaw · Cover Poster, default"
@@ -460,7 +460,7 @@
       "max": "38.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-02-cover-tee",
+     "url": "https://shop.ripostelabs.xyz/products/db-02-cover-tee",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-tee-bone.png?v=1789142502",
       "alt": "Daily Bread №2 — The Thaw · Cover Tee, bone"
@@ -505,7 +505,7 @@
       "max": "28.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-02-cover-tote",
+     "url": "https://shop.ripostelabs.xyz/products/db-02-cover-tote",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-tote.png?v=1789142507",
       "alt": "Daily Bread №2 — The Thaw · Cover Tote, default"
@@ -527,7 +527,7 @@
       "max": "38.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-02-quotes-tee",
+     "url": "https://shop.ripostelabs.xyz/products/db-02-quotes-tee",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-1-bone.png?v=1789142517",
       "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q1 bone"
@@ -605,7 +605,7 @@
       "max": "3.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-02-sticker-singles",
+     "url": "https://shop.ripostelabs.xyz/products/db-02-sticker-singles",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-sticker-1.png?v=1789142525",
       "alt": "Peel Me DAILY BREAD · KELOWNA BC · Singles, 01 fresh daily (thaw)"
@@ -674,7 +674,7 @@
       "max": "8.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-02-stickers",
+     "url": "https://shop.ripostelabs.xyz/products/db-02-stickers",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-stickers.png?v=1789142519",
       "alt": "Peel Me №2 — The Thaw · Sticker Sheet, default"
@@ -703,7 +703,7 @@
       "max": "68.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/collective-crewneck",
+     "url": "https://shop.ripostelabs.xyz/products/collective-crewneck",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-bone.png?v=1789038380",
       "alt": "Collective. Crewneck, bone"
@@ -748,7 +748,7 @@
       "max": "28.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-collective-poster",
+     "url": "https://shop.ripostelabs.xyz/products/db-collective-poster",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-bone.png?v=1789146091",
       "alt": "Collective. Poster, bone"
@@ -782,7 +782,7 @@
       "max": "28.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-collective-tote",
+     "url": "https://shop.ripostelabs.xyz/products/db-collective-tote",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-bone.png?v=1789146094",
       "alt": "Collective. Tote, natural"
@@ -816,7 +816,7 @@
       "max": "28.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-mouth-poster",
+     "url": "https://shop.ripostelabs.xyz/products/db-mouth-poster",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-mouth-poster-bone.png?v=1789146086",
       "alt": "Daily Bread Mouth Poster, bone"
@@ -850,7 +850,7 @@
       "max": "28.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-mouth-tote",
+     "url": "https://shop.ripostelabs.xyz/products/db-mouth-tote",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-mouth-tote-bone.png?v=1789146089",
       "alt": "Daily Bread Mouth Tote, natural"
@@ -884,7 +884,7 @@
       "max": "28.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-loaf-poster",
+     "url": "https://shop.ripostelabs.xyz/products/db-loaf-poster",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-loaf-poster-bone.png?v=1789146074",
       "alt": "Loaf Poster, bone"
@@ -918,7 +918,7 @@
       "max": "38.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/loaf-tee",
+     "url": "https://shop.ripostelabs.xyz/products/loaf-tee",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-tee-loaf-bone.png?v=1789039598",
       "alt": "Loaf Tee, bone"
@@ -963,7 +963,7 @@
       "max": "28.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-loaf-tote",
+     "url": "https://shop.ripostelabs.xyz/products/db-loaf-tote",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-loaf-tote-bone.png?v=1789146076",
       "alt": "Loaf Tote, natural"
@@ -997,7 +997,7 @@
       "max": "68.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/phone-tree-crewneck",
+     "url": "https://shop.ripostelabs.xyz/products/phone-tree-crewneck",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-phone-tree-bone.png?v=1789039598",
       "alt": "Phone Tree Crewneck, bone"
@@ -1042,7 +1042,7 @@
       "max": "28.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-phone-tree-poster",
+     "url": "https://shop.ripostelabs.xyz/products/db-phone-tree-poster",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-poster-bone.png?v=1789146079",
       "alt": "Phone Tree Poster, bone"
@@ -1076,7 +1076,7 @@
       "max": "28.0",
       "currency": "CAD"
      },
-     "url": "https://h23y0x-fd.myshopify.com/products/db-phone-tree-tote",
+     "url": "https://shop.ripostelabs.xyz/products/db-phone-tree-tote",
      "image": {
       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-tote-bone.png?v=1789146081",
       "alt": "Phone Tree Tote, natural"
