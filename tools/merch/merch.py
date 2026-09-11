@@ -37,6 +37,10 @@ from pathlib import Path
 
 from PIL import Image
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+os.environ.setdefault("MERCH_BLANKS", os.path.join(os.path.dirname(os.path.abspath(__file__)), "blanks"))
+import photomock  # noqa: E402  photographic mockups on the blank photos
+
 REPO = Path(__file__).resolve().parents[2]
 FONT_DIR = REPO / "tools" / "latex" / "fonts"
 
@@ -399,10 +403,8 @@ def build(edition, out, publish):
         imgs = {}
         for kind in kinds:
             for g, fill in GARMENTS.items():
-                m = out / "tmp" / f"{name}-{kind}-{g.lower()}.svg"
-                m.write_text(garment_mockup(inner, fill, kind))
                 png = out / "mockup" / f"{name}-{kind}-{g.lower()}.png"
-                rsvg(env, m, png, width=MOCK)
+                photomock.compose(f"{kind}-{g.lower()}", str(out / "print" / f"{name}.png"), str(png))
                 imgs.setdefault(kind, {})[g] = str(png.relative_to(out))
         return imgs
 
@@ -417,10 +419,8 @@ def build(edition, out, publish):
     products.append(apparel(f"db-{nn}-cover-crewneck", f"Daily Bread {label} · Cover Crewneck", body,
                             "crew", f"DB{nn}-CVC", PRICE_CREW, imgs["crew"]))
     # the tote shares the tee's print file; natural canvas only
-    tm = out / "tmp" / f"db-{nn}-cover-tote.svg"
-    tm.write_text(tote_mockup(inner, BONE))
     timg = out / "mockup" / f"db-{nn}-cover-tote.png"
-    rsvg(env, tm, timg, width=MOCK)
+    photomock.compose("tote-bone", str(out / "print" / f"db-{nn}-cover.png"), str(timg))
     products.append({
         "handle": f"db-{nn}-cover-tote", "title": f"Daily Bread {label} \u00b7 Cover Tote",
         "descriptionHtml": (f"<p>The cover of Daily Bread {label} on a natural canvas tote, 10 \u00d7 15 in print. "
@@ -465,10 +465,8 @@ def build(edition, out, publish):
                 svg.write_text(sheet(quote_inner(model, q, ink)))
                 rsvg(env, svg, out / "print" / f"{name}.png", width=PW)
                 rsvg(env, svg, out / "pdf" / f"{name}.pdf", fmt="pdf")
-                m = out / "tmp" / f"{name}-mock.svg"
-                m.write_text(garment_mockup(quote_inner(model, q, ink), fill, "tee"))
                 png = out / "mockup" / f"{name}.png"
-                rsvg(env, m, png, width=MOCK)
+                photomock.compose(f"tee-{g.lower()}", str(out / "print" / f"{name}.png"), str(png))
                 imgs[f"Q{qi} {g}"] = str(png.relative_to(out))
                 for sz in SIZES:
                     variants.append({"quote": f"Q{qi}", "size": sz, "colour": g,
