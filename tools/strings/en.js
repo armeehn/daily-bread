@@ -40,6 +40,7 @@ module.exports = {
   'nav.directory': 'Directory',
   'nav.submit': 'Submit',
   'nav.lab': 'The Lab',
+  'nav.shop': 'Shop',
   'nav.stickers': 'Stickers',
 
   /* ---- hero ---- */
@@ -173,6 +174,12 @@ module.exports = {
   'submit.voteFine': 'Mark one · photograph · send. Democracy.',
 
   /* ---- Sec.16 · from the lab ---- */
+  'shop.tag': '// the shop · every edition, on cotton and paper',
+  'shop.kicker': 'MERCH / BY EDITION',
+  'shop.h': 'Wear the issue.',
+  'shop.lead': 'Each edition turns into things: the cover on a tee and a tote, the centrefold as a poster, the sticker sheet cut loose, the quotes said out loud. Made from the edition\u2019s own files, printed on order.',
+  'shop.all': 'All of it',
+  'shop.note': 'PRICES IN CAD \u00b7 PRINTED ON ORDER \u00b7 THE SHOP RUNS ON RIPOSTE\u2019S STORE; THE MAGAZINE STAYS ITS OWN.',
   'lab.tag': '// from the lab · funder disclosure, printed large',
   'lab.labInc': 'Laboratories Inc.',
   'lab.h': at('p30.content.title'),

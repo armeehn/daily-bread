@@ -1,0 +1,835 @@
+{
+ "shop": "https://h23y0x-fd.myshopify.com",
+ "generated": "2026-09-11T16:13:39+00:00",
+ "collections": [
+  {
+   "handle": "db-01",
+   "title": "Daily Bread №1 — Kelowna's Collapse",
+   "url": "https://h23y0x-fd.myshopify.com/collections/db-01",
+   "products": [
+    {
+     "handle": "db-01-cover-crewneck",
+     "title": "Daily Bread №1 — Kelowna's Collapse · Cover Crewneck",
+     "type": "Sweatshirt",
+     "price": {
+      "min": "68.0",
+      "max": "68.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-01-cover-crewneck",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-crew-bone.png?v=1789142454",
+      "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Crewneck, bone"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-crew-bone.png?v=1789142454",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Crewneck, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-crew-ink.png?v=1789142454",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Crewneck, ink"
+      }
+     ],
+     "options": [
+      {
+       "name": "Size",
+       "values": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+       ]
+      },
+      {
+       "name": "Colour",
+       "values": [
+        "Bone",
+        "Ink"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "db-01-cover-poster",
+     "title": "Daily Bread №1 — Kelowna's Collapse · Cover Poster",
+     "type": "Poster",
+     "price": {
+      "min": "28.0",
+      "max": "28.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-01-cover-poster",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-poster.png?v=1789142457",
+      "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Poster, default"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-poster.png?v=1789142457",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Poster, default"
+      }
+     ],
+     "options": []
+    },
+    {
+     "handle": "db-01-cover-tee",
+     "title": "Daily Bread №1 — Kelowna's Collapse · Cover Tee",
+     "type": "T-Shirt",
+     "price": {
+      "min": "38.0",
+      "max": "38.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-01-cover-tee",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-tee-bone.png?v=1789142451",
+      "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Tee, bone"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-tee-bone.png?v=1789142451",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Tee, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-tee-ink.png?v=1789142451",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Tee, ink"
+      }
+     ],
+     "options": [
+      {
+       "name": "Size",
+       "values": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+       ]
+      },
+      {
+       "name": "Colour",
+       "values": [
+        "Bone",
+        "Ink"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "db-01-cover-tote",
+     "title": "Daily Bread №1 — Kelowna's Collapse · Cover Tote",
+     "type": "Tote Bag",
+     "price": {
+      "min": "28.0",
+      "max": "28.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-01-cover-tote",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-tote.png?v=1789142455",
+      "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Tote, default"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-tote.png?v=1789142455",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Tote, default"
+      }
+     ],
+     "options": []
+    },
+    {
+     "handle": "db-01-quotes-tee",
+     "title": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee",
+     "type": "T-Shirt",
+     "price": {
+      "min": "38.0",
+      "max": "38.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-01-quotes-tee",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-1-bone.png?v=1789142463",
+      "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q1 bone"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-1-bone.png?v=1789142463",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q1 bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-1-ink.png?v=1789142463",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q1 ink"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-2-bone.png?v=1789142463",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q2 bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-2-ink.png?v=1789142463",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q2 ink"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-3-bone.png?v=1789142463",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q3 bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-3-ink.png?v=1789142463",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q3 ink"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-4-bone.png?v=1789142463",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q4 bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-4-ink.png?v=1789142463",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q4 ink"
+      }
+     ],
+     "options": [
+      {
+       "name": "Quote",
+       "values": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+       ]
+      },
+      {
+       "name": "Size",
+       "values": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+       ]
+      },
+      {
+       "name": "Colour",
+       "values": [
+        "Bone",
+        "Ink"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "db-01-sticker-singles",
+     "title": "Peel Me №1 — Kelowna's Collapse · Singles",
+     "type": "Stickers",
+     "price": {
+      "min": "3.0",
+      "max": "3.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-01-sticker-singles",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-sticker-1.png?v=1789142475",
+      "alt": "Peel Me CRUMB 4 MAYOR · Singles, 01 fresh daily (dread)"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-sticker-1.png?v=1789142475",
+       "alt": "Peel Me CRUMB 4 MAYOR · Singles, 01 fresh daily (dread)"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-sticker-2.png?v=1789142475",
+       "alt": "Peel Me CRUMB 4 MAYOR · Singles, 02 eat the rich, share the bread"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-sticker-3.png?v=1789142475",
+       "alt": "Peel Me CRUMB 4 MAYOR · Singles, 03 ogopogo saw you"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-sticker-4.png?v=1789142475",
+       "alt": "Peel Me CRUMB 4 MAYOR · Singles, 04 daily bread — drip wordmark"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-sticker-5.png?v=1789142475",
+       "alt": "Peel Me CRUMB 4 MAYOR · Singles, 05 local peach, gender unknown"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-sticker-6.png?v=1789142475",
+       "alt": "Peel Me CRUMB 4 MAYOR · Singles, 06 i survived another tower proposal"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-sticker-7.png?v=1789142475",
+       "alt": "Peel Me CRUMB 4 MAYOR · Singles, 07 quiet until we didn’t have to be"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-sticker-8.png?v=1789142475",
+       "alt": "Peel Me CRUMB 4 MAYOR · Singles, 08 parry. riposte."
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-sticker-9.png?v=1789142475",
+       "alt": "Peel Me CRUMB 4 MAYOR · Singles, 09 crumb 4 mayor"
+      }
+     ],
+     "options": [
+      {
+       "name": "Design",
+       "values": [
+        "01 FRESH DAILY (DREAD)",
+        "02 EAT THE RICH, SHARE THE BREAD",
+        "03 OGOPOGO SAW YOU",
+        "04 DAILY BREAD — drip wordmark",
+        "05 LOCAL PEACH, GENDER UNKNOWN",
+        "06 I SURVIVED ANOTHER TOWER PROPOSAL",
+        "07 QUIET UNTIL WE DIDN’T HAVE TO BE",
+        "08 PARRY. RIPOSTE.",
+        "09 CRUMB 4 MAYOR"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "db-01-stickers",
+     "title": "Peel Me №1 — Kelowna's Collapse · Sticker Sheet",
+     "type": "Stickers",
+     "price": {
+      "min": "8.0",
+      "max": "8.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-01-stickers",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-stickers.png?v=1789142469",
+      "alt": "Peel Me №1 — Kelowna's Collapse · Sticker Sheet, default"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-stickers.png?v=1789142469",
+       "alt": "Peel Me №1 — Kelowna's Collapse · Sticker Sheet, default"
+      }
+     ],
+     "options": []
+    },
+    {
+     "handle": "db-01-wall-poster",
+     "title": "The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Poster",
+     "type": "Poster",
+     "price": {
+      "min": "28.0",
+      "max": "28.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-01-wall-poster",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-wall-poster.png?v=1789142465",
+      "alt": "The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Poster, default"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-wall-poster.png?v=1789142465",
+       "alt": "The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Poster, default"
+      }
+     ],
+     "options": []
+    },
+    {
+     "handle": "db-01-wall-tee",
+     "title": "The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Tee",
+     "type": "T-Shirt",
+     "price": {
+      "min": "38.0",
+      "max": "38.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-01-wall-tee",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-wall-tee-bone.png?v=1789142467",
+      "alt": "The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Tee, bone"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-wall-tee-bone.png?v=1789142467",
+       "alt": "The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Tee, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-wall-tee-ink.png?v=1789142467",
+       "alt": "The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Tee, ink"
+      }
+     ],
+     "options": [
+      {
+       "name": "Size",
+       "values": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+       ]
+      },
+      {
+       "name": "Colour",
+       "values": [
+        "Bone",
+        "Ink"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "handle": "db-02",
+   "title": "Daily Bread №2 — The Thaw",
+   "url": "https://h23y0x-fd.myshopify.com/collections/db-02",
+   "products": [
+    {
+     "handle": "db-02-cover-crewneck",
+     "title": "Daily Bread №2 — The Thaw · Cover Crewneck",
+     "type": "Sweatshirt",
+     "price": {
+      "min": "68.0",
+      "max": "68.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-02-cover-crewneck",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-crew-bone.png?v=1789142505",
+      "alt": "Daily Bread №2 — The Thaw · Cover Crewneck, bone"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-crew-bone.png?v=1789142505",
+       "alt": "Daily Bread №2 — The Thaw · Cover Crewneck, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-crew-ink.png?v=1789142505",
+       "alt": "Daily Bread №2 — The Thaw · Cover Crewneck, ink"
+      }
+     ],
+     "options": [
+      {
+       "name": "Size",
+       "values": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+       ]
+      },
+      {
+       "name": "Colour",
+       "values": [
+        "Bone",
+        "Ink"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "db-02-cover-poster",
+     "title": "Daily Bread №2 — The Thaw · Cover Poster",
+     "type": "Poster",
+     "price": {
+      "min": "28.0",
+      "max": "28.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-02-cover-poster",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-poster.png?v=1789142509",
+      "alt": "Daily Bread №2 — The Thaw · Cover Poster, default"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-poster.png?v=1789142509",
+       "alt": "Daily Bread №2 — The Thaw · Cover Poster, default"
+      }
+     ],
+     "options": []
+    },
+    {
+     "handle": "db-02-cover-tee",
+     "title": "Daily Bread №2 — The Thaw · Cover Tee",
+     "type": "T-Shirt",
+     "price": {
+      "min": "38.0",
+      "max": "38.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-02-cover-tee",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-tee-bone.png?v=1789142502",
+      "alt": "Daily Bread №2 — The Thaw · Cover Tee, bone"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-tee-bone.png?v=1789142502",
+       "alt": "Daily Bread №2 — The Thaw · Cover Tee, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-tee-ink.png?v=1789142502",
+       "alt": "Daily Bread №2 — The Thaw · Cover Tee, ink"
+      }
+     ],
+     "options": [
+      {
+       "name": "Size",
+       "values": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+       ]
+      },
+      {
+       "name": "Colour",
+       "values": [
+        "Bone",
+        "Ink"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "db-02-cover-tote",
+     "title": "Daily Bread №2 — The Thaw · Cover Tote",
+     "type": "Tote Bag",
+     "price": {
+      "min": "28.0",
+      "max": "28.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-02-cover-tote",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-tote.png?v=1789142507",
+      "alt": "Daily Bread №2 — The Thaw · Cover Tote, default"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-tote.png?v=1789142507",
+       "alt": "Daily Bread №2 — The Thaw · Cover Tote, default"
+      }
+     ],
+     "options": []
+    },
+    {
+     "handle": "db-02-quotes-tee",
+     "title": "Daily Bread №2 — The Thaw · Quotes Tee",
+     "type": "T-Shirt",
+     "price": {
+      "min": "38.0",
+      "max": "38.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-02-quotes-tee",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-1-bone.png?v=1789142517",
+      "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q1 bone"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-1-bone.png?v=1789142517",
+       "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q1 bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-1-ink.png?v=1789142517",
+       "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q1 ink"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-2-bone.png?v=1789142517",
+       "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q2 bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-2-ink.png?v=1789142517",
+       "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q2 ink"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-3-bone.png?v=1789142517",
+       "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q3 bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-3-ink.png?v=1789142517",
+       "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q3 ink"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-4-bone.png?v=1789142517",
+       "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q4 bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-4-ink.png?v=1789142517",
+       "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q4 ink"
+      }
+     ],
+     "options": [
+      {
+       "name": "Quote",
+       "values": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+       ]
+      },
+      {
+       "name": "Size",
+       "values": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+       ]
+      },
+      {
+       "name": "Colour",
+       "values": [
+        "Bone",
+        "Ink"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "db-02-sticker-singles",
+     "title": "Peel Me №2 — The Thaw · Singles",
+     "type": "Stickers",
+     "price": {
+      "min": "3.0",
+      "max": "3.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-02-sticker-singles",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-sticker-1.png?v=1789142525",
+      "alt": "Peel Me DAILY BREAD · KELOWNA BC · Singles, 01 fresh daily (thaw)"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-sticker-1.png?v=1789142525",
+       "alt": "Peel Me DAILY BREAD · KELOWNA BC · Singles, 01 fresh daily (thaw)"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-sticker-2.png?v=1789142525",
+       "alt": "Peel Me DAILY BREAD · KELOWNA BC · Singles, 02 the lake remembers"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-sticker-3.png?v=1789142525",
+       "alt": "Peel Me DAILY BREAD · KELOWNA BC · Singles, 03 ice out ✕"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-sticker-4.png?v=1789142525",
+       "alt": "Peel Me DAILY BREAD · KELOWNA BC · Singles, 04 rent strike season two"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-sticker-5.png?v=1789142525",
+       "alt": "Peel Me DAILY BREAD · KELOWNA BC · Singles, 05 it was thursday"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-sticker-6.png?v=1789142525",
+       "alt": "Peel Me DAILY BREAD · KELOWNA BC · Singles, 06 pay what you can"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-sticker-7.png?v=1789142525",
+       "alt": "Peel Me DAILY BREAD · KELOWNA BC · Singles, 07 mud is a season"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-sticker-8.png?v=1789142525",
+       "alt": "Peel Me DAILY BREAD · KELOWNA BC · Singles, 08 crumbs 4 council"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-sticker-9.png?v=1789142525",
+       "alt": "Peel Me DAILY BREAD · KELOWNA BC · Singles, 09 daily bread · kelowna bc"
+      }
+     ],
+     "options": [
+      {
+       "name": "Design",
+       "values": [
+        "01 FRESH DAILY (THAW)",
+        "02 THE LAKE REMEMBERS",
+        "03 ICE OUT ✕",
+        "04 RENT STRIKE SEASON TWO",
+        "05 IT WAS THURSDAY",
+        "06 PAY WHAT YOU CAN",
+        "07 MUD IS A SEASON",
+        "08 CRUMBS 4 COUNCIL",
+        "09 DAILY BREAD · KELOWNA BC"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "db-02-stickers",
+     "title": "Peel Me №2 — The Thaw · Sticker Sheet",
+     "type": "Stickers",
+     "price": {
+      "min": "8.0",
+      "max": "8.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-02-stickers",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-stickers.png?v=1789142519",
+      "alt": "Peel Me №2 — The Thaw · Sticker Sheet, default"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-stickers.png?v=1789142519",
+       "alt": "Peel Me №2 — The Thaw · Sticker Sheet, default"
+      }
+     ],
+     "options": []
+    }
+   ]
+  },
+  {
+   "handle": "daily-bread-apparel",
+   "title": "Daily Bread · Apparel",
+   "url": "https://h23y0x-fd.myshopify.com/collections/daily-bread-apparel",
+   "products": [
+    {
+     "handle": "collective-crewneck",
+     "title": "Collective. Crewneck",
+     "type": "Sweatshirt",
+     "price": {
+      "min": "68.0",
+      "max": "68.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/collective-crewneck",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-bone.png?v=1789038380",
+      "alt": "Collective. Crewneck, bone"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-bone.png?v=1789038380",
+       "alt": "Collective. Crewneck, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-ink.png?v=1789038380",
+       "alt": "Collective. Crewneck, ink"
+      }
+     ],
+     "options": [
+      {
+       "name": "Size",
+       "values": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+       ]
+      },
+      {
+       "name": "Colour",
+       "values": [
+        "Bone",
+        "Ink"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "loaf-tee",
+     "title": "Loaf Tee",
+     "type": "T-Shirt",
+     "price": {
+      "min": "38.0",
+      "max": "38.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/loaf-tee",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-tee-loaf-bone.png?v=1789039598",
+      "alt": "Loaf Tee, bone"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-tee-loaf-bone.png?v=1789039598",
+       "alt": "Loaf Tee, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-tee-loaf-ink.png?v=1789039598",
+       "alt": "Loaf Tee, ink"
+      }
+     ],
+     "options": [
+      {
+       "name": "Size",
+       "values": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+       ]
+      },
+      {
+       "name": "Colour",
+       "values": [
+        "Bone",
+        "Ink"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "phone-tree-crewneck",
+     "title": "Phone Tree Crewneck",
+     "type": "Sweatshirt",
+     "price": {
+      "min": "68.0",
+      "max": "68.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/phone-tree-crewneck",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-phone-tree-bone.png?v=1789039598",
+      "alt": "Phone Tree Crewneck, bone"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-phone-tree-bone.png?v=1789039598",
+       "alt": "Phone Tree Crewneck, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-phone-tree-ink.png?v=1789039599",
+       "alt": "Phone Tree Crewneck, ink"
+      }
+     ],
+     "options": [
+      {
+       "name": "Size",
+       "values": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+       ]
+      },
+      {
+       "name": "Colour",
+       "values": [
+        "Bone",
+        "Ink"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
