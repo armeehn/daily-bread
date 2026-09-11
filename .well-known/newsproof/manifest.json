@@ -13,137 +13,137 @@
   },
   "publisher_key_id": "dc93d30cf93f629a",
   "log_key_id": "ca8f1397d1cf96dd",
-  "tree_size": 127,
-  "root_sha256": "a821d4f59fe14df1201d00957c0db8626698562943ca562675ad4dfba45b9aab",
-  "sth_timestamp": "2026-09-11T17:55:25Z",
+  "tree_size": 143,
+  "root_sha256": "1a7552c0efbbc43db1f4e85eb46a2cb1b9b354c2ce6431cb6912b5b908a256c2",
+  "sth_timestamp": "2026-09-11T18:00:14Z",
   "editions": [
     {
       "code": "en",
       "endo": "English",
       "url": "/",
       "proof": "proofs/en.proof.json",
-      "version": 7,
-      "leaf_index": 111
+      "version": 8,
+      "leaf_index": 127
     },
     {
       "code": "fr",
       "endo": "Fran\u00e7ais",
       "url": "/fr/",
       "proof": "proofs/fr.proof.json",
-      "version": 8,
-      "leaf_index": 112
+      "version": 9,
+      "leaf_index": 128
     },
     {
       "code": "es",
       "endo": "Espa\u00f1ol",
       "url": "/es/",
       "proof": "proofs/es.proof.json",
-      "version": 8,
-      "leaf_index": 113
+      "version": 9,
+      "leaf_index": 129
     },
     {
       "code": "it",
       "endo": "Italiano",
       "url": "/it/",
       "proof": "proofs/it.proof.json",
-      "version": 8,
-      "leaf_index": 114
+      "version": 9,
+      "leaf_index": 130
     },
     {
       "code": "pl",
       "endo": "Polski",
       "url": "/pl/",
       "proof": "proofs/pl.proof.json",
-      "version": 8,
-      "leaf_index": 115
+      "version": 9,
+      "leaf_index": 131
     },
     {
       "code": "la",
       "endo": "Latina",
       "url": "/la/",
       "proof": "proofs/la.proof.json",
-      "version": 8,
-      "leaf_index": 116
+      "version": 9,
+      "leaf_index": 132
     },
     {
       "code": "zh-hans",
       "endo": "\u7b80\u4f53\u4e2d\u6587",
       "url": "/zh-hans/",
       "proof": "proofs/zh-hans.proof.json",
-      "version": 8,
-      "leaf_index": 117
+      "version": 9,
+      "leaf_index": 133
     },
     {
       "code": "zh-hant",
       "endo": "\u7e41\u9ad4\u4e2d\u6587",
       "url": "/zh-hant/",
       "proof": "proofs/zh-hant.proof.json",
-      "version": 8,
-      "leaf_index": 118
+      "version": 9,
+      "leaf_index": 134
     },
     {
       "code": "pa",
       "endo": "\u0a2a\u0a70\u0a1c\u0a3e\u0a2c\u0a40",
       "url": "/pa/",
       "proof": "proofs/pa.proof.json",
-      "version": 8,
-      "leaf_index": 119
+      "version": 9,
+      "leaf_index": 135
     },
     {
       "code": "ko",
       "endo": "\ud55c\uad6d\uc5b4",
       "url": "/ko/",
       "proof": "proofs/ko.proof.json",
-      "version": 8,
-      "leaf_index": 120
+      "version": 9,
+      "leaf_index": 136
     },
     {
       "code": "ja",
       "endo": "\u65e5\u672c\u8a9e",
       "url": "/ja/",
       "proof": "proofs/ja.proof.json",
-      "version": 8,
-      "leaf_index": 121
+      "version": 9,
+      "leaf_index": 137
     },
     {
       "code": "tl",
       "endo": "Tagalog",
       "url": "/tl/",
       "proof": "proofs/tl.proof.json",
-      "version": 8,
-      "leaf_index": 122
+      "version": 9,
+      "leaf_index": 138
     },
     {
       "code": "vi",
       "endo": "Ti\u1ebfng Vi\u1ec7t",
       "url": "/vi/",
       "proof": "proofs/vi.proof.json",
-      "version": 8,
-      "leaf_index": 123
+      "version": 9,
+      "leaf_index": 139
     },
     {
       "code": "hi",
       "endo": "\u0939\u093f\u0928\u094d\u0926\u0940",
       "url": "/hi/",
       "proof": "proofs/hi.proof.json",
-      "version": 8,
-      "leaf_index": 124
+      "version": 9,
+      "leaf_index": 140
     },
     {
       "code": "ar",
       "endo": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629",
       "url": "/ar/",
       "proof": "proofs/ar.proof.json",
-      "version": 8,
-      "leaf_index": 125
+      "version": 9,
+      "leaf_index": 141
     },
     {
       "code": "fa",
       "endo": "\u0641\u0627\u0631\u0633\u06cc",
       "url": "/fa/",
       "proof": "proofs/fa.proof.json",
-      "version": 8,
-      "leaf_index": 126
+      "version": 9,
+      "leaf_index": 142
     }
   ]
 }
