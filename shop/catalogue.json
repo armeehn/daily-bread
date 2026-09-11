@@ -1,6 +1,6 @@
 {
  "shop": "https://h23y0x-fd.myshopify.com",
- "generated": "2026-09-11T18:00:11+00:00",
+ "generated": "2026-09-11T18:07:30+00:00",
  "collections": [
   {
    "handle": "db-01",
@@ -705,16 +705,16 @@
      },
      "url": "https://shop.ripostelabs.xyz/products/collective-crewneck",
      "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-bone.png?v=1789149009",
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-bone.png?v=1789150046",
       "alt": "collective-crewneck, bone"
      },
      "images": [
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-bone.png?v=1789149009",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-bone.png?v=1789150046",
        "alt": "collective-crewneck, bone"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-ink.png?v=1789149009",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-ink.png?v=1789150046",
        "alt": "collective-crewneck, ink"
       }
      ],
@@ -750,16 +750,16 @@
      },
      "url": "https://shop.ripostelabs.xyz/products/db-collective-poster",
      "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-bone.png?v=1789148938",
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-bone.png?v=1789149988",
       "alt": "Collective. Poster, bone"
      },
      "images": [
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-bone.png?v=1789148938",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-bone.png?v=1789149988",
        "alt": "Collective. Poster, bone"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-ink.png?v=1789148938",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-ink.png?v=1789149988",
        "alt": "Collective. Poster, ink"
       }
      ],
@@ -784,16 +784,16 @@
      },
      "url": "https://shop.ripostelabs.xyz/products/db-collective-tote",
      "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-bone.png?v=1789148940",
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-bone.png?v=1789149991",
       "alt": "Collective. Tote, natural"
      },
      "images": [
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-bone.png?v=1789148940",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-bone.png?v=1789149991",
        "alt": "Collective. Tote, natural"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-ink.png?v=1789148940",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-ink.png?v=1789149991",
        "alt": "Collective. Tote, black"
       }
      ],
@@ -818,16 +818,16 @@
      },
      "url": "https://shop.ripostelabs.xyz/products/phone-tree-crewneck",
      "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-phone-tree-bone.png?v=1789148991",
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-phone-tree-bone.png?v=1789150034",
       "alt": "phone-tree-crewneck, bone"
      },
      "images": [
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-phone-tree-bone.png?v=1789148991",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-phone-tree-bone.png?v=1789150034",
        "alt": "phone-tree-crewneck, bone"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-phone-tree-ink.png?v=1789148991",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-phone-tree-ink.png?v=1789150034",
        "alt": "phone-tree-crewneck, ink"
       }
      ],
@@ -863,16 +863,16 @@
      },
      "url": "https://shop.ripostelabs.xyz/products/db-phone-tree-poster",
      "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-poster-bone.png?v=1789148925",
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-poster-bone.png?v=1789149976",
       "alt": "Phone Tree Poster, bone"
      },
      "images": [
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-poster-bone.png?v=1789148925",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-poster-bone.png?v=1789149976",
        "alt": "Phone Tree Poster, bone"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-poster-ink.png?v=1789148925",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-poster-ink.png?v=1789149976",
        "alt": "Phone Tree Poster, ink"
       }
      ],
@@ -897,16 +897,16 @@
      },
      "url": "https://shop.ripostelabs.xyz/products/db-phone-tree-tote",
      "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-tote-bone.png?v=1789148928",
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-tote-bone.png?v=1789149979",
       "alt": "Phone Tree Tote, natural"
      },
      "images": [
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-tote-bone.png?v=1789148928",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-tote-bone.png?v=1789149979",
        "alt": "Phone Tree Tote, natural"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-tote-ink.png?v=1789148928",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-tote-ink.png?v=1789149979",
        "alt": "Phone Tree Tote, black"
       }
      ],
