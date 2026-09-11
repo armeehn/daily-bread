@@ -550,22 +550,22 @@ def build(edition, out, publish):
         # singles: one product, a variant per design, 3 in die-cut
         _, items = sticker_items(model)
         imgs, variants = {}, []
-        for i, (label, shape, bg, fg) in enumerate(items, 1):
+        for i, (caption, shape, bg, fg) in enumerate(items, 1):
             name = f"db-{nn}-sticker-{i}"
             sv = out / "tmp" / f"{name}.svg"
-            sv.write_text(single_svg(label, shape, bg, fg))
+            sv.write_text(single_svg(caption, shape, bg, fg))
             rsvg(env, sv, out / "pdf" / f"{name}.pdf", fmt="pdf")
             rsvg(env, sv, out / "print" / f"{name}.png", width=int((SINGLE_MM + 2 * SINGLE_BLEED) / 25.4 * DPI))
             mm_ = out / "tmp" / f"{name}-mock.svg"
             side = SINGLE_MM + 2 * SINGLE_BLEED
-            body = single_svg(label, shape, bg, fg)
+            body = single_svg(caption, shape, bg, fg)
             mm_.write_text(f'<svg xmlns="http://www.w3.org/2000/svg" width="{MOCK}" height="{MOCK}" viewBox="0 0 1000 1000">'
                            f'<rect width="1000" height="1000" fill="{BONE_DIM}"/>'
                            f'<svg x="200" y="200" width="600" height="600" viewBox="0 0 {side} {side}">'
                            f'{body[body.index(">", body.index("<svg")) + 1:body.rindex("</svg>")]}</svg></svg>')
             png = out / "mockup" / f"{name}.png"
             rsvg(env, mm_, png, width=MOCK)
-            key = f"{i:02d} {label}"
+            key = f"{i:02d} {caption}"
             imgs[key] = str(png.relative_to(out))
             variants.append({"size": key, "colour": None, "sku": f"DB{nn}-STK-{i:02d}", "price": PRICE_SINGLE, "image": key})
         products.append({
