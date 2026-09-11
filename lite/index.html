@@ -215,6 +215,7 @@
     body:has(#directory:target) .rail a[href="#directory"],
     body:has(#submit:target) .rail a[href="#submit"],
     body:has(#lab:target) .rail a[href="#lab"],
+    body:has(#shop:target) .rail a[href="#shop"],
     body:has(#stickers:target) .rail a[href="#stickers"],
     body:not(:has(.pane:target)) .rail a[href="#letter"]{
       --edge:var(--pink);--no:var(--muted);
@@ -526,6 +527,21 @@
   [dir="rtl"] .list .li .end{margin-left:0;margin-right:auto}
   [dir="rtl"] .masthead-list .li .val{margin-left:0;margin-right:auto}
 
+  /* ---- the shop (Sec.17): cards on the paper, hard ink offset like .card ---- */
+  .shop-col{margin-top:26px}
+  .shop-col .hd{display:flex;justify-content:space-between;gap:12px;align-items:center;
+    border-bottom:2px solid var(--ink);padding-bottom:8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+  .shop-col .hd .r a{font-weight:700}
+  .shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:18px;margin-top:16px}
+  .shop-card{display:block;border:2px solid var(--ink);background:var(--bone);color:var(--ink);text-decoration:none;
+    box-shadow:6px 6px 0 var(--pink);padding:0 0 12px}
+  .shop-card:hover{box-shadow:6px 6px 0 var(--teal)}
+  .shop-card img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border-bottom:2px solid var(--ink);background:var(--panel);margin-bottom:10px}
+  .shop-card > span{display:block;padding:0 12px}
+  .shop-name{font-weight:700;font-size:13px;line-height:1.35;margin-top:10px}
+  .shop-type{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+  .shop-price{font-size:12px;margin-top:8px}
+
   /* ==========================================================================
      Daily Bread · lightweight-variant overrides
      --------------------------------------------------------------------------
@@ -655,6 +671,7 @@
       <a href="#directory">Directory</a>
       <a href="#submit">Submit</a>
       <a href="#lab">The Lab</a>
+      <a href="#shop">Shop</a>
       <a href="#stickers">Stickers</a>
     </nav>
     <nav class="vswitch" aria-label="Rendering"><a href="/">Full</a><a href="/lite/" aria-current="true">Lite</a><a href="/eink/">E-ink</a></nav>
@@ -678,6 +695,7 @@
       <a href="#directory"><span class="no">18</span><span class="lb">Directory</span></a>
       <a href="#submit"><span class="no">19</span><span class="lb">Submit</span></a>
       <a href="#lab"><span class="no">16</span><span class="lb">The Lab</span></a>
+      <a href="#shop"><span class="no">17</span><span class="lb">Shop</span></a>
       <a href="#stickers"><span class="no">24</span><span class="lb">Stickers</span></a>
     </div>
   </div>
@@ -1085,6 +1103,152 @@
         <p class="meta" style="margin-top:14px;line-height:1.7">Tour the shop: open doors first Fridays · bring clean #2 + #5 plastics.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<div class="band harl br"></div>
+
+</div><!-- /pane -->
+
+<div class="pane" id="shop">
+<!-- ============ SHOP ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.17</span><span class="tag">// the shop · every edition, on cotton and paper</span></div>
+    <span class="kicker">MERCH / BY EDITION</span>
+    <h2 class="display" style="margin-top:14px">Wear the issue.</h2>
+    <p class="dek" style="max-width:62ch">Each edition turns into things: the cover on a tee and a tote, the centrefold as a poster, the sticker sheet cut loose, the quotes said out loud. Made from the edition’s own files, printed on order.</p>
+    
+      <div class="shop-col">
+        <div class="hd"><span>Daily Bread №1 — Kelowna's Collapse</span><span class="r"><a href="https://h23y0x-fd.myshopify.com/collections/db-01" rel="noopener">All of it →</a></span></div>
+        <div class="shop-grid">
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/db-01-cover-crewneck" rel="noopener">
+            
+            <span class="shop-name">Cover Crewneck</span>
+            <span class="shop-type">Sweatshirt</span>
+            <span class="shop-price">$68 CAD</span>
+          </a>
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/db-01-cover-poster" rel="noopener">
+            
+            <span class="shop-name">Cover Poster</span>
+            <span class="shop-type">Poster</span>
+            <span class="shop-price">$28 CAD</span>
+          </a>
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/db-01-cover-tee" rel="noopener">
+            
+            <span class="shop-name">Cover Tee</span>
+            <span class="shop-type">T-Shirt</span>
+            <span class="shop-price">$38 CAD</span>
+          </a>
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/db-01-cover-tote" rel="noopener">
+            
+            <span class="shop-name">Cover Tote</span>
+            <span class="shop-type">Tote Bag</span>
+            <span class="shop-price">$28 CAD</span>
+          </a>
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/db-01-quotes-tee" rel="noopener">
+            
+            <span class="shop-name">Quotes Tee</span>
+            <span class="shop-type">T-Shirt</span>
+            <span class="shop-price">$38 CAD</span>
+          </a>
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/db-01-sticker-singles" rel="noopener">
+            
+            <span class="shop-name">Peel Me №1 — Kelowna's Collapse · Singles</span>
+            <span class="shop-type">Stickers</span>
+            <span class="shop-price">$3 CAD</span>
+          </a>
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/db-01-stickers" rel="noopener">
+            
+            <span class="shop-name">Peel Me №1 — Kelowna's Collapse · Sticker Sheet</span>
+            <span class="shop-type">Stickers</span>
+            <span class="shop-price">$8 CAD</span>
+          </a>
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/db-01-wall-poster" rel="noopener">
+            
+            <span class="shop-name">The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Poster</span>
+            <span class="shop-type">Poster</span>
+            <span class="shop-price">$28 CAD</span>
+          </a>
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/db-01-wall-tee" rel="noopener">
+            
+            <span class="shop-name">The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Tee</span>
+            <span class="shop-type">T-Shirt</span>
+            <span class="shop-price">$38 CAD</span>
+          </a>
+        </div>
+      </div>
+      <div class="shop-col">
+        <div class="hd"><span>Daily Bread №2 — The Thaw</span><span class="r"><a href="https://h23y0x-fd.myshopify.com/collections/db-02" rel="noopener">All of it →</a></span></div>
+        <div class="shop-grid">
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/db-02-cover-crewneck" rel="noopener">
+            
+            <span class="shop-name">Cover Crewneck</span>
+            <span class="shop-type">Sweatshirt</span>
+            <span class="shop-price">$68 CAD</span>
+          </a>
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/db-02-cover-poster" rel="noopener">
+            
+            <span class="shop-name">Cover Poster</span>
+            <span class="shop-type">Poster</span>
+            <span class="shop-price">$28 CAD</span>
+          </a>
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/db-02-cover-tee" rel="noopener">
+            
+            <span class="shop-name">Cover Tee</span>
+            <span class="shop-type">T-Shirt</span>
+            <span class="shop-price">$38 CAD</span>
+          </a>
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/db-02-cover-tote" rel="noopener">
+            
+            <span class="shop-name">Cover Tote</span>
+            <span class="shop-type">Tote Bag</span>
+            <span class="shop-price">$28 CAD</span>
+          </a>
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/db-02-quotes-tee" rel="noopener">
+            
+            <span class="shop-name">Quotes Tee</span>
+            <span class="shop-type">T-Shirt</span>
+            <span class="shop-price">$38 CAD</span>
+          </a>
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/db-02-sticker-singles" rel="noopener">
+            
+            <span class="shop-name">Peel Me №2 — The Thaw · Singles</span>
+            <span class="shop-type">Stickers</span>
+            <span class="shop-price">$3 CAD</span>
+          </a>
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/db-02-stickers" rel="noopener">
+            
+            <span class="shop-name">Peel Me №2 — The Thaw · Sticker Sheet</span>
+            <span class="shop-type">Stickers</span>
+            <span class="shop-price">$8 CAD</span>
+          </a>
+        </div>
+      </div>
+      <div class="shop-col">
+        <div class="hd"><span>Daily Bread · Apparel</span><span class="r"><a href="https://h23y0x-fd.myshopify.com/collections/daily-bread-apparel" rel="noopener">All of it →</a></span></div>
+        <div class="shop-grid">
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/collective-crewneck" rel="noopener">
+            
+            <span class="shop-name">Collective. Crewneck</span>
+            <span class="shop-type">Sweatshirt</span>
+            <span class="shop-price">$68 CAD</span>
+          </a>
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/loaf-tee" rel="noopener">
+            
+            <span class="shop-name">Loaf Tee</span>
+            <span class="shop-type">T-Shirt</span>
+            <span class="shop-price">$38 CAD</span>
+          </a>
+          <a class="shop-card" href="https://h23y0x-fd.myshopify.com/products/phone-tree-crewneck" rel="noopener">
+            
+            <span class="shop-name">Phone Tree Crewneck</span>
+            <span class="shop-type">Sweatshirt</span>
+            <span class="shop-price">$68 CAD</span>
+          </a>
+        </div>
+      </div>
+    <p class="meta" style="margin-top:22px;line-height:1.7">PRICES IN CAD · PRINTED ON ORDER · THE SHOP RUNS ON RIPOSTE’S STORE; THE MAGAZINE STAYS ITS OWN.</p>
   </div>
 </section>
 
