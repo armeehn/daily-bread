@@ -57,11 +57,18 @@ def perspective_coeffs(src, dst):
     return _solve(a, b)
 
 
-def compose(blank, print_png, out_png, size=OUT_SIZE):
+def compose(blank, print_png, out_png, size=OUT_SIZE, line_boost=0):
+    """`line_boost`: dilate the art's alpha by this many pixels first, for
+    hairline drawings that would vanish at mockup scale (the print file is
+    left alone)."""
     photo_name, quad = BLANKS[blank]
     photo = Image.open(os.path.join(BLANK_DIR, photo_name)).convert("RGB")
     W, H = photo.size
     art = Image.open(print_png).convert("RGBA")
+    if line_boost:
+        r0, g0, b0, a0 = art.split()
+        a0 = a0.filter(ImageFilter.MaxFilter(2 * line_boost + 1))
+        art = Image.merge("RGBA", (r0, g0, b0, a0))
     # the print sheet is 3600 x 4800; warp it onto the quad in photo space
     src = [(0, 0), (art.width, 0), (art.width, art.height), (0, art.height)]
     coeffs = perspective_coeffs(src, quad)
@@ -81,6 +88,21 @@ def compose(blank, print_png, out_png, size=OUT_SIZE):
     out.paste(rgb, (0, 0), a)
     out = out.resize((size, size), Image.LANCZOS)
     out.save(out_png, "PNG", optimize=True)
+    return out_png
+
+
+def poster_mockup(poster_png, out_png, size=OUT_SIZE):
+    """A flat poster on the bone-dim ground with the hard pink offset."""
+    poster = Image.open(poster_png).convert("RGB")
+    k = 700 / max(poster.size)
+    w, h = int(poster.width * k), int(poster.height * k)
+    out = Image.new("RGB", (1000, 1000), (234, 228, 214))
+    x, y = (1000 - w) // 2, (1000 - h) // 2
+    out.paste((240, 71, 125), (x + 14, y + 14, x + 14 + w, y + 14 + h))
+    out.paste(poster.resize((w, h), Image.LANCZOS), (x, y))
+    from PIL import ImageDraw
+    ImageDraw.Draw(out).rectangle((x, y, x + w - 1, y + h - 1), outline=(29, 26, 23), width=3)
+    out.resize((size, size), Image.LANCZOS).save(out_png, "PNG", optimize=True)
     return out_png
 
 
