@@ -1,6 +1,6 @@
 {
  "shop": "https://h23y0x-fd.myshopify.com",
- "generated": "2026-09-11T16:13:39+00:00",
+ "generated": "2026-09-11T17:03:05+00:00",
  "collections": [
   {
    "handle": "db-01",
@@ -691,7 +691,7 @@
   },
   {
    "handle": "daily-bread-apparel",
-   "title": "Daily Bread · Apparel",
+   "title": "Daily Bread · Merch",
    "url": "https://h23y0x-fd.myshopify.com/collections/daily-bread-apparel",
    "products": [
     {
@@ -732,6 +732,176 @@
       },
       {
        "name": "Colour",
+       "values": [
+        "Bone",
+        "Ink"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "db-collective-poster",
+     "title": "Collective. Poster",
+     "type": "Poster",
+     "price": {
+      "min": "28.0",
+      "max": "28.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-collective-poster",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-bone.png?v=1789146091",
+      "alt": "Collective. Poster, bone"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-bone.png?v=1789146091",
+       "alt": "Collective. Poster, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-ink.png?v=1789146091",
+       "alt": "Collective. Poster, ink"
+      }
+     ],
+     "options": [
+      {
+       "name": "Ground",
+       "values": [
+        "Bone",
+        "Ink"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "db-collective-tote",
+     "title": "Collective. Tote",
+     "type": "Tote Bag",
+     "price": {
+      "min": "28.0",
+      "max": "28.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-collective-tote",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-bone.png?v=1789146094",
+      "alt": "Collective. Tote, natural"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-bone.png?v=1789146094",
+       "alt": "Collective. Tote, natural"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-ink.png?v=1789146094",
+       "alt": "Collective. Tote, black"
+      }
+     ],
+     "options": [
+      {
+       "name": "Canvas",
+       "values": [
+        "Natural",
+        "Black"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "db-mouth-poster",
+     "title": "Daily Bread Mouth Poster",
+     "type": "Poster",
+     "price": {
+      "min": "28.0",
+      "max": "28.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-mouth-poster",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-mouth-poster-bone.png?v=1789146086",
+      "alt": "Daily Bread Mouth Poster, bone"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-mouth-poster-bone.png?v=1789146086",
+       "alt": "Daily Bread Mouth Poster, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-mouth-poster-ink.png?v=1789146086",
+       "alt": "Daily Bread Mouth Poster, ink"
+      }
+     ],
+     "options": [
+      {
+       "name": "Ground",
+       "values": [
+        "Bone",
+        "Ink"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "db-mouth-tote",
+     "title": "Daily Bread Mouth Tote",
+     "type": "Tote Bag",
+     "price": {
+      "min": "28.0",
+      "max": "28.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-mouth-tote",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-mouth-tote-bone.png?v=1789146089",
+      "alt": "Daily Bread Mouth Tote, natural"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-mouth-tote-bone.png?v=1789146089",
+       "alt": "Daily Bread Mouth Tote, natural"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-mouth-tote-ink.png?v=1789146089",
+       "alt": "Daily Bread Mouth Tote, black"
+      }
+     ],
+     "options": [
+      {
+       "name": "Canvas",
+       "values": [
+        "Natural",
+        "Black"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "db-loaf-poster",
+     "title": "Loaf Poster",
+     "type": "Poster",
+     "price": {
+      "min": "28.0",
+      "max": "28.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-loaf-poster",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-loaf-poster-bone.png?v=1789146074",
+      "alt": "Loaf Poster, bone"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-loaf-poster-bone.png?v=1789146074",
+       "alt": "Loaf Poster, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-loaf-poster-ink.png?v=1789146074",
+       "alt": "Loaf Poster, ink"
+      }
+     ],
+     "options": [
+      {
+       "name": "Ground",
        "values": [
         "Bone",
         "Ink"
@@ -785,6 +955,40 @@
      ]
     },
     {
+     "handle": "db-loaf-tote",
+     "title": "Loaf Tote",
+     "type": "Tote Bag",
+     "price": {
+      "min": "28.0",
+      "max": "28.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-loaf-tote",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-loaf-tote-bone.png?v=1789146076",
+      "alt": "Loaf Tote, natural"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-loaf-tote-bone.png?v=1789146076",
+       "alt": "Loaf Tote, natural"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-loaf-tote-ink.png?v=1789146076",
+       "alt": "Loaf Tote, black"
+      }
+     ],
+     "options": [
+      {
+       "name": "Canvas",
+       "values": [
+        "Natural",
+        "Black"
+       ]
+      }
+     ]
+    },
+    {
      "handle": "phone-tree-crewneck",
      "title": "Phone Tree Crewneck",
      "type": "Sweatshirt",
@@ -825,6 +1029,74 @@
        "values": [
         "Bone",
         "Ink"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "db-phone-tree-poster",
+     "title": "Phone Tree Poster",
+     "type": "Poster",
+     "price": {
+      "min": "28.0",
+      "max": "28.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-phone-tree-poster",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-poster-bone.png?v=1789146079",
+      "alt": "Phone Tree Poster, bone"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-poster-bone.png?v=1789146079",
+       "alt": "Phone Tree Poster, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-poster-ink.png?v=1789146078",
+       "alt": "Phone Tree Poster, ink"
+      }
+     ],
+     "options": [
+      {
+       "name": "Ground",
+       "values": [
+        "Bone",
+        "Ink"
+       ]
+      }
+     ]
+    },
+    {
+     "handle": "db-phone-tree-tote",
+     "title": "Phone Tree Tote",
+     "type": "Tote Bag",
+     "price": {
+      "min": "28.0",
+      "max": "28.0",
+      "currency": "CAD"
+     },
+     "url": "https://h23y0x-fd.myshopify.com/products/db-phone-tree-tote",
+     "image": {
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-tote-bone.png?v=1789146081",
+      "alt": "Phone Tree Tote, natural"
+     },
+     "images": [
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-tote-bone.png?v=1789146081",
+       "alt": "Phone Tree Tote, natural"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-tote-ink.png?v=1789146080",
+       "alt": "Phone Tree Tote, black"
+      }
+     ],
+     "options": [
+      {
+       "name": "Canvas",
+       "values": [
+        "Natural",
+        "Black"
        ]
       }
      ]
