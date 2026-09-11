@@ -1,6 +1,6 @@
 {
  "shop": "https://h23y0x-fd.myshopify.com",
- "generated": "2026-09-11T19:11:42+00:00",
+ "generated": "2026-09-11T22:29:08+00:00",
  "collections": [
   {
    "handle": "db-01",
@@ -874,96 +874,6 @@
       {
        "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-tee-ink.png?v=1789153810",
        "alt": "Daily Bread №1 Cover · Glitch Tee, ink"
-      }
-     ],
-     "options": [
-      {
-       "name": "Colour",
-       "values": [
-        "Bone",
-        "Ink"
-       ]
-      },
-      {
-       "name": "Size",
-       "values": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL"
-       ]
-      }
-     ]
-    },
-    {
-     "handle": "db-outline-01-glitch-crewneck",
-     "title": "Daily Bread №1 Outline · Glitch Crewneck",
-     "type": "Sweatshirt",
-     "price": {
-      "min": "72.0",
-      "max": "72.0",
-      "currency": "CAD"
-     },
-     "url": "https://shop.ripostelabs.xyz/products/db-outline-01-glitch-crewneck",
-     "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-outline-01-glitch-crew-bone.png?v=1789153822",
-      "alt": "Daily Bread №1 Outline · Glitch Crewneck, bone"
-     },
-     "images": [
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-outline-01-glitch-crew-bone.png?v=1789153822",
-       "alt": "Daily Bread №1 Outline · Glitch Crewneck, bone"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-outline-01-glitch-crew-ink.png?v=1789153822",
-       "alt": "Daily Bread №1 Outline · Glitch Crewneck, ink"
-      }
-     ],
-     "options": [
-      {
-       "name": "Colour",
-       "values": [
-        "Bone",
-        "Ink"
-       ]
-      },
-      {
-       "name": "Size",
-       "values": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL"
-       ]
-      }
-     ]
-    },
-    {
-     "handle": "db-outline-01-glitch-tee",
-     "title": "Daily Bread №1 Outline · Glitch Tee",
-     "type": "T-Shirt",
-     "price": {
-      "min": "42.0",
-      "max": "42.0",
-      "currency": "CAD"
-     },
-     "url": "https://shop.ripostelabs.xyz/products/db-outline-01-glitch-tee",
-     "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-outline-01-glitch-tee-bone.png?v=1789153818",
-      "alt": "Daily Bread №1 Outline · Glitch Tee, bone"
-     },
-     "images": [
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-outline-01-glitch-tee-bone.png?v=1789153818",
-       "alt": "Daily Bread №1 Outline · Glitch Tee, bone"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-outline-01-glitch-tee-ink.png?v=1789153819",
-       "alt": "Daily Bread №1 Outline · Glitch Tee, ink"
       }
      ],
      "options": [
