@@ -166,12 +166,12 @@ def cover_inner(model, tmp, name, sw=PW, sh=PH, aw=ART_W, ah=ART_H):
     k = aw / ART_W  # type scales with the art
     return "\n".join([
         f'<image x="{x0}" y="{y0}" width="{aw}" height="{ah}" xlink:href="{art_png.name}"/>',
-        # masthead across the top like a magazine, never over the picture's subject;
-        # ink with a bone keyline so it holds on any art
-        f'<g font-family="{FRAKTUR}" font-size="{400 * k:.0f}" text-anchor="middle" '
-        f'stroke="{BONE}" stroke-width="{22 * k:.0f}" stroke-linejoin="round" paint-order="stroke" fill="{INK}">'
-        f'<text x="{cx}" y="{y0 + 470 * k:.0f}">Daily Bread</text></g>',
-        text(cx, y0 + 600 * k, tag, 72 * k, PLEX, 700, BONE, "0.3em"),
+        # the masthead over the tongue, as on the printed cover: the original
+        # blackletter, ink with a bone keyline so it holds on the art
+        f'<g font-family="{FRAKTUR}" font-size="{640 * k:.0f}" text-anchor="middle" '
+        f'stroke="{BONE}" stroke-width="{28 * k:.0f}" stroke-linejoin="round" paint-order="stroke" fill="{INK}">'
+        f'<text x="{cx}" y="{y0 + 1900 * k:.0f}">Daily</text><text x="{cx}" y="{y0 + 2520 * k:.0f}">Bread</text></g>',
+        text(cx, y0 + 260 * k, tag, 84 * k, PLEX, 700, BONE, "0.3em"),
         text(cx, y0 + ah - 120 * k, edition, 64 * k, PLEX, 700, BONE, "0.3em"),
     ])
 
