@@ -121,35 +121,6 @@
      ]
     },
     {
-     "handle": "daily-bread-glitch-stickers",
-     "title": "Daily Bread · Glitch Sticker Sheet",
-     "type": "Stickers",
-     "price": {
-      "min": "6.0",
-      "max": "6.0",
-      "currency": "CAD"
-     },
-     "url": "https://shop.ripostelabs.xyz/products/daily-bread-glitch-stickers",
-     "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/daily-bread-glitch-stickers.png?v=1789252557",
-      "alt": "Daily Bread · Glitch Sticker Sheet, a5 · 9 stickers"
-     },
-     "images": [
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/daily-bread-glitch-stickers.png?v=1789252557",
-       "alt": "Daily Bread · Glitch Sticker Sheet, a5 · 9 stickers"
-      }
-     ],
-     "options": [
-      {
-       "name": "Sheet",
-       "values": [
-        "A5 · 9 stickers"
-       ]
-      }
-     ]
-    },
-    {
      "handle": "db-cover-01-glitch-crewneck",
      "title": "Daily Bread №1 Cover · Glitch Crewneck",
      "type": "Sweatshirt",
@@ -190,70 +161,6 @@
         "L",
         "XL",
         "2XL"
-       ]
-      }
-     ]
-    },
-    {
-     "handle": "db-cover-01-glitch-sticker",
-     "title": "Daily Bread №1 Cover · Glitch Sticker",
-     "type": "Stickers",
-     "price": {
-      "min": "2.0",
-      "max": "2.0",
-      "currency": "CAD"
-     },
-     "url": "https://shop.ripostelabs.xyz/products/db-cover-01-glitch-sticker",
-     "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-split.png?v=1789252538",
-      "alt": "Daily Bread №1 Cover · Glitch Sticker, split"
-     },
-     "images": [
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-split.png?v=1789252538",
-       "alt": "Daily Bread №1 Cover · Glitch Sticker, split"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-melt.png?v=1789252538",
-       "alt": "Daily Bread №1 Cover · Glitch Sticker, melt"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-drip.png?v=1789252538",
-       "alt": "Daily Bread №1 Cover · Glitch Sticker, drip"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-scan.png?v=1789252538",
-       "alt": "Daily Bread №1 Cover · Glitch Sticker, scan"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-tile.png?v=1789252538",
-       "alt": "Daily Bread №1 Cover · Glitch Sticker, tile"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-wave.png?v=1789252538",
-       "alt": "Daily Bread №1 Cover · Glitch Sticker, wave"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-dither.png?v=1789252538",
-       "alt": "Daily Bread №1 Cover · Glitch Sticker, dither"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-kaleid.png?v=1789252539",
-       "alt": "Daily Bread №1 Cover · Glitch Sticker, kaleid"
-      }
-     ],
-     "options": [
-      {
-       "name": "Cut",
-       "values": [
-        "Split",
-        "Melt",
-        "Drip",
-        "Scan",
-        "Tile",
-        "Wave",
-        "Dither",
-        "Kaleid"
        ]
       }
      ]
