@@ -1,6 +1,6 @@
 {
  "shop": "https://h23y0x-fd.myshopify.com",
- "generated": "2026-09-11T22:29:08+00:00",
+ "generated": "2026-09-12T15:10:03+00:00",
  "collections": [
   {
    "handle": "db-01",
@@ -309,73 +309,6 @@
       }
      ],
      "options": []
-    },
-    {
-     "handle": "db-01-wall-poster",
-     "title": "The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Poster",
-     "type": "Poster",
-     "price": {
-      "min": "28.0",
-      "max": "28.0",
-      "currency": "CAD"
-     },
-     "url": "https://shop.ripostelabs.xyz/products/db-01-wall-poster",
-     "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-wall-poster.png?v=1789153094",
-      "alt": "The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Poster, default"
-     },
-     "images": [
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-wall-poster.png?v=1789153094",
-       "alt": "The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Poster, default"
-      }
-     ],
-     "options": []
-    },
-    {
-     "handle": "db-01-wall-tee",
-     "title": "The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Tee",
-     "type": "T-Shirt",
-     "price": {
-      "min": "38.0",
-      "max": "38.0",
-      "currency": "CAD"
-     },
-     "url": "https://shop.ripostelabs.xyz/products/db-01-wall-tee",
-     "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-wall-tee-bone.png?v=1789153097",
-      "alt": "The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Tee, bone"
-     },
-     "images": [
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-wall-tee-bone.png?v=1789153097",
-       "alt": "The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Tee, bone"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-wall-tee-ink.png?v=1789153097",
-       "alt": "The Wall №1 — Kelowna's Collapse · A Scene Isn't an Address · Tee, ink"
-      }
-     ],
-     "options": [
-      {
-       "name": "Size",
-       "values": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL"
-       ]
-      },
-      {
-       "name": "Colour",
-       "values": [
-        "Bone",
-        "Ink"
-       ]
-      }
-     ]
     }
    ]
   },
@@ -893,119 +826,6 @@
         "L",
         "XL",
         "2XL"
-       ]
-      }
-     ]
-    },
-    {
-     "handle": "phone-tree-crewneck",
-     "title": "Phone Tree Crewneck",
-     "type": "Sweatshirt",
-     "price": {
-      "min": "68.0",
-      "max": "68.0",
-      "currency": "CAD"
-     },
-     "url": "https://shop.ripostelabs.xyz/products/phone-tree-crewneck",
-     "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-phone-tree-bone.png?v=1789150034",
-      "alt": "phone-tree-crewneck, bone"
-     },
-     "images": [
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-phone-tree-bone.png?v=1789150034",
-       "alt": "phone-tree-crewneck, bone"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-phone-tree-ink.png?v=1789150034",
-       "alt": "phone-tree-crewneck, ink"
-      }
-     ],
-     "options": [
-      {
-       "name": "Size",
-       "values": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL"
-       ]
-      },
-      {
-       "name": "Colour",
-       "values": [
-        "Bone",
-        "Ink"
-       ]
-      }
-     ]
-    },
-    {
-     "handle": "db-phone-tree-poster",
-     "title": "Phone Tree Poster",
-     "type": "Poster",
-     "price": {
-      "min": "28.0",
-      "max": "28.0",
-      "currency": "CAD"
-     },
-     "url": "https://shop.ripostelabs.xyz/products/db-phone-tree-poster",
-     "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-poster-bone.png?v=1789149976",
-      "alt": "Phone Tree Poster, bone"
-     },
-     "images": [
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-poster-bone.png?v=1789149976",
-       "alt": "Phone Tree Poster, bone"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-poster-ink.png?v=1789149976",
-       "alt": "Phone Tree Poster, ink"
-      }
-     ],
-     "options": [
-      {
-       "name": "Ground",
-       "values": [
-        "Bone",
-        "Ink"
-       ]
-      }
-     ]
-    },
-    {
-     "handle": "db-phone-tree-tote",
-     "title": "Phone Tree Tote",
-     "type": "Tote Bag",
-     "price": {
-      "min": "28.0",
-      "max": "28.0",
-      "currency": "CAD"
-     },
-     "url": "https://shop.ripostelabs.xyz/products/db-phone-tree-tote",
-     "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-tote-bone.png?v=1789149979",
-      "alt": "Phone Tree Tote, natural"
-     },
-     "images": [
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-tote-bone.png?v=1789149979",
-       "alt": "Phone Tree Tote, natural"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-phone-tree-tote-ink.png?v=1789149979",
-       "alt": "Phone Tree Tote, black"
-      }
-     ],
-     "options": [
-      {
-       "name": "Canvas",
-       "values": [
-        "Natural",
-        "Black"
        ]
       }
      ]
