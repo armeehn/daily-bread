@@ -8,17 +8,32 @@ Wants=network-online.target
 Type=simple
 User=user
 Group=user
-# The main checkout: `git pull` here after a merge, then restart this unit.
+# The main checkout. daily-bread-press-update.timer keeps it level with
+# origin/main and restarts this unit when tools/ changed.
 WorkingDirectory=/home/user/daily-bread
 ExecStart=/usr/bin/python3 tools/press-server.py
 Environment=PRESS_PORT=8091
-Restart=on-failure
+Restart=always
 RestartSec=5
+TimeoutStopSec=20
 
 # lualatex is a whole core for several seconds on a shared, RAM-oversubscribed
 # host; one typesetting at a time is enforced in the server, and it yields.
 Nice=5
 MemoryMax=2G
+TasksMax=64
+
+# Sandbox: the press reads the checkout, riposte-latex and TeX Live, and writes
+# only its own build/ (per-request temp dirs and the per-build font cache).
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/user/daily-bread/build
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
 
 [Install]
 WantedBy=multi-user.target
