@@ -1,6 +1,6 @@
 {
  "shop": "https://h23y0x-fd.myshopify.com",
- "generated": "2026-09-12T15:10:03+00:00",
+ "generated": "2026-09-12T21:00:03+00:00",
  "collections": [
   {
    "handle": "db-01",
@@ -12,8 +12,8 @@
      "title": "Daily Bread №1 — Kelowna's Collapse · Cover Crewneck",
      "type": "Sweatshirt",
      "price": {
-      "min": "68.0",
-      "max": "68.0",
+      "min": "48.0",
+      "max": "48.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-01-cover-crewneck",
@@ -57,8 +57,8 @@
      "title": "Daily Bread №1 — Kelowna's Collapse · Cover Poster",
      "type": "Poster",
      "price": {
-      "min": "28.0",
-      "max": "28.0",
+      "min": "20.0",
+      "max": "20.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-01-cover-poster",
@@ -79,8 +79,8 @@
      "title": "Daily Bread №1 — Kelowna's Collapse · Cover Tee",
      "type": "T-Shirt",
      "price": {
-      "min": "38.0",
-      "max": "38.0",
+      "min": "28.0",
+      "max": "28.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-01-cover-tee",
@@ -124,8 +124,8 @@
      "title": "Daily Bread №1 — Kelowna's Collapse · Cover Tote",
      "type": "Tote Bag",
      "price": {
-      "min": "28.0",
-      "max": "28.0",
+      "min": "18.0",
+      "max": "18.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-01-cover-tote",
@@ -146,8 +146,8 @@
      "title": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee",
      "type": "T-Shirt",
      "price": {
-      "min": "38.0",
-      "max": "38.0",
+      "min": "28.0",
+      "max": "28.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-01-quotes-tee",
@@ -224,8 +224,8 @@
      "title": "Peel Me №1 — Kelowna's Collapse · Singles",
      "type": "Stickers",
      "price": {
-      "min": "3.0",
-      "max": "3.0",
+      "min": "2.0",
+      "max": "2.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-01-sticker-singles",
@@ -293,8 +293,8 @@
      "title": "Peel Me №1 — Kelowna's Collapse · Sticker Sheet",
      "type": "Stickers",
      "price": {
-      "min": "8.0",
-      "max": "8.0",
+      "min": "6.0",
+      "max": "6.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-01-stickers",
@@ -322,8 +322,8 @@
      "title": "Daily Bread №2 — The Thaw · Cover Crewneck",
      "type": "Sweatshirt",
      "price": {
-      "min": "68.0",
-      "max": "68.0",
+      "min": "48.0",
+      "max": "48.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-02-cover-crewneck",
@@ -367,8 +367,8 @@
      "title": "Daily Bread №2 — The Thaw · Cover Poster",
      "type": "Poster",
      "price": {
-      "min": "28.0",
-      "max": "28.0",
+      "min": "20.0",
+      "max": "20.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-02-cover-poster",
@@ -389,8 +389,8 @@
      "title": "Daily Bread №2 — The Thaw · Cover Tee",
      "type": "T-Shirt",
      "price": {
-      "min": "38.0",
-      "max": "38.0",
+      "min": "28.0",
+      "max": "28.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-02-cover-tee",
@@ -434,8 +434,8 @@
      "title": "Daily Bread №2 — The Thaw · Cover Tote",
      "type": "Tote Bag",
      "price": {
-      "min": "28.0",
-      "max": "28.0",
+      "min": "18.0",
+      "max": "18.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-02-cover-tote",
@@ -456,8 +456,8 @@
      "title": "Daily Bread №2 — The Thaw · Quotes Tee",
      "type": "T-Shirt",
      "price": {
-      "min": "38.0",
-      "max": "38.0",
+      "min": "28.0",
+      "max": "28.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-02-quotes-tee",
@@ -534,8 +534,8 @@
      "title": "Peel Me №2 — The Thaw · Singles",
      "type": "Stickers",
      "price": {
-      "min": "3.0",
-      "max": "3.0",
+      "min": "2.0",
+      "max": "2.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-02-sticker-singles",
@@ -603,8 +603,8 @@
      "title": "Peel Me №2 — The Thaw · Sticker Sheet",
      "type": "Stickers",
      "price": {
-      "min": "8.0",
-      "max": "8.0",
+      "min": "6.0",
+      "max": "6.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-02-stickers",
@@ -632,8 +632,8 @@
      "title": "Collective. Crewneck",
      "type": "Sweatshirt",
      "price": {
-      "min": "68.0",
-      "max": "68.0",
+      "min": "48.0",
+      "max": "48.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/collective-crewneck",
@@ -677,8 +677,8 @@
      "title": "Collective. Poster",
      "type": "Poster",
      "price": {
-      "min": "28.0",
-      "max": "28.0",
+      "min": "20.0",
+      "max": "20.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-collective-poster",
@@ -711,8 +711,8 @@
      "title": "Collective. Tote",
      "type": "Tote Bag",
      "price": {
-      "min": "28.0",
-      "max": "28.0",
+      "min": "18.0",
+      "max": "18.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-collective-tote",
@@ -745,8 +745,8 @@
      "title": "Daily Bread №1 Cover · Glitch Crewneck",
      "type": "Sweatshirt",
      "price": {
-      "min": "72.0",
-      "max": "72.0",
+      "min": "48.0",
+      "max": "48.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-cover-01-glitch-crewneck",
@@ -790,8 +790,8 @@
      "title": "Daily Bread №1 Cover · Glitch Tee",
      "type": "T-Shirt",
      "price": {
-      "min": "42.0",
-      "max": "42.0",
+      "min": "28.0",
+      "max": "28.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-cover-01-glitch-tee",
