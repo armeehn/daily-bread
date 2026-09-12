@@ -1,114 +1,114 @@
 {
   "dailybread/1/ar": {
     "code": "ar",
-    "content_sha256": "b2488389598d96292931adb62f9616a595148c878d192f37a26b098d3f79c128",
-    "leaf_index": 221,
-    "statement_digest": "ac2a026d7f9628bddc98dc2b552655d102571aab62b76bd48340ded24fae8916",
-    "version": 14
+    "content_sha256": "a01e18ff2ac155bb46f4f33eaf439a13b439883bdc5a1137a51ec6fb731684ff",
+    "leaf_index": 237,
+    "statement_digest": "5a3a4f3080309cb0400e08d7d72788d4f2a1fa46eb5f51004602b23055fac44e",
+    "version": 15
   },
   "dailybread/1/en": {
     "code": "en",
-    "content_sha256": "794d52a1712a68fb2c509317b721203649e4b9fd216bfb2ebb64337d94867a10",
-    "leaf_index": 207,
-    "statement_digest": "3d9caa7c2d5f3f8c2cb095cbf8103338ec4cbf948f6ec5eccc9de49097ccd05d",
-    "version": 13
+    "content_sha256": "38860619e54cdc72aa69e8fd3f1c300158dae94e44ef504fbcc685785ebbc911",
+    "leaf_index": 223,
+    "statement_digest": "4bd625274b12f67a4894e12c25ee3a11a72e2843c1ea25e445747baf42ebc9ad",
+    "version": 14
   },
   "dailybread/1/es": {
     "code": "es",
-    "content_sha256": "f88ab4e6485a03ef6de971191970dfd22cb8c83626e6d82d3cb935c1d10b9d2e",
-    "leaf_index": 209,
-    "statement_digest": "60d595aa180198748d5d3b1747090cd347642bbdd46fffe25d2c407f376f98c8",
-    "version": 14
+    "content_sha256": "33eb0b56f27cd56d7aa409eed2bf91451f417715364c3711d8912d1695a4aa7d",
+    "leaf_index": 225,
+    "statement_digest": "74bd25cde678cc1c1f4917073fdf715fc9b85b350775e04b5ccb9cd14c6cc24e",
+    "version": 15
   },
   "dailybread/1/fa": {
     "code": "fa",
-    "content_sha256": "739d69daaa31d3fbb2c7c607e4926e2506035e70e0909badc63f72cf85e4d23b",
-    "leaf_index": 222,
-    "statement_digest": "abcc80e9578fa6b89823d78ee00f9f8f943fb0c0276d1b4713eef620f4d8574c",
-    "version": 14
+    "content_sha256": "21fc17ef2ee679abfe89f8d3d676dba1bf207de612d8a32f39dae2b57d186d3f",
+    "leaf_index": 238,
+    "statement_digest": "c924ac2a918cf5c0b1b3a3436eecbdf7b09a9bfb81fdfb8f69a6f86a9823273b",
+    "version": 15
   },
   "dailybread/1/fr": {
     "code": "fr",
-    "content_sha256": "b7dbc81a2dd59980f81609300303322c52d5a804688ce203ac079503f9a669e6",
-    "leaf_index": 208,
-    "statement_digest": "38fb6441726d8a6fcf0d92b8070d62c688eddb481e6f7a9b993683d7f1e2ee29",
-    "version": 14
+    "content_sha256": "a0dfa615ed957d0470858b32e3f8a14875b1cb91c702c4f89909005caefe7c13",
+    "leaf_index": 224,
+    "statement_digest": "0aeb4ad0130247903bfc8f7321a7ee55deeddaafc10ae601b2dde8a9cbc4d4c9",
+    "version": 15
   },
   "dailybread/1/hi": {
     "code": "hi",
-    "content_sha256": "67393642661dfb5b5e856837e766b68be73fe9e0853a04bd33be5e3bc237e067",
-    "leaf_index": 220,
-    "statement_digest": "a661bbe864162ebc19f0cf3553fc2aa77930a56c16a09b7fdbfed208df922826",
-    "version": 14
+    "content_sha256": "e5c7b06a7d427c8092d61684aa52785fa6a1fe0df91d99f4223610d865683361",
+    "leaf_index": 236,
+    "statement_digest": "c3562068cea4e38c408a77bd3d085cb064977bc3a1ba6b55d50d68d626011b7d",
+    "version": 15
   },
   "dailybread/1/it": {
     "code": "it",
-    "content_sha256": "9ca81756687fb5212122450d8423785d15e61e33372c0928877410ca6c48d1e2",
-    "leaf_index": 210,
-    "statement_digest": "622464aefe99832967d61f96e66c817157f1b454f4395a2d13b2fe7c30f8a0b2",
-    "version": 14
+    "content_sha256": "848bf11f41aa2f9d6354db0585fba3969ff54114dd2e8c3380a29af35ff8aeb5",
+    "leaf_index": 226,
+    "statement_digest": "b8b9fe56ec57c11a8acf44415b49e39015cecac4acb04fbf28f6e2da1b4f7aab",
+    "version": 15
   },
   "dailybread/1/ja": {
     "code": "ja",
-    "content_sha256": "75747f9f916c632d7bd734a9669d6486369c81eb1a96e214a4db57b7ab1c477f",
-    "leaf_index": 217,
-    "statement_digest": "84e765eb182007918862975fa8bbc094c6f031eb31654af6880ac26c3862e887",
-    "version": 14
+    "content_sha256": "866b0f520bb2f2f0d9c8546d1a9501f710bea15912cda4164b4e8c672aaaf996",
+    "leaf_index": 233,
+    "statement_digest": "e3d457f7c2367a7dcf5c395a2978baa3ed5421b68d475de78ff244867ff5942c",
+    "version": 15
   },
   "dailybread/1/ko": {
     "code": "ko",
-    "content_sha256": "98dec8204c5ba23dc51308845fb9ac2aec4b453cdb6fa6ff5cb0118353074c7f",
-    "leaf_index": 216,
-    "statement_digest": "df52e62753f085ae2286a7d80d5cce09c34e0654603d527ce1d02a252e5b84a1",
-    "version": 14
+    "content_sha256": "649e5592affc122b5f29d0a8f422ffc642ff3cf3f96e172bb1ba8bdfda1bbf2e",
+    "leaf_index": 232,
+    "statement_digest": "ad60c236c888daf236e18199f11fb885fcfe44db86534b6588570ab92128a9b5",
+    "version": 15
   },
   "dailybread/1/la": {
     "code": "la",
-    "content_sha256": "a7d7e64fb0a41ace67802f012b0a50dda2d689d12ee05e61d06ea02052b584be",
-    "leaf_index": 212,
-    "statement_digest": "6b80e0e7909a08c6e6a0fe86b3cb2a009155d966ca042578eeb1c2243271ed8c",
-    "version": 14
+    "content_sha256": "a414958da945dcf381babfb6cf2684b07fb41ebab824ffba6f6dc25c08df5f44",
+    "leaf_index": 228,
+    "statement_digest": "eda6cc9325646dcff6d9d5a3456ec5ebb23930d41988a1f6338c030fbbdcc5e3",
+    "version": 15
   },
   "dailybread/1/pa": {
     "code": "pa",
-    "content_sha256": "db0e9d31db88d568e08b7aefdf2d2a9fe8fc6aac56c9f8fca7f68a5771117a47",
-    "leaf_index": 215,
-    "statement_digest": "cb0ace98830e275fd46856f113aab54f53d995e6ed0b8e239f08053d2d1923f7",
-    "version": 14
+    "content_sha256": "887830e20f11b042786f63c595a94f316b57c70148ac7cb68e9c63a3b0f79bcc",
+    "leaf_index": 231,
+    "statement_digest": "438054bbd68ddb7d93e92904ae5c0e61aa998cbbad7fe37a774ac2579b6bf473",
+    "version": 15
   },
   "dailybread/1/pl": {
     "code": "pl",
-    "content_sha256": "b11ce0ac7cf6ead3835594a39b51c453d349726284c2ff116b6794858cfd8504",
-    "leaf_index": 211,
-    "statement_digest": "06f01d4292fc4eb4d4a1f3f402bd7b895ca0064290dc00dc182487e4eea77629",
-    "version": 14
+    "content_sha256": "991d346c7d07d0b30654ae7efe4fc2625511bcec1abacd85ebb10b735d539e11",
+    "leaf_index": 227,
+    "statement_digest": "886fe4379956294d0c8d52eb7bbbe6263b150a0e069cc823b0fd12c92126cc81",
+    "version": 15
   },
   "dailybread/1/tl": {
     "code": "tl",
-    "content_sha256": "84386dc2b03c9eb10f41821bc6d0daf1105c81bb94e5b341f70519c93b6fbb7d",
-    "leaf_index": 218,
-    "statement_digest": "b871b0dd98969528f0e7b0c7d3d074af48132cf4aa5666ab2fe62098e46b29d2",
-    "version": 14
+    "content_sha256": "8ce842e7d49442a9adab6a61e75e7bb2d9ec57aeeef8291d9b7713a77d5333f3",
+    "leaf_index": 234,
+    "statement_digest": "3a3d875217fb8af15efbd430f1b11dc6ee93b5d9cf850266b6cbdec97b455656",
+    "version": 15
   },
   "dailybread/1/vi": {
     "code": "vi",
-    "content_sha256": "04b65057f300e33f1c6b3806886c1c0454ef7f7f7d366f48596dead526634510",
-    "leaf_index": 219,
-    "statement_digest": "89f327df7d9c0661cdb6105ec043ad5c4e1aa092d2fdc972a9a610ee644fd7b7",
-    "version": 14
+    "content_sha256": "8ee61bce606dd1748f4bfa3fbdc91716c19c580c30e054ed36ff80cf0796e1f9",
+    "leaf_index": 235,
+    "statement_digest": "ee6f50e6f0fda90e1cebade523fb5a10cba790b41ba2814c98369b81bf05cd8f",
+    "version": 15
   },
   "dailybread/1/zh-hans": {
     "code": "zh-hans",
-    "content_sha256": "91ec44d61dac87ca4b5874aa20567969de001bc20fb9d0b619dc4323b6c3e4fd",
-    "leaf_index": 213,
-    "statement_digest": "23a1d871c0db50cd77bead33a08c010f0e67bda0e0ef3700ba8b8afcc225692c",
-    "version": 14
+    "content_sha256": "cffe21a3cc88b7e7024e45073185a184cff0ce6a8e56fcb2c34693dc947d1df6",
+    "leaf_index": 229,
+    "statement_digest": "825671c3c85e990c4efab6cf2c1d74e1ee7868c403a9fdaea8f91331e0929df1",
+    "version": 15
   },
   "dailybread/1/zh-hant": {
     "code": "zh-hant",
-    "content_sha256": "f5ed395483d4d413377459d54eb32f5b737d309501c6d9808458da2cedecc2ce",
-    "leaf_index": 214,
-    "statement_digest": "65c10f3b927c6326da3ab26630ac79f408ed7eb206bc09fbca8668bd51d1ff69",
-    "version": 14
+    "content_sha256": "be58699e7575971036c83e2767fa9ee167320b82cfc28d53b1fef7e5bb1aa30b",
+    "leaf_index": 230,
+    "statement_digest": "1a8e5520ef3ae60722d10f0adaf02bea8efba740a68b7dbdc12cfd279b9aeae2",
+    "version": 15
   }
 }
