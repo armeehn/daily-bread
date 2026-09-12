@@ -15,6 +15,11 @@ import tempfile
 from pathlib import Path
 
 ENGINE = os.environ.get("RIPOSTE_ENGINE", "lualatex")
+# A whole edition typesets in ~8 s. lualatex in nonstopmode cannot wait for input,
+# but a pathological page (a runaway macro, a font that will not load) can spin;
+# the press serialises builds, so one that never ends would stall every request
+# after it. Generous, and fatal.
+TEX_TIMEOUT_S = int(os.environ.get("RIPOSTE_TEX_TIMEOUT", "150"))
 TEXLIVE_BIN = "/opt/texlive/2026/bin/x86_64-linux"
 
 MM_PT = 72 / 25.4
@@ -138,7 +143,12 @@ def _stage_fonts(repo, build):
 
 
 def _run(cmd, cwd, env, log):
-    res = subprocess.run(cmd, cwd=cwd, env=env, capture_output=True, text=True)
+    try:
+        res = subprocess.run(cmd, cwd=cwd, env=env, capture_output=True, text=True,
+                             timeout=TEX_TIMEOUT_S)
+    except subprocess.TimeoutExpired:
+        raise RuntimeError(f"{cmd[0]} exceeded {TEX_TIMEOUT_S} s and was killed "
+                           f"(see {log.name})")
     if res.returncode:
         tail = "\n".join((log.read_text(errors="replace") if log.exists() else res.stdout).splitlines()[-30:])
         raise RuntimeError(f"{cmd[0]} failed:\n{tail}")

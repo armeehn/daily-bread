@@ -44,9 +44,12 @@ _EXT = {"image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp", "image
 
 
 def plain(value):
-    """Web copy as press copy: tags gone, entities resolved, whitespace collapsed."""
-    if value is None:
+    """Web copy as press copy: tags gone, entities resolved, whitespace collapsed.
+    A list where a string belongs reads as one line; a dict is not copy at all."""
+    if value is None or isinstance(value, (dict, bool)):
         return ""
+    if isinstance(value, list):
+        value = " ".join(plain(v) for v in value)
     text = html.unescape(_TAG.sub("", str(value)))
     return " ".join(text.split())
 
@@ -76,6 +79,13 @@ def luminance(hex6):
     """Relative brightness of a 6-digit hex colour, 0 (black) to 1 (white)."""
     r, g, b = (int(hex6[i:i + 2], 16) / 255 for i in (0, 2, 4))
     return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def plain_keep_breaks(value):
+    """Like plain(), but a blank line survives so it can still split paragraphs."""
+    if value is None or isinstance(value, (dict, list, bool)):
+        return ""
+    return html.unescape(_TAG.sub("", str(value)))
 
 
 def sec_no(sec):
@@ -111,13 +121,22 @@ class Overlay:
                 return ""
         return v if v is not None else ""
 
+    def d(self, *path):
+        """A studio section by path: a dict, or {} when absent or not a dict."""
+        v = self.s(*path)
+        return v if isinstance(v, dict) else {}
+
     def put(self, page_id, prop, value):
         """Write a print field from a studio value; empty studio values leave the
         print copy alone. Strings keep the print field's case convention."""
         page = self.pages.get(page_id)
         if page is None:
             return
-        if isinstance(value, list):
+        existing = page["content"].get(prop)
+        # The print field's type wins: a block sequence stays a list (one string
+        # becomes one paragraph), a string field gets its list joined.
+        if isinstance(existing, list):
+            value = value if isinstance(value, list) else [value]
             value = [plain(v) for v in value if plain(v)]
             if not value:
                 return
@@ -125,7 +144,7 @@ class Overlay:
             value = plain(value)
             if not value:
                 return
-            value = like(page["content"].get(prop), value)
+            value = like(existing, value)
         page["content"][prop] = value
         self.touched.add(page_id)
 
@@ -135,8 +154,11 @@ class Overlay:
         if page is None or not isinstance(items, list) or not items:
             return
         existing = page["content"].get(prop)
-        out = [row(existing, i, *[it.get(k, "") if isinstance(it, dict) else it for k in fields])
-               for i, it in enumerate(items)]
+        items = [it for it in items if isinstance(it, dict)]
+        out = [row(existing, i, *[it.get(k, "") for k in fields]) for i, it in enumerate(items)]
+        out = [r for r in out if r.replace("|", "").strip()]
+        if not out:
+            return
         page["content"][prop] = out
         self.touched.add(page_id)
 
@@ -153,8 +175,9 @@ class Overlay:
             name = hashlib.sha256(data).hexdigest()[:16] + _EXT.get(m.group(1), ".bin")
             (studio_dir / name).write_bytes(data)
             return f"{STUDIO_ASSETS}/{name}"
-        src = self.repo / value
-        if not src.is_file():
+        # A repo path only: no data: URL, no absolute path, nothing that climbs out.
+        src = (self.repo / value).resolve()
+        if not src.is_file() or self.repo.resolve() not in src.parents:
             return ""
         shutil.copyfile(src, studio_dir / src.name)
         return f"{STUDIO_ASSETS}/{src.name}"
@@ -178,17 +201,17 @@ class Overlay:
         return self.issue
 
     def meta(self):
-        meta, m = self.issue["meta"], self.s("meta")
+        meta, m = self.issue["meta"], self.d("meta")
         if plain(m.get("issueNo")):
             meta["issue"] = plain(m["issueNo"])
         if plain(m.get("issueName")):
             meta["theme"] = plain(m["issueName"])
         if plain(m.get("issueNo")) and plain(m.get("season")):
             meta["edition"] = f"{plain(m['issueNo'])} · {plain(m['season']).upper()}"
-        theme = self.s("theme")
+        theme = self.d("theme")
         hexes = []
         for key in PALETTE_KEYS:
-            h = _HEX.match(str(theme.get(key, "")) if isinstance(theme, dict) else "")
+            h = _HEX.match(str(theme.get(key, "")))
             hexes.append(h.group(1).lower() if h else "")
         # all five core colours or nothing: a half palette is worse than the default
         if all(hexes[:5]):
@@ -200,7 +223,7 @@ class Overlay:
             meta["palette"] = ",".join(hexes + [scheme])
 
     def covers(self):
-        m, f = self.s("meta"), self.s("footer")
+        m, f = self.d("meta"), self.d("footer")
         tag = f"{plain(m.get('issueNo'))} — {plain(m.get('issueName'))}" if plain(m.get("issueName")) else ""
         for pid in ("fc", "bc"):
             self.put(pid, "issueTag", tag)
@@ -216,9 +239,11 @@ class Overlay:
             self.touched.add("fc")
 
     def letter(self):
-        L, m = self.s("letter"), self.s("meta")
+        L, m = self.d("letter"), self.d("meta")
         badges = self.s("hero", "badges")
         stamp = badges[0].get("text") if isinstance(badges, list) and badges and isinstance(badges[0], dict) else ""
+        if not isinstance(L.get("masthead"), list):
+            L = dict(L, masthead=None)
         for pid in ("ic", "p01"):
             self.put(pid, "body", L.get("paragraphs"))
             self.put(pid, "lead", L.get("dropcap"))
@@ -236,7 +261,7 @@ class Overlay:
             self.put(pid, "signoff", L.get("signoff"))
 
     def contents(self):
-        C, m, S = self.s("contents"), self.s("meta"), self.s("submit")
+        C, m, S = self.d("contents"), self.d("meta"), self.d("submit")
         for pid in ("p02", "p03"):
             self.put(pid, "title", C.get("heading"))
             self.rows(pid, "rows", C.get("toc"), ("pg", "t", "k"))
@@ -245,13 +270,13 @@ class Overlay:
                 self.put(pid, "manifestLabel", f"Manifest / {plain(m['issueNo'])}")
             self.put(pid, "manifestTag", C.get("doc"))
             # "<b>Art for the centrefold</b> — A4 landscape…" -> "Art for the centrefold | A4 landscape…"
-            take = S.get("takeItems") if isinstance(S, dict) else None
+            take = S.get("takeItems")
             if isinstance(take, list) and take:
-                split = [re.split(r"\s+—\s+", plain(t), maxsplit=1) for t in take]
+                split = [re.split(r"\s+—\s+", plain(t), maxsplit=1) for t in take if plain(t)]
                 self.rows(pid, "subRows", [{"a": p[0], "b": p[1] if len(p) > 1 else ""} for p in split], ("a", "b"))
 
     def history(self):
-        H = self.s("history")
+        H = self.d("history")
         self.put("p04", "title", H.get("headline"))
         self.put("p04", "body", H.get("paragraphs"))
         self.put("p07", "kicker", H.get("ledgerLabel"))
@@ -270,16 +295,16 @@ class Overlay:
             self.put(pid, "meta", r.get("meta"))
             self.put(pid, "title", r.get("title"))
             body = r.get("body")
-            self.put(pid, "body", body if isinstance(body, list) else re.split(r"\n\s*\n", str(body or "")))
+            self.put(pid, "body", body if isinstance(body, list) else re.split(r"\n\s*\n", plain_keep_breaks(body)))
 
     def comics(self):
-        K = self.s("comics")
+        K = self.d("comics")
         for pid in ("p14", "p15", "p42"):
             self.put(pid, "credit", K.get("credit"))
         self.put("p14", "title", K.get("title"))
 
     def interview(self):
-        I = self.s("interview")
+        I = self.d("interview")
         q = plain(I.get("quote"))
         if q and not q.startswith(("“", '"')):
             q = f"“{q}”"
@@ -287,8 +312,8 @@ class Overlay:
             self.put(pid, "quote", q)
 
     def stickers(self):
-        S = self.s("stickers")
-        items = S.get("items") if isinstance(S, dict) else None
+        S = self.d("stickers")
+        items = S.get("items")
         page = self.pages.get("p20")
         if page is None:
             return
@@ -299,30 +324,31 @@ class Overlay:
             existing = page["content"].get("stickers") or []
             bone = self.s("theme", "bone") or "#f6f1e7"
             out = []
-            for i, it in enumerate(items):
+            for i, it in enumerate([it for it in items if isinstance(it, dict)]):
                 ref = [f.strip() for f in str(existing[min(i, len(existing) - 1)]).split("|")] if existing else []
                 shape = ref[1] if len(ref) > 1 else "circle"
                 out.append(row(existing, i, it.get("label", ""), shape, it.get("c", "") or "#f0477d", bone))
-            page["content"]["stickers"] = out
-            self.touched.add("p20")
+            if out:
+                page["content"]["stickers"] = out
+                self.touched.add("p20")
 
     def art(self):
-        A = self.s("art")
+        A = self.d("art")
         for pid in ("p20", "p22", "p23", "p24"):
             self.put(pid, "title", A.get("colourHd"))
 
     def waitlist(self):
-        W = self.s("waitlist")
+        W = self.d("waitlist")
         self.put("p25", "title", W.get("title"))
         self.put("p25", "dek", W.get("dek"))
         self.put("p25", "kicker", W.get("label"))
         self.rows("p25", "stats", W.get("stats"), ("n", "l"))
-        D = self.s("directory")
+        D = self.d("directory")
         self.put("p27", "checkTitle", D.get("checklistLabel"))
         self.put("p27", "checklist", D.get("checklist"))
 
     def lab(self):
-        L = self.s("lab")
+        L = self.d("lab")
         for pid in ("p30", "p31"):
             self.put(pid, "title", L.get("title"))
             self.put(pid, "logoSub", L.get("subhead"))
@@ -337,7 +363,7 @@ class Overlay:
             self.put(pid, "footNote", L.get("tourNote"))
 
     def listings(self):
-        C, D, S = self.s("calendar"), self.s("directory"), self.s("submit")
+        C, D, S = self.d("calendar"), self.d("directory"), self.d("submit")
         # p37 screenings
         self.rows("p37", "rows", C.get("screenings"), ("d", "f", "p"))
         self.put("p37", "kicker", C.get("screeningsLabel"))
@@ -361,7 +387,7 @@ class Overlay:
         self.put("p39", "dirKicker", D.get("label"))
 
     def colophon(self):
-        F = self.s("footer")
+        F = self.d("footer")
         for pid in ("p44", "ibc"):
             self.put(pid, "colophon", F.get("colophon"))
             self.put(pid, "sig", F.get("seeYou"))

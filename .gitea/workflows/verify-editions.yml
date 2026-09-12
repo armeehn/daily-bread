@@ -128,6 +128,12 @@ jobs:
           python3 tools/db-latex.py check --edition issue-01 --web
           python3 tools/db-latex.py check --edition issue-02 --web
 
+      # The studio's edition laid over the .tex (what press.hq typesets on demand)
+      # must never break the issue: same 48 pages, TeX specials escaped, a
+      # hostile model tolerated. No TeX needed; that half is press-booklet.yml.
+      - name: The studio overlay keeps the issue whole
+        run: python3 tools/latex/test_overlay.py
+
   # 5. THE .tex MUST STILL TYPESET TO THE PRESS GEOMETRY
   # 48 A5 pages (420 x 594.96 pt) and 24 A4-landscape sides (841.92 x 594.96 pt),
   # the sizes db-render/out/*.pdf measure. Needs TeX, so it runs in the TeX Live
