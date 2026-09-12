@@ -84,6 +84,16 @@ jobs:
             python3 tools/db-latex.py press --edition "$(basename "$tex" .tex)"
           done
 
+      # What press.hq does on demand, once, here: the studio's default edition
+      # laid over issue-01 must typeset to the same 48 pages. Nothing tracked comes
+      # out of it; it exists so an overlay that only breaks in TeX is caught before
+      # a person presses the button.
+      - name: Typeset the studio's default edition over issue-01 (overlay smoke)
+        run: |
+          node -e 'const DB=require("./db.js");process.stdout.write(JSON.stringify(DB.clone(DB.DEFAULT_MODEL)))' > /tmp/studio-model.json
+          python3 tools/db-latex.py press --edition issue-01 --model /tmp/studio-model.json --out /tmp/overlay-booklet.pdf
+          pdfinfo /tmp/overlay-booklet.pdf | grep -E "Pages|Page size"
+
       # A claim of determinism that wasn't tested twice is not evidence.
       - name: Typeset a second time and require byte-identical output
         run: |

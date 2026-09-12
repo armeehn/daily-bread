@@ -52,7 +52,19 @@ a different TeX Live and font set give the same pages and different bytes.
 preamble, and every studio field with a print counterpart replaces it, cased
 like the print copy; the other pages are typeset untouched. This is exactly
 what `tools/press-server.py` does for the studio's button, on demand, as
-`daily-bread-press.service` in LXC 111 behind `press.hq`.
+`daily-bread-press.service` in LXC 111 behind `press.hq`. `python3
+tools/latex/test_overlay.py` proves the overlay keeps the issue whole for the
+default, an empty and a hostile model (CI runs it; no TeX needed), and
+`press-booklet.yml` typesets the default overlay once per run.
+
+The press in production: one typesetting at a time, three more may queue, the
+rest get `503 Retry-After`; a build is killed after `RIPOSTE_TEX_TIMEOUT`
+(150 s); each build has its own `TEXMFVAR`, because luaotfload caches a font
+under the absolute path it first saw it at and a deleted build dir then breaks
+every later build on the box. `daily-bread-press-update.timer` fast-forwards
+the checkout to `origin/main` every ten minutes and restarts the press when
+`tools/` changed; a checkout left dirty or on a branch is reported, not reset.
+Unit files: `tools/daily-bread-press*.{service,timer}`, Caddy: `tools/press.caddy`.
 
 `check` proves, in order: tex -> issue -> tex loses nothing; the issue equals
 the committed `content/<edition>.js`; rebuilding the site from the .tex

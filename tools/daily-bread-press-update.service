@@ -1,0 +1,24 @@
+[Unit]
+Description=Daily Bread press — keep the checkout level with origin/main
+Documentation=file:/home/user/daily-bread/tools/press-server.py
+After=network-online.target
+
+[Service]
+Type=oneshot
+# Fast-forward only: a checkout another session left dirty or on a branch is
+# left alone and reported, never reset. The press is restarted only when the
+# code it imported at start changed; a content change is read per request.
+ExecStart=/bin/bash -c '\
+  set -u; cd /home/user/daily-bread || exit 90; \
+  old=$(runuser -u user -- git rev-parse HEAD); \
+  runuser -u user -- git fetch -q origin main || { echo "fetch failed"; exit 0; }; \
+  [ "$(runuser -u user -- git rev-parse --abbrev-ref HEAD)" = main ] || { echo "checkout is not on main; leaving it"; exit 0; }; \
+  runuser -u user -- git merge --ff-only -q origin/main || { echo "cannot fast-forward (dirty or diverged); leaving it"; exit 0; }; \
+  new=$(runuser -u user -- git rev-parse HEAD); \
+  [ "$old" = "$new" ] && exit 0; \
+  echo "advanced $old -> $new"; \
+  if runuser -u user -- git diff --quiet "$old" "$new" -- tools/press-server.py tools/latex; then exit 0; fi; \
+  echo "press code changed; restarting"; systemctl try-restart daily-bread-press.service'
+
+[Install]
+WantedBy=multi-user.target

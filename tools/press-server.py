@@ -15,8 +15,10 @@ repo — LXC 111 on the estate, published by Caddy as press.hq.ripostelabs.xyz.
     GET  /           a status page for a person who opened press.hq in a browser
 
 One typesetting at a time: lualatex is a whole core for several seconds and the
-box is shared. Requests queue on the lock rather than fail. Bodies are capped
-because an embedded cover image rides inside the model as a data: URL.
+box is shared. A few requests queue on the lock; past that the answer is 503
+with Retry-After rather than a pile of threads that all finish minutes late.
+Bodies are capped because an embedded cover image rides inside the model as a
+data: URL. A build that hangs is killed by press.py's own timeout.
 
 Stdlib only, like the estate's other hand-written servers.
 """
@@ -24,6 +26,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 import threading
@@ -46,8 +49,24 @@ LOCAL_ORIGIN = re.compile(r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$")
 MAX_BODY = 24 * 1024 * 1024        # the model, cover image included
 EDITION = re.compile(r"^issue-\d{2}$")
 WORK = REPO / "build" / "studio"    # one temp dir per request, removed after
+MAX_QUEUED = int(os.environ.get("PRESS_MAX_QUEUED", "3"))   # waiting, not counting the one running
+RETRY_AFTER_S = "15"
 
 lock = threading.Lock()
+queued = 0                          # requests waiting for the lock
+queued_lock = threading.Lock()
+
+
+def commit():
+    """The checkout this press typesets from, for /health and the logs."""
+    try:
+        return subprocess.run(["git", "-C", str(REPO), "rev-parse", "--short", "HEAD"],
+                              capture_output=True, text=True, timeout=10).stdout.strip() or "?"
+    except Exception:
+        return "?"
+
+
+COMMIT = commit()
 
 STATUS_PAGE = """<!doctype html><meta charset="utf-8"><title>Daily Bread press</title>
 <style>body{{font:15px/1.5 "IBM Plex Mono",ui-monospace,monospace;max-width:40em;margin:3em auto;padding:0 1em;color:#1d1a17;background:#f6f1e7}}
@@ -106,8 +125,9 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         route = self.path.split("?")[0]
-        status = {"ok": True, "editions": editions(),
-                  "engine": press.engine_version(REPO), "busy": lock.locked()}
+        status = {"ok": True, "editions": editions(), "commit": COMMIT,
+                  "engine": press.engine_version(REPO), "busy": lock.locked(),
+                  "queued": queued, "maxQueued": MAX_QUEUED}
         if route == "/health":
             return self.reply(HTTPStatus.OK, status)
         if route == "/":
@@ -134,17 +154,39 @@ class Handler(BaseHTTPRequestHandler):
         if not isinstance(model, dict):
             return self.fail(HTTPStatus.BAD_REQUEST, "model must be the studio's edition JSON")
 
+        global queued
+        with queued_lock:
+            if queued >= MAX_QUEUED:
+                self.send_response(HTTPStatus.SERVICE_UNAVAILABLE)
+                self.cors()
+                self.send_header("Retry-After", RETRY_AFTER_S)
+                body = json.dumps({"ok": False, "error": f"the press has {queued} editions waiting; try again in {RETRY_AFTER_S} s"}).encode()
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+                return
+            queued += 1
+
         WORK.mkdir(parents=True, exist_ok=True)
         work = Path(tempfile.mkdtemp(prefix=edition + "-", dir=WORK))
         started = time.monotonic()
         try:
             with lock:
+                with queued_lock:
+                    queued -= 1
+                waited = time.monotonic() - started
                 booklet, info = overlay.typeset(REPO, edition, model, work)
             pdf = booklet.read_bytes()
         except Exception as e:                      # a TeX error is the common case
+            sys.stderr.write("press %s %s FAILED after %.1fs: %s\n" % (
+                self.address_string(), edition, time.monotonic() - started, str(e)[-300:].replace("\n", " ")))
             return self.fail(HTTPStatus.UNPROCESSABLE_ENTITY, str(e)[-2000:])
         finally:
             shutil.rmtree(work, ignore_errors=True)
+        sys.stderr.write("press %s %s ok %.1fs (waited %.1fs) %d pages %d bytes overlaid %d overfull %d\n" % (
+            self.address_string(), edition, time.monotonic() - started, waited,
+            info["pages"], len(pdf), len(info["touched"]), info["overfull"]))
 
         name = f"daily-bread-{edition}-booklet.pdf"
         self.reply(HTTPStatus.OK, pdf, "application/pdf", {
@@ -157,8 +199,11 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main():
+    # Leftovers from a build the previous process did not live to clean up.
+    shutil.rmtree(WORK, ignore_errors=True)
     srv = ThreadingHTTPServer(("0.0.0.0", PORT), Handler)
-    sys.stderr.write(f"daily-bread press on :{PORT}  editions {editions()}  repo {REPO}\n")
+    srv.daemon_threads = True
+    sys.stderr.write(f"daily-bread press on :{PORT}  commit {COMMIT}  editions {editions()}  repo {REPO}\n")
     srv.serve_forever()
 
 
