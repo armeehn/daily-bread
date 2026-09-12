@@ -1,7 +1,7 @@
 {
   "edition": "issue-01",
   "source": "content/issue-01.tex",
-  "sourceSha256": "fa22e79ffb262e5bac34952e798daa6fd5e7e8430ad66018e3702106f7adb438",
+  "sourceSha256": "c6841c07f925811fe2d130f752e1c510007cef9db4692d12ee42829993172414",
   "pages": 48,
   "sides": 24,
   "sheets": 12,
@@ -35,8 +35,8 @@
     "26|23",
     "24|25"
   ],
-  "pdfSha256": "24adaced7c14f9adf9bbedbe97d6fa397a570c5efe0c40a475e0d80080675e94",
-  "pdfBytes": 2968847,
+  "pdfSha256": "482f22c21a6e2c6e89b514d7120e29d90da089cc78a76d11278997673143c474",
+  "pdfBytes": 3101023,
   "sourceDateEpoch": 0,
   "engine": "This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)",
   "press": "tools/db-latex.py press (lualatex + dailybread.cls; saddle-stitch on Letter)"
