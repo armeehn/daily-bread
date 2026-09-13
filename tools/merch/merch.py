@@ -435,9 +435,10 @@ def build(edition, out, publish):
     # 1. the cover
     inner = cover_inner(model, out / "tmp", f"db-{nn}-cover")
     imgs = emit(f"db-{nn}-cover", inner, ("tee", "crew"))
-    body.append(f"<p>The cover of Daily Bread {label}, as printed. On a shirt the art sits at 10 × 15 in with "
-                f"the masthead over it, front print only, unisex cut. As a 12 × 18 in print it runs full bleed, "
-                f"masthead and all. On a natural canvas tote it carries a stack of the magazine, which is the point.</p>")
+    body.append(f"<p>Daily Bread {label.replace(' — ', ', ')}, as things you can wear and hang.</p>"
+                f"<p>The cover, as printed. On the tee and crewneck the art sits at 10 × 15 in with the masthead "
+                f"over it. The poster is 12 × 18 in, full bleed, masthead and all. The tote is natural canvas and "
+                f"carries a stack of the magazine.</p>")
     items.append(item("Cover Tee", imgs["tee"], PRICE_TEE, f"DB{nn}-CVT"))
     items.append(item("Cover Crewneck", imgs["crew"], PRICE_CREW, f"DB{nn}-CVC"))
     # the tote shares the tee's print file; natural canvas only
@@ -469,9 +470,9 @@ def build(edition, out, publish):
                 png = out / "mockup" / f"db-{nn}-outline-{kind}-{g}.png"
                 photomock.compose(f"{kind}-{g}", str(src), str(png), line_boost=3)
                 imgs[kind][ground] = str(png.relative_to(out))
-        body.append(f"<p>Outline: the №{n} cover as a line drawing, the DTF print as delivered, black on bone, "
-                    f"white on ink, 11 × 14 in on the front. The poster sets the drawing 12 × 18 in on bone paper; "
-                    f"the tote carries it in black on natural canvas.</p>")
+        body.append(f"<p>The outline is the same cover as a line drawing, the DTF print as delivered. Black on "
+                    f"bone, white on ink, 11 × 14 in on the chest. The poster puts the drawing on 12 × 18 in bone "
+                    f"paper. The tote has it in black on natural canvas.</p>")
         items.append(item("Outline Tee", imgs["tee"], PRICE_TEE, f"DB{nn}-OLT"))
         items.append(item("Outline Crewneck", imgs["crew"], PRICE_CREW, f"DB{nn}-OLC"))
         # tote, natural canvas, black lines
@@ -509,11 +510,14 @@ def build(edition, out, publish):
                 photomock.compose(f"tee-{g.lower()}", str(out / "print" / f"{name}.png"), str(png))
                 imgs[g] = str(png.relative_to(out))
             items.append(item(f"Quote Tee {qi}", imgs, PRICE_TEE, f"DB{nn}-QT{qi}"))
-        body.append("<p>Quote tees, what people said, on a shirt. Front print, unisex cut, ink on bone or bone on ink:</p><ol>"
-                    + "".join(f"<li>{esc(q)}</li>" for q in qs) + "</ol>")
+        count = {2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six"}.get(len(qs), len(qs))
+        body.append(f"<p>{count} quote tees, one line each from the issue, ink on bone or bone on ink:</p><ul>"
+                    + "".join(f"<li>{esc(q)}</li>" for q in qs) + "</ul>")
         print("quotes:", len(qs), "tee items")
 
-    body.append("<p>Funded by Riposte Laboratories Inc.</p>")
+    body.append("<p>Front prints only, unisex cut. Funded by Riposte Laboratories Inc.</p>"
+                f"<p>Tee {PRICE_TEE.split('.')[0]}, crewneck {PRICE_CREW.split('.')[0]}, poster "
+                f"{PRICE_POSTER.split('.')[0]}, tote {PRICE_TOTE.split('.')[0]} CAD.</p>")
     products.append(edition_product(nn, label, "".join(body), items))
     print("edition product:", len(items), "items")
 
@@ -556,10 +560,12 @@ def build(edition, out, publish):
             variants.append({"size": key, "colour": None, "sku": f"DB{nn}-STK-{i:02d}", "price": PRICE_SINGLE, "image": key})
         products.append({
             "handle": f"db-{nn}-peel-me", "title": f"Peel Me {label}",
-            "descriptionHtml": (f"<p>The Peel Me page of Daily Bread {label}: the whole page as a kiss-cut A5 sheet "
-                                f"of nine, {esc(pg.get('brandSub', '').lower())}, or any one sticker die-cut at 3 in.</p>"
+            "descriptionHtml": (f"<p>The Peel Me page of Daily Bread {label.replace(' — ', ', ')}. "
+                                f"{esc(pg.get('brandSub', '').replace(' · ', ', ').capitalize())}. Take the whole page as a "
+                                f"kiss-cut A5 sheet of nine, or any one sticker die-cut at 3 in.</p>"
                                 f"<ul>{''.join('<li>' + esc(r.split('|')[0].strip()) + '</li>' for r in pg['stickers'])}</ul>"
-                                f"<p>Funded by Riposte Laboratories Inc.</p>"),
+                                f"<p>Funded by Riposte Laboratories Inc.</p>"
+                                f"<p>Sheet {PRICE_STICKERS.split('.')[0]}, single {PRICE_SINGLE.split('.')[0]} CAD.</p>"),
             "productType": "Stickers", "tags": ["stickers", "peel-me", "daily-bread", "merch:auto"],
             "options": ["Design"],
             "variants": variants, "images": imgs,
