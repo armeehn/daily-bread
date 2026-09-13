@@ -8,9 +8,14 @@ Reads content/<edition>.js (generated from the .tex, the source of truth) and
 turns what the edition already contains into products:
 
     Cover      art  -> cover tee, crewneck, tote (10 x 15 in print), 12 x 18 poster
-    The Wall   svg  -> poster (vector, 24 in wide) and a tee   (assets/wall-NN.svg)
+    Outline    pdf  -> the line drawing on tee, crewneck, tote, poster (assets/outline-NN.pdf)
+    quotes     list -> a tee per quote
     Peel Me    list -> A5 kiss-cut sticker sheet, and 3 in die-cut singles
-    quotes     list -> a tee per quote (one product, Quote x Size x Colour)
+
+Two products per edition: everything above the Peel Me line is ONE product
+(db-NN, options Item / Colour / Size, prints at "One size"); Peel Me is the
+other (db-NN-peel-me, the sheet and each single as a Design). The Wall was
+retired 2026-09-12 and its code went with the one-product fold.
 
 Output, under merch/<edition>/:
 
@@ -19,8 +24,8 @@ Output, under merch/<edition>/:
     mockup/   flat renders for the shop
     products.json   everything --publish needs, so a human can read it first
 
-Nothing here invents artwork.  If the edition has no wall file yet the poster
-and wall tee are skipped and said so; the placeholder page is not merch.
+Nothing here invents artwork.  If the edition has no outline file or Peel Me
+page yet those items are skipped and said so; a placeholder page is not merch.
 
 Needs: python3 + Pillow, rsvg-convert, node (to read the model), IBM Plex Mono
 installed, and the repo's own UnifrakturMaguntia (tools/latex/fonts) which this
@@ -63,6 +68,9 @@ SIZES = ["XS", "S", "M", "L", "XL", "2XL"]
 GARMENTS = {"Bone": BONE, "Ink": INK}
 PRICE_TEE, PRICE_CREW, PRICE_POSTER, PRICE_STICKERS = "28.00", "50.00", "20.00", "6.00"
 PRICE_TOTE, PRICE_SINGLE = "18.00", "2.00"
+ONE_SIZE = "One size"       # what a print answers to the Size option
+FULL = "Full colour"        # what a full-bleed print answers to Colour
+COLOURS = ["Bone", "Ink", "Natural", FULL]
 POSTER_W, POSTER_H = 12 * DPI, 18 * DPI   # the cover as a print, full bleed
 SINGLE_MM, SINGLE_BLEED = 76, 2           # 3 in die-cut, 2 mm bleed
 VENDOR = "Daily Bread"
@@ -174,36 +182,6 @@ def cover_inner(model, tmp, name, sw=PW, sh=PH, aw=ART_W, ah=ART_H):
         text(cx, y0 + 260 * k, tag, 84 * k, PLEX, 700, BONE, "0.3em"),
         text(cx, y0 + ah - 120 * k, edition, 64 * k, PLEX, 700, BONE, "0.3em"),
     ])
-
-
-def wall_svg(model):
-    """assets/wall-NN.svg, the rip-out poster as vector.  None if absent."""
-    _, nn = issue_no(model)
-    p = REPO / "assets" / f"wall-{nn}.svg"
-    if not p.exists():
-        return None, p
-    return p.read_text(), p
-
-
-def wall_title(svg):
-    m = re.search(r'aria-label="([^"]+)"', svg)
-    return m.group(1) if m else "The Wall"
-
-
-def wall_viewbox(svg):
-    m = re.search(r'viewBox="([\d.\s-]+)"', svg)
-    x, y, w, h = (float(v) for v in m.group(1).split())
-    return w, h
-
-
-def wall_inner(svg, width):
-    """Nest the poster on the sheet at `width` px, centred."""
-    w, h = wall_viewbox(svg)
-    ph = width * h / w
-    x, y = (PW - width) / 2, (PH - ph) / 2
-    body = svg[svg.index(">", svg.index("<svg")) + 1:svg.rindex("</svg>")]
-    return (f'<svg x="{x}" y="{y}" width="{width}" height="{ph}" viewBox="0 0 {w} {h}">'
-            f'{body}</svg>')
 
 
 def outline_pdf(model):
@@ -404,16 +382,30 @@ def flat_mockup(inner_svg, vw, vh):
 
 # ── products ──────────────────────────────────────────────────────────────
 
-def apparel(handle, title, body, kind, sku, price, images):
-    return {
-        "handle": handle, "title": title, "descriptionHtml": body,
-        "productType": "T-Shirt" if kind == "tee" else "Sweatshirt",
-        "tags": ["apparel", kind if kind == "tee" else "crewneck", "daily-bread", "merch:auto"],
-        "options": ["Size", "Colour"],
-        "variants": [{"size": s, "colour": g, "sku": f"{sku}-{g.upper()}-{s}", "price": price,
-                      "image": images[g]} for g in GARMENTS for s in SIZES],
-        "images": images,
-    }
+def item(name, images, price, sku, sized=True):
+    """One item of the edition product. images: {colour: mockup path}."""
+    return {"name": name, "images": images, "price": price, "sku": sku, "sized": sized}
+
+
+def edition_product(nn, label, body, items):
+    """The whole edition as ONE product: options Item / Colour / Size, a
+    variant per cell with its own price and mockup; prints answer ONE_SIZE.
+    Shopify allows three options, so the cover, outline and quotes ride in Item."""
+    images, variants = {}, []
+    for it in items:
+        for colour, path in it["images"].items():
+            key = f"{it['name']}, {colour}"
+            images[key] = path
+            for sz in (SIZES if it["sized"] else [ONE_SIZE]):
+                variants.append({"item": it["name"], "colour": colour, "size": sz, "image": key, "price": it["price"],
+                                 "sku": it["sku"] + ("" if colour == FULL else f"-{colour.upper()}")
+                                 + (f"-{sz}" if it["sized"] else "")})
+    sizes = ([*SIZES] if any(it["sized"] for it in items) else []) + ([ONE_SIZE] if any(not it["sized"] for it in items) else [])
+    return {"handle": f"db-{nn}", "title": f"Daily Bread {label}", "descriptionHtml": body, "productType": "Merch",
+            "tags": ["apparel", "tee", "crewneck", "poster", "tote", "daily-bread", "merch:auto"],
+            "options": ["Item", "Colour", "Size"], "items": [it["name"] for it in items],
+            "colours": sorted({c for it in items for c in it["images"]}, key=COLOURS.index), "sizes": sizes,
+            "variants": variants, "images": images}
 
 
 def build(edition, out, publish):
@@ -424,7 +416,7 @@ def build(edition, out, publish):
     for d in ("print", "pdf", "mockup", "tmp"):
         (out / d).mkdir(parents=True, exist_ok=True)
     env = fontconfig(out / "tmp")
-    products = []
+    products, items, body = [], [], []     # items + body paragraphs of the edition product
 
     def emit(name, inner, kinds):
         """Print PNG + PDF once, a mockup per garment colour and kind."""
@@ -443,26 +435,15 @@ def build(edition, out, publish):
     # 1. the cover
     inner = cover_inner(model, out / "tmp", f"db-{nn}-cover")
     imgs = emit(f"db-{nn}-cover", inner, ("tee", "crew"))
-    body = (f"<p>The cover of Daily Bread {label}, as printed, on a shirt. The art at 10 × 15 in, "
-            f"the masthead over it.</p><p>Front print only. Unisex cut.</p>"
-            f"<p>Funded by Riposte Laboratories Inc.</p>")
-    products.append(apparel(f"db-{nn}-cover-tee", f"Daily Bread {label} · Cover Tee", body,
-                            "tee", f"DB{nn}-CVT", PRICE_TEE, imgs["tee"]))
-    products.append(apparel(f"db-{nn}-cover-crewneck", f"Daily Bread {label} · Cover Crewneck", body,
-                            "crew", f"DB{nn}-CVC", PRICE_CREW, imgs["crew"]))
+    body.append(f"<p>The cover of Daily Bread {label}, as printed. On a shirt the art sits at 10 × 15 in with "
+                f"the masthead over it, front print only, unisex cut. As a 12 × 18 in print it runs full bleed, "
+                f"masthead and all. On a natural canvas tote it carries a stack of the magazine, which is the point.</p>")
+    items.append(item("Cover Tee", imgs["tee"], PRICE_TEE, f"DB{nn}-CVT"))
+    items.append(item("Cover Crewneck", imgs["crew"], PRICE_CREW, f"DB{nn}-CVC"))
     # the tote shares the tee's print file; natural canvas only
     timg = out / "mockup" / f"db-{nn}-cover-tote.png"
     photomock.compose("tote-bone", str(out / "print" / f"db-{nn}-cover.png"), str(timg))
-    products.append({
-        "handle": f"db-{nn}-cover-tote", "title": f"Daily Bread {label} \u00b7 Cover Tote",
-        "descriptionHtml": (f"<p>The cover of Daily Bread {label} on a natural canvas tote, 10 \u00d7 15 in print. "
-                            f"Carries a stack of the magazine, which is the point.</p><p>Funded by Riposte Laboratories Inc.</p>"),
-        "productType": "Tote Bag", "tags": ["tote", "daily-bread", "merch:auto"],
-        "options": ["Title"],
-        "variants": [{"size": "Default Title", "colour": None, "sku": f"DB{nn}-CVB", "price": PRICE_TOTE,
-                      "image": str(timg.relative_to(out))}],
-        "images": {"Default": str(timg.relative_to(out))},
-    })
+    items.append(item("Cover Tote", {"Natural": str(timg.relative_to(out))}, PRICE_TOTE, f"DB{nn}-CVB", sized=False))
     # the cover as a 12 x 18 print, full bleed
     pinner = cover_inner(model, out / "tmp", f"db-{nn}-cover-poster", POSTER_W, POSTER_H, POSTER_W, POSTER_H)
     ps = out / "tmp" / f"db-{nn}-cover-poster.svg"
@@ -473,16 +454,7 @@ def build(edition, out, publish):
     pm.write_text(flat_mockup(pinner, POSTER_W, POSTER_H))
     pimg = out / "mockup" / f"db-{nn}-cover-poster.png"
     rsvg(env, pm, pimg, width=MOCK)
-    products.append({
-        "handle": f"db-{nn}-cover-poster", "title": f"Daily Bread {label} \u00b7 Cover Poster",
-        "descriptionHtml": (f"<p>The cover of Daily Bread {label} as a 12 \u00d7 18 in print, full bleed, "
-                            f"masthead and all.</p><p>Funded by Riposte Laboratories Inc.</p>"),
-        "productType": "Poster", "tags": ["poster", "daily-bread", "merch:auto"],
-        "options": ["Title"],
-        "variants": [{"size": "Default Title", "colour": None, "sku": f"DB{nn}-CVP", "price": PRICE_POSTER,
-                      "image": str(pimg.relative_to(out))}],
-        "images": {"Default": str(pimg.relative_to(out))},
-    })
+    items.append(item("Cover Poster", {FULL: str(pimg.relative_to(out))}, PRICE_POSTER, f"DB{nn}-CVP", sized=False))
     print("cover:", "tee + crewneck + tote + poster")
 
     # 1a. the outline: DTF line drawing, tee / crewneck / tote / poster
@@ -497,20 +469,15 @@ def build(edition, out, publish):
                 png = out / "mockup" / f"db-{nn}-outline-{kind}-{g}.png"
                 photomock.compose(f"{kind}-{g}", str(src), str(png), line_boost=3)
                 imgs[kind][ground] = str(png.relative_to(out))
-        body = (f"<p>The №{n} cover as a line drawing, the DTF print as delivered: black on bone, white on ink. "
-                f"11 × 14 in, front.</p><p>Funded by Riposte Laboratories Inc.</p>")
-        products.append(apparel(f"db-{nn}-outline-tee", f"Daily Bread {label} · Outline Tee", body, "tee", f"DB{nn}-OLT", PRICE_TEE, imgs["tee"]))
-        products.append(apparel(f"db-{nn}-outline-crewneck", f"Daily Bread {label} · Outline Crewneck", body, "crew", f"DB{nn}-OLC", PRICE_CREW, imgs["crew"]))
+        body.append(f"<p>Outline: the №{n} cover as a line drawing, the DTF print as delivered, black on bone, "
+                    f"white on ink, 11 × 14 in on the front. The poster sets the drawing 12 × 18 in on bone paper; "
+                    f"the tote carries it in black on natural canvas.</p>")
+        items.append(item("Outline Tee", imgs["tee"], PRICE_TEE, f"DB{nn}-OLT"))
+        items.append(item("Outline Crewneck", imgs["crew"], PRICE_CREW, f"DB{nn}-OLC"))
         # tote, natural canvas, black lines
         timg = out / "mockup" / f"db-{nn}-outline-tote.png"
         photomock.compose("tote-bone", str(pngs["Bone"]), str(timg), line_boost=3)
-        products.append({
-            "handle": f"db-{nn}-outline-tote", "title": f"Daily Bread {label} \u00b7 Outline Tote",
-            "descriptionHtml": f"<p>The №{n} cover as a line drawing on a natural canvas tote.</p><p>Funded by Riposte Laboratories Inc.</p>",
-            "productType": "Tote Bag", "tags": ["tote", "daily-bread", "merch:auto"], "options": ["Title"],
-            "variants": [{"size": "Default Title", "colour": None, "sku": f"DB{nn}-OLB", "price": PRICE_TOTE, "image": str(timg.relative_to(out))}],
-            "images": {"Default": str(timg.relative_to(out))},
-        })
+        items.append(item("Outline Tote", {"Natural": str(timg.relative_to(out))}, PRICE_TOTE, f"DB{nn}-OLB", sized=False))
         # poster: the drawing on bone, 12 x 18, one inch off the edges
         ob = Image.open(pngs["Bone"])
         bb = ob.getbbox()
@@ -523,20 +490,14 @@ def build(edition, out, publish):
         poster.save(out / "pdf" / f"db-{nn}-outline-poster.pdf", "PDF", resolution=DPI)
         pimg = out / "mockup" / f"db-{nn}-outline-poster.png"
         photomock.poster_mockup(str(out / "print" / f"db-{nn}-outline-poster.png"), str(pimg))
-        products.append({
-            "handle": f"db-{nn}-outline-poster", "title": f"Daily Bread {label} \u00b7 Outline Poster",
-            "descriptionHtml": f"<p>The №{n} cover as a line drawing, 12 × 18 in on bone paper.</p><p>Funded by Riposte Laboratories Inc.</p>",
-            "productType": "Poster", "tags": ["poster", "daily-bread", "merch:auto"], "options": ["Title"],
-            "variants": [{"size": "Default Title", "colour": None, "sku": f"DB{nn}-OLP", "price": PRICE_POSTER, "image": str(pimg.relative_to(out))}],
-            "images": {"Default": str(pimg.relative_to(out))},
-        })
+        items.append(item("Outline Poster", {"Bone": str(pimg.relative_to(out))}, PRICE_POSTER, f"DB{nn}-OLP", sized=False))
         print("outline:", opdf.name, "-> tee + crewneck + tote + poster")
 
-    # 1b. the quotes, one tee, a variant per quote
+    # 1b. the quotes, one tee item per quote
     qs = quotes(model)
     if qs:
-        imgs, variants = {}, []
         for qi, q in enumerate(qs, 1):
+            imgs = {}
             for g, fill in GARMENTS.items():
                 ink = INK if g == "Bone" else BONE
                 name = f"db-{nn}-quote-{qi}-{g.lower()}"
@@ -546,56 +507,15 @@ def build(edition, out, publish):
                 rsvg(env, svg, out / "pdf" / f"{name}.pdf", fmt="pdf")
                 png = out / "mockup" / f"{name}.png"
                 photomock.compose(f"tee-{g.lower()}", str(out / "print" / f"{name}.png"), str(png))
-                imgs[f"Q{qi} {g}"] = str(png.relative_to(out))
-                for sz in SIZES:
-                    variants.append({"quote": f"Q{qi}", "size": sz, "colour": g,
-                                     "sku": f"DB{nn}-QT{qi}-{g.upper()}-{sz}", "price": PRICE_TEE,
-                                     "image": f"Q{qi} {g}"})
-        products.append({
-            "handle": f"db-{nn}-quotes-tee", "title": f"Daily Bread {label} \u00b7 Quotes Tee",
-            "descriptionHtml": (f"<p>What people said, on a shirt. Pick the quote:</p><ol>"
-                                + "".join(f"<li>{esc(q)}</li>" for q in qs)
-                                + f"</ol><p>From Daily Bread {label}. Front print, unisex cut, ink on bone or bone on ink.</p>"
-                                f"<p>Funded by Riposte Laboratories Inc.</p>"),
-            "productType": "T-Shirt", "tags": ["apparel", "tee", "daily-bread", "merch:auto"],
-            "options": ["Quote", "Size", "Colour"], "quotes": [f"Q{i}" for i in range(1, len(qs) + 1)],
-            "variants": variants, "images": imgs,
-        })
-        print("quotes:", len(qs), "on one tee")
+                imgs[g] = str(png.relative_to(out))
+            items.append(item(f"Quote Tee {qi}", imgs, PRICE_TEE, f"DB{nn}-QT{qi}"))
+        body.append("<p>Quote tees, what people said, on a shirt. Front print, unisex cut, ink on bone or bone on ink:</p><ol>"
+                    + "".join(f"<li>{esc(q)}</li>" for q in qs) + "</ol>")
+        print("quotes:", len(qs), "tee items")
 
-    # 2. the wall
-    svg, path = wall_svg(model)
-    if svg is None:
-        print(f"wall: no {path.name} yet, poster and wall tee skipped")
-    else:
-        title = wall_title(svg)
-        vw, vh = wall_viewbox(svg)
-        # poster: 24 in wide, vector
-        poster = out / "tmp" / f"db-{nn}-wall-poster.svg"
-        poster.write_text(svg.replace("<svg ", f'<svg width="24in" height="{24 * vh / vw:.3f}in" ', 1))
-        rsvg(env, poster, out / "pdf" / f"db-{nn}-wall-poster.pdf", fmt="pdf")
-        rsvg(env, poster, out / "print" / f"db-{nn}-wall-poster.png", width=24 * DPI)
-        pm = out / "tmp" / f"db-{nn}-wall-poster-mock.svg"
-        pm.write_text(flat_mockup(svg[svg.index(">", svg.index("<svg")) + 1:svg.rindex("</svg>")], vw, vh))
-        pimg = out / "mockup" / f"db-{nn}-wall-poster.png"
-        rsvg(env, pm, pimg, width=MOCK)
-        products.append({
-            "handle": f"db-{nn}-wall-poster", "title": f"The Wall {label} · {title} · Poster",
-            "descriptionHtml": (f"<p>The rip-out centrefold of Daily Bread {label}, <em>{esc(title)}</em>, "
-                                f"as a poster. 24 × {24 * vh / vw:.0f} in, printed from the vector.</p>"
-                                f"<p>Funded by Riposte Laboratories Inc.</p>"),
-            "productType": "Poster", "tags": ["poster", "the-wall", "daily-bread", "merch:auto"],
-            "options": ["Title"],
-            "variants": [{"size": "Default Title", "colour": None, "sku": f"DB{nn}-WALL-P",
-                          "price": PRICE_POSTER, "image": str(pimg.relative_to(out))}],
-            "images": {"Default": str(pimg.relative_to(out))},
-        })
-        imgs = emit(f"db-{nn}-wall", wall_inner(svg, 11 * DPI), ("tee",))
-        products.append(apparel(f"db-{nn}-wall-tee", f"The Wall {label} · {title} · Tee",
-                                f"<p>The centrefold poster of Daily Bread {label} across the chest, 11 in wide.</p>"
-                                f"<p>Front print only. Unisex cut.</p><p>Funded by Riposte Laboratories Inc.</p>",
-                                "tee", f"DB{nn}-WLT", PRICE_TEE, imgs["tee"]))
-        print("wall:", title, "-> poster + tee")
+    body.append("<p>Funded by Riposte Laboratories Inc.</p>")
+    products.append(edition_product(nn, label, "".join(body), items))
+    print("edition product:", len(items), "items")
 
     # 3. the stickers
     ssvg = stickers_svg(model)
@@ -611,23 +531,12 @@ def build(edition, out, publish):
         simg = out / "mockup" / f"db-{nn}-stickers.png"
         rsvg(env, sm, simg, width=MOCK)
         pg = page(model, "Insert", "stickers")["content"]
-        products.append({
-            "handle": f"db-{nn}-stickers", "title": f"Peel Me {label} · Sticker Sheet",
-            "descriptionHtml": (f"<p>The Peel Me page of Daily Bread {label} as a kiss-cut A5 sheet: "
-                                f"nine stickers, {esc(pg.get('brandSub', '').lower())}.</p>"
-                                f"<ul>{''.join('<li>' + esc(r.split('|')[0].strip()) + '</li>' for r in pg['stickers'])}</ul>"
-                                f"<p>Funded by Riposte Laboratories Inc.</p>"),
-            "productType": "Stickers", "tags": ["stickers", "peel-me", "daily-bread", "merch:auto"],
-            "options": ["Title"],
-            "variants": [{"size": "Default Title", "colour": None, "sku": f"DB{nn}-STK",
-                          "price": PRICE_STICKERS, "image": str(simg.relative_to(out))}],
-            "images": {"Default": str(simg.relative_to(out))},
-        })
-        print("stickers:", len(pg["stickers"]), "on one A5 sheet")
-        # singles: one product, a variant per design, 3 in die-cut
-        _, items = sticker_items(model)
-        imgs, variants = {}, []
-        for i, (caption, shape, bg, fg) in enumerate(items, 1):
+        # one product: the A5 sheet, then a variant per single, 3 in die-cut
+        _, singles = sticker_items(model)
+        sheet_key = "Sheet of nine"
+        imgs, variants = {sheet_key: str(simg.relative_to(out))}, [
+            {"size": sheet_key, "colour": None, "sku": f"DB{nn}-STK", "price": PRICE_STICKERS, "image": sheet_key}]
+        for i, (caption, shape, bg, fg) in enumerate(singles, 1):
             name = f"db-{nn}-sticker-{i}"
             sv = out / "tmp" / f"{name}.svg"
             sv.write_text(single_svg(caption, shape, bg, fg))
@@ -646,14 +555,16 @@ def build(edition, out, publish):
             imgs[key] = str(png.relative_to(out))
             variants.append({"size": key, "colour": None, "sku": f"DB{nn}-STK-{i:02d}", "price": PRICE_SINGLE, "image": key})
         products.append({
-            "handle": f"db-{nn}-sticker-singles", "title": f"Peel Me {label} \u00b7 Singles",
-            "descriptionHtml": (f"<p>Any one sticker from the Peel Me page of Daily Bread {label}, "
-                                f"die-cut at 3 in.</p><p>Funded by Riposte Laboratories Inc.</p>"),
+            "handle": f"db-{nn}-peel-me", "title": f"Peel Me {label}",
+            "descriptionHtml": (f"<p>The Peel Me page of Daily Bread {label}: the whole page as a kiss-cut A5 sheet "
+                                f"of nine, {esc(pg.get('brandSub', '').lower())}, or any one sticker die-cut at 3 in.</p>"
+                                f"<ul>{''.join('<li>' + esc(r.split('|')[0].strip()) + '</li>' for r in pg['stickers'])}</ul>"
+                                f"<p>Funded by Riposte Laboratories Inc.</p>"),
             "productType": "Stickers", "tags": ["stickers", "peel-me", "daily-bread", "merch:auto"],
             "options": ["Design"],
             "variants": variants, "images": imgs,
         })
-        print("singles:", len(items))
+        print("peel me: sheet +", len(singles), "singles")
 
     manifest = {"edition": edition, "issue": n, "theme": theme, "vendor": VENDOR,
                 "collection": f"db-{nn}", "collectionTitle": f"Daily Bread {label}",
@@ -663,6 +574,7 @@ def build(edition, out, publish):
 
     if publish:
         publish_all(manifest, out)
+        archive(RETIRED(nn))
 
 
 # ── shopify ───────────────────────────────────────────────────────────────
@@ -755,9 +667,9 @@ def collection_id(shop, tok, handle, title):
 
 
 def variant_inputs(p, urls):
-    """productSet's option and variant lists for a manifest product.  Four
-    shapes: Size x Colour, Quote x Size x Colour, Design (one per sticker),
-    and a single default variant."""
+    """productSet's option and variant lists for a manifest product.  Three
+    shapes: Item x Colour x Size (the edition), Design (Peel Me), and a
+    single default variant (the wall poster)."""
     opts = p["options"]
     variants = []
     for v in p["variants"]:
@@ -767,15 +679,11 @@ def variant_inputs(p, urls):
         elif opts == ["Design"]:
             ov = [{"optionName": "Design", "name": v["size"]}]
             img = urls[v["image"]]
-        elif opts == ["Quote", "Size", "Colour"]:
-            ov = [{"optionName": "Quote", "name": v["quote"]},
-                  {"optionName": "Size", "name": v["size"]},
-                  {"optionName": "Colour", "name": v["colour"]}]
-            img = urls[v["image"]]
         else:
-            ov = [{"optionName": "Size", "name": v["size"]},
-                  {"optionName": "Colour", "name": v["colour"]}]
-            img = urls[v["colour"]]
+            ov = [{"optionName": "Item", "name": v["item"]},
+                  {"optionName": "Colour", "name": v["colour"]},
+                  {"optionName": "Size", "name": v["size"]}]
+            img = urls[v["image"]]
         variants.append({"optionValues": ov, "sku": v["sku"], "price": v["price"],
                          "inventoryItem": {"tracked": True},
                          "file": {"originalSource": img, "contentType": "IMAGE"}})
@@ -784,13 +692,10 @@ def variant_inputs(p, urls):
         options = [{"name": "Title", "values": values(["Default Title"])}]
     elif opts == ["Design"]:
         options = [{"name": "Design", "values": values([v["size"] for v in p["variants"]])}]
-    elif opts == ["Quote", "Size", "Colour"]:
-        options = [{"name": "Quote", "values": values(p["quotes"])},
-                   {"name": "Size", "values": values(SIZES)},
-                   {"name": "Colour", "values": values(GARMENTS)}]
     else:
-        options = [{"name": "Size", "values": values(SIZES)},
-                   {"name": "Colour", "values": values(GARMENTS)}]
+        options = [{"name": "Item", "values": values(p["items"])},
+                   {"name": "Colour", "values": values(p["colours"])},
+                   {"name": "Size", "values": values(p["sizes"])}]
     return variants, options
 
 
@@ -804,6 +709,28 @@ def online_store_id(shop, tok):
         print("note: no read_publications scope; put new products on the Online Store channel by hand")
         return None
     return next((n["id"] for n in d["publications"]["nodes"] if n["name"] == "Online Store"), None)
+
+
+# the split rack, one product per kind, folded into the edition product 2026-09-13
+RETIRED = lambda nn: [f"db-{nn}-{k}" for k in (   # noqa: E731
+    "cover-tee", "cover-crewneck", "cover-tote", "cover-poster", "outline-tee", "outline-crewneck",
+    "outline-tote", "outline-poster", "quotes-tee", "stickers", "sticker-singles")]
+
+
+def archive(handles):
+    """Archived, not deleted: orders keep their lines, and it reverses."""
+    shop = os.environ.get("SHOPIFY_SHOP", "h23y0x-fd.myshopify.com")
+    tok = token(shop)
+    for h in handles:
+        d = gql(shop, tok, 'query($q:String){products(first:1,query:$q){nodes{id status}}}', {"q": f"handle:{h}"})
+        nodes = d["products"]["nodes"]
+        if not nodes or nodes[0]["status"] == "ARCHIVED":
+            continue
+        d = gql(shop, tok, """mutation($p:ProductUpdateInput!){productUpdate(product:$p){product{id} userErrors{message}}}""",
+                {"p": {"id": nodes[0]["id"], "status": "ARCHIVED"}})
+        if d["productUpdate"]["userErrors"]:
+            sys.exit(f"archive {h}: {d['productUpdate']['userErrors']}")
+        print("archived:", h)
 
 
 def publish_all(manifest, out):
