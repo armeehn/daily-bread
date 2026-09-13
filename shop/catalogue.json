@@ -1,6 +1,6 @@
 {
  "shop": "https://h23y0x-fd.myshopify.com",
- "generated": "2026-09-12T22:36:46+00:00",
+ "generated": "2026-09-13T14:23:26+00:00",
  "collections": [
   {
    "handle": "daily-bread-apparel",
@@ -8,30 +8,43 @@
    "url": "https://h23y0x-fd.myshopify.com/collections/daily-bread-apparel",
    "products": [
     {
-     "handle": "collective-crewneck",
-     "title": "Collective. Crewneck",
-     "type": "Sweatshirt",
+     "handle": "db-collective-apparel",
+     "title": "Collective. Apparel",
+     "type": "Apparel",
      "price": {
       "min": "48.0",
       "max": "48.0",
       "currency": "CAD"
      },
-     "url": "https://shop.ripostelabs.xyz/products/collective-crewneck",
+     "url": "https://shop.ripostelabs.xyz/products/db-collective-apparel",
      "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-bone.png?v=1789150046",
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-bone.png?v=1789308955",
       "alt": "collective-crewneck, bone"
      },
      "images": [
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-bone.png?v=1789150046",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-bone.png?v=1789308955",
        "alt": "collective-crewneck, bone"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-ink.png?v=1789150046",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-ink.png?v=1789308955",
        "alt": "collective-crewneck, ink"
       }
      ],
      "options": [
+      {
+       "name": "Garment",
+       "values": [
+        "Crewneck"
+       ]
+      },
+      {
+       "name": "Colour",
+       "values": [
+        "Bone",
+        "Ink"
+       ]
+      },
       {
        "name": "Size",
        "values": [
@@ -41,13 +54,6 @@
         "L",
         "XL",
         "2XL"
-       ]
-      },
-      {
-       "name": "Colour",
-       "values": [
-        "Bone",
-        "Ink"
        ]
       }
      ]
@@ -63,16 +69,16 @@
      },
      "url": "https://shop.ripostelabs.xyz/products/db-collective-poster",
      "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-bone.png?v=1789149988",
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-bone.png?v=1789308913",
       "alt": "Collective. Poster, bone"
      },
      "images": [
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-bone.png?v=1789149988",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-bone.png?v=1789308913",
        "alt": "Collective. Poster, bone"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-ink.png?v=1789149988",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-ink.png?v=1789308913",
        "alt": "Collective. Poster, ink"
       }
      ],
@@ -97,16 +103,16 @@
      },
      "url": "https://shop.ripostelabs.xyz/products/db-collective-tote",
      "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-bone.png?v=1789149991",
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-bone.png?v=1789308916",
       "alt": "Collective. Tote, natural"
      },
      "images": [
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-bone.png?v=1789149991",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-bone.png?v=1789308916",
        "alt": "Collective. Tote, natural"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-ink.png?v=1789149991",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-ink.png?v=1789308916",
        "alt": "Collective. Tote, black"
       }
      ],
@@ -121,75 +127,45 @@
      ]
     },
     {
-     "handle": "db-cover-01-glitch-crewneck",
-     "title": "Daily Bread №1 Cover · Glitch Crewneck",
-     "type": "Sweatshirt",
+     "handle": "db-cover-01-apparel",
+     "title": "Daily Bread №1 Cover Apparel",
+     "type": "Apparel",
      "price": {
-      "min": "48.0",
+      "min": "28.0",
       "max": "48.0",
       "currency": "CAD"
      },
-     "url": "https://shop.ripostelabs.xyz/products/db-cover-01-glitch-crewneck",
+     "url": "https://shop.ripostelabs.xyz/products/db-cover-01-apparel",
      "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-crew-bone.png?v=1789153815",
-      "alt": "Daily Bread №1 Cover · Glitch Crewneck, bone"
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-tee-bone.png?v=1789308961",
+      "alt": "Daily Bread №1 Cover · Glitch Tee, bone"
      },
      "images": [
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-crew-bone.png?v=1789153815",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-tee-bone.png?v=1789308961",
+       "alt": "Daily Bread №1 Cover · Glitch Tee, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-tee-ink.png?v=1789308961",
+       "alt": "Daily Bread №1 Cover · Glitch Tee, ink"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-crew-bone.png?v=1789308961",
        "alt": "Daily Bread №1 Cover · Glitch Crewneck, bone"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-crew-ink.png?v=1789153815",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-crew-ink.png?v=1789308961",
        "alt": "Daily Bread №1 Cover · Glitch Crewneck, ink"
       }
      ],
      "options": [
       {
-       "name": "Colour",
+       "name": "Garment",
        "values": [
-        "Bone",
-        "Ink"
+        "Glitch Tee",
+        "Glitch Crewneck"
        ]
       },
-      {
-       "name": "Size",
-       "values": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL"
-       ]
-      }
-     ]
-    },
-    {
-     "handle": "db-cover-01-glitch-tee",
-     "title": "Daily Bread №1 Cover · Glitch Tee",
-     "type": "T-Shirt",
-     "price": {
-      "min": "28.0",
-      "max": "28.0",
-      "currency": "CAD"
-     },
-     "url": "https://shop.ripostelabs.xyz/products/db-cover-01-glitch-tee",
-     "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-tee-bone.png?v=1789153810",
-      "alt": "Daily Bread №1 Cover · Glitch Tee, bone"
-     },
-     "images": [
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-tee-bone.png?v=1789153810",
-       "alt": "Daily Bread №1 Cover · Glitch Tee, bone"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-tee-ink.png?v=1789153810",
-       "alt": "Daily Bread №1 Cover · Glitch Tee, ink"
-      }
-     ],
-     "options": [
       {
        "name": "Colour",
        "values": [

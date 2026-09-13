@@ -25,7 +25,7 @@ QUERY = """query($q: String!) {
   collections(first: 1, query: $q) {
     nodes {
       handle title descriptionHtml
-      products(first: 50, sortKey: TITLE) {
+      products(first: 250, sortKey: TITLE) {
         nodes {
           handle title productType tags status onlineStoreUrl
           priceRangeV2 { minVariantPrice { amount currencyCode } maxVariantPrice { amount } }
