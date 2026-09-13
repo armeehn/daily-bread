@@ -5,3 +5,13 @@ CLOUDFLARE.md
 README.md
 tools/
 .gitignore
+db-render/
+.gitea/
+.claude/
+tmp-*.html
+FORKING.md
+BRAND.md
+PRINT-SPEC.md
+LICENSE
+magazine.env
+.magazine.applied
