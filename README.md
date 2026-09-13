@@ -10,10 +10,40 @@ domain, place and mailbox it carries lives in [`magazine.env`](magazine.env),
 and `python3 tools/rebrand.py` makes the tree follow it. [`FORKING.md`](FORKING.md)
 is the checklist from fork to your first edition.
 
-`index.html` is a single-page, responsive web edition of №1, styled from the
-Daily Bread print design: UnifrakturMaguntia blackletter masthead, IBM Plex Mono
-spec-sheet chrome, checker/harlequin bands, and the pink/teal/orange accent
-cascade over a bone/ink base. Assets live in `assets/`.
+Read it at [db.ripostelabs.xyz](https://db.ripostelabs.xyz). The web edition is
+static HTML in sixteen languages, styled from the print design: blackletter
+masthead, IBM Plex Mono spec-sheet chrome, checker bands, the pink/teal/orange
+accent cascade over a bone/ink base. The same source typesets the print run.
+
+## Repository map
+
+| Path | What it is |
+|---|---|
+| [`content/`](content/) | The issues. One LaTeX file each (`issue-01.tex`) and its generated `.js` twin, which the web build reads |
+| [`tools/build.js`](tools/build.js) | The web build: 48 pages (16 languages × full, lite, e-ink) from `content/`, `tools/strings/` and `tools/assets/` |
+| `index.html`, `<lang>/`, `lite/`, `eink/` | The built pages, committed; CI fails if they differ from a rebuild |
+| [`studio.html`](studio.html) + [`db.js`](db.js) | The browser studio: edit, re-skin and preview an edition, typeset it through the press. Served at `/studio` |
+| [`tools/latex/`](tools/latex/) | The press: `dailybread.cls`, the `.tex` ⇄ `.js` round trip, the saddle-stitch booklet imposition |
+| [`press/`](press/) | The pressed booklets, one per issue, byte-checked by CI |
+| [`tools/newsproof/`](tools/newsproof/) + [`verify/`](verify/) | Tamper-evidence: every page is hashed, logged and signed; the badge on the page checks it |
+| [`tools/strings/`](tools/strings/) | The web chrome in English (`en.js`) and fifteen translations |
+| [`shop/`](shop/), [`tools/merch/`](tools/merch/) | The shop pane and the merch artwork pipeline |
+| [`wrangler.jsonc`](wrangler.jsonc), [`CLOUDFLARE.md`](CLOUDFLARE.md) | Deploy: the repo root served as Cloudflare Worker static assets |
+| [`magazine.env`](magazine.env), [`FORKING.md`](FORKING.md), [`LICENSE`](LICENSE) | Make it yours |
+| [`db-render/`](db-render/) | The original hand-laid-out kit, kept for reference; not served |
+
+## Quickstart
+
+```sh
+node tools/build.js               # rebuild the 48 pages (Node standard library only)
+node tools/check-site.js          # read them back: links, hreflang, sitemap, headers
+python3 tools/db-latex.py build   # .tex → .js round trip and both press PDFs (needs TeX Live)
+python3 tools/db-latex.py check   # prove the round trip
+open studio.html                  # the studio works from file://
+```
+
+CI (`.gitea/workflows/verify-editions.yml`) runs the rebuild, the read-back,
+the round trip, the press geometry and the rebrand round trip on every push.
 
 ## Reading — the contents rail and the section tabs
 
@@ -140,17 +170,12 @@ accidents; the offline verifier is what holds against the publisher.
 `studio.html` is a bespoke, self-contained editor for building and re-skinning
 the whole issue. No backend, no build server: it runs entirely in the browser.
 
-**It is deliberately NOT deployed to the public site** — the studio lets anyone
-rewrite the magazine, so it must not be world-readable on a static host (there is
-no server to check a password). It lives on the **`studio` branch** instead:
-
-```
-git switch studio        # or: git worktree add ../db-studio studio
-# then open studio.html in a browser (double-click, or a local server)
-```
-
-Everything works from `file://`: autosave, import/export, and Publish. To put it
-online behind a login, see **Private online access** below.
+It lives on `main` and is served at `/studio` by the same Worker as the
+magazine. The studio lets anyone rewrite the edition in their own browser and
+nothing else: publishing is a commit, so the page is safe to expose, and
+[`CLOUDFLARE.md`](CLOUDFLARE.md) shows how to put it behind a login anyway.
+Locally, open `studio.html` from `file://`; autosave, import/export and Publish
+all work there.
 
 **Two ways to edit.** The left pane has a **Design** tab and an **All fields** tab.
 
@@ -200,8 +225,8 @@ shows exactly what will publish, at full / tablet / phone widths.
   `daily-bread-№1.json` you can commit, back up, or move between machines; import
   it to pick up where you left off.
 - **Publish → `index.html`** — downloads a complete, self-contained
-  `index.html`. Drop it in the repo root and commit; GitHub Pages serves the new
-  edition. (If you embedded a cover via upload, it travels inside the file as a
+  `index.html`. Drop it in the repo root and commit; Cloudflare deploys the new
+  edition on push. (If you embedded a cover via upload, it travels inside the file as a
   data URL; if you referenced `assets/cover.jpg`, keep that file in `assets/`.)
 
 ### How it's wired
@@ -211,12 +236,11 @@ shows exactly what will publish, at full / tablet / phone widths.
   `DB.render(model)` — a pure function that turns the model into the finished,
   static magazine HTML (no runtime JS in the output). The studio's live preview
   and its "Publish" button both call `render()`, so what you see is what ships.
-- **`build.js`** regenerates `index.html` from `db.js`'s default model on the
-  command line: `node build.js`. Handy for CI or a quick rebuild; produces the
-  same output as the studio's Publish button.
-- **`index.html`** is the published edition. It currently holds the hand-built
-  №1; the studio's model reproduces it exactly, so you can adopt the
-  studio-driven workflow whenever you like by clicking Publish.
+- **`tools/build.js`** builds the published pages from `content/<edition>.js`
+  and `tools/strings/`, all sixteen languages and three variants, on the command
+  line: `node tools/build.js`. CI requires the committed pages to match.
+- **`index.html`** is the published English edition; `db.js`'s default model
+  reproduces it, so the studio's Publish button and the build agree.
 - **`db-render/render-studio-pdf.js`** renders the print magazine PDF from that
   same `DB.render(model)` output — the document in the studio's preview — so the
   studio view and the printer's file are one thing. Page size, bleed, safe area
@@ -276,28 +300,9 @@ Newlines in masthead/headline fields become line breaks.
 
 ### Private online access
 
-GitHub Pages has no server, so it can't check a password — a client-side gate is
-theatre (the source ships to the browser). To use the studio online you need a
-real auth layer in front of it. Two routes:
-
-**A · Cloudflare Access on `ourdailybre.ad` (one domain, needs migration).**
-1. Add `ourdailybre.ad` to a Cloudflare account; change the nameservers at your
-   registrar to the pair Cloudflare gives you (the domain is currently pointed
-   straight at GitHub Pages, so this is a real migration; allow time to propagate).
-2. In Cloudflare DNS, recreate the GitHub Pages records **proxied** (orange
-   cloud). Set SSL/TLS mode to **Full** to avoid a redirect loop with Pages.
-3. Redeploy the studio under a single folder — `studio/index.html` + `studio/db.js`
-   (off the `studio` branch) — so one policy covers it.
-4. Zero Trust → Access → Add a **self-hosted application** for
-   `ourdailybre.ad/studio/*`; policy: Allow → emails = you. Done: the magazine at
-   the root stays public; `/studio/*` prompts for a login.
-
-**B · Cloudflare Pages + Access (no nameserver change, separate URL).**
-Deploy just the studio to a Cloudflare Pages project (free) from the `studio`
-branch; you get `daily-bread-studio.pages.dev`. Protect that project with
-Cloudflare Access (Pages integrates with Zero Trust natively). The apex domain
-stays on GitHub Pages untouched; the studio lives at a gated `*.pages.dev` URL.
-Fastest path if you don't want to move `ourdailybre.ad`.
+The deploy is a Cloudflare Worker, so a real login can sit in front of `/studio`:
+Cloudflare Access, a policy of your own e-mail addresses, nothing in the repo.
+[`CLOUDFLARE.md`](CLOUDFLARE.md) is the click-by-click.
 
 ---
 
