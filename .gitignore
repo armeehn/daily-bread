@@ -27,3 +27,6 @@ build/
 
 # merch pipeline output (tools/merch/merch.py); CI keeps it as an artifact
 /merch/
+
+# studio theme dumps (db-render/shoot.js writes them under build/)
+tmp-*.html

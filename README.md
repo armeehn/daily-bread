@@ -5,6 +5,11 @@ Free where you found it; pay what you can where you can't.
 
 **Issue №1 — Kelowna's Collapse** (Summer 2026). Funded by Riposte Laboratories Inc.
 
+This repository is meant to be forked. The machinery is MIT; every name,
+domain, place and mailbox it carries lives in [`magazine.env`](magazine.env),
+and `python3 tools/rebrand.py` makes the tree follow it. [`FORKING.md`](FORKING.md)
+is the checklist from fork to your first edition.
+
 `index.html` is a single-page, responsive web edition of №1, styled from the
 Daily Bread print design: UnifrakturMaguntia blackletter masthead, IBM Plex Mono
 spec-sheet chrome, checker/harlequin bands, and the pink/teal/orange accent
@@ -308,9 +313,11 @@ the site and both press PDFs (48 x A5, 24 x A4 landscape) from that one file;
 
 Daily Bread is an independent publication **funded by** Riposte Laboratories Inc. — it is not
 a Riposte-branded product and keeps its own masthead, type stack and voice on purpose.
+<!-- rebrand:off -->
 [`BRAND.md`](BRAND.md) records what the two share, what diverges deliberately, and which
 parts of the [Riposte design system](https://github.com/armeehn/riposte-brand) still apply
-(chiefly contrast and print rule weights).
+(chiefly contrast and print rule weights). A fork owes it nothing.
+<!-- rebrand:on -->
 
 <table>
 <tr>
