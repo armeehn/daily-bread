@@ -14,9 +14,9 @@ fs.mkdirSync(OUT, { recursive: true });
     await studio.selectOption('#themeSel', 'b:' + k);
     await studio.waitForTimeout(600);
     const html = await studio.evaluate(() => document.querySelector('#preview').srcdoc);
-    fs.writeFileSync(`/home/user/daily-bread/tmp-${k}.html`, html);
+    fs.writeFileSync(`${__dirname}/../build/tmp-${k}.html`, html);
     const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
-    await p.goto(`${BASE}/tmp-${k}.html`);
+    await p.goto(`${BASE}/build/tmp-${k}.html`);
     await p.waitForTimeout(1500);
     await p.screenshot({ path: `${OUT}/${k}-full.png`, fullPage: true });
     for (const sel of ['.signoff', '.stamp.free', '.scribble', '.sticker', '.stamp']) {
