@@ -1,6 +1,6 @@
 {
  "shop": "https://h23y0x-fd.myshopify.com",
- "generated": "2026-09-14T01:01:31+00:00",
+ "generated": "2026-09-14T01:43:05+00:00",
  "collections": [
   {
    "handle": "daily-bread-apparel",
@@ -13,7 +13,7 @@
      "type": "Merch",
      "price": {
       "min": "18.0",
-      "max": "118.0",
+      "max": "50.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-collective",
@@ -84,8 +84,8 @@
      "title": "Daily Bread №1 Cover · Glitch",
      "type": "Merch",
      "price": {
-      "min": "45.0",
-      "max": "118.0",
+      "min": "28.0",
+      "max": "50.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-cover-01",
@@ -145,7 +145,7 @@
      "type": "Merch",
      "price": {
       "min": "18.0",
-      "max": "118.0",
+      "max": "50.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-01",
@@ -242,7 +242,7 @@
      "type": "Merch",
      "price": {
       "min": "18.0",
-      "max": "118.0",
+      "max": "50.0",
       "currency": "CAD"
      },
      "url": "https://shop.ripostelabs.xyz/products/db-02",
