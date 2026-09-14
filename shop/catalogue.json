@@ -1,6 +1,6 @@
 {
  "shop": "https://h23y0x-fd.myshopify.com",
- "generated": "2026-09-13T14:23:26+00:00",
+ "generated": "2026-09-14T01:01:31+00:00",
  "collections": [
   {
    "handle": "daily-bread-apparel",
@@ -8,41 +8,61 @@
    "url": "https://h23y0x-fd.myshopify.com/collections/daily-bread-apparel",
    "products": [
     {
-     "handle": "db-collective-apparel",
-     "title": "Collective. Apparel",
-     "type": "Apparel",
+     "handle": "db-collective",
+     "title": "Collective.",
+     "type": "Merch",
      "price": {
-      "min": "48.0",
-      "max": "48.0",
+      "min": "18.0",
+      "max": "118.0",
       "currency": "CAD"
      },
-     "url": "https://shop.ripostelabs.xyz/products/db-collective-apparel",
+     "url": "https://shop.ripostelabs.xyz/products/db-collective",
      "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-bone.png?v=1789308955",
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-bone.png?v=1789320306",
       "alt": "collective-crewneck, bone"
      },
      "images": [
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-bone.png?v=1789308955",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-bone.png?v=1789320306",
        "alt": "collective-crewneck, bone"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-ink.png?v=1789308955",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-crew-collective-ink.png?v=1789320306",
        "alt": "collective-crewneck, ink"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-bone.png?v=1789320306",
+       "alt": "Collective. Poster, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-ink.png?v=1789320306",
+       "alt": "Collective. Poster, ink"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-bone.png?v=1789320306",
+       "alt": "Collective. Tote, natural"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-ink.png?v=1789320306",
+       "alt": "Collective. Tote, black"
       }
      ],
      "options": [
       {
-       "name": "Garment",
+       "name": "Item",
        "values": [
-        "Crewneck"
+        "Crewneck",
+        "Poster",
+        "Tote"
        ]
       },
       {
        "name": "Colour",
        "values": [
         "Bone",
-        "Ink"
+        "Ink",
+        "Natural",
+        "Black"
        ]
       },
       {
@@ -53,114 +73,47 @@
         "M",
         "L",
         "XL",
-        "2XL"
+        "2XL",
+        "One size"
        ]
       }
      ]
     },
     {
-     "handle": "db-collective-poster",
-     "title": "Collective. Poster",
-     "type": "Poster",
+     "handle": "db-cover-01",
+     "title": "Daily Bread №1 Cover · Glitch",
+     "type": "Merch",
      "price": {
-      "min": "20.0",
-      "max": "20.0",
+      "min": "45.0",
+      "max": "118.0",
       "currency": "CAD"
      },
-     "url": "https://shop.ripostelabs.xyz/products/db-collective-poster",
+     "url": "https://shop.ripostelabs.xyz/products/db-cover-01",
      "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-bone.png?v=1789308913",
-      "alt": "Collective. Poster, bone"
-     },
-     "images": [
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-bone.png?v=1789308913",
-       "alt": "Collective. Poster, bone"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-poster-ink.png?v=1789308913",
-       "alt": "Collective. Poster, ink"
-      }
-     ],
-     "options": [
-      {
-       "name": "Ground",
-       "values": [
-        "Bone",
-        "Ink"
-       ]
-      }
-     ]
-    },
-    {
-     "handle": "db-collective-tote",
-     "title": "Collective. Tote",
-     "type": "Tote Bag",
-     "price": {
-      "min": "18.0",
-      "max": "18.0",
-      "currency": "CAD"
-     },
-     "url": "https://shop.ripostelabs.xyz/products/db-collective-tote",
-     "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-bone.png?v=1789308916",
-      "alt": "Collective. Tote, natural"
-     },
-     "images": [
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-bone.png?v=1789308916",
-       "alt": "Collective. Tote, natural"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-collective-tote-ink.png?v=1789308916",
-       "alt": "Collective. Tote, black"
-      }
-     ],
-     "options": [
-      {
-       "name": "Canvas",
-       "values": [
-        "Natural",
-        "Black"
-       ]
-      }
-     ]
-    },
-    {
-     "handle": "db-cover-01-apparel",
-     "title": "Daily Bread №1 Cover Apparel",
-     "type": "Apparel",
-     "price": {
-      "min": "28.0",
-      "max": "48.0",
-      "currency": "CAD"
-     },
-     "url": "https://shop.ripostelabs.xyz/products/db-cover-01-apparel",
-     "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-tee-bone.png?v=1789308961",
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-tee-bone.png?v=1789320316",
       "alt": "Daily Bread №1 Cover · Glitch Tee, bone"
      },
      "images": [
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-tee-bone.png?v=1789308961",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-tee-bone.png?v=1789320316",
        "alt": "Daily Bread №1 Cover · Glitch Tee, bone"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-tee-ink.png?v=1789308961",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-tee-ink.png?v=1789320316",
        "alt": "Daily Bread №1 Cover · Glitch Tee, ink"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-crew-bone.png?v=1789308961",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-crew-bone.png?v=1789320316",
        "alt": "Daily Bread №1 Cover · Glitch Crewneck, bone"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-crew-ink.png?v=1789308961",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-cover-01-glitch-crew-ink.png?v=1789320316",
        "alt": "Daily Bread №1 Cover · Glitch Crewneck, ink"
       }
      ],
      "options": [
       {
-       "name": "Garment",
+       "name": "Item",
        "values": [
         "Glitch Tee",
         "Glitch Crewneck"
@@ -187,151 +140,86 @@
      ]
     },
     {
-     "handle": "db-01-cover-crewneck",
-     "title": "Daily Bread №1 — Kelowna's Collapse · Cover Crewneck",
-     "type": "Sweatshirt",
+     "handle": "db-01",
+     "title": "Daily Bread №1 — Kelowna's Collapse",
+     "type": "Merch",
      "price": {
-      "min": "48.0",
-      "max": "48.0",
+      "min": "18.0",
+      "max": "118.0",
       "currency": "CAD"
      },
-     "url": "https://shop.ripostelabs.xyz/products/db-01-cover-crewneck",
+     "url": "https://shop.ripostelabs.xyz/products/db-01",
      "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-crew-bone.png?v=1789153071",
-      "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Crewneck, bone"
-     },
-     "images": [
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-crew-bone.png?v=1789153071",
-       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Crewneck, bone"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-crew-ink.png?v=1789153071",
-       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Crewneck, ink"
-      }
-     ],
-     "options": [
-      {
-       "name": "Size",
-       "values": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL"
-       ]
-      },
-      {
-       "name": "Colour",
-       "values": [
-        "Bone",
-        "Ink"
-       ]
-      }
-     ]
-    },
-    {
-     "handle": "db-01-cover-tee",
-     "title": "Daily Bread №1 — Kelowna's Collapse · Cover Tee",
-     "type": "T-Shirt",
-     "price": {
-      "min": "28.0",
-      "max": "28.0",
-      "currency": "CAD"
-     },
-     "url": "https://shop.ripostelabs.xyz/products/db-01-cover-tee",
-     "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-tee-bone.png?v=1789153068",
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-tee-bone.png?v=1789319908",
       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Tee, bone"
      },
      "images": [
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-tee-bone.png?v=1789153068",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-tee-bone.png?v=1789319908",
        "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Tee, bone"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-tee-ink.png?v=1789153068",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-tee-ink.png?v=1789319908",
        "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Tee, ink"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-crew-bone.png?v=1789319908",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Crewneck, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-crew-ink.png?v=1789319908",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Crewneck, ink"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-tote.png?v=1789319908",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Tote, default"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-cover-poster.png?v=1789319908",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Cover Poster, default"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-outline-tee-bone.png?v=1789319908",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Outline Tee, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-outline-tee-ink.png?v=1789319908",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Outline Tee, ink"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-outline-crew-bone.png?v=1789319908",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Outline Crewneck, bone"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-outline-crew-ink.png?v=1789319908",
+       "alt": "Daily Bread №1 — Kelowna's Collapse · Outline Crewneck, ink"
       }
      ],
      "options": [
       {
-       "name": "Size",
+       "name": "Item",
        "values": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL"
+        "Cover Tee",
+        "Cover Crewneck",
+        "Cover Tote",
+        "Cover Poster",
+        "Outline Tee",
+        "Outline Crewneck",
+        "Outline Tote",
+        "Outline Poster",
+        "Quote Tee 1",
+        "Quote Tee 2",
+        "Quote Tee 3",
+        "Quote Tee 4"
        ]
       },
       {
        "name": "Colour",
        "values": [
         "Bone",
-        "Ink"
-       ]
-      }
-     ]
-    },
-    {
-     "handle": "db-01-quotes-tee",
-     "title": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee",
-     "type": "T-Shirt",
-     "price": {
-      "min": "28.0",
-      "max": "28.0",
-      "currency": "CAD"
-     },
-     "url": "https://shop.ripostelabs.xyz/products/db-01-quotes-tee",
-     "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-1-bone.png?v=1789153092",
-      "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q1 bone"
-     },
-     "images": [
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-1-bone.png?v=1789153092",
-       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q1 bone"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-1-ink.png?v=1789153092",
-       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q1 ink"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-2-bone.png?v=1789153092",
-       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q2 bone"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-2-ink.png?v=1789153092",
-       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q2 ink"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-3-bone.png?v=1789153092",
-       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q3 bone"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-3-ink.png?v=1789153092",
-       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q3 ink"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-4-bone.png?v=1789153092",
-       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q4 bone"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-01-quote-4-ink.png?v=1789153092",
-       "alt": "Daily Bread №1 — Kelowna's Collapse · Quotes Tee, q4 ink"
-      }
-     ],
-     "options": [
-      {
-       "name": "Quote",
-       "values": [
-        "Q1",
-        "Q2",
-        "Q3",
-        "Q4"
+        "Ink",
+        "Natural",
+        "Full colour"
        ]
       },
       {
@@ -342,164 +230,89 @@
         "M",
         "L",
         "XL",
-        "2XL"
-       ]
-      },
-      {
-       "name": "Colour",
-       "values": [
-        "Bone",
-        "Ink"
+        "2XL",
+        "One size"
        ]
       }
      ]
     },
     {
-     "handle": "db-02-cover-crewneck",
-     "title": "Daily Bread №2 — The Thaw · Cover Crewneck",
-     "type": "Sweatshirt",
+     "handle": "db-02",
+     "title": "Daily Bread №2 — The Thaw",
+     "type": "Merch",
      "price": {
-      "min": "48.0",
-      "max": "48.0",
+      "min": "18.0",
+      "max": "118.0",
       "currency": "CAD"
      },
-     "url": "https://shop.ripostelabs.xyz/products/db-02-cover-crewneck",
+     "url": "https://shop.ripostelabs.xyz/products/db-02",
      "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-crew-bone.png?v=1789149221",
-      "alt": "Daily Bread №2 — The Thaw · Cover Crewneck, bone"
-     },
-     "images": [
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-crew-bone.png?v=1789149221",
-       "alt": "Daily Bread №2 — The Thaw · Cover Crewneck, bone"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-crew-ink.png?v=1789149221",
-       "alt": "Daily Bread №2 — The Thaw · Cover Crewneck, ink"
-      }
-     ],
-     "options": [
-      {
-       "name": "Size",
-       "values": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL"
-       ]
-      },
-      {
-       "name": "Colour",
-       "values": [
-        "Bone",
-        "Ink"
-       ]
-      }
-     ]
-    },
-    {
-     "handle": "db-02-cover-tee",
-     "title": "Daily Bread №2 — The Thaw · Cover Tee",
-     "type": "T-Shirt",
-     "price": {
-      "min": "28.0",
-      "max": "28.0",
-      "currency": "CAD"
-     },
-     "url": "https://shop.ripostelabs.xyz/products/db-02-cover-tee",
-     "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-tee-bone.png?v=1789149217",
+      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-tee-bone.png?v=1789320000",
       "alt": "Daily Bread №2 — The Thaw · Cover Tee, bone"
      },
      "images": [
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-tee-bone.png?v=1789149217",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-tee-bone.png?v=1789320000",
        "alt": "Daily Bread №2 — The Thaw · Cover Tee, bone"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-tee-ink.png?v=1789149217",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-tee-ink.png?v=1789320000",
        "alt": "Daily Bread №2 — The Thaw · Cover Tee, ink"
-      }
-     ],
-     "options": [
-      {
-       "name": "Size",
-       "values": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL"
-       ]
       },
       {
-       "name": "Colour",
-       "values": [
-        "Bone",
-        "Ink"
-       ]
-      }
-     ]
-    },
-    {
-     "handle": "db-02-quotes-tee",
-     "title": "Daily Bread №2 — The Thaw · Quotes Tee",
-     "type": "T-Shirt",
-     "price": {
-      "min": "28.0",
-      "max": "28.0",
-      "currency": "CAD"
-     },
-     "url": "https://shop.ripostelabs.xyz/products/db-02-quotes-tee",
-     "image": {
-      "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-1-bone.png?v=1789149236",
-      "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q1 bone"
-     },
-     "images": [
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-crew-bone.png?v=1789320000",
+       "alt": "Daily Bread №2 — The Thaw · Cover Crewneck, bone"
+      },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-1-bone.png?v=1789149236",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-crew-ink.png?v=1789320000",
+       "alt": "Daily Bread №2 — The Thaw · Cover Crewneck, ink"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-tote.png?v=1789320000",
+       "alt": "Daily Bread №2 — The Thaw · Cover Tote, default"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-cover-poster.png?v=1789320000",
+       "alt": "Daily Bread №2 — The Thaw · Cover Poster, default"
+      },
+      {
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-1-bone.png?v=1789319998",
        "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q1 bone"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-1-ink.png?v=1789149236",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-1-ink.png?v=1789319998",
        "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q1 ink"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-2-bone.png?v=1789149236",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-2-bone.png?v=1789319998",
        "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q2 bone"
       },
       {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-2-ink.png?v=1789149236",
+       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-2-ink.png?v=1789319998",
        "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q2 ink"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-3-bone.png?v=1789149236",
-       "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q3 bone"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-3-ink.png?v=1789149236",
-       "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q3 ink"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-4-bone.png?v=1789149236",
-       "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q4 bone"
-      },
-      {
-       "src": "https://cdn.shopify.com/s/files/1/1006/4396/3192/files/db-02-quote-4-ink.png?v=1789149236",
-       "alt": "Daily Bread №2 — The Thaw · Quotes Tee, q4 ink"
       }
      ],
      "options": [
       {
-       "name": "Quote",
+       "name": "Item",
        "values": [
-        "Q1",
-        "Q2",
-        "Q3",
-        "Q4"
+        "Cover Tee",
+        "Cover Crewneck",
+        "Cover Tote",
+        "Cover Poster",
+        "Quote Tee 1",
+        "Quote Tee 2",
+        "Quote Tee 3",
+        "Quote Tee 4"
+       ]
+      },
+      {
+       "name": "Colour",
+       "values": [
+        "Bone",
+        "Ink",
+        "Natural",
+        "Full colour"
        ]
       },
       {
@@ -510,14 +323,8 @@
         "M",
         "L",
         "XL",
-        "2XL"
-       ]
-      },
-      {
-       "name": "Colour",
-       "values": [
-        "Bone",
-        "Ink"
+        "2XL",
+        "One size"
        ]
       }
      ]
