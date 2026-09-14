@@ -61,7 +61,7 @@ PLEX = "IBM Plex Mono"
 
 SIZES = ["XS", "S", "M", "L", "XL", "2XL"]
 GARMENTS = {"Bone": BONE, "Ink": INK}
-PRICE_TEE, PRICE_CREW, PRICE_POSTER, PRICE_STICKERS = "45.00", "118.00", "20.00", "6.00"
+PRICE_TEE, PRICE_CREW, PRICE_POSTER, PRICE_STICKERS = "28.00", "50.00", "20.00", "6.00"
 PRICE_TOTE, PRICE_SINGLE = "18.00", "2.00"
 POSTER_W, POSTER_H = 12 * DPI, 18 * DPI   # the cover as a print, full bleed
 SINGLE_MM, SINGLE_BLEED = 76, 2           # 3 in die-cut, 2 mm bleed
