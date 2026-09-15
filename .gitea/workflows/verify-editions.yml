@@ -145,7 +145,7 @@ jobs:
         run: python3 tools/latex/test_overlay.py
 
   # 5. THE .tex MUST STILL TYPESET TO THE PRESS GEOMETRY
-  # 48 A5 pages (420 x 594.96 pt) and 24 A4-landscape sides (841.92 x 594.96 pt),
+  # 48 A5 pages (420 x 594.96 pt) and 24 Letter-landscape sides (792 x 612 pt),
   # the sizes db-render/out/*.pdf measure. Needs TeX, so it runs in the TeX Live
   # image (2.7 GB, pulled once per runner). Without riposte-latex on the runner
   # the class uses its shim, which changes the face and colours but not the
@@ -188,6 +188,26 @@ jobs:
       - uses: actions/checkout@v4
 
       # check_live.py is standard library only, same rule as verify_standalone.py.
+      #
+      # A push run starts seconds after the merge, while the mirror job is still
+      # pushing to GitHub and Cloudflare has not deployed yet, so every edition
+      # reads SERVED DIFFERS (exit 2) and the commit status on main stays red
+      # although the scheduled run an hour later is green. Wait out the deploy:
+      # retry only that exit code, up to DEPLOY_WAIT_S. A stale proof (exit 1)
+      # or a real mismatch fails at once or after the deadline.
       - name: Check the deployed editions against the published proofs
         working-directory: tools
-        run: python3 -m newsproof.check_live
+        env:
+          DEPLOY_WAIT_S: 600
+          POLL_S: 30
+        run: |
+          deadline=$((SECONDS + DEPLOY_WAIT_S))
+          while true; do
+            python3 -m newsproof.check_live && exit 0
+            rc=$?
+            if [ "$rc" != 2 ] || [ "$SECONDS" -ge "$deadline" ]; then
+              exit "$rc"
+            fi
+            echo "deploy still in flight; retrying in ${POLL_S}s"
+            sleep "$POLL_S"
+          done
