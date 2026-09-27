@@ -43,8 +43,9 @@
   /* the edition switcher and its four single-glyph actions read as one control */
   header.bar .eds{position:relative;display:flex;align-items:center;gap:3px;min-width:0}
   header.bar .eds select.btn{max-width:150px;overflow:hidden;text-overflow:ellipsis}
+  header.bar #themeSel{max-width:160px;overflow:hidden;text-overflow:ellipsis}
   .btn.sq{padding:6px 8px;font-size:12px;letter-spacing:0}
-  .edmenu{position:absolute;top:calc(100% + 6px);left:0;z-index:20;min-width:190px;
+  .edmenu{position:absolute;top:calc(100% + 6px);left:0;z-index:20;min-width:250px;
     background:var(--ink);border:2px solid var(--bone);display:flex;flex-direction:column}
   .edmenu.off{display:none}
   .edmenu button{background:transparent;border:0;color:var(--bone);text-align:left;cursor:pointer;
@@ -54,6 +55,16 @@
   .edmenu button.danger:hover{background:var(--pink);color:var(--bone)}
   .edmenu button[disabled]{opacity:.35;cursor:default}
   .edmenu button[disabled]:hover{background:transparent;color:var(--bone)}
+  .edmenu.right{left:auto;right:0}
+  .edmenu hr{border:0;border-top:1px solid #5a544b;margin:3px 0}
+  .edmenu button small{display:block;font-size:9.5px;font-weight:400;letter-spacing:.02em;text-transform:none;color:#b7ad9e;margin-top:2px}
+  .edmenu button:hover small{color:inherit}
+  .menu-host{position:relative;display:flex}
+  /* undo / redo: icons, because the mono face has no curved arrows */
+  header.bar .hist{display:flex;gap:3px}
+  .btn.ico{padding:4px 7px;line-height:0}
+  .btn.ico svg{width:16px;height:16px}
+  .btn kbd{font:inherit;font-size:9px;font-weight:500;letter-spacing:.04em;opacity:.65;margin-left:6px}
   select.btn{-webkit-appearance:none;appearance:none;padding-right:22px;
     background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='6'><path d='M0 0l4 6 4-6z' fill='%23f6f1e7'/></svg>") right 8px center no-repeat}
 
@@ -148,8 +159,53 @@
 
   .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bone);
     padding:10px 18px;font-size:11px;letter-spacing:.06em;border:2px solid var(--teal);opacity:0;
-    transition:opacity .2s;pointer-events:none;z-index:20}
+    transition:opacity .2s;pointer-events:none;z-index:60;display:flex;align-items:center;gap:14px;max-width:calc(100vw - 32px)}
   .toast.show{opacity:1}
+  .toast.show.act{pointer-events:auto}
+  .toast button{background:transparent;border:1.5px solid var(--teal);color:var(--teal);padding:3px 9px;cursor:pointer;
+    font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+  .toast button:hover{background:var(--teal);color:var(--ink)}
+
+  /* ---- find: one box for every field, every line of copy and every command ---- */
+  .pal-back{position:fixed;inset:0;background:rgba(29,26,23,.45);z-index:55;display:flex;justify-content:center;align-items:flex-start;padding:10vh 16px 16px}
+  .pal-back[hidden]{display:none}
+  .pal{background:var(--bone);border:2px solid var(--ink);box-shadow:10px 10px 0 rgba(29,26,23,.4);width:min(640px,100%);
+    max-height:72vh;display:flex;flex-direction:column}
+  .pal input{border:0;border-bottom:2px solid var(--ink);background:#fff;padding:14px 16px;font-size:15px;width:100%}
+  .pal input:focus{outline:0}
+  .pal-list{overflow:auto;flex:1;min-height:0}
+  .pal-list .grp{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);padding:10px 16px 4px}
+  .pal-list .opt{display:flex;align-items:baseline;gap:10px;padding:7px 16px;cursor:pointer;border-left:3px solid transparent}
+  .pal-list .opt.on{background:var(--panel);border-left-color:var(--pink)}
+  .pal-list .opt .k{flex:none;width:14px;text-align:center;color:var(--muted);font-size:11px}
+  .pal-list .opt .m{flex:1;min-width:0}
+  .pal-list .opt .l{font-weight:600;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pal-list .opt .s{font-size:10.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pal-list .opt .r{flex:none;font-size:9.5px;color:var(--muted);letter-spacing:.06em}
+  .pal-list mark{background:rgba(240,71,125,.22);color:inherit}
+  .pal-list .none{padding:22px 16px;color:var(--muted);font-size:11.5px}
+  .pal-foot{border-top:1px solid var(--line);padding:6px 16px;font-size:9.5px;letter-spacing:.08em;color:var(--muted);background:var(--panel)}
+
+  /* ---- keyboard shortcuts sheet ---- */
+  .keys td{padding:6px 6px;border-bottom:1px solid var(--line);font-size:12px;vertical-align:top}
+  .keys td:first-child{white-space:nowrap;width:1%}
+  .keys kbd{display:inline-block;border:1.5px solid var(--ink);border-bottom-width:3px;background:#fff;padding:0 5px;
+    font:600 10.5px/1.6 var(--mono);margin:0 1px}
+  .keys h4{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:14px 0 4px}
+  .keys h4:first-child{margin-top:0}
+
+  /* ---- a field that keeps <b>/<i>/<a> gets a formatting strip while you are in it ---- */
+  .field.rich{position:relative}
+  .fmt{display:flex;gap:2px;opacity:0;transition:opacity .12s}
+  .field.rich > .fmt{position:absolute;top:-4px;right:0}
+  .field.rich:hover > .fmt,.field.rich:focus-within > .fmt,.item:hover .fmt,.item:focus-within .fmt{opacity:1}
+  .fmt button{border:1px solid var(--line);background:#fff;min-width:22px;height:20px;padding:0 5px;cursor:pointer;
+    font-size:10.5px;line-height:1;color:var(--ink)}
+  .fmt button:hover{background:var(--ink);color:var(--bone);border-color:var(--ink)}
+  .fmt .fb{font-weight:700} .fmt .fi{font-style:italic}
+  /* the field you jumped to from Find, briefly */
+  .field.flash,.item.flash{animation:flash 1.4s ease-out}
+  @keyframes flash{0%,40%{box-shadow:0 0 0 3px var(--teal)}100%{box-shadow:0 0 0 3px transparent}}
 
   /* ---- accessible theme wizard ---- */
   .wiz-back{position:fixed;inset:0;background:rgba(29,26,23,.55);z-index:50;display:none;align-items:center;justify-content:center;padding:20px}
@@ -244,23 +300,35 @@
     <span class="brand">Daily&nbsp;Bread</span>
     <span class="sub">Studio<br>edit &amp; configure</span>
     <div class="spacer"></div>
-    <div class="eds">
+    <div class="hist">
+      <button class="btn ico" id="undoBtn" title="Undo (Ctrl+Z)" aria-label="Undo" disabled><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5.5 3.5 2.5 6.5l3 3"/><path d="M2.5 6.5h7a4 4 0 0 1 0 8h-3"/></svg></button>
+      <button class="btn ico" id="redoBtn" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" disabled><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10.5 3.5l3 3-3 3"/><path d="M13.5 6.5h-7a4 4 0 0 0 0 8h3"/></svg></button>
+    </div>
+    <button class="btn" id="findBtn" title="Find any field, any line of copy, or a studio command">Find<kbd class="modk">Ctrl K</kbd></button>
+    <div class="eds menu-host">
       <select class="btn" id="editionSel" title="Switch edition. Each edition keeps its own content, theme and arranged layout in this browser, so several issues can be prepped side by side."></select>
-      <button class="btn sq" id="edMenuBtn" title="New, copy, rename or delete an edition" aria-haspopup="true" aria-expanded="false">⋯</button>
+      <button class="btn sq" id="edMenuBtn" title="New, copy, rename, import, export, reset or delete an edition" aria-haspopup="true" aria-expanded="false">⋯</button>
       <div class="edmenu off" id="edMenu">
         <button id="edNewBtn">New edition…</button>
         <button id="edDupBtn">Duplicate…</button>
         <button id="edRenBtn">Rename…</button>
+        <hr>
+        <button id="importBtn">Import JSON…<small>opens a file as a new edition</small></button>
+        <button id="exportBtn">Export JSON<small>this edition as a file, to back up or commit</small></button>
+        <hr>
+        <button id="resetBtn" class="danger">Reset to default…</button>
         <button id="edDelBtn" class="danger">Delete…</button>
       </div>
     </div>
     <select class="btn" id="themeSel" title="Apply a theme preset"><option value="">Theme preset…</option></select>
-    <button class="btn" id="importBtn">Import JSON</button>
-    <button class="btn" id="exportBtn">Export JSON</button>
+    <div class="menu-host">
+      <button class="btn" id="pdfMenuBtn" title="Print outputs" aria-haspopup="true" aria-expanded="false">PDF ▾</button>
+      <div class="edmenu right off" id="pdfMenu">
+        <button id="pdfBtn" title="Export exactly what is on screen, right now, through your browser's print dialog: cover, then one page per section, at the trim size set under Print. Choose 'Save as PDF', Margins None, Background graphics ON. This is the studio's own document; 'Magazine PDF' is the TeX press booklet, typeset from the .tex.">Web PDF<small>what is on screen, through the print dialog</small></button>
+        <button id="magPdfBtn" title="Typeset the edition in view as the press booklet: this model laid over content/&lt;issue&gt;.tex (theme, cover, letter, contents, voices, interview, waitlist, lab, listings, colophon…), 48 A5 pages set by lualatex and imposed two to a Letter-landscape side so the folded, stapled stack reads in order. Print two-sided, short-edge flip, actual size. Takes about ten seconds on press.hq. Pages the studio has no field for are typeset as the .tex has them. Off the estate, where press.hq is out of reach, you get the last CI typesetting of the .tex instead, without your edits — the toast says which.">Magazine PDF ⤓<small>the press booklet, typeset in about ten seconds</small></button>
+      </div>
+    </div>
     <button class="btn teal" id="publishBtn" title="Download index.html to commit">Publish → index.html</button>
-    <button class="btn" id="pdfBtn" title="Export exactly what is on screen, right now, through your browser's print dialog: cover, then one page per section, at the trim size set under Print. Choose 'Save as PDF', Margins None, Background graphics ON. This is the studio's own document; 'Magazine PDF' is the TeX press booklet, typeset from the .tex.">Web PDF</button>
-    <button class="btn teal" id="magPdfBtn" title="Typeset the edition in view as the press booklet: this model laid over content/&lt;issue&gt;.tex (theme, cover, letter, contents, voices, interview, waitlist, lab, listings, colophon…), 48 A5 pages set by lualatex and imposed two to a Letter-landscape side so the folded, stapled stack reads in order. Print two-sided, short-edge flip, actual size. Takes about ten seconds on press.hq. Pages the studio has no field for are typeset as the .tex has them. Off the estate, where press.hq is out of reach, you get the last CI typesetting of the .tex instead, without your edits — the toast says which.">Magazine PDF ⤓</button>
-    <button class="btn pink" id="resetBtn">Reset</button>
     <span class="status" id="status">Loaded</span>
   </header>
 
@@ -298,7 +366,15 @@
 </div>
 <input type="file" id="fileImport" accept="application/json" hidden>
 <input type="file" id="fileImage" accept="image/*" hidden>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="pal-back" id="palBack" hidden>
+  <div class="pal" role="dialog" aria-label="Find">
+    <input id="palIn" type="text" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="true"
+      aria-controls="palList" placeholder="Find a field, a line of copy, or a command…">
+    <div class="pal-list" id="palList" role="listbox"></div>
+    <div class="pal-foot">↑ ↓ move · ↵ open · esc close · try “deadline”, “pink”, “publish”, “phone”</div>
+  </div>
+</div>
 
 <script src="db.js"></script>
 <script>
@@ -306,6 +382,7 @@
 const KEY = "dailybread:model:v1";      // pre-editions: one bare model, migrated once
 const EKEY = "dailybread:editions:v1";
 const $ = s => document.querySelector(s);
+const MODK = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent) ? "⌘" : "Ctrl";
 
 /* ---------- state ----------
    Issues are prepped in parallel, so the studio holds a SHELF of models rather
@@ -399,12 +476,14 @@ function populateEditionSelect(){
 // the edition that just left the screen. Drop it and rebuild the inspector.
 function afterSwap(){
   sel = null; inspStale = true;
-  populateEditionSelect(); buildEditor(); renderPreview();
+  hist();                               // this edition's history starts from what it holds now
+  populateEditionSelect(); buildEditor(); renderPreview(); updateHistButtons();
 }
 
 // commit whatever is on screen before putting a different edition there
 function switchEdition(id){
   if(!shelf.items[id] || id === shelf.current) return;
+  flush();
   save();
   shelf.current = id;
   model = loadModel();
@@ -415,6 +494,7 @@ function switchEdition(id){
 }
 
 function addEdition(name, m, note){
+  flush();
   save();
   const id = newId(), prev = shelf.current;
   shelf.items[id] = { name: name, model: m };
@@ -439,16 +519,103 @@ function setPath(o, p, v){
   a[ks[ks.length-1]] = v;
 }
 
-/* ---------- preview (debounced) ---------- */
-let t=null, imgFor=null;
-function schedule(){
+/* ---------- preview (debounced) ----------
+   Every edit ends in schedule(key). `key` names what was edited ("f:<path>" for
+   typing into one field) so a run of keystrokes becomes one undo step; edits
+   that change structure (add, move, delete a row) pass nothing and are always a
+   step of their own. */
+let saveTimer=null, pendingKey=null, imgFor=null;
+function schedule(key){
   setStatus("Saving…", true);
-  clearTimeout(t);
-  t=setTimeout(()=>{ renderPreview(); if(save()) setStatus("Saved ✓", false); }, 160);
+  // two different edits inside one debounce are one step, and not a typing run
+  pendingKey = saveTimer && pendingKey !== key ? null : (key || null);
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(flush, 160);
 }
+// run a pending save now: undo, a swap or an export must see the latest edit
+function flush(){
+  if(!saveTimer) return;
+  clearTimeout(saveTimer); saveTimer=null;
+  renderPreview(); record(pendingKey);
+  if(save()) setStatus("Saved ✓", false);
+}
+/* srcdoc is replaced on every edit, which reloads the document and used to put
+   you back on the cover after each keystroke. Carry the scroll across. */
+let pvScroll=null;
+function ifWin(){ try{ return $("#preview").contentWindow; }catch(e){ return null; } }
 function renderPreview(){
+  const w = ifWin();
+  if(pvScroll===null && w && w.document && w.document.body) pvScroll = { x:w.scrollX, y:w.scrollY };
   try{ $("#preview").srcdoc = DB.render(model); }
   catch(e){ console.error(e); setStatus("Render error", true); }
+}
+
+/* ---------- undo / redo ----------
+   The model is plain JSON and every edit passes through schedule() or save(), so
+   history is a stack of serialised models rather than a log of operations: no
+   edit path has to know how to reverse itself. One history per edition, kept in
+   memory for this session (localStorage has no room for it next to embedded
+   images). */
+const HIST_MAX = 100;                  // steps kept per edition
+const HIST_CHARS = 40e6;               // …and at most this much JSON, since images ride inside
+const COALESCE_MS = 1200;              // keystrokes in one field closer than this are one step
+const hists = {};                      // edition id -> { undo:[], redo:[], cur, key, at }
+function hist(){
+  return hists[shelf.current] ||
+    (hists[shelf.current] = { undo:[], redo:[], cur:JSON.stringify(model), key:null, at:0 });
+}
+// note that the model moved on; returns whether it had
+function record(key){
+  const h = hist(), now = JSON.stringify(model);
+  if(now === h.cur) return false;
+  const at = Date.now();
+  if(!(key && key === h.key && at - h.at < COALESCE_MS && h.undo.length)){
+    h.undo.push(h.cur);
+    let size = h.undo.reduce((n,s)=> n + s.length, 0);
+    while(h.undo.length > 1 && (h.undo.length > HIST_MAX || size > HIST_CHARS)) size -= h.undo.shift().length;
+  }
+  h.cur = now; h.redo.length = 0; h.key = key || null; h.at = at;
+  updateHistButtons();
+  return true;
+}
+function undo(){ step("undo"); }
+function redo(){ step("redo"); }
+function step(dir){
+  if(inlineEl) endInline(true);
+  flush();
+  const h = hist(), from = dir==="undo" ? h.undo : h.redo, to = dir==="undo" ? h.redo : h.undo;
+  if(!from.length){ toast(dir==="undo" ? "Nothing to undo" : "Nothing to redo"); return; }
+  to.push(h.cur); h.cur = from.pop(); h.key = null;
+  restoreModel(h.cur);
+  setStatus(dir==="undo" ? "Undone ✓" : "Redone ✓", false);
+}
+/* Put a serialised model back on screen. Every panel holds references into the
+   old model object, so both are rebuilt; the field you were typing in gets its
+   focus back, and a selection that still exists stays selected. */
+function restoreModel(json){
+  const a = document.activeElement, focusPath = a && a.dataset && a.dataset.path;
+  model = JSON.parse(json);
+  if(sel && sel.paths.some(p=> getPath(model, p) === undefined)) sel = null;
+  buildEditor(); fieldsDirty = false;
+  renderInspector();
+  renderPreview(); save(); updateHistButtons();
+  if(focusPath) refocus(focusPath);
+}
+function updateHistButtons(){
+  const h = hist();
+  $("#undoBtn").disabled = !h.undo.length;
+  $("#redoBtn").disabled = !h.redo.length;
+  $("#undoBtn").title = "Undo (" + MODK + "+Z)" + (h.undo.length ? " · " + h.undo.length + " step" + (h.undo.length>1?"s":"") : "");
+  $("#redoBtn").title = "Redo (" + MODK + "+Shift+Z)" + (h.redo.length ? " · " + h.redo.length + " step" + (h.redo.length>1?"s":"") : "");
+}
+$("#undoBtn").addEventListener("click", undo);
+$("#redoBtn").addEventListener("click", redo);
+function refocus(path){
+  const pane = designOn ? $("#designPane") : $("#fieldsPane");
+  const inp = pane.querySelector('[data-path="'+CSS.escape(path)+'"]');
+  if(!inp) return;
+  inp.focus({ preventScroll:true });
+  try{ const n = inp.value.length; inp.setSelectionRange(n, n); }catch(e){}
 }
 function setStatus(txt, saving){
   const el=$("#status"); el.textContent=txt; el.classList.toggle("saving", !!saving);
@@ -461,19 +628,30 @@ function itemLabel(tpl, obj){
   return tpl.replace(/\{(\w+)\}/g, (_,k)=> (obj[k]!=null?obj[k]:"")).slice(0,60) || "(empty)";
 }
 
+/* The accordion is rebuilt whenever the model is replaced (theme, undo, a swap).
+   It used to fold back to its first section each time; now it keeps whatever
+   you had open, and where you were scrolled. */
+let openSecs = null;                   // ids of the open sections; null until the first build
 function buildEditor(){
-  const pane = $("#fieldsPane"); pane.innerHTML="";
+  const pane = $("#fieldsPane");
+  if(pane.children.length)
+    openSecs = new Set(Array.from(pane.children).filter(w=>w.classList.contains("open")).map(w=>w.dataset.sec));
+  const top = pane.scrollTop;
+  pane.innerHTML="";
   DB.SCHEMA.forEach((sec, si)=>{
     const wrap = document.createElement("div");
-    wrap.className = "sec" + (si===0 ? " open" : "");
+    wrap.className = "sec" + ((openSecs ? openSecs.has(sec.id) : si===0) ? " open" : "");
+    wrap.dataset.sec = sec.id;
     const head = document.createElement("div");
     head.className="head"; head.setAttribute("role","button"); head.tabIndex=0;
     head.innerHTML = `<span class="no">${esc((sec.tag||"").replace('//','').trim())}</span>`+
                      `<span class="ttl">${esc(sectionLabel(sec))}</span>`+
                      `<button class="rename" title="Rename this editor section" aria-label="Rename section">✎</button>`+
                      `<span class="chev">▸</span>`;
-    head.addEventListener("click", ()=> wrap.classList.toggle("open"));
-    head.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); wrap.classList.toggle("open"); } });
+    // opening a section brings its part of the page into view
+    const toggle = ()=>{ if(wrap.classList.toggle("open")) showSection(sec); };
+    head.addEventListener("click", toggle);
+    head.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggle(); } });
     head.querySelector(".rename").addEventListener("click", e=>{ e.stopPropagation(); startRename(head, sec); });
     const body = document.createElement("div");
     body.className="body";
@@ -483,6 +661,7 @@ function buildEditor(){
 
     wrap.appendChild(head); wrap.appendChild(body); pane.appendChild(wrap);
   });
+  pane.scrollTop = top;
 }
 
 /* inline-rename an accordion section label (class ttl); persists to labels store */
@@ -516,15 +695,15 @@ function startRename(head, sec){
 
 /* single scalar field */
 function fieldEl(f){
-  const cur = getPath(model, f.path);
+  const cur = getPath(model, f.path), key = "f:"+f.path;
   const d = document.createElement("div");
   if(f.type==="color"){
     d.className="field color";
     d.innerHTML = `<label>${esc(f.label)}</label>`;
     const sw=document.createElement("input"); sw.type="color"; sw.value=toHex(cur);
-    const tx=document.createElement("input"); tx.type="text"; tx.value=cur!=null?cur:"";
-    sw.addEventListener("input",()=>{ tx.value=sw.value; setPath(model,f.path,sw.value); schedule(); });
-    tx.addEventListener("input",()=>{ if(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(tx.value)) sw.value=tx.value; setPath(model,f.path,tx.value); schedule(); });
+    const tx=document.createElement("input"); tx.type="text"; tx.value=cur!=null?cur:""; tx.dataset.path=f.path;
+    sw.addEventListener("input",()=>{ tx.value=sw.value; setPath(model,f.path,sw.value); schedule(key); });
+    tx.addEventListener("input",()=>{ if(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(tx.value)) sw.value=tx.value; setPath(model,f.path,tx.value); schedule(key); });
     d.appendChild(sw); d.appendChild(tx); return d;
   }
   if(f.type==="image"){
@@ -533,9 +712,9 @@ function fieldEl(f){
     const row=document.createElement("div"); row.className="imgrow";
     const img=document.createElement("img"); img.src=cur||"";
     const pick=document.createElement("button"); pick.className="btn2"; pick.textContent="Upload…";
-    const tx=document.createElement("input"); tx.type="text"; tx.value=cur||""; tx.style.flex="1"; tx.style.minWidth="140px";
+    const tx=document.createElement("input"); tx.type="text"; tx.value=cur||""; tx.style.flex="1"; tx.style.minWidth="140px"; tx.dataset.path=f.path;
     pick.addEventListener("click",()=>{ imgFor={path:f.path, img, tx}; $("#fileImage").click(); });
-    tx.addEventListener("input",()=>{ setPath(model,f.path,tx.value); img.src=tx.value; schedule(); });
+    tx.addEventListener("input",()=>{ setPath(model,f.path,tx.value); img.src=tx.value; schedule(key); });
     row.appendChild(img); row.appendChild(pick); row.appendChild(tx);
     wireImageDrop(row, f.path, img, tx);
     d.appendChild(row); return d;
@@ -543,7 +722,7 @@ function fieldEl(f){
   if(f.type==="select"){
     d.className="field";
     d.innerHTML=`<label>${esc(f.label)}</label>`;
-    const sel=document.createElement("select");
+    const sel=document.createElement("select"); sel.dataset.path=f.path;
     (f.opts||[]).forEach(o=>{
       const val=Array.isArray(o)?o[0]:o, lab=Array.isArray(o)?o[1]:o;
       const op=document.createElement("option"); op.value=val; op.textContent=lab;
@@ -558,7 +737,9 @@ function fieldEl(f){
   const inp = f.type==="area" ? document.createElement("textarea") : document.createElement("input");
   if(f.type!=="area") inp.type="text";
   inp.value = cur!=null?cur:"";
-  inp.addEventListener("input",()=>{ setPath(model,f.path,inp.value); schedule(); });
+  inp.dataset.path = f.path;
+  inp.addEventListener("input",()=>{ setPath(model,f.path,inp.value); schedule(key); });
+  if(isRich(f.path)){ d.classList.add("rich"); d.appendChild(fmtBar(inp)); }
   d.appendChild(inp); addHint(d,f); return d;
 }
 /* optional per-field helper text (schema `hint`) */
@@ -566,6 +747,49 @@ function addHint(d,f){
   if(!f.hint) return;
   const h=document.createElement("div"); h.className="hint"; h.style.margin="6px 0 0";
   h.textContent=f.hint; d.appendChild(h);
+}
+
+/* Bold / italic / link for the fields the renderer keeps markup in (see RICH),
+   so nobody has to type <b> by hand. Wraps the selection; on a selection that is
+   already wrapped in that tag it unwraps instead. */
+function fmtBar(inp){
+  const bar=document.createElement("span"); bar.className="fmt";
+  const btn=(cls, txt, title, fn)=>{
+    const b=document.createElement("button"); b.type="button"; b.className=cls; b.textContent=txt; b.title=title;
+    b.addEventListener("mousedown", e=> e.preventDefault());   // keep the selection in the field
+    b.addEventListener("click", e=>{ e.stopPropagation(); fn(); });
+    bar.appendChild(b);
+  };
+  btn("fb", "B", "Bold ("+MODK+"+B)", ()=> wrapSel(inp, "<b>", "</b>"));
+  btn("fi", "I", "Italic ("+MODK+"+I)", ()=> wrapSel(inp, "<i>", "</i>"));
+  btn("fl", "Link", "Link the selection…", ()=> linkSel(inp));
+  inp.addEventListener("keydown", e=>{
+    if(!(e.ctrlKey||e.metaKey) || e.altKey || e.shiftKey) return;
+    const k=e.key.toLowerCase();
+    if(k==="b"){ e.preventDefault(); wrapSel(inp, "<b>", "</b>"); }
+    else if(k==="i"){ e.preventDefault(); wrapSel(inp, "<i>", "</i>"); }
+  });
+  return bar;
+}
+function wrapSel(inp, open, close){
+  const v=inp.value, s=inp.selectionStart, e=inp.selectionEnd;
+  inp.focus();
+  if(v.slice(s-open.length, s)===open && v.slice(e, e+close.length)===close){
+    inp.setRangeText(v.slice(s, e), s-open.length, e+close.length, "select");
+  } else {
+    inp.setRangeText(open+v.slice(s, e)+close, s, e, "end");
+    inp.setSelectionRange(s+open.length, e+open.length);
+  }
+  inp.dispatchEvent(new Event("input", { bubbles:true }));
+}
+function linkSel(inp){
+  const s=inp.selectionStart, e=inp.selectionEnd;
+  const url=prompt("Link to — a web address, mailto:someone@…, or #section", "https://");
+  if(url==null || !url.trim() || url.trim()==="https://") return;
+  inp.setSelectionRange(s, e);
+  // db.js keeps an <a …> up to its first ">", so a URL may not carry one
+  const href = url.trim().replace(/"/g,"&quot;").replace(/</g,"%3C").replace(/>/g,"%3E");
+  wrapSel(inp, '<a href="'+href+'">', "</a>");
 }
 
 /* a repeatable list (of strings or of objects) */
@@ -582,6 +806,7 @@ function redrawList(wrap, l){
   wrap.appendChild(lab);
 
   arr.forEach((it, i)=>{
+    const base = l.path+"."+i;
     const item=document.createElement("div"); item.className="item"+(l.strings?" str":"");
     const hd=document.createElement("div"); hd.className="itophd";
     hd.innerHTML=`<span class="grip" draggable="true" title="Drag to reorder">⠿</span>`+
@@ -591,7 +816,6 @@ function redrawList(wrap, l){
     ctl.appendChild(mini("↑", ()=>move(l,i,-1,wrap)));
     ctl.appendChild(mini("↓", ()=>move(l,i,1,wrap)));
     ctl.appendChild(mini("✕", ()=>remove(l,i,wrap), true));
-    hd.appendChild(ctl); item.appendChild(hd);
     wireRowDrag(item, hd, l, i, wrap);
 
     const ib=document.createElement("div"); ib.className="ibody";
@@ -599,13 +823,16 @@ function redrawList(wrap, l){
       const inp = l.area ? document.createElement("textarea") : document.createElement("input");
       if(!l.area) inp.type="text";
       inp.value = it!=null?it:"";
-      inp.addEventListener("input",()=>{ arr[i]=inp.value; hd.querySelector(".name").textContent=String(inp.value).slice(0,60); schedule(); });
+      inp.dataset.path = base;
+      inp.addEventListener("input",()=>{ arr[i]=inp.value; hd.querySelector(".name").textContent=String(inp.value).slice(0,60); schedule("f:"+base); });
+      if(isRich(base)) hd.appendChild(fmtBar(inp));   // a bare row has no label line; its header has room
       ib.appendChild(inp);
     } else {
       (l.fields||[]).forEach(sf=>{
-        ib.appendChild(subField(sf, it, ()=>{ hd.querySelector(".name").textContent=itemLabel(l.item, it); }));
+        ib.appendChild(subField(sf, it, ()=>{ hd.querySelector(".name").textContent=itemLabel(l.item, it); }, base));
       });
     }
+    hd.appendChild(ctl); item.appendChild(hd);
     item.appendChild(ib); wrap.appendChild(item);
   });
 
@@ -614,19 +841,23 @@ function redrawList(wrap, l){
     const a=getPath(model,l.path)||[]; setPath(model,l.path,a);
     a.push(l.strings ? (l.def!=null?l.def:"") : DB.clone(l.def||{}));
     redrawList(wrap,l); schedule();
+    const row = CSS.escape(l.path+"."+(a.length-1));
+    const inp = wrap.querySelector('[data-path="'+row+'"], [data-path^="'+row+'."]');
+    if(inp){ inp.focus(); if(inp.select) inp.select(); }  // straight into the row you asked for
   });
   wrap.appendChild(add);
 }
-function subField(sf, obj, onName){
-  const cur = obj[sf.path];
+// one field of a list row; `base` is the row's path ("contents.toc.3")
+function subField(sf, obj, onName, base){
+  const cur = obj[sf.path], path = base+"."+sf.path, key = "f:"+path;
   const d=document.createElement("div");
   if(sf.type==="color"){
     d.className="field color";
     d.innerHTML=`<label>${esc(sf.label)}</label>`;
     const sw=document.createElement("input"); sw.type="color"; sw.value=toHex(cur);
-    const tx=document.createElement("input"); tx.type="text"; tx.value=cur!=null?cur:"";
-    sw.addEventListener("input",()=>{ tx.value=sw.value; obj[sf.path]=sw.value; schedule(); });
-    tx.addEventListener("input",()=>{ if(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(tx.value)) sw.value=tx.value; obj[sf.path]=tx.value; schedule(); });
+    const tx=document.createElement("input"); tx.type="text"; tx.value=cur!=null?cur:""; tx.dataset.path=path;
+    sw.addEventListener("input",()=>{ tx.value=sw.value; obj[sf.path]=sw.value; schedule(key); });
+    tx.addEventListener("input",()=>{ if(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(tx.value)) sw.value=tx.value; obj[sf.path]=tx.value; schedule(key); });
     d.appendChild(sw); d.appendChild(tx); return d;
   }
   d.className="field";
@@ -634,7 +865,9 @@ function subField(sf, obj, onName){
   const inp = sf.type==="area" ? document.createElement("textarea") : document.createElement("input");
   if(sf.type!=="area") inp.type="text";
   inp.value = cur!=null?cur:"";
-  inp.addEventListener("input",()=>{ obj[sf.path]=inp.value; onName&&onName(); schedule(); });
+  inp.dataset.path = path;
+  inp.addEventListener("input",()=>{ obj[sf.path]=inp.value; onName&&onName(); schedule(key); });
+  if(isRich(path)){ d.classList.add("rich"); d.appendChild(fmtBar(inp)); }
   d.appendChild(inp); return d;
 }
 function mini(txt, fn, del){
@@ -646,13 +879,30 @@ function move(l,i,dir,wrap){
   if(j<0||j>=a.length) return;
   const tmp=a[i]; a[i]=a[j]; a[j]=tmp; redrawList(wrap,l); schedule();
 }
+// no confirm: a delete is one Undo away, and the toast says so
 function remove(l,i,wrap){
   const a=getPath(model,l.path); a.splice(i,1); redrawList(wrap,l); schedule();
+  toast("Deleted "+(l.strings ? "item" : "row")+" "+(i+1)+" of "+l.label.replace(/\s*\(.*$/,""), UNDO);
 }
 function toHex(v){ return /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(v||"") ? v : "#000000"; }
 
 /* ---------- toolbar ---------- */
-function toast(msg){ const el=$("#toast"); el.textContent=msg; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"),1900); }
+// toast(msg) says something; toast(msg, {label, fn}) also offers to act on it
+// (Undo, mostly), and stays up long enough to be reached for
+let toastTimer=null;
+function toast(msg, action){
+  const el=$("#toast"); el.textContent=msg;
+  if(action){
+    const b=document.createElement("button"); b.textContent=action.label;
+    b.addEventListener("click", ()=>{ el.classList.remove("show"); action.fn(); });
+    el.appendChild(b);
+  }
+  el.classList.toggle("act", !!action);
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove("show"), action ? 6000 : 1900);
+}
+const UNDO = { label:"Undo", fn:()=> undo() };
 function download(name, text, type){
   const blob=new Blob([text], {type:type||"text/plain"});
   const url=URL.createObjectURL(blob); const a=document.createElement("a");
@@ -716,8 +966,10 @@ $("#magPdfBtn").addEventListener("click", async ()=>{
   // ASCII on purpose: Chromium drops a download name it cannot sanitise and
   // saves the file as "download".
   const name="daily-bread-"+ed+"-booklet.pdf";
-  const btn=$("#magPdfBtn"), label=btn.textContent;
-  btn.disabled=true; btn.textContent="Typesetting…";
+  // the button lives in the PDF menu, which closes on click: the menu's own
+  // button carries the "Typesetting…" while the press works
+  const btn=$("#magPdfBtn"), label=btn.innerHTML, trig=$("#pdfMenuBtn"), tlabel=trig.innerHTML;
+  btn.disabled=true; btn.textContent="Typesetting…"; trig.textContent="Typesetting…";
   try{
     let r=null;
     try{
@@ -750,7 +1002,7 @@ $("#magPdfBtn").addEventListener("click", async ()=>{
     saveBlobAs("/press/"+ed+"/booklet.pdf", name);
     toast("press.hq is out of reach — downloading the last CI typesetting of "+man.source+", without your edits");
   }finally{
-    btn.disabled=false; btn.textContent=label;
+    btn.disabled=false; btn.innerHTML=label; trig.innerHTML=tlabel;
   }
 });
 $("#importBtn").addEventListener("click",()=> $("#fileImport").click());
@@ -794,24 +1046,36 @@ $("#fileImage").addEventListener("change",e=>{
   e.target.value="";
 });
 $("#resetBtn").addEventListener("click",()=>{
-  if(!confirm("Reset “"+shelf.items[shelf.current].name+"” to the built-in Daily Bread №1 default? Its edits will be lost. Other editions are untouched.")) return;
-  model=DB.clone(DB.DEFAULT_MODEL); sel=null; inspStale=true; buildEditor(); renderPreview(); save(); toast("Reset to default");
+  if(!confirm("Reset “"+shelf.items[shelf.current].name+"” to the built-in Daily Bread №1 default? Other editions are untouched, and Undo brings its edits back until you close the studio.")) return;
+  flush();
+  model=DB.clone(DB.DEFAULT_MODEL); sel=null; inspStale=true; buildEditor(); renderPreview(); record(); save();
+  toast("Reset to default", UNDO);
 });
 
 $("#editionSel").addEventListener("change", e=> switchEdition(e.target.value));
 
-// the bar has no room for four more buttons, so the verbs live behind one
-function editionMenu(open){
-  $("#edMenu").classList.toggle("off", !open);
-  $("#edMenuBtn").setAttribute("aria-expanded", open ? "true" : "false");
+// The bar has no room for a button per verb, so they live behind two menus:
+// the edition's own (⋯) and the print outputs (PDF ▾). One is open at a time.
+const MENUS = { edMenu:"#edMenuBtn", pdfMenu:"#pdfMenuBtn" };
+function openMenu(id){
+  Object.keys(MENUS).forEach(k=>{
+    const on = k === id;
+    $("#"+k).classList.toggle("off", !on);
+    $(MENUS[k]).setAttribute("aria-expanded", on ? "true" : "false");
+  });
 }
-$("#edMenuBtn").addEventListener("click", e=>{
-  e.stopPropagation();
-  editionMenu($("#edMenu").classList.contains("off"));
+Object.keys(MENUS).forEach(k=>{
+  $(MENUS[k]).addEventListener("click", e=>{
+    e.stopPropagation();
+    openMenu($("#"+k).classList.contains("off") ? k : null);
+  });
+  $("#"+k).addEventListener("click", ()=> openMenu(null));
 });
-document.addEventListener("click", e=>{ if(!e.target.closest(".eds")) editionMenu(false); });
-document.addEventListener("keydown", e=>{ if(e.key==="Escape") editionMenu(false); });
-$("#edMenu").addEventListener("click", ()=> editionMenu(false));
+document.addEventListener("click", e=>{ if(!e.target.closest(".menu-host")) openMenu(null); });
+// Esc closes an open menu and does nothing else (not also clear the selection)
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape" && document.querySelector(".edmenu:not(.off)")){ e.preventDefault(); openMenu(null); }
+});
 $("#edNewBtn").addEventListener("click",()=>{
   const fallback = "Issue "+(shelf.order.length+1);
   const name = prompt("Name the new edition", fallback);
@@ -835,8 +1099,9 @@ $("#edDelBtn").addEventListener("click",()=>{
   if(shelf.order.length < 2){ toast("The last edition cannot be deleted — use Reset"); return; }
   const ed = shelf.items[shelf.current];
   if(!confirm("Delete the edition “"+ed.name+"”? Everything in it goes with it. Export it first if you may want it back.")) return;
+  flush();
   const i = shelf.order.indexOf(shelf.current);
-  shelf.order.splice(i,1); delete shelf.items[shelf.current];
+  shelf.order.splice(i,1); delete shelf.items[shelf.current]; delete hists[shelf.current];
   shelf.current = shelf.order[Math.min(i, shelf.order.length-1)];
   model = loadModel(); saveShelf();
   afterSwap();
@@ -947,8 +1212,9 @@ function setTheme(next){
 }
 
 function applyTheme(th, note){
+  flush();
   setTheme(th);
-  buildEditor(); renderPreview(); save(); toast(note || ("Applied theme: "+(th.name||"custom")));
+  buildEditor(); renderPreview(); record(); save(); toast(note || ("Applied theme: "+(th.name||"custom")), UNDO);
 }
 $("#themeSel").addEventListener("change",()=>{
   const sel=$("#themeSel"), v=sel.value; sel.value="";
@@ -964,7 +1230,8 @@ let wiz = null;   // { back, body, foot, dots, step, draft, name, target, orig }
 const WSTEPS = ["Base","Accents","Review","Name"];
 
 function openThemeWizard(){
-  const orig = DB.clone(model.theme);
+  flush(); record();                    // the history's current state is now exactly the model
+  const orig = hist().cur;
   const draft = DB.clone(model.theme);
   ["ink","bone","panel","paper2","dark","muted","pink","teal","orange"].forEach(k=>{ if(!isHex(draft[k])) draft[k] = k==="dark" ? draft.ink : "#888888"; });
   if(!isHex(draft.dark)) draft.dark = draft.ink;
@@ -973,9 +1240,12 @@ function openThemeWizard(){
   renderWizard();
   wiz.back.classList.add("show");
 }
+/* Cancelling puts back the model exactly as it was when the wizard opened.
+   Re-tinting from the draft back to the original theme could not: two roles the
+   draft had made the same colour both came back as whichever role is first. */
 function closeWizard(restore){
   if(!wiz) return;
-  if(restore && wiz.orig){ setTheme(wiz.orig); renderPreview(); }
+  if(restore && wiz.orig) restoreModel(wiz.orig);
   if(wiz.back) wiz.back.remove();
   wiz = null;
 }
@@ -1149,7 +1419,7 @@ function setMvPos(key,dx,dy){
   dx = Math.round(dx); dy = Math.round(dy);
   if(!dx && !dy) delete model.positions[key]; else model.positions[key] = {dx,dy};
 }
-function persistPositions(){ save(); setStatus("Saved ✓", false); }
+function persistPositions(){ record(); save(); setStatus("Saved ✓", false); }
 
 const MV_STYLE = `
   [data-mv]{cursor:move; outline:1.5px dashed rgba(240,71,125,.85); outline-offset:3px}
@@ -1249,12 +1519,20 @@ function drawGuides(doc, bv, bh, rect, dx, dy){
 }
 
 // Re-attach after every preview reload (srcdoc is replaced on each edit / width change keeps it).
+// The map is built in both modes: All fields uses it to show where a field lands.
 $("#preview").addEventListener("load", ()=>{
+  const w = ifWin(), doc = ifDoc();
+  if(pvScroll && w){ w.scrollTo({ left:pvScroll.x, top:pvScroll.y, behavior:"instant" }); }
+  pvScroll = null;
+  if(doc && doc.head && !doc.getElementById("dz-locate")){
+    const st = doc.createElement("style"); st.id = "dz-locate"; st.textContent = LOCATE_STYLE;
+    doc.head.appendChild(st);
+  }
+  if(doc) wireKeys(doc);
   if(arrangeOn){ enterArrange(); return; }
-  if(!designOn) return;
-  enterDesign();
+  if(designOn) enterDesign();
   buildMap();                                   // re-applies the selection outline
-  if(inspStale){ inspStale = false; renderInspector(); }
+  if(designOn && inspStale){ inspStale = false; renderInspector(); }
 });
 
 $("#arrangeBtn").addEventListener("click",()=>{
@@ -1267,13 +1545,15 @@ $("#arrangeBtn").addEventListener("click",()=>{
     toast("Arrange: drag elements — they snap to guides. Double-click one to reset it.");
   } else {
     exitArrange();
-    if(designOn){ enterDesign(); buildMap(); }
+    if(designOn) enterDesign();
+    buildMap();
   }
 });
 $("#clearArrangeBtn").addEventListener("click",()=>{
   if(!confirm("Reset every element to its default position?")) return;
-  model.positions = {}; save(); renderPreview();   // reload re-enters arrange via the load hook
-  toast("Layout reset");
+  flush();
+  model.positions = {}; record(); save(); renderPreview();   // reload re-enters arrange via the load hook
+  toast("Layout reset", UNDO);
 });
 
 /* mobile tabs */
@@ -1332,6 +1612,34 @@ const LISTS = {};
 DB.SCHEMA.forEach(sec => (sec.lists||[]).forEach(l=>{ LISTS[l.path] = { list:l, sec }; }));
 function tplPath(p){ return p.replace(/\.\d+(?=\.|$)/g, ".#"); }
 function fieldInfo(p){ return FIELDS[tplPath(p)]; }
+
+/* Which fields keep <b>, <i> and <a>? db.js decides per field (rich() or esc()),
+   and a list here would drift from it. So ask the renderer, the same way the
+   design map does: append "<b>token</b>" to every prose field of the default
+   model, render once, and a field is rich if a real <b> element came out
+   holding its token. Escaped fields show the tag as text; CSS never parses it. */
+const RICH = (function(){
+  const out = new Set();
+  try{
+    const probe = DB.clone(DB.DEFAULT_MODEL), tpls = [];
+    Object.keys(FIELDS).forEach(tp=>{
+      const info = FIELDS[tp];
+      if((info.type!=="text" && info.type!=="area") || NOT_PROSE.test(tp)) return;
+      const cut = tp.indexOf("#"), p = tp.replace(/#/g, "0");   // row 0 stands in for its list
+      if(cut >= 0 && getPath(probe, tp.slice(0, cut) + "0") == null) return;
+      const v = getPath(probe, p);
+      setPath(probe, p, (v == null ? "" : v) + "<b>" + TOK + tpls.length + TOK + "</b>");
+      tpls.push(tp);
+    });
+    const pdoc = new DOMParser().parseFromString(DB.render(probe), "text/html");
+    pdoc.querySelectorAll("body b").forEach(b=>{
+      let m; TOK_RE.lastIndex = 0;
+      while((m = TOK_RE.exec(b.textContent))) out.add(tpls[+m[1]]);
+    });
+  }catch(e){ console.warn("rich-field probe failed; no formatting strip", e); }
+  return out;
+})();
+function isRich(p){ return RICH.has(tplPath(p)); }
 /* "letter.masthead.2.role" — or the bare row "letter.masthead.2" — -> its list */
 function itemOf(p){
   const m = String(p).match(/^(.+?)\.(\d+)(?:\.|$)/);
@@ -1669,15 +1977,16 @@ function endInline(commit){
 
 /* ---------- selection + the inspector ---------- */
 function entryFor(el){ return MAP && MAP.entries.find(en=> en.el === el); }
-function selEl(){
-  if(!sel || !MAP) return null;
-  const p = sel.paths[0];
+// where a model path shows on the page: its own element, else its row's block
+function elForPath(p){
+  if(!MAP) return null;
   const en = MAP.entries.find(e=> e.paths.indexOf(p) >= 0);
   if(en) return en.el;
   const it = itemOf(p);
   const row = it && MAP.items.find(x=> x.key === it.listPath+"#"+it.idx);
   return row ? row.el : null;
 }
+function selEl(){ return sel ? elForPath(sel.paths[0]) : null; }
 function applySelection(doc){
   if(!doc || !doc.body) return;
   doc.querySelectorAll(".dz-sel").forEach(n=>n.classList.remove("dz-sel"));
@@ -1731,7 +2040,7 @@ function renderInspector(){
 
   const go = document.createElement("button"); go.className = "additem";
   go.textContent = "Open in all fields";
-  go.addEventListener("click", ()=> revealInFields(sec));
+  go.addEventListener("click", ()=> revealField(first, sec));
   box.appendChild(go);
   pane.appendChild(box);
 }
@@ -1740,35 +2049,39 @@ function rowFields(it){
   if(l.strings) return [{ path:base, info:FIELDS[l.path+".#"] }];
   return (l.fields||[]).map(sf=>({ path: base + "." + sf.path, info: FIELDS[l.path+".#."+sf.path] }));
 }
+/* what you can do to a selected row — from its buttons or from the keyboard */
+function rowArr(it){ return getPath(model, it.listPath) || []; }
+function selectRow(it, i){ sel = { paths:[it.listPath+"."+i] }; touched("panel"); }
+function moveRow(it, dir){
+  const a = rowArr(it), j = it.idx + dir;
+  if(j < 0 || j >= a.length) return;
+  a.splice(j, 0, a.splice(it.idx,1)[0]); selectRow(it, j);
+}
+function duplicateRow(it){
+  const a = rowArr(it); a.splice(it.idx+1, 0, DB.clone(a[it.idx])); selectRow(it, it.idx+1);
+}
+function addRowBelow(it){
+  const a = rowArr(it), l = it.list;
+  a.splice(it.idx+1, 0, l.strings ? (l.def!=null?l.def:"") : DB.clone(l.def||{}));
+  selectRow(it, it.idx+1);
+}
+// no confirm: the toast offers Undo, which is quicker than a dialog and not a guess
+function deleteRow(it){
+  rowArr(it).splice(it.idx, 1); sel = null; touched("panel");
+  toast("Deleted " + it.list.label.replace(/\s*\(.*$/,"") + " · row " + (it.idx+1), UNDO);
+}
 function rowActions(it){
   const bar = document.createElement("div"); bar.className = "acts";
-  const arr = ()=> getPath(model, it.listPath) || [];
   const act = (txt, title, fn, del)=>{
     const b = document.createElement("button"); b.textContent = txt; b.title = title;
     if(del) b.className = "del";
     b.addEventListener("click", fn); bar.appendChild(b);
   };
-  const after = i => { sel = { paths:[it.listPath+"."+i] }; touched("panel"); };
-  act("↑ Up", "Move this row up", ()=>{
-    const a = arr(); if(it.idx <= 0) return;
-    a.splice(it.idx-1, 0, a.splice(it.idx,1)[0]); after(it.idx-1);
-  });
-  act("↓ Down", "Move this row down", ()=>{
-    const a = arr(); if(it.idx >= a.length-1) return;
-    a.splice(it.idx+1, 0, a.splice(it.idx,1)[0]); after(it.idx+1);
-  });
-  act("Duplicate", "Copy this row below", ()=>{
-    const a = arr(); a.splice(it.idx+1, 0, DB.clone(a[it.idx])); after(it.idx+1);
-  });
-  act("+ Add below", "Insert an empty row below", ()=>{
-    const a = arr(), l = it.list;
-    a.splice(it.idx+1, 0, l.strings ? (l.def!=null?l.def:"") : DB.clone(l.def||{}));
-    after(it.idx+1);
-  });
-  act("Delete", "Remove this row", ()=>{
-    if(!confirm("Delete this row?")) return;
-    arr().splice(it.idx, 1); sel = null; touched("panel");
-  }, true);
+  act("↑ Up", "Move this row up (Alt+↑)", ()=> moveRow(it, -1));
+  act("↓ Down", "Move this row down (Alt+↓)", ()=> moveRow(it, 1));
+  act("Duplicate", "Copy this row below ("+MODK+"+D)", ()=> duplicateRow(it));
+  act("+ Add below", "Insert an empty row below", ()=> addRowBelow(it));
+  act("Delete", "Remove this row (Delete) — Undo brings it back", ()=> deleteRow(it), true);
   return bar;
 }
 function blankPanel(){
@@ -1778,6 +2091,8 @@ function blankPanel(){
     '<h3>Click anything on the page</h3>'+
     '<p>Whatever you click opens here, ready to edit. Double-click a line of text to type straight onto the page.</p>'+
     '<p>Drag a row — a contents line, a badge, an event — to move it. Drop an image file on a picture to replace it.</p>'+
+    '<p>Looking for something? <b>'+MODK+' K</b> finds any field, any line of copy, or a command. '+
+    '<b>'+MODK+' Z</b> undoes, and <b>?</b> lists every shortcut.</p>'+
     '<div class="sep"></div><div class="lab">Jump to</div>';
   const jump = document.createElement("div"); jump.className = "jump";
   (model.nav||[]).forEach(n=>{
@@ -1796,12 +2111,63 @@ function blankPanel(){
 function revealInFields(sec){
   showMode("fields");
   if(!sec) return;
-  const i = DB.SCHEMA.indexOf(sec);
-  const el = $("#fieldsPane").children[i];
+  const el = $("#fieldsPane").querySelector('.sec[data-sec="'+CSS.escape(sec.id)+'"]');
   if(!el) return;
   el.classList.add("open");
   el.scrollIntoView({behavior:"smooth", block:"start"});
 }
+/* …and straight to one field in it: focused, and flashed so the eye finds it */
+function revealField(path, sec){
+  showMode("fields");
+  const it = itemOf(path);
+  sec = sec || (it && it.sec) || (fieldInfo(path) || {}).sec;
+  const box = sec && $("#fieldsPane").querySelector('.sec[data-sec="'+CSS.escape(sec.id)+'"]');
+  if(box) box.classList.add("open");
+  const inp = $("#fieldsPane").querySelector('[data-path="'+CSS.escape(path)+'"]');
+  if(!inp){ if(box) box.scrollIntoView({block:"start"}); return; }
+  inp.scrollIntoView({block:"center"});
+  inp.focus({ preventScroll:true });
+  flashEl(inp.closest(".item.str") || inp.closest(".field"));
+}
+function flashEl(el){
+  if(!el) return;
+  el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+  setTimeout(()=> el.classList.remove("flash"), 1500);
+}
+
+/* ---------- All fields ↔ the page ----------
+   Focusing a field in the accordion scrolls the preview to where it prints and
+   flashes it; opening a section scrolls to that section. The map is the design
+   map, which is built in both modes. */
+const LOCATE_STYLE = `
+  .dz-flash{outline:3px solid #12b795 !important; outline-offset:4px; animation:dzfl 1.4s ease-out forwards}
+  @keyframes dzfl{0%,45%{outline-color:#12b795} 100%{outline-color:rgba(18,183,149,0)}}`;
+function locate(path, how){
+  const el = elForPath(path);
+  if(!el || !el.isConnected) return false;
+  el.scrollIntoView({ block:"center", behavior: how || "smooth" });
+  el.classList.remove("dz-flash"); void el.offsetWidth; el.classList.add("dz-flash");
+  setTimeout(()=> el.classList.remove("dz-flash"), 1500);
+  return true;
+}
+// a section's place on the page: its <section id>, else the first thing mapped to it
+function sectionEl(sec){
+  const doc = ifDoc(); if(!doc) return null;
+  const byId = doc.getElementById(sec.id);
+  if(byId) return byId;
+  if(!MAP) return null;
+  const en = MAP.entries.find(e=> e.paths.some(p=>{ const i = fieldInfo(p), it = itemOf(p);
+    return (it && it.sec === sec) || (i && i.sec === sec); }));
+  return en ? en.el : null;
+}
+function showSection(sec){
+  const el = sectionEl(sec);
+  if(el && el.isConnected) el.scrollIntoView({ block:"start", behavior:"smooth" });
+}
+$("#fieldsPane").addEventListener("focusin", e=>{
+  const p = e.target.dataset && e.target.dataset.path;
+  if(p && !arrangeOn) locate(p);
+});
 
 /* ---------- edit-pane mode switch ---------- */
 function showMode(m){
@@ -1873,11 +2239,291 @@ function wireImageDrop(row, path, img, tx){
   });
 }
 
+/* ============================================================================
+   Find — one box for every field, every line of copy, and every command
+   ----------------------------------------------------------------------------
+   The schema has a few hundred fields across nineteen sections, and the page
+   only offers a handle on the ones that print as text. Find searches field
+   labels, section names and what each field currently says, so "deadline",
+   "Bernard Ave" or "pink" all land somewhere. Picking a field selects it on the
+   page when it is there, or opens it in All fields when it is not (colours,
+   print settings, links), and puts the cursor in it.
+   ========================================================================== */
+const PLAIN = s => String(s==null?"":s).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim();
+const FOLD = s => PLAIN(s).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const shortLabel = l => l.label.replace(/\s*\(.*$/,"");
+let palItems = [], palRes = [], palAct = 0, palPrev = null;
+
+function palCommands(){
+  const c = (label, run, keys, words)=> ({ kind:"cmd", label, run, keys:keys||"", hay:FOLD(label+" "+(words||"")) });
+  const out = [
+    c("Publish → index.html", ()=> $("#publishBtn").click(), "", "download html web deploy commit"),
+    c("Export JSON — back up this edition", ()=> $("#exportBtn").click(), "", "save download backup file"),
+    c("Undo", undo, MODK+" Z", "back revert"),
+    c("Redo", redo, MODK+" ⇧ Z", "again"),
+    c("Magazine PDF — typeset the press booklet", ()=> $("#magPdfBtn").click(), "", "print pdf press booklet tex latex"),
+    c("Web PDF — print what is on screen", ()=> $("#pdfBtn").click(), "", "print pdf"),
+    c("Import JSON as a new edition…", ()=> $("#importBtn").click(), "", "open load file"),
+    c("New edition…", ()=> $("#edNewBtn").click(), "", "issue add create"),
+    c("Keyboard shortcuts", showKeys, "?", "help keys hotkeys"),
+    c("Duplicate this edition…", ()=> $("#edDupBtn").click(), "", "copy clone issue"),
+    c("Rename this edition…", ()=> $("#edRenBtn").click(), "", "issue name title"),
+    c("Create an accessible theme…", openThemeWizard, "", "colour color palette contrast wcag wizard"),
+    c("Preview at full width", ()=> setWidth("full"), "", "desktop wide"),
+    c("Preview at tablet width", ()=> setWidth("tab"), "", "ipad"),
+    c("Preview at phone width", ()=> setWidth("phone"), "", "mobile narrow"),
+    c(arrangeOn ? "Leave Arrange" : "Arrange — drag things into place", ()=> $("#arrangeBtn").click(), "", "move position layout nudge"),
+    c(designOn ? "Show all fields" : "Show the design inspector", ()=> showMode(designOn ? "fields" : "design"), "", "mode panel accordion"),
+    c("Open the preview in a new tab", ()=> $("#openTab").click(), "", "window"),
+    c("Reset this edition to the default…", ()=> $("#resetBtn").click(), "", "clear start over"),
+  ];
+  shelf.order.forEach(id=>{
+    if(id !== shelf.current) out.push(c("Open edition: "+shelf.items[id].name, ()=> switchEdition(id), "", "switch issue"));
+  });
+  Object.keys(DB.THEMES).forEach(k=>
+    out.push(c("Theme: "+DB.THEMES[k].name, ()=> applyTheme(DB.THEMES[k]), "", "preset colour color palette")));
+  Object.keys(customThemes).forEach(k=>
+    out.push(c("Theme: "+(customThemes[k].name||k), ()=> applyTheme(customThemes[k]), "", "preset colour color palette mine")));
+  return out;
+}
+function palFields(){
+  const out = [];
+  const add = (label, sub, v, path, type)=> out.push({ kind:"field", label, sub, path,
+    value: type==="image" ? (/^data:/.test(v||"") ? "(embedded image)" : PLAIN(v)) : PLAIN(v) });
+  DB.SCHEMA.forEach(sec=>{
+    const sl = sectionLabel(sec);
+    out.push({ kind:"sec", label:sl, sub:(sec.tag||"").replace("//","").trim(),
+               hay:FOLD(sl+" "+sec.title+" "+sec.id), run:()=> goSection(sec) });
+    (sec.fields||[]).forEach(f=> add(f.label, sl, getPath(model, f.path), f.path, f.type));
+    (sec.lists||[]).forEach(l=>{
+      (getPath(model, l.path)||[]).forEach((row, i)=>{
+        if(l.strings) add(shortLabel(l)+" · "+(i+1), sl, row, l.path+"."+i);
+        else (l.fields||[]).forEach(sf=>
+          add(sf.label, sl+" · "+shortLabel(l)+" "+(i+1), row && row[sf.path], l.path+"."+i+"."+sf.path, sf.type));
+      });
+    });
+  });
+  out.forEach(o=>{ if(o.kind==="field"){ o.hay = FOLD(o.label+" "+o.sub); o.vhay = FOLD(o.value); } });
+  return out;
+}
+
+function openPalette(q){
+  if(wiz || $("#keysBack")) return;
+  if(inlineEl) endInline(true);
+  openMenu(null); flush();
+  palPrev = document.activeElement;
+  palItems = palCommands().concat(palFields());
+  $("#palBack").hidden = false;
+  const inp = $("#palIn"); inp.value = q || "";
+  palFilter(); inp.focus(); inp.select();
+}
+function closePalette(restore){
+  if($("#palBack").hidden) return;
+  $("#palBack").hidden = true;
+  if(restore && palPrev && palPrev.focus && document.contains(palPrev)) palPrev.focus({ preventScroll:true });
+  palPrev = null;
+}
+function palFilter(){
+  const q = FOLD($("#palIn").value), toks = q ? q.split(" ") : [];
+  const groups = [ { t:"Commands", max:8, a:[] }, { t:"Sections", max:8, a:[] },
+                   { t:"Fields", max:30, a:[] }, { t:"In the copy", max:40, a:[] } ];
+  if(!toks.length){
+    groups[0].a = palItems.filter(o=> o.kind==="cmd").slice(0, 9).map(o=> ({ o, s:0 }));
+    groups[1].max = 30;
+    groups[1].a = palItems.filter(o=> o.kind==="sec").map(o=> ({ o, s:0 }));
+  } else palItems.forEach(o=>{
+    const inHay = toks.every(t=> o.hay.indexOf(t) >= 0);
+    if(!inHay && !(o.vhay && toks.every(t=> (o.hay+" "+o.vhay).indexOf(t) >= 0))) return;
+    // a name that matches beats copy that matches; both at once beats either
+    const s = (o.hay.startsWith(q) ? 3 : inHay ? 2 : 0) + (o.vhay && o.vhay.indexOf(q) >= 0 ? 1 : 0);
+    const g = o.kind==="cmd" ? 0 : o.kind==="sec" ? 1 : inHay ? 2 : 3;
+    groups[g].a.push({ o, s, hit: !inHay });
+  });
+  palRes = []; palAct = 0;
+  const list = $("#palList"); list.innerHTML = "";
+  // the group holding the best match leads, so ↵ on "bleed" is the Bleed field,
+  // not the section that happens to be called "Print & bleed"
+  groups.forEach(g=>{ g.a.sort((x, y)=> y.s - x.s); g.best = g.a.length ? g.a[0].s : -1; });
+  groups.slice().sort((x, y)=> y.best - x.best).forEach(g=>{
+    if(!g.a.length) return;
+    const hd = document.createElement("div"); hd.className = "grp"; hd.textContent = g.t;
+    list.appendChild(hd);
+    g.a.slice(0, g.max).forEach(r=>{
+      const i = palRes.length, o = r.o;
+      palRes.push(o);
+      const row = document.createElement("div");
+      row.className = "opt"; row.id = "po-"+i; row.setAttribute("role", "option");
+      const sub = o.kind==="field"
+        ? esc(o.sub) + (o.value ? " — " + mark(snippet(o.value, r.hit ? toks : []), toks) : "")
+        : esc(o.sub || "");
+      row.innerHTML = '<span class="k">'+(o.kind==="cmd" ? "›" : o.kind==="sec" ? "§" : "¶")+'</span>'+
+        '<span class="m"><div class="l">'+mark(o.label, toks)+'</div>'+(sub ? '<div class="s">'+sub+'</div>' : "")+'</span>'+
+        (o.keys ? '<span class="r">'+esc(o.keys)+'</span>' : "");
+      row.addEventListener("mousemove", ()=>{ if(palAct !== i) palSet(i); });
+      row.addEventListener("click", ()=> palRun(i));
+      list.appendChild(row);
+    });
+  });
+  if(!palRes.length){
+    const n = document.createElement("div"); n.className = "none";
+    n.textContent = "Nothing matches “"+$("#palIn").value+"”. Find looks through field names, section names and the copy itself.";
+    list.appendChild(n);
+  }
+  palSet(0);
+}
+// the part of a long value around the first hit, not its first sixty characters
+function snippet(v, toks){
+  const low = v.toLowerCase();
+  let at = -1;
+  toks.forEach(t=>{ const i = low.indexOf(t); if(i >= 0 && (at < 0 || i < at)) at = i; });
+  if(at < 0) return v.length > 90 ? v.slice(0, 90) + "…" : v;
+  const s = Math.max(0, at - 30), e = Math.min(v.length, at + 70);
+  return (s ? "…" : "") + v.slice(s, e) + (e < v.length ? "…" : "");
+}
+// escape, and mark each search word where it appears
+function mark(text, toks){
+  text = String(text == null ? "" : text);
+  if(!toks.length) return esc(text);
+  const re = new RegExp("(" + toks.map(t=> t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") + ")", "ig");
+  return text.split(re).map((p, i)=> i % 2 ? "<mark>"+esc(p)+"</mark>" : esc(p)).join("");
+}
+function palSet(i){
+  if(!palRes.length) return;
+  palAct = (i + palRes.length) % palRes.length;
+  document.querySelectorAll("#palList .opt.on").forEach(n=> n.classList.remove("on"));
+  const row = $("#po-"+palAct);
+  if(row){ row.classList.add("on"); row.scrollIntoView({ block:"nearest" }); }
+  $("#palIn").setAttribute("aria-activedescendant", "po-"+palAct);
+}
+function palRun(i){
+  const o = palRes[i]; if(!o) return;
+  closePalette(false);
+  if(o.kind==="field") goField(o.path); else o.run();
+}
+$("#palIn").addEventListener("input", palFilter);
+$("#palIn").addEventListener("keydown", e=>{
+  e.stopPropagation();
+  if(e.key==="ArrowDown"){ e.preventDefault(); palSet(palAct+1); }
+  else if(e.key==="ArrowUp"){ e.preventDefault(); palSet(palAct-1); }
+  else if(e.key==="Enter"){ e.preventDefault(); palRun(palAct); }
+  else if(e.key==="Escape" || ((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k")){ e.preventDefault(); closePalette(true); }
+});
+$("#palBack").addEventListener("mousedown", e=>{ if(e.target === $("#palBack")) closePalette(true); });
+$("#findBtn").addEventListener("click", ()=> openPalette());
+
+/* a field from Find: on the page if it prints there, otherwise in All fields */
+function goField(path){
+  if(arrangeOn) $("#arrangeBtn").click();          // Arrange hides the map; step out of it
+  const el = designOn && elForPath(path);
+  if(el && el.isConnected){
+    const en = MAP.entries.find(e=> e.el === el && e.paths.indexOf(path) >= 0);
+    sel = { paths: en ? en.paths.slice() : [path] };
+    applySelection(ifDoc()); renderInspector();
+    el.scrollIntoView({ block:"center" });
+    const inp = $("#designPane").querySelector('[data-path="'+CSS.escape(path)+'"]');
+    if(inp){ inp.focus({ preventScroll:true }); if(inp.select) inp.select(); flashEl(inp.closest(".field")); }
+    return;
+  }
+  revealField(path);
+}
+function goSection(sec){
+  const el = sectionEl(sec);
+  if(designOn && el && el.isConnected){ el.scrollIntoView({ block:"start" }); return; }
+  revealInFields(sec);
+  if(el && el.isConnected) el.scrollIntoView({ block:"start" });
+}
+function setWidth(w){ const b = document.querySelector('.pvbar button[data-w="'+w+'"]'); if(b) b.click(); }
+
+/* ---------- keyboard ---------- */
+function showKeys(){
+  if($("#keysBack")) return;
+  closePalette(false);
+  const k = s => s.split(" ").map(x=> "<kbd>"+esc(x)+"</kbd>").join(" ");
+  const rows = [
+    ["Anywhere", [
+      [k(MODK+" K"), "Find a field, a line of copy, or a command"],
+      [k(MODK+" Z"), "Undo"],
+      [k(MODK+" ⇧ Z")+" "+k(MODK+" Y"), "Redo"],
+      [k(MODK+" S"), "Save now — though the studio already saves as you type"],
+      [k("?"), "This sheet"],
+      [k("Esc"), "Close a menu or dialog; clear the selection"]]],
+    ["With a row selected on the page", [
+      [k("Alt ↑")+" "+k("Alt ↓"), "Move it up or down"],
+      [k(MODK+" D"), "Duplicate it"],
+      [k("Delete")+" "+k(MODK+" ⌫"), "Delete it — Undo brings it back"]]],
+    ["In a field that takes formatting", [
+      [k(MODK+" B")+" "+k(MODK+" I"), "Bold, italic — or use the B / I / Link strip above the field"]]],
+    ["On the page", [
+      ["Click", "Open it in the panel"],
+      ["Double-click", "Type straight onto the page"],
+      ["Drag a row", "Reorder it"],
+      ["Drop an image", "Replace the picture"]]]
+  ];
+  const back = document.createElement("div"); back.className = "wiz-back show"; back.id = "keysBack";
+  back.innerHTML = '<div class="wiz keys" role="dialog" aria-label="Keyboard shortcuts">'+
+    '<div class="wh"><span class="t">Keys</span><span class="sub">keyboard<br>shortcuts</span>'+
+    '<button class="x" title="Close">✕</button></div><div class="wb">'+
+    rows.map(g=> '<h4>'+esc(g[0])+'</h4><table><tbody>'+
+      g[1].map(r=> '<tr><td>'+r[0]+'</td><td>'+esc(r[1])+'</td></tr>').join("")+'</tbody></table>').join("")+
+    '</div></div>';
+  const close = ()=>{ back.remove(); document.removeEventListener("keydown", esc_, true); };
+  const esc_ = e=>{ if(e.key==="Escape" || e.key==="?"){ e.preventDefault(); e.stopPropagation(); close(); } };
+  back.addEventListener("mousedown", e=>{ if(e.target === back) close(); });
+  back.querySelector(".x").addEventListener("click", close);
+  document.addEventListener("keydown", esc_, true);
+  document.body.appendChild(back);
+}
+
+function isTyping(t){
+  if(!t || !t.tagName) return false;
+  if(t.isContentEditable) return true;
+  const n = t.tagName;
+  return n==="TEXTAREA" || n==="SELECT" ||
+    (n==="INPUT" && !/^(button|checkbox|radio|color|file|range|submit|reset)$/.test(t.type));
+}
+/* One handler for the studio and for the preview (focus is often inside the
+   page after a click there). Typing on the page keeps the browser's own keys. */
+function onKey(e){
+  if(e.defaultPrevented || inlineEl || wiz || $("#keysBack") || !$("#palBack").hidden) return;
+  const mod = e.ctrlKey || e.metaKey, k = (e.key||"").toLowerCase();
+  if(mod && !e.altKey){
+    if(k==="k"){ e.preventDefault(); openPalette(); return; }
+    if(k==="z"){ e.preventDefault(); if(e.shiftKey) redo(); else undo(); return; }
+    if(k==="y"){ e.preventDefault(); redo(); return; }
+    if(k==="s"){
+      e.preventDefault(); flush();
+      if(save()){ setStatus("Saved ✓", false); toast("Saved in this browser. The studio saves as you type; ⋯ → Export JSON keeps a copy on disk."); }
+      return;
+    }
+  }
+  if(isTyping(e.target)) return;
+  if(e.key==="?"){ e.preventDefault(); showKeys(); return; }
+  if(e.key==="Escape"){
+    if(sel){ sel = null; applySelection(ifDoc()); if(designOn) renderInspector(); }
+    return;
+  }
+  const it = designOn && !arrangeOn && sel && itemOf(sel.paths[0]);
+  if(!it) return;
+  if(e.altKey && !mod && (e.key==="ArrowUp" || e.key==="ArrowDown")){ e.preventDefault(); moveRow(it, e.key==="ArrowUp" ? -1 : 1); }
+  else if(mod && !e.altKey && k==="d"){ e.preventDefault(); duplicateRow(it); }
+  else if(!e.altKey && ((!mod && e.key==="Delete") || (mod && e.key==="Backspace"))){ e.preventDefault(); deleteRow(it); }
+}
+document.addEventListener("keydown", onKey);
+function wireKeys(doc){
+  if(doc.__keysWired) return;
+  doc.addEventListener("keydown", onKey);
+  doc.__keysWired = true;
+}
+
 /* ---------- boot ---------- */
+document.querySelectorAll(".modk").forEach(n=> n.textContent = MODK+" K");
+swap("edit");     // narrow screens show one pane at a time; the tabs said Edit but both were showing
+hist();
 populateEditionSelect();
 buildEditor();
 renderInspector();
 renderPreview();
+updateHistButtons();
 setStatus(hadSaved?"Restored ✓":"Loaded default", false);
 </script>
 </body>

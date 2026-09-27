@@ -253,8 +253,10 @@ for (const w of [1920, 1600, 1440, 1400, 1280]) {
     return { h: Math.round(b.height), over, who, wide: document.body.scrollWidth > window.innerWidth };
   })]);
 }
-check("the top bar is one row at the studio's design width, longest name and all",
-  bars.filter(([w]) => w >= 1600).every(([, m]) => m.h === 52),
+// Import, Export and Reset moved into the edition menu and the two PDFs under
+// one button, which bought back a row: the bar now fits down to 1280.
+check("the top bar is one row down to 1280, longest name and all",
+  bars.every(([, m]) => m.h === 52),
   bars.map(([w, m]) => w + ":" + m.h).join(" "));
 check("a fuller bar grows instead of covering the pane below",
   bars.every(([, m]) => m.over === 0),

@@ -76,6 +76,11 @@ async function open(pressRoute) {
   return { ctx, page };
 }
 const toastText = (page) => page.evaluate(() => document.querySelector("#toast")?.textContent || "");
+// the button lives in the PDF menu in the top bar, so a person opens that first
+async function pressButton(page) {
+  await page.click("#pdfMenuBtn");
+  await page.click("#magPdfBtn");
+}
 
 /* ---- (1) the press is reachable: POST the edition in view, save the reply ---- */
 {
@@ -98,7 +103,7 @@ const toastText = (page) => page.evaluate(() => document.querySelector("#toast")
 
   const [download] = await Promise.all([
     page.waitForEvent("download", { timeout: 20000 }),
-    page.click("#magPdfBtn"),
+    pressButton(page),
   ]);
   const got = fs.readFileSync(await download.path());
   check("POSTs the edition on screen", posted && posted.edition === EDITION, JSON.stringify(posted && posted.edition));
@@ -116,7 +121,7 @@ const toastText = (page) => page.evaluate(() => document.querySelector("#toast")
   const { ctx, page } = await open(route => route.abort("connectionrefused"));
   const [download] = await Promise.all([
     page.waitForEvent("download", { timeout: 20000 }),
-    page.click("#magPdfBtn"),
+    pressButton(page),
   ]);
   const got = fs.readFileSync(await download.path());
   const want = fs.readFileSync(path.join(ROOT, "press", EDITION, "booklet.pdf"));

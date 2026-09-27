@@ -204,6 +204,33 @@ wired into CI.
 **Arrange** (in the preview bar) is still there for free positioning, and takes
 over from Design while it is on.
 
+**Finding your way, and taking it back.**
+
+- **Undo / Redo** (the two arrows in the top bar, `Ctrl+Z` / `Ctrl+Shift+Z`)
+  covers every edit: typing, rows added, moved or deleted, dropped images,
+  theme presets, Arrange drags, Reset. Typing into one field is one step until
+  you pause. Each edition keeps its own history for as long as the studio is
+  open; it is not saved. Deleting a row asks nothing now: the toast offers Undo.
+- **Find** (`Ctrl+K`, or the button) searches every field by name, every
+  section, and what each field currently says, plus the studio's commands.
+  Type `deadline`, `Bernard Ave` or `phone` and press Enter. A field that prints
+  is selected on the page with the cursor in it; one that does not (colours,
+  print settings, links) opens in All fields.
+- **The preview holds its place.** It used to jump back to the cover after
+  every keystroke. In All fields, focusing a field scrolls the page to where it
+  prints and flashes it, and opening a section scrolls to that section.
+- **Formatting without HTML.** Fields that print `<b>`, `<i>` and `<a>` show a
+  B / I / Link strip while you are in them (`Ctrl+B`, `Ctrl+I` work too);
+  fields that would print the tags as text do not. Which is which is not a
+  list: the studio renders a probe of the default model with `<b>` appended to
+  every field and sees which ones came out bold.
+- **Keys.** With a row selected on the page, `Alt+↑/↓` moves it, `Ctrl+D`
+  duplicates it and `Delete` removes it. `Ctrl+S` confirms the autosave instead
+  of opening the browser's save dialog. `?` lists all of it.
+
+`node db-render/test-studio-editor.mjs` drives all of the above in a real
+browser, under the same conditions as the design test.
+
 **What you can edit** — every section is a form: masthead & issue metadata, the
 cover (upload an image or point at a path), the editor's letter, contents/TOC,
 the collapse ledger, young-voices reports, the waitlist stats, the interview
@@ -221,9 +248,12 @@ shows exactly what will publish, at full / tablet / phone widths.
 
 - **Autosave** — every change is written to your browser (`localStorage`), so
   the studio reopens where you left off.
-- **Export / Import JSON** — download the whole issue as a portable
-  `daily-bread-№1.json` you can commit, back up, or move between machines; import
-  it to pick up where you left off.
+- **Export / Import JSON** (in the edition menu, `⋯`, beside the switcher,
+  with New, Duplicate, Rename, Reset and Delete) — download the whole issue as
+  a portable `daily-bread-№1.json` you can commit, back up, or move between
+  machines; import it to pick up where you left off.
+- **PDF ▾** holds the two print outputs, Web PDF and Magazine PDF, described
+  below.
 - **Publish → `index.html`** — downloads a complete, self-contained
   `index.html`. Drop it in the repo root and commit; Cloudflare deploys the new
   edition on push. (If you embedded a cover via upload, it travels inside the file as a
