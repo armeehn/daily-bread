@@ -42,6 +42,135 @@ _HEX = re.compile(r"^#?([0-9a-fA-F]{6})$")
 _DATA_URL = re.compile(r"^data:([\w/+.-]+);base64,(.*)$", re.S)
 _EXT = {"image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp", "image/gif": ".gif"}
 
+# Long pieces that may run on to a Continued page ("jump"), with the page they
+# start on. When the studio's copy is longer than its page holds, it breaks
+# where the page's measured line budget runs out (press/<edition>/limits.json,
+# "mainLines"), says where it continues, and the rest takes half of a Continued
+# page near the back. Pages are added only when a piece jumps, and padded with
+# a Notes page to the multiple of four a saddle-stitched booklet needs.
+#
+# Lines, not words: body copy is IBM Plex Mono, every character the same width,
+# so a paragraph's lines are known before TeX sets it (71 characters to the
+# line at 8.8 pt across the A5 text block), and a page of many short paragraphs
+# holds fewer words than one of a few long ones. Each paragraph break costs
+# the class's half-gap, about a quarter of a line.
+JUMPS = (("letter.paragraphs", "p01"), ("history.paragraphs", "p04"),
+         ("voices.reports.0.body", "p11"), ("voices.reports.1.body", "p12"),
+         ("voices.reports.2.body", "p13"), ("lab.paragraphs", "p30"))
+LINE_CHARS = 71           # characters to a body line (measured on the typeset page)
+PARA_GAP = 0.2745         # 0.5 × 2.2 mm between paragraphs, in 11.36 pt lines
+JUMP_SPARE = 1.5          # lines kept free on the first page, never broken at its edge
+_WORD = re.compile(r"[^\W_][\w'’\-]*", re.UNICODE)
+
+
+def wrap(text, width=LINE_CHARS):
+    """A paragraph as the lines a monospaced, greedy break gives it."""
+    lines, cur = [], ""
+    for w in str(text).split():
+        if not cur:
+            cur = w
+        elif len(cur) + 1 + len(w) <= width:
+            cur += " " + w
+        else:
+            lines.append(cur)
+            cur = w
+    if cur:
+        lines.append(cur)
+    return lines
+
+
+def body_lines(paras):
+    """Lines a body takes on the page: its wrapped lines plus the paragraph gaps."""
+    return sum(len(wrap(p)) for p in paras) + PARA_GAP * max(0, len(paras) - 1)
+
+
+def split_lines(paras, budget):
+    """Paragraphs -> (what fits `budget` lines, the rest), breaking inside a
+    paragraph between two of its lines when that is where the budget runs out."""
+    head, tail, used = [], [], 0.0
+    for i, p in enumerate(paras):
+        if tail:
+            tail.append(p)
+            continue
+        ls = wrap(p)
+        gap = PARA_GAP if head else 0
+        room = int(budget - used - gap)
+        if len(ls) <= room:
+            head.append(p)
+            used += gap + len(ls)
+        elif room >= 2:                     # at least two lines stay, or it all moves on
+            head.append(" ".join(ls[:room]) + " …")
+            tail.append("… " + " ".join(ls[room:]))
+        else:
+            tail.append(p)
+    return head, tail
+
+
+def wrap(text, width=LINE_CHARS):
+    """A paragraph as the lines a monospaced, greedy break gives it."""
+    lines, cur = [], ""
+    for w in str(text).split():
+        if not cur:
+            cur = w
+        elif len(cur) + 1 + len(w) <= width:
+            cur += " " + w
+        else:
+            lines.append(cur)
+            cur = w
+    if cur:
+        lines.append(cur)
+    return lines
+
+
+def body_lines(paras):
+    """Lines a body takes on the page: its wrapped lines plus the paragraph gaps."""
+    return sum(len(wrap(p)) for p in paras) + PARA_GAP * max(0, len(paras) - 1)
+
+
+def split_lines(paras, budget):
+    """Paragraphs -> (what fits `budget` lines, the rest), breaking inside a
+    paragraph between two of its lines when that is where the budget runs out."""
+    head, tail, used = [], [], 0.0
+    for i, p in enumerate(paras):
+        if tail:
+            tail.append(p)
+            continue
+        ls = wrap(p)
+        gap = PARA_GAP if head else 0
+        room = int(budget - used - gap)
+        if len(ls) <= room:
+            head.append(p)
+            used += gap + len(ls)
+        elif room >= 2:                     # at least two lines stay, or it all moves on
+            head.append(" ".join(ls[:room]) + " …")
+            tail.append("… " + " ".join(ls[room:]))
+        else:
+            tail.append(p)
+    return head, tail
+
+
+def count_words(paras):
+    return sum(len(_WORD.findall(p)) for p in paras)
+
+
+def split_words(paras, keep):
+    """Paragraphs -> (the first `keep` words, the rest), breaking inside a
+    paragraph at a word boundary when that is where the count runs out."""
+    head, tail, left = [], [], keep
+    for i, p in enumerate(paras):
+        words = list(_WORD.finditer(p))
+        if left <= 0:
+            tail.append(p)
+        elif len(words) <= left:
+            head.append(p)
+            left -= len(words)
+        else:
+            cut = words[left - 1].end()
+            head.append(p[:cut].rstrip() + " …")
+            tail.append("… " + p[cut:].lstrip())
+            left = 0
+    return head, tail
+
 
 def plain(value):
     """Web copy as press copy: tags gone, entities resolved, whitespace collapsed.
@@ -102,8 +231,9 @@ def tag_text(tag):
 class Overlay:
     """One studio model over one issue; `apply()` returns the merged issue."""
 
-    def __init__(self, repo, issue, model, stage):
+    def __init__(self, repo, issue, model, stage, mains=None):
         self.repo = Path(repo)
+        self.mains = mains or {}                  # model path -> lines its first page holds
         self.issue = issue
         self.m = model or {}
         self.stage = Path(stage)
@@ -198,7 +328,54 @@ class Overlay:
         self.lab()
         self.listings()
         self.colophon()
+        self.jumps()
         return self.issue
+
+    # ---- continuations ---------------------------------------------------
+    def jumps(self):
+        parts = []
+        for path, pid in JUMPS:
+            page, cap = self.pages.get(pid), self.mains.get(path)
+            body = page and page["content"].get("body")
+            if not cap or not isinstance(body, list):
+                continue
+            budget = cap - JUMP_SPARE - 1 - PARA_GAP   # and a line for "Continued on page …"
+            if body_lines(body) <= cap - JUMP_SPARE:
+                continue
+            head, tail = split_lines(body, budget)
+            if tail and head:
+                parts.append((path, page, head, tail))
+        if not parts:
+            return
+        pages = self.issue["pages"]
+        at = next((i for i, p in enumerate(pages) if p["id"] == "ibc"), len(pages))
+        prev = pages[at - 1].get("chrome", {}).get("folio", "")
+        folio = int(prev) + 1 if str(prev).isdigit() else at + 1
+        n_jump = (len(parts) + 1) // 2
+        n_pad = (4 - (len(pages) + n_jump) % 4) % 4
+        new = []
+        for k in range(n_jump + n_pad):
+            f = folio + k
+            notes = k >= n_jump
+            new.append({"id": f"j{f:02d}", "template": "Jump", "variant": "notes" if notes else "jumps",
+                        "chrome": {"footer": "mono", "accent": "#f0477d",
+                                   "headLeft": f"{f:02d} · {'NOTES' if notes else 'CONTINUED'}",
+                                   "headRight": "YOURS" if notes else "FROM EARLIER PAGES",
+                                   "docNo": f"DB-{f:03d}-J", "folio": f"{f:02d}"},
+                        "content": {"kicker": "Notes" if notes else "Continued"}})
+        for j, (path, page, head, tail) in enumerate(parts):
+            jp = new[j // 2]
+            slot = "A" if j % 2 == 0 else "B"
+            here = page.get("chrome", {}).get("folio", "")
+            title = plain(page["content"].get("title")) or plain(page["content"].get("tag")) or "Continued"
+            page["content"]["body"] = head + [f"Continued on page {jp['chrome']['folio']} →"]
+            jp["content"][f"jump{slot}Title"] = f"{title} · continued from page {here}"
+            jp["content"][f"jump{slot}Body"] = tail
+            self.touched.add(page["id"])
+        pages[at:at] = new
+        for p in new:
+            self.pages[p["id"]] = p
+            self.touched.add(p["id"])
 
     def meta(self):
         meta, m = self.issue["meta"], self.d("meta")
@@ -398,7 +575,19 @@ def apply(repo, issue, model, stage):
     return Overlay(repo, issue, model, stage).apply()
 
 
-def typeset(repo, edition, model, workdir):
+def load_mains(repo, edition):
+    """Each jumping piece's first-page capacity, from the measured limits; {} if
+    there are none (then nothing jumps, as before limits existed)."""
+    f = Path(repo) / "press" / edition / "limits.json"
+    try:
+        import json
+        slots = json.loads(f.read_text()).get("slots", [])
+    except (OSError, ValueError):
+        return {}
+    return {s["path"]: s["mainLines"] for s in slots if s.get("mainLines")}
+
+
+def typeset(repo, edition, model, workdir, mains=None):
     """content/<edition>.tex with the studio model laid over it -> booklet.pdf.
     Returns (booklet_path, info) where info has pages, sides and the touched ids."""
     repo, workdir = Path(repo), Path(workdir)
@@ -416,9 +605,9 @@ def typeset(repo, edition, model, workdir):
             link.symlink_to(target)
 
     issue = read_tex(tex_src.read_text())
-    n = len(issue["pages"])
-    ov = Overlay(repo, issue, model, stage)
+    ov = Overlay(repo, issue, model, stage, load_mains(repo, edition) if mains is None else mains)
     issue = ov.apply()
+    n = len(issue["pages"])                   # continuations may have added pages
     tex = workdir / "issue.tex"
     tex.write_text(write_tex(issue))
 
@@ -429,7 +618,10 @@ def typeset(repo, edition, model, workdir):
         raise RuntimeError(f"overlay typeset to {got[0]} pages, the issue has {n}")
     # A field too long for its box does not add a page; it runs off the trim and
     # TeX says so in the log. Reported, not fatal: the proof shows where.
-    overfull = press.overfull_boxes(workdir / "build" / "print.log")
+    # A continuation cut at the foot of its slot is lost copy, as good as overfull:
+    # the studio's toast tells the editor to check the proof.
+    log = workdir / "build" / "print.log"
+    overfull = press.overfull_boxes(log) + log.read_text(errors="replace").count("continuation was cut")
     return booklet, {"pages": n, "sides": pages, "sheets": pages // 2,
                      "sheetWidthPt": round(w, 2), "sheetHeightPt": round(h, 2),
                      "overfull": overfull, "touched": sorted(ov.touched),

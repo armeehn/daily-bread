@@ -584,6 +584,37 @@
   \db@kindtagbar{tag}{meta}\db@skip{tag}\db@skip{meta}%
   \db@r{head}{title}\db@r{para}{body}\vfill\db@r{quote}{quote}\db@r{note}{promise}\db@r{note}{note}}
 
+% A page of continuations ("jumps"), added by the studio overlay when a piece
+% runs past its own page: two half-page slots, each a piece's title and the
+% rest of its copy. A slot is a fixed height, so one piece can never push into
+% the other. The `notes` variant is ruled lines, for padding a booklet to a
+% multiple of four.
+\newlength{\db@jumph}
+\setlength{\db@jumph}{0.43\textheight}
+\newbox\db@jb
+% The slot is cut at its edge (\vsplit keeps the lines that fit), so a
+% continuation longer than its half page loses its tail instead of printing
+% over the next one; the log says so, and the studio's word limit is what
+% keeps it from happening.
+\newcommand{\db@jumpslot}[1]{%
+  \db@ifvis{jump#1Title}{%
+    \setbox\db@jb=\vbox{\hsize=\linewidth\parindent=0pt\RaggedRight
+      {\db@label\color{DBAccent}\db@caps{\db@val{jump#1Title}}\par}\vspace{0.4\db@gap}%
+      {\db@bodysize\justifying\db@each{jump#1Body}{\db@item\par\vspace{0.5\db@gap}}}}%
+    \ifdim\ht\db@jb>\db@jumph
+      \splittopskip=0pt\vbadness=10000
+      \setbox\db@jb=\vsplit\db@jb to \db@jumph
+      \typeout{Daily Bread: a continuation was cut at the foot of its slot (jump #1, page \db@id)}%
+    \fi
+    \noindent\vbox to \db@jumph{\unvbox\db@jb\vss}\par}{}%
+  \db@skip{jump#1Title}\db@skip{jump#1Body}}
+\csdef{db@t@Jump}{%
+  \db@r{kicker}{kicker}%
+  \ifdefstring{\db@variant}{notes}{%
+    \foreach \n in {1,...,30}{\vspace{4.6mm}\db@dash}%
+  }{%
+    \db@jumpslot{A}\db@jumpslot{B}}}
+
 \csdef{db@t@Comic}{%
   \ifdefstring{\db@variant}{guest}{%
     \db@kindtagbar{guestTag}{}\db@skip{guestTag}\db@slot{150mm}{\db@val{guestText}}\db@skip{guestText}%

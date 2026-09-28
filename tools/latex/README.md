@@ -74,7 +74,17 @@ overfull box. So each slot is grown with words of its own section and a marker
 word, typeset, and read back with `pdftotext -bbox`: it fits while the marker is
 on its page above the foot of the text area and nothing else on the page has
 been pushed below that line. Slots on different pages are probed in the same
-run, so the whole issue takes about a dozen typesettings.
+run, so the whole issue takes about two dozen typesettings (four minutes).
+
+Long pieces continue. When the studio's letter, History, a Young Voices report
+or the Lab runs past its page, the overlay breaks it by line budget (body copy
+is monospaced, so a paragraph's lines are known before TeX sets it: 71
+characters to the line), ends the page "Continued on page N →", and sets the
+rest in half of a **Continued** page (`Jump` template) after p44. Pages are added
+only when a piece continues, padded with a ruled Notes page to a multiple of
+four. A slot is cut at its edge (`\vsplit`) rather than printed over its
+neighbour; the log says so and the press counts it as overfull. The base
+issue has no Continued pages: `check` and the tracked booklet are unchanged.
 
 `check` proves, in order: tex -> issue -> tex loses nothing; the issue equals
 the committed `content/<edition>.js`; rebuilding the site from the .tex

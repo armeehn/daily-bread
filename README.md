@@ -243,7 +243,13 @@ over from Design while it is on.
 
   The printed booklet sets the number. `python3 tools/db-latex.py limits
   --edition issue-01` grows each piece on its A5 page until its copy leaves the
-  page, and writes `press/<edition>/limits.json`. The web page then follows
+  page, and writes `press/<edition>/limits.json`. The long pieces (the letter,
+  History, each Young Voices report, the Lab) may run on: past their page they
+  continue on half of a Continued page near the back ("Continued on page 45 →"),
+  so their limits include that half page, roughly half as much again. Limits
+  are measured with paragraphs of about 45 words; much shorter paragraphs hold
+  somewhat fewer, and a continuation that overruns is cut and flagged in the
+  press proof. The web page then follows
   print: each piece's Web PDF sheet is scaled until it holds the same number of
   words, measured by growing the piece on the sheet, and must agree within 5%
   (for №1 the worst is 2.2%). The Web PDF prints each such sheet at that scale,

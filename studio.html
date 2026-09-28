@@ -1201,10 +1201,13 @@ async function measureWordLimits(){
     });
     const bySheet = {}; sheets.forEach(sh=>{ bySheet[sh.key] = sh; });
     const out = {}, zooms = {};
-    // 1. writers' pieces: the web sheet is calibrated to hold what print holds
-    slots.forEach(sl=>{
+    // 1. writers' pieces: the web sheet is calibrated to hold what print holds.
+    // One piece at a time, giving the page a turn between them: each is a
+    // burst of layouts, and the preview and the keyboard should not wait on all.
+    for(const sl of slots){
+      await new Promise(r=> setTimeout(r, 0));
       const target = targets[sl.path], sh = bySheet[pieceSheet(sl.path)];
-      if(!target || !sh || !sh.fit.contains(target)) return;
+      if(!target || !sh || !sh.fit.contains(target)) continue;
       const now = pieceWords(sl.path);
       const p = sl.capacity;                           // what its printed page holds, however much is written
       const pool = (PLAIN(sh.unit.textContent).match(WORD_RE) || ["word"]);
@@ -1217,7 +1220,7 @@ async function measureWordLimits(){
       // start from the last calibration: between edits it rarely moves, and one
       // measure then confirms it instead of a search
       let z = webZooms[sh.key] || 1, w = cap(z);
-      if(w == null) return;
+      if(w == null) continue;
       let best = { z, w };
       let lo = null, hi = null;                    // lo: holds >= p (small scale); hi: holds < p
       if(w >= p) lo = { z, w }; else hi = { z, w };
@@ -1241,7 +1244,7 @@ async function measureWordLimits(){
       (out[sec] = out[sec] || { pieces: [] }).pieces.push({
         path: sl.path, label: pieceLabel(sl.path), now, web: w, print: p, limit: Math.min(w, p),
         zoom: z, agree: Math.min(w, p) / Math.max(w, p, 1) >= 1 - WL_TOLERANCE, over: now > Math.min(w, p) });
-    });
+    }
     // 2. sections with no printed slot: the old web measure, longest block at full size
     sheets.forEach(sh=>{
       const id = sh.key.split(".")[0];

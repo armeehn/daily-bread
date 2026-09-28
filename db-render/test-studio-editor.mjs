@@ -113,8 +113,13 @@ check("the preview keeps its scroll across a re-render",
 
 /* ---- 3. typing is one undo step; undo and redo put it back ---- */
 const typed = await page.evaluate(async ms => {
-  const d = document.querySelector("#preview").contentDocument;
-  const el = Array.from(d.querySelectorAll("[data-dbp]")).find(n => entryFor(n) && entryFor(n).paths[0] === "letter.signoff");
+  // the preview re-maps after each render; wait for the sign-off to be on the map
+  let el = null;
+  for (let k = 0; k < 60 && !el; k++) {
+    const d = document.querySelector("#preview").contentDocument;
+    el = Array.from(d.querySelectorAll("[data-dbp]")).find(n => entryFor(n) && entryFor(n).paths[0] === "letter.signoff");
+    if (!el) await new Promise(r => setTimeout(r, 100));
+  }
   el.click();
   await new Promise(r => setTimeout(r, 200));
   const inp = document.querySelector('#designPane [data-path="letter.signoff"]');

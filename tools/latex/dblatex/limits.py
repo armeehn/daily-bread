@@ -16,6 +16,16 @@ below that line that was not there already (a sign-off, a caption).
 
 Every slot on a different page is independent, so each typesetting probes all
 of them at once: about a dozen lualatex runs for the issue, not a dozen each.
+
+Two phases. First each piece on its own page, nothing continued: that gives
+`main` (words) and, from the copy that just filled it, `mainLines`, the line
+budget the overlay breaks long pieces by. Then the long pieces (overlay.JUMPS)
+are grown again with continuations on, until their half of a Continued page
+is full; a continuation too long for its slot is cut by the class and so goes
+missing from the page, which is what the search looks for. `capacity` is the
+total, published PUBLISH under what was measured. Grown copy comes in
+paragraphs of PARA_WORDS, since every paragraph break costs space: a writer
+whose paragraphs are much shorter than that gets somewhat fewer words.
 """
 import html
 import json
@@ -25,7 +35,8 @@ import tempfile
 from pathlib import Path
 
 from . import press
-from .overlay import typeset
+from .overlay import JUMPS, Overlay, body_lines, typeset
+from .reader import read_tex
 
 MM_PT = 72 / 25.4
 # the foot of the text area: A5 height less the class's 13 mm bottom margin
@@ -83,15 +94,21 @@ def marker(i):
     return "zqend" + "abcdefghijklmnop"[i] + "q"
 
 
+PARA_WORDS = 45                  # grown copy comes in paragraphs of this size, as writers write
+PUBLISH = 0.97                   # a limit is published this far under what was measured
+
+
 def grow(model, i, path, n, pool):
-    """The slot's copy plus n words of its own vocabulary, then its marker."""
-    add = " ".join(pool[j % len(pool)] for j in range(n))
-    tail = (add + " " if add else "") + marker(i)
+    """The slot's copy plus n words of its own vocabulary, in paragraphs of
+    PARA_WORDS (a paragraph break costs space, so one long block would measure
+    more room than real copy has), then its marker."""
+    words_ = [pool[j % len(pool)] for j in range(n)] + [marker(i)]
+    paras = [" ".join(words_[k:k + PARA_WORDS]) for k in range(0, len(words_), PARA_WORDS)]
     v = get(model, path)
     if isinstance(v, list):
-        put(model, path, v + [tail])
+        put(model, path, v + paras)
     else:
-        put(model, path, (str(v or "") + " " + tail).strip())
+        put(model, path, "\n\n".join([str(v or "")] + paras).strip())
 
 
 def vocabulary(node):
@@ -124,60 +141,39 @@ def below(page):
     return sum(1 for _, y in page if y > FOOT_PT + 0.5)
 
 
-def run(repo, edition, model, probes, work):
-    """Typeset `model` with slot i grown by probes[i] words (None: not grown).
-    Returns the one-up PDF's words per page."""
+def probe_model(model, probes):
     m = json.loads(json.dumps(model))
     for i, (sec, path) in enumerate(SLOTS):
         if probes[i] is not None:
-            pool = vocabulary(model.get(sec, {})) or ["word"]
-            grow(m, i, path, probes[i], pool)
-    typeset(repo, edition, m, work)
+            grow(m, i, path, probes[i], vocabulary(model.get(sec, {})) or ["word"])
+    return m
+
+
+def run(repo, edition, model, probes, work, mains):
+    """Typeset `model` with slot i grown by probes[i] words (None: not grown),
+    continuations per `mains` ({} for none). Returns the words per page."""
+    typeset(repo, edition, probe_model(model, probes), work, mains=mains)
     return page_words(Path(work) / "build" / "print.pdf")
 
 
-def measure(repo, edition, model, log=print):
-    repo = Path(repo)
-    work = Path(tempfile.mkdtemp(prefix="db-limits-"))
-    n = len(SLOTS)
-
-    # 1. where each slot prints, and what already sits below the foot there
-    base = run(repo, edition, model, [0] * n, work)
-    home, floor = {}, {}
-    for i in range(n):
-        home[i] = [p for p, pg in enumerate(base) if any(marker(i) in t.lower() for t, _ in pg)]
-        for p in home[i]:
-            floor[p] = below(base[p]) - sum(1 for t, y in base[p] if marker(i) in t.lower() and y > FOOT_PT + 0.5)
-    lost = [SLOTS[i][1] for i in range(n) if not home[i]]
-    if lost:
-        log("not on any page as typeset (already over?): " + ", ".join(lost))
-
-    def fits(pages, i):
-        for p in home[i]:
-            pg = pages[p]
-            ys = [y for t, y in pg if marker(i) in t.lower()]
-            if not ys or max(ys) > FOOT_PT + 0.5:
-                return False
-            if below(pg) > floor[p]:
-                return False
-        return True
-
-    # 2. double until each slot overflows, then bisect; every run probes all slots
-    lo = {i: 0 for i in range(n) if home[i]}
+def search(start, fits, run_probes, log, label):
+    """Per slot, the most words that still fit: double from `start` until it
+    does not, then bisect. Every typesetting probes every open slot at once."""
+    lo = dict(start)
     hi = {i: None for i in lo}
     step = {i: 32 for i in lo}
     rounds = 0
     while True:
-        probes = [None] * n
+        probes = [None] * len(SLOTS)
         for i in lo:
             if hi[i] is None:
                 probes[i] = lo[i] + step[i]
             elif hi[i] - lo[i] > PRECISION:
                 probes[i] = (lo[i] + hi[i]) // 2
         if all(p is None for p in probes):
-            break
+            return lo, rounds
         rounds += 1
-        pages = run(repo, edition, model, probes, work)
+        pages = run_probes(probes)
         for i, k in enumerate(probes):
             if k is None:
                 continue
@@ -187,12 +183,69 @@ def measure(repo, edition, model, log=print):
                     step[i] *= 2
             else:
                 hi[i] = k
-        log("round %d: %s" % (rounds, " ".join("%s=%s" % (SLOTS[i][1].split(".")[0], p) for i, p in enumerate(probes) if p is not None)))
+        log("%s round %d: %s" % (label, rounds, " ".join("%s=%s" % (SLOTS[i][1].split(".")[0], p) for i, p in enumerate(probes) if p is not None)))
+
+
+def measure(repo, edition, model, log=print):
+    repo = Path(repo)
+    work = Path(tempfile.mkdtemp(prefix="db-limits-"))
+    n = len(SLOTS)
+    jump_paths = {path for path, _ in JUMPS}
+
+    # 1. where each slot prints, and what already sits below the foot there
+    base = run(repo, edition, model, [0] * n, work, {})
+    home, floor = {}, {}
+    for i in range(n):
+        home[i] = [p for p, pg in enumerate(base) if any(marker(i) in t.lower() for t, _ in pg)]
+        for p in home[i]:
+            floor[p] = below(base[p]) - sum(1 for t, y in base[p] if marker(i) in t.lower() and y > FOOT_PT + 0.5)
+    lost = [SLOTS[i][1] for i in range(n) if not home[i]]
+    if lost:
+        log("not on any page as typeset (already over?): " + ", ".join(lost))
+
+    def page_ok(pages, i):
+        return all(below(pages[p]) <= floor[p] for p in home[i])
+
+    # 2. phase A: each piece on its own page, nothing continued
+    def fits_a(pages, i):
+        for p in home[i]:
+            ys = [y for t, y in pages[p] if marker(i) in t.lower()]
+            if not ys or max(ys) > FOOT_PT + 0.5:
+                return False
+        return page_ok(pages, i)
+    main, rounds_a = search({i: 0 for i in range(n) if home[i]}, fits_a,
+                            lambda pr: run(repo, edition, model, pr, work, {}), log, "page")
+
+    # the first page's line budget, from the copy that just filled it
+    lines = {}
+    for i, (sec, path) in enumerate(SLOTS):
+        if path in jump_paths and i in main:
+            pid = dict(JUMPS)[path]
+            issue = Overlay(repo, read_tex((repo / "content" / f"{edition}.tex").read_text()),
+                            probe_model(model, [main[i] if k == i else None for k in range(n)]), work / "stage").apply()
+            body = next(p for p in issue["pages"] if p["id"] == pid)["content"].get("body") or []
+            lines[path] = round(body_lines(body), 2)
+
+    # 3. phase B: long pieces continue on a Continued page; grow until the half-page slot is full
+    home_pages = {p for i in home for p in home[i]}
+    def fits_b(pages, i):
+        if not page_ok(pages, i):
+            return False                          # the first page must still close above its foot
+        return any(marker(i) in t.lower() for p, pg in enumerate(pages) if p not in home_pages for t, _ in pg)
+    jumpers = {i: main[i] for i, (_, path) in enumerate(SLOTS) if path in lines}
+    total, rounds_b = search(jumpers, fits_b,
+                             lambda pr: run(repo, edition, model, pr, work, lines), log, "continued")
 
     slots = []
     for i, (sec, path) in enumerate(SLOTS):
         now = words(get(model, path))
-        slots.append({"section": sec, "path": path, "words": now,
-                      "capacity": (now + lo[i]) if i in lo else None,
-                      "pages": [p + 1 for p in home[i]]})
-    return {"slots": slots, "rounds": rounds + 1, "footPt": round(FOOT_PT, 2)}
+        measured = (now + (total[i] if i in total else main[i])) if i in main else None
+        slot = {"section": sec, "path": path, "words": now,
+                "main": (now + main[i]) if i in main else None,
+                "measured": measured,
+                "capacity": int(measured * PUBLISH) if measured else None,
+                "pages": [p + 1 for p in home[i]]}
+        if path in lines:
+            slot["mainLines"] = lines[path]
+        slots.append(slot)
+    return {"slots": slots, "rounds": rounds_a + rounds_b + 1, "footPt": round(FOOT_PT, 2)}

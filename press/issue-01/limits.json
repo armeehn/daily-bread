@@ -10,16 +10,21 @@
       "section": "letter",
       "path": "letter.paragraphs",
       "words": 104,
-      "capacity": 444,
+      "main": 384,
+      "measured": 552,
+      "capacity": 535,
       "pages": [
         3
-      ]
+      ],
+      "mainLines": 37.47
     },
     {
       "section": "contents",
       "path": "contents.dek",
       "words": 28,
-      "capacity": 328,
+      "main": 328,
+      "measured": 328,
+      "capacity": 318,
       "pages": [
         5
       ]
@@ -28,43 +33,57 @@
       "section": "history",
       "path": "history.paragraphs",
       "words": 97,
-      "capacity": 205,
+      "main": 185,
+      "measured": 321,
+      "capacity": 311,
       "pages": [
         6
-      ]
+      ],
+      "mainLines": 18.82
     },
     {
       "section": "voices",
       "path": "voices.reports.0.body",
       "words": 30,
-      "capacity": 478,
+      "main": 386,
+      "measured": 550,
+      "capacity": 533,
       "pages": [
         13
-      ]
+      ],
+      "mainLines": 37.2
     },
     {
       "section": "voices",
       "path": "voices.reports.1.body",
       "words": 44,
-      "capacity": 536,
+      "main": 428,
+      "measured": 596,
+      "capacity": 578,
       "pages": [
         14
-      ]
+      ],
+      "mainLines": 40.47
     },
     {
       "section": "voices",
       "path": "voices.reports.2.body",
       "words": 32,
-      "capacity": 496,
+      "main": 388,
+      "measured": 552,
+      "capacity": 535,
       "pages": [
         15
-      ]
+      ],
+      "mainLines": 37.2
     },
     {
       "section": "waitlist",
       "path": "waitlist.dek",
       "words": 40,
-      "capacity": 224,
+      "main": 224,
+      "measured": 224,
+      "capacity": 217,
       "pages": [
         27
       ]
@@ -73,7 +92,9 @@
       "section": "interview",
       "path": "interview.quote",
       "words": 13,
-      "capacity": 229,
+      "main": 229,
+      "measured": 229,
+      "capacity": 222,
       "pages": [
         18
       ]
@@ -82,7 +103,9 @@
       "section": "calendar",
       "path": "calendar.dek",
       "words": 12,
-      "capacity": 348,
+      "main": 348,
+      "measured": 348,
+      "capacity": 337,
       "pages": [
         40
       ]
@@ -91,7 +114,9 @@
       "section": "directory",
       "path": "directory.note",
       "words": 13,
-      "capacity": 453,
+      "main": 453,
+      "measured": 453,
+      "capacity": 439,
       "pages": [
         41
       ]
@@ -100,12 +125,15 @@
       "section": "lab",
       "path": "lab.paragraphs",
       "words": 74,
-      "capacity": 386,
+      "main": 342,
+      "measured": 486,
+      "capacity": 471,
       "pages": [
         32
-      ]
+      ],
+      "mainLines": 36.92
     }
   ],
-  "rounds": 13,
+  "rounds": 19,
   "footPt": 558.11
 }
