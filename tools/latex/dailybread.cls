@@ -585,35 +585,47 @@
   \db@r{head}{title}\db@r{para}{body}\vfill\db@r{quote}{quote}\db@r{note}{promise}\db@r{note}{note}}
 
 % A page of continuations ("jumps"), added by the studio overlay when a piece
-% runs past its own page: two half-page slots, each a piece's title and the
-% rest of its copy. A slot is a fixed height, so one piece can never push into
-% the other. The `notes` variant is ruled lines, for padding a booklet to a
-% multiple of four.
+% runs past its own page. The `full` variant gives one piece the whole page;
+% `jumps` shares it between two, half each. A slot is a fixed height, so a
+% piece never pushes into what follows. `notes` is ruled lines, for padding a
+% booklet to a multiple of four.
 \newlength{\db@jumph}
 \setlength{\db@jumph}{0.43\textheight}
+\newlength{\db@jumpfull}
+\setlength{\db@jumpfull}{0.9\textheight}
 \newbox\db@jb
+\newbox\db@js
 % The slot is cut at its edge (\vsplit keeps the lines that fit), so a
-% continuation longer than its half page loses its tail instead of printing
-% over the next one; the log says so, and the studio's word limit is what
-% keeps it from happening.
-\newcommand{\db@jumpslot}[1]{%
+% continuation longer than its slot (half a page, or a whole one) loses its
+% tail instead of printing over what follows; the log says so, and the
+% studio's word limit is what keeps it from happening.
+\newcommand{\db@jumpslot}[2][\db@jumph]{% [slot height]{A|B}
+  \def\db@slot@h{#1}\db@jumpslot@{#2}}
+\newcommand{\db@jumpslot@}[1]{%
   \db@ifvis{jump#1Title}{%
     \setbox\db@jb=\vbox{\hsize=\linewidth\parindent=0pt\RaggedRight
       {\db@label\color{DBAccent}\db@caps{\db@val{jump#1Title}}\par}\vspace{0.4\db@gap}%
-      {\db@bodysize\justifying\db@each{jump#1Body}{\db@item\par\vspace{0.5\db@gap}}}}%
-    \ifdim\ht\db@jb>\db@jumph
+      {\db@bodysize\justifying\db@each{jump#1Body}{\db@item\par\vspace{0.5\db@gap}}}\unskip}% the last gap is not copy
+    \ifdim\ht\db@jb>\db@slot@h
       \splittopskip=0pt\vbadness=10000
-      \setbox\db@jb=\vsplit\db@jb to \db@jumph
-      \typeout{Daily Bread: a continuation was cut at the foot of its slot (jump #1, page \db@id)}%
+      \setbox\db@js=\vsplit\db@jb to \db@slot@h
+      % taller than the slot may still fit, by shrinking its glue: only what
+      % \vsplit leaves behind is lost
+      \ifvoid\db@jb\else
+        \typeout{Daily Bread: a continuation was cut at the foot of its slot (jump #1, page \db@id)}%
+      \fi
+      \setbox\db@jb=\box\db@js
     \fi
-    \noindent\vbox to \db@jumph{\unvbox\db@jb\vss}\par}{}%
+    \noindent\vbox to \db@slot@h{\unvbox\db@jb\vss}\par}{}%
   \db@skip{jump#1Title}\db@skip{jump#1Body}}
 \csdef{db@t@Jump}{%
   \db@r{kicker}{kicker}%
   \ifdefstring{\db@variant}{notes}{%
     \foreach \n in {1,...,30}{\vspace{4.6mm}\db@dash}%
+  }{\ifdefstring{\db@variant}{full}{%
+    \db@jumpslot[\db@jumpfull]{A}%
   }{%
-    \db@jumpslot{A}\db@jumpslot{B}}}
+    \db@jumpslot{A}\db@jumpslot{B}}}}
 
 \csdef{db@t@Comic}{%
   \ifdefstring{\db@variant}{guest}{%

@@ -20,10 +20,12 @@ of them at once: about a dozen lualatex runs for the issue, not a dozen each.
 Two phases. First each piece on its own page, nothing continued: that gives
 `main` (words) and, from the copy that just filled it, `mainLines`, the line
 budget the overlay breaks long pieces by. Then the long pieces (overlay.JUMPS)
-are grown again with continuations on, until their half of a Continued page
-is full; a continuation too long for its slot is cut by the class and so goes
+are grown again with continuations on, until their Continued page (a whole
+page each) is full; a continuation too long for its slot is cut by the class and so goes
 missing from the page, which is what the search looks for. `capacity` is the
-total, published PUBLISH under what was measured. Grown copy comes in
+total, published PUBLISH under what was measured; `first` and `continued`
+split it between the two pages, for the Web PDF, which gives a long piece a
+Continued sheet of its own and calibrates each sheet to its page. Grown copy comes in
 paragraphs of PARA_WORDS, since every paragraph break costs space: a writer
 whose paragraphs are much shorter than that gets somewhat fewer words.
 """
@@ -226,7 +228,7 @@ def measure(repo, edition, model, log=print):
             body = next(p for p in issue["pages"] if p["id"] == pid)["content"].get("body") or []
             lines[path] = round(body_lines(body), 2)
 
-    # 3. phase B: long pieces continue on a Continued page; grow until the half-page slot is full
+    # 3. phase B: long pieces continue on a Continued page; grow until that page is full
     home_pages = {p for i in home for p in home[i]}
     def fits_b(pages, i):
         if not page_ok(pages, i):
@@ -235,6 +237,19 @@ def measure(repo, edition, model, log=print):
     jumpers = {i: main[i] for i, (_, path) in enumerate(SLOTS) if path in lines}
     total, rounds_b = search(jumpers, fits_b,
                              lambda pr: run(repo, edition, model, pr, work, lines), log, "continued")
+
+    # how the total divides between the first page and the Continued page
+    split = {}
+    if total:
+        full = probe_model(model, [total.get(i) for i in range(n)])
+        issue = Overlay(repo, read_tex((repo / "content" / f"{edition}.tex").read_text()), full,
+                        work / "stage", lines).apply()
+        by_id = {p["id"]: p for p in issue["pages"]}
+        for i in total:
+            path = SLOTS[i][1]
+            head = by_id[dict(JUMPS)[path]]["content"].get("body") or []
+            first = sum(len(WORD.findall(p)) for p in head[:-1] if not p.startswith("Continued on page"))
+            split[i] = first
 
     slots = []
     for i, (sec, path) in enumerate(SLOTS):
@@ -247,5 +262,8 @@ def measure(repo, edition, model, log=print):
                 "pages": [p + 1 for p in home[i]]}
         if path in lines:
             slot["mainLines"] = lines[path]
+        if i in split and measured:
+            slot["first"] = int(split[i] * PUBLISH)
+            slot["continued"] = slot["capacity"] - slot["first"]
         slots.append(slot)
     return {"slots": slots, "rounds": rounds_a + rounds_b + 1, "footPt": round(FOOT_PT, 2)}

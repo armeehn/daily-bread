@@ -80,10 +80,13 @@ Long pieces continue. When the studio's letter, History, a Young Voices report
 or the Lab runs past its page, the overlay breaks it by line budget (body copy
 is monospaced, so a paragraph's lines are known before TeX sets it: 71
 characters to the line), ends the page "Continued on page N →", and sets the
-rest in half of a **Continued** page (`Jump` template) after p44. Pages are added
-only when a piece continues, padded with a ruled Notes page to a multiple of
-four. A slot is cut at its edge (`\vsplit`) rather than printed over its
-neighbour; the log says so and the press counts it as overfull. The base
+rest on a whole **Continued** page of its own (`Jump` template, `full`
+variant) after p44. Pages are added only when a piece continues, padded with a
+ruled Notes page to a multiple of four. A continuation longer than its page is
+cut at the foot (`\vsplit`) rather than run off it; the log says so and the
+press counts it as overfull. `limits.json` records how each long piece's limit
+divides between its first page and its Continued page (`first`,
+`continued`), which the studio's Web PDF uses. The base
 issue has no Continued pages: `check` and the tracked booklet are unchanged.
 
 `check` proves, in order: tex -> issue -> tex loses nothing; the issue equals

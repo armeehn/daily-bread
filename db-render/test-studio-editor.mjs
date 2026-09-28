@@ -104,8 +104,13 @@ const kept = await page.evaluate(async ms => {
   const w = document.querySelector("#preview").contentWindow;
   w.document.querySelector("#calendar").scrollIntoView({ behavior: "instant" });
   const before = w.scrollY;
-  model.calendar.title = model.calendar.title + " x"; schedule("f:calendar.title");
+  const title = model.calendar.title = model.calendar.title + " x"; schedule("f:calendar.title");
   await new Promise(r => setTimeout(r, ms));
+  // the re-render is a new document: wait for it (a busy page may take longer), then read
+  const fresh = () => { const d = document.querySelector("#preview").contentDocument;
+    return d && d.readyState === "complete" && d.body && d.body.textContent.indexOf(title) >= 0; };
+  for (let k = 0; k < 100 && !fresh(); k++) await new Promise(r => setTimeout(r, 100));
+  await new Promise(r => setTimeout(r, 100));
   return { before, after: document.querySelector("#preview").contentWindow.scrollY };
 }, SETTLE);
 check("the preview keeps its scroll across a re-render",
@@ -499,12 +504,22 @@ const wl = await page.evaluate(async () => {
   // fill the letter to its limit: its sheet must print at its calibrated scale, not smaller
   const words = (PLAIN(model.letter.paragraphs.join(" ")).match(WORD_RE) || []);
   model.letter.paragraphs.push(Array.from({ length: letter.limit - letter.now }, (_, j) => words[j % words.length]).join(" "));
-  const { frame, sheets } = await buildPrintFrame(); frame.remove();
+  const { frame, sheets } = await buildPrintFrame();
   const atLimit = sheets.find(s => s.key === "letter").scale;
+  // a long piece carries on onto a Continued sheet: nothing lost, nothing twice
+  const ci = sheets.findIndex(s => s.key === "letter.cont"), cs = sheets[ci];
+  const count = el => (PLAIN(el.textContent).match(WORD_RE) || []).length;
+  const main = sheets.find(s => s.key === "letter");
+  const jump = main.unit.querySelector(".pp-jump");
+  const cont = cs && { scale: cs.scale, zoom: webZooms["letter.cont"], sheet: ci + 1, of: sheets.length,
+    split: count(main.unit.querySelector(".prose")) - count(jump) - 1 + count(cs.unit.querySelector(".pp-cont-body")),  // less the drop cap
+    jump: jump.textContent, head: cs.unit.querySelector(".pp-cont-k").textContent,
+    beforeBack: sheets[ci + 1] && sheets[ci + 1].key === "footer" || sheets.slice(ci + 1).every(s => /\.cont$|^footer$/.test(s.key)) };
+  frame.remove();
   model.letter.paragraphs[model.letter.paragraphs.length - 1] += " " + Array(400).fill("word").join(" ");
   const b = await measureWordLimits();
   model.letter.paragraphs.pop();
-  return { n: printed.length, worst, letter, zoom: webZooms.letter, atLimit, after: b.letter.pieces[0],
+  return { n: printed.length, worst, letter, zoom: webZooms.letter, atLimit, after: b.letter.pieces[0], cont, target: letter.limit,
            voices: a.voices.pieces.length, voiceSheets: sheets.filter(s => /^voices\./.test(s.key)).length,
            comics: a.comics, submit: a.submit };
 });
@@ -514,6 +529,12 @@ check("the limit is the smaller of the two", wl.letter.limit === Math.min(wl.let
 check("each young-voices report is its own piece and its own sheet", wl.voices === 3 && wl.voiceSheets === 3, wl.voices + " pieces, " + wl.voiceSheets + " sheets");
 check("a piece at its limit prints at its calibrated scale, not shrunk further",
   Math.abs(wl.atLimit - wl.zoom) < 0.02, wl.atLimit + " vs " + wl.zoom);
+check("a long piece at its limit carries on onto a Continued sheet before the back cover",
+  wl.cont && wl.cont.beforeBack, JSON.stringify(wl.cont));
+check("…which prints at its own calibrated scale", wl.cont && Math.abs(wl.cont.scale - wl.cont.zoom) < 0.02, wl.cont && wl.cont.scale + " vs " + wl.cont.zoom);
+check("…and between the two sheets no word is lost or doubled", wl.cont && wl.cont.split === wl.target, wl.cont && wl.cont.split + " of " + wl.target);
+check("…and each sheet points to the other", wl.cont && wl.cont.jump === "Continued on sheet " + wl.cont.sheet + " →" && /^Continued from sheet \d+$/.test(wl.cont.head),
+  wl.cont && wl.cont.jump + " / " + wl.cont.head);
 check("400 more words puts it over, by about that much",
   wl.after.over && Math.abs((wl.after.now - wl.after.limit) - (wl.after.now - wl.letter.limit)) < 30, JSON.stringify(wl.after));
 check("a page its pictures fill says so instead of a number", wl.comics && wl.comics.pictures === true, JSON.stringify(wl.comics));

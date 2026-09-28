@@ -45,8 +45,8 @@ _EXT = {"image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp", "image
 # Long pieces that may run on to a Continued page ("jump"), with the page they
 # start on. When the studio's copy is longer than its page holds, it breaks
 # where the page's measured line budget runs out (press/<edition>/limits.json,
-# "mainLines"), says where it continues, and the rest takes half of a Continued
-# page near the back. Pages are added only when a piece jumps, and padded with
+# "mainLines"), says where it continues, and the rest takes a whole Continued
+# page of its own near the back. Pages are added only when a piece jumps, and padded with
 # a Notes page to the multiple of four a saddle-stitched booklet needs.
 #
 # Lines, not words: body copy is IBM Plex Mono, every character the same width,
@@ -351,21 +351,20 @@ class Overlay:
         at = next((i for i, p in enumerate(pages) if p["id"] == "ibc"), len(pages))
         prev = pages[at - 1].get("chrome", {}).get("folio", "")
         folio = int(prev) + 1 if str(prev).isdigit() else at + 1
-        n_jump = (len(parts) + 1) // 2
+        n_jump = len(parts)                         # a whole Continued page each
         n_pad = (4 - (len(pages) + n_jump) % 4) % 4
         new = []
         for k in range(n_jump + n_pad):
             f = folio + k
             notes = k >= n_jump
-            new.append({"id": f"j{f:02d}", "template": "Jump", "variant": "notes" if notes else "jumps",
+            new.append({"id": f"j{f:02d}", "template": "Jump", "variant": "notes" if notes else "full",
                         "chrome": {"footer": "mono", "accent": "#f0477d",
                                    "headLeft": f"{f:02d} · {'NOTES' if notes else 'CONTINUED'}",
                                    "headRight": "YOURS" if notes else "FROM EARLIER PAGES",
                                    "docNo": f"DB-{f:03d}-J", "folio": f"{f:02d}"},
                         "content": {"kicker": "Notes" if notes else "Continued"}})
         for j, (path, page, head, tail) in enumerate(parts):
-            jp = new[j // 2]
-            slot = "A" if j % 2 == 0 else "B"
+            jp, slot = new[j], "A"
             here = page.get("chrome", {}).get("folio", "")
             title = plain(page["content"].get("title")) or plain(page["content"].get("tag")) or "Continued"
             page["content"]["body"] = head + [f"Continued on page {jp['chrome']['folio']} →"]

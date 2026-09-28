@@ -11,12 +11,14 @@
       "path": "letter.paragraphs",
       "words": 104,
       "main": 384,
-      "measured": 552,
-      "capacity": 535,
+      "measured": 792,
+      "capacity": 768,
       "pages": [
         3
       ],
-      "mainLines": 37.47
+      "mainLines": 37.47,
+      "first": 342,
+      "continued": 426
     },
     {
       "section": "contents",
@@ -34,48 +36,56 @@
       "path": "history.paragraphs",
       "words": 97,
       "main": 185,
-      "measured": 321,
-      "capacity": 311,
+      "measured": 545,
+      "capacity": 528,
       "pages": [
         6
       ],
-      "mainLines": 18.82
+      "mainLines": 18.82,
+      "first": 137,
+      "continued": 391
     },
     {
       "section": "voices",
       "path": "voices.reports.0.body",
       "words": 30,
       "main": 386,
-      "measured": 550,
-      "capacity": 533,
+      "measured": 790,
+      "capacity": 766,
       "pages": [
         13
       ],
-      "mainLines": 37.2
+      "mainLines": 37.2,
+      "first": 334,
+      "continued": 432
     },
     {
       "section": "voices",
       "path": "voices.reports.1.body",
       "words": 44,
       "main": 428,
-      "measured": 596,
-      "capacity": 578,
+      "measured": 832,
+      "capacity": 807,
       "pages": [
         14
       ],
-      "mainLines": 40.47
+      "mainLines": 40.47,
+      "first": 386,
+      "continued": 421
     },
     {
       "section": "voices",
       "path": "voices.reports.2.body",
       "words": 32,
       "main": 388,
-      "measured": 552,
-      "capacity": 535,
+      "measured": 792,
+      "capacity": 768,
       "pages": [
         15
       ],
-      "mainLines": 37.2
+      "mainLines": 37.2,
+      "first": 336,
+      "continued": 432
     },
     {
       "section": "waitlist",
@@ -126,14 +136,16 @@
       "path": "lab.paragraphs",
       "words": 74,
       "main": 342,
-      "measured": 486,
-      "capacity": 471,
+      "measured": 722,
+      "capacity": 700,
       "pages": [
         32
       ],
-      "mainLines": 36.92
+      "mainLines": 36.92,
+      "first": 290,
+      "continued": 410
     }
   ],
-  "rounds": 19,
+  "rounds": 21,
   "footPt": 558.11
 }

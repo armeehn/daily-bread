@@ -245,15 +245,21 @@ over from Design while it is on.
   --edition issue-01` grows each piece on its A5 page until its copy leaves the
   page, and writes `press/<edition>/limits.json`. The long pieces (the letter,
   History, each Young Voices report, the Lab) may run on: past their page they
-  continue on half of a Continued page near the back ("Continued on page 45 →"),
-  so their limits include that half page, roughly half as much again. Limits
+  continue on a whole Continued page of their own near the back ("Continued on
+  page 45 →"), so their limits are about twice a page: the letter 768 words,
+  History 528, the reports 766–807, the Lab 700 for №1. Limits
   are measured with paragraphs of about 45 words; much shorter paragraphs hold
   somewhat fewer, and a continuation that overruns is cut and flagged in the
   press proof. The web page then follows
   print: each piece's Web PDF sheet is scaled until it holds the same number of
   words, measured by growing the piece on the sheet, and must agree within 5%
-  (for №1 the worst is 2.2%). The Web PDF prints each such sheet at that scale,
-  and gives Young Voices a sheet per report, as print gives each a page. The
+  (for №1 the worst is 2.3%). The Web PDF prints each such sheet at that scale,
+  and gives Young Voices a sheet per report, as print gives each a page. A long
+  piece gets a Continued sheet of its own there too, before the back cover:
+  its first sheet is calibrated to print's first page and its Continued sheet
+  (a running head, the rest in two columns) to print's Continued page; the
+  piece is split at a word, keeping its links and emphasis, and each sheet
+  names the other's number. A piece that fits its first sheet has none. The
   interview's quote takes its sheet's full width there, as it takes its page in
   print. Submit has no printed slot and keeps its web measure; Comics, Art and
   Stickers are filled by their pictures, so they say that instead of a number.
@@ -291,7 +297,8 @@ shows exactly what will publish, at full / tablet / phone widths.
     every section goes on exactly one sheet of the trim size set under Print,
     and a section taller than its sheet (the comic strip, the centrefold, the
     sticker sheet) is scaled down to fit it instead of running onto another.
-    There are no crop marks; this is the copy you print yourself.
+    A long piece that outgrows its sheet carries on onto a Continued sheet
+    before the back cover, as it does in print. There are no crop marks; this is the copy you print yourself.
   - **Magazine PDF**: the press booklet, described below.
   - **Stickers for a cutter**: a transparent PNG of the sticker sheet at
     300 dpi, sized for Cricut Print Then Cut (6.75 × 9.25 in, twelve 2 in
