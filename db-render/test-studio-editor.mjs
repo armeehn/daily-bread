@@ -384,7 +384,117 @@ check("the PDF menu opens", menus.pdf && !menus.ed);
 check("one menu at a time", swapped.ed && !swapped.pdf);
 check("a click elsewhere closes it", shut === 0);
 
-/* ---- 14. none of this leaks into what publishes ---- */
+/* ---- 14. every upload goes through the image editor ---- */
+await page.evaluate(() => { showMode("fields"); document.querySelector('.sec[data-sec="hero"]').classList.add("open"); });
+const cover0 = await page.evaluate(() => model.hero.coverSrc);
+await page.evaluate(() => document.querySelector('.sec[data-sec="hero"] .imgrow .btn2').click());
+await page.locator("#fileImage").setInputFiles(path.join(ROOT, "assets/cover.jpg"));
+await page.waitForSelector("#ieBack");
+check("an upload opens the image editor, not the page", await page.evaluate(c => model.hero.coverSrc === c, cover0));
+await page.click('#ieBack [data-a="cancel"]');
+await page.waitForTimeout(200);
+check("Cancel leaves the picture as it was", await page.evaluate(c => !document.querySelector("#ieBack") && model.hero.coverSrc === c, cover0));
+await page.evaluate(() => document.querySelector('.sec[data-sec="hero"] .imgrow .btn2').click());
+await page.locator("#fileImage").setInputFiles(path.join(ROOT, "assets/cover.jpg"));
+await page.waitForSelector("#ieBack");
+await page.click('.ie-ratios button[data-r="1"]');
+await page.click('#ieBack [data-a="rr"]');
+await page.click('#ieBack [data-a="ok"]');
+await settle();
+const edited = await page.evaluate(async () => {
+  const im = new Image(); im.src = model.hero.coverSrc; await im.decode();
+  return { w: im.width, h: im.height, data: /^data:image\/jpeg/.test(model.hero.coverSrc),
+           edit: !document.querySelector('.sec[data-sec="hero"] .imgrow .btn2.edit').disabled };
+});
+check("a square crop comes out square", edited.data && edited.w === edited.h && edited.w > 100, JSON.stringify(edited));
+check("a placed picture can be edited again", edited.edit);
+await page.click("#undoBtn");
+await settle();
+check("an edited upload is one undo step", await page.evaluate(c => model.hero.coverSrc === c, cover0));
+
+/* ---- 15. sticker artwork from local artists ---- */
+const stick = await page.evaluate(async ms => {
+  showMode("fields");
+  const box = document.querySelector('.sec[data-sec="stickers"]'); box.classList.add("open");
+  const field = box.querySelector('[data-path="stickers.items.0.img"]');
+  model.stickers.items[0].img = "assets/cover.jpg"; model.stickers.items[0].by = "Jo Rivera";
+  schedule();
+  await new Promise(r => setTimeout(r, ms));
+  const d = document.querySelector("#preview").contentDocument, s0 = d.querySelector(".sticker-grid .sticker");
+  return { field: !!field && !!field.closest(".field").querySelector(".imgrow"),
+           img: !!s0.querySelector("img.art"), by: (s0.querySelector(".by") || {}).textContent,
+           dropTarget: s0.querySelector("img.art") && s0.querySelector("img.art").getAttribute("data-dbimg") };
+}, SETTLE);
+check("each sticker has an artwork upload in All fields", stick.field);
+check("uploaded artwork replaces the drawn sticker", stick.img);
+check("…with the artist's credit under it", stick.by === "Jo Rivera", stick.by);
+check("a file can be dropped straight onto a sticker on the page", stick.dropTarget === "stickers.items.0.img", stick.dropTarget);
+
+/* ---- 16. Web PDF: one section, one sheet, no crop marks ---- */
+const pp = await page.evaluate(async () => {
+  const { frame, sheets } = await buildPrintFrame();
+  const d = frame.contentDocument, W = parseFloat(frame.style.width), H = parseFloat(frame.style.height);
+  const units = d.querySelectorAll(".pp-sheet").length;
+  const sizes = Array.from(d.querySelectorAll(".pp-sheet")).every(s => {
+    const r = s.getBoundingClientRect(); return Math.abs(r.width - W) < 1 && Math.abs(r.height - H) < 1; });
+  const inside = Array.from(d.querySelectorAll(".pp-fit")).every(f => {
+    const r = f.getBoundingClientRect(), s = f.parentElement.getBoundingClientRect();
+    return r.bottom <= s.bottom + 1 && r.right <= s.right + 1 && r.left >= s.left - 1; });
+  const marks = d.querySelector(".cropmarks"), shown = marks && getComputedStyle(marks).display !== "none";
+  const html = "<!doctype html>" + d.documentElement.outerHTML;
+  frame.remove();
+  const want = DB.SCHEMA.filter(s => /^Sec\./.test(s.tag || "")).length;
+  return { n: sheets.length, units, sizes, inside, shown, W, H, html, labels: sheets.map(s => s.label) };
+});
+check("one sheet per section, plus the covers", pp.n === pp.units && pp.n >= 14, pp.n + " sheets: " + pp.labels.join(", "));
+check("every sheet is exactly the trim size", pp.sizes);
+check("nothing on a sheet runs past it", pp.inside);
+check("the Web PDF carries no crop marks", !pp.shown);
+{
+  const q = await browser.newPage({ viewport: { width: Math.round(pp.W), height: Math.round(pp.H) } });
+  await q.goto(URL_);
+  await q.setContent(pp.html, { waitUntil: "load" });
+  const pdf = (await q.pdf({ preferCSSPageSize: true, printBackground: true })).toString("latin1");
+  const pages = (pdf.match(/\/Type\s*\/Page[^s]/g) || []).length;
+  await q.close();
+  check("printed, it is exactly that many pages", pages === pp.n, pages + " pages for " + pp.n + " sheets");
+}
+
+/* ---- 17. the sticker sheet for a cutting machine ---- */
+const cut = await page.evaluate(async () => {
+  const s = await stickerCutSheets();
+  const im = new Image(); im.src = s[0]; await im.decode();
+  const c = document.createElement("canvas"); c.width = im.width; c.height = im.height;
+  const x = c.getContext("2d"); x.drawImage(im, 0, 0);
+  const a = (px, py) => x.getImageData(px, py, 1, 1).data[3];
+  const L = s.layout, side = L.side * 300, gap = 75;
+  const ox = (im.width - (L.cols * side + (L.cols - 1) * gap)) / 2, oy = (im.height - (L.rows * side + (L.rows - 1) * gap)) / 2;
+  return { n: s.length, w: im.width, h: im.height, layout: L,
+           corner: a(2, 2), gap: a(Math.round(ox + side + gap / 2), Math.round(oy + side / 2)),
+           island: a(Math.round(ox + side / 2), Math.round(oy + side * 0.9)) };
+});
+check("the cutter sheet is Print Then Cut's 6.75 × 9.25 in at 300 dpi", cut.w === 2025 && cut.h === 2775, cut.w + "×" + cut.h);
+check("twelve stickers fit one sheet at 2 in", cut.n === 1 && cut.layout.perSheet >= 12 && cut.layout.side === 2, JSON.stringify(cut.layout));
+check("between stickers is transparent, so the blade goes round each", cut.corner === 0 && cut.gap === 0, JSON.stringify(cut));
+check("each sticker is solid", cut.island === 255, cut.island);
+
+/* ---- 18. word limits, measured on the page ---- */
+const wl = await page.evaluate(async () => {
+  const a = await measureWordLimits();
+  const letter = a.letter;
+  model.letter.paragraphs.push(Array(400).fill("word").join(" "));
+  const b = await measureWordLimits();
+  model.letter.paragraphs.pop();
+  return { letter, after: b.letter, comics: a.comics, n: Object.keys(a).length };
+});
+check("every text section gets a word limit", wl.n >= 11, wl.n + " sections");
+check("a section with room says how much", wl.letter && wl.letter.limit > wl.letter.now && !wl.letter.over, JSON.stringify(wl.letter));
+check("400 more words puts it over, by about that much",
+  wl.after.over && Math.abs((wl.after.now - wl.after.limit) - (400 - (wl.letter.limit - wl.letter.now))) < 30, JSON.stringify(wl.after));
+check("the limit does not move when the copy does", Math.abs(wl.after.limit - wl.letter.limit) < 25, wl.letter.limit + " vs " + wl.after.limit);
+check("a page its pictures fill says so instead of a number", wl.comics && wl.comics.pictures === true, JSON.stringify(wl.comics));
+
+/* ---- 19. none of this leaks into what publishes ---- */
 const clean = await page.evaluate(() => !/data-dbp|data-dbi|dz-flash|dz-locate|⁣/.test(DB.render(model)));
 check("published HTML carries no editor hooks", clean);
 

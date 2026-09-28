@@ -228,6 +228,20 @@ over from Design while it is on.
   duplicates it and `Delete` removes it. `Ctrl+S` confirms the autosave instead
   of opening the browser's save dialog. `?` lists all of it.
 
+- **Pictures are looked at before they go in.** Every image you upload or drop
+  opens in the studio's image editor first: crop (free, or 1:1, 4:5, 3:2,
+  16:9), turn, flip, brightness, contrast, saturation, black and white. Nothing
+  reaches the page until *Use this image*; an image left untouched is embedded
+  exactly as before. *Edit…* beside a placed picture opens it again, and Undo
+  brings the previous one back.
+- **Word limits.** Each section in All fields shows how many words its page
+  holds (`≤ 197 w`), and a line under its heading says how many are used and
+  how many are to spare, or how far over it is. The number is measured: the
+  section's longest block of copy is grown on its Web PDF sheet until the page
+  is full. Comics, Art and Stickers are filled by their pictures, so they say
+  that instead of giving a number. It is the web sheet's limit only; the press
+  booklet is typeset by lualatex on press.hq and is not measured yet.
+
 `node db-render/test-studio-editor.mjs` drives all of the above in a real
 browser, under the same conditions as the design test.
 
@@ -252,8 +266,28 @@ shows exactly what will publish, at full / tablet / phone widths.
   with New, Duplicate, Rename, Reset and Delete) — download the whole issue as
   a portable `daily-bread-№1.json` you can commit, back up, or move between
   machines; import it to pick up where you left off.
-- **PDF ▾** holds the two print outputs, Web PDF and Magazine PDF, described
-  below.
+- **Print ▾** holds the print outputs:
+  - **Web PDF**: one sheet per section, cover to back cover, through the
+    browser's print dialog (Save as PDF, Margins None, Background graphics on).
+    The studio builds its own document for it rather than printing the preview:
+    every section goes on exactly one sheet of the trim size set under Print,
+    and a section taller than its sheet (the comic strip, the centrefold, the
+    sticker sheet) is scaled down to fit it instead of running onto another.
+    There are no crop marks; this is the copy you print yourself.
+  - **Magazine PDF**: the press booklet, described below.
+  - **Stickers for a cutter**: a transparent PNG of the sticker sheet at
+    300 dpi, sized for Cricut Print Then Cut (6.75 × 9.25 in, twelve 2 in
+    stickers; more go on more sheets). A Cricut only cuts what Design Space
+    printed with its own registration marks, so marks on a page from anywhere
+    else would be ignored. In Design Space: *Upload* the PNG, choose *Print
+    Then Cut image*, set its width to 6.75 in, *Make It*. It prints the sheet
+    with its marks and cuts round each sticker.
+
+Each sticker also takes **artwork**: an uploaded image replaces the drawn
+sticker, with the artist's credit printed under it, and it carries into the
+cutter sheet. Artwork is kept at 1000 px, over 500 dpi at sticker size, so a
+full sheet still fits the browser's storage. The press booklet's sticker page
+is typeset from the `.tex` and does not take the artwork yet.
 - **Publish → `index.html`** — downloads a complete, self-contained
   `index.html`. Drop it in the repo root and commit; Cloudflare deploys the new
   edition on push. (If you embedded a cover via upload, it travels inside the file as a
