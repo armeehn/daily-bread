@@ -199,9 +199,14 @@ const dropped = await page.evaluate(async ms => {
   const dt = new DataTransfer();
   dt.items.add(new File([Uint8Array.from(atob(png), c => c.charCodeAt(0))], "dot.png", { type: "image/png" }));
   im.dispatchEvent(new DragEvent("drop", { bubbles: true, dataTransfer: dt }));
+  // a dropped picture opens in the image editor first; accept it as it is
+  for (let i = 0; i < 40 && !document.querySelector("#ieBack"); i++) await new Promise(r => setTimeout(r, 50));
+  const okBtn = document.querySelector('#ieBack [data-a="ok"]');
+  if (!okBtn) return { p, editor: false };
+  okBtn.click();
   await new Promise(r => setTimeout(r, ms));
   const after = getPath(model, p);
-  return { p, changed: after !== before, isData: /^data:image\/png/.test(after) };
+  return { p, editor: true, changed: after !== before, isData: /^data:image\/png/.test(after) };
 }, RENDER_DEBOUNCE);
 check("an image dropped on a picture replaces it",
   !dropped.missing && dropped.changed && dropped.isData, JSON.stringify(dropped));

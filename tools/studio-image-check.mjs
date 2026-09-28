@@ -40,6 +40,8 @@ console.log("photo bytes:", buffer.length);
 // (the accordion is collapsed, so click in-page rather than by pointer)
 await page.evaluate(() => document.querySelector(".imgrow .btn2").click());
 await page.locator("#fileImage").setInputFiles({ name: "cover.jpg", mimeType: "image/jpeg", buffer });
+// every upload opens in the image editor; accept it untouched, which embeds it the usual way
+await page.click('#ieBack [data-a="ok"]');
 
 await page.waitForFunction(() => /Saved|Storage/.test(document.querySelector("#status").textContent));
 const status = await page.evaluate(() => document.querySelector("#status").textContent);

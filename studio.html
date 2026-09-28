@@ -203,6 +203,37 @@
     font-size:10.5px;line-height:1;color:var(--ink)}
   .fmt button:hover{background:var(--ink);color:var(--bone);border-color:var(--ink)}
   .fmt .fb{font-weight:700} .fmt .fi{font-style:italic}
+  .sec > .head .wl{font-size:9.5px;font-weight:600;letter-spacing:.04em;color:var(--teal);border:1px solid var(--teal);padding:1px 5px;white-space:nowrap}
+  .sec > .head .wl.over{color:var(--pink);border-color:var(--pink)}
+  .wlnote{margin:0 0 12px}
+  .imgrow .btn2[disabled]{opacity:.35;cursor:default;background:#fff;color:inherit}
+
+  /* ---- image editor: every picture is looked at before it goes in ---- */
+  .wiz.ie{width:min(1000px,100%)}
+  .ie-body{display:grid;grid-template-columns:1fr 250px;gap:16px;padding:16px;overflow:auto;min-height:0}
+  @media(max-width:760px){.ie-body{grid-template-columns:1fr}}
+  .ie-stage{position:relative;display:flex;align-items:center;justify-content:center;min-height:300px;
+    background:repeating-conic-gradient(#d9d2c3 0 25%,#ece6d8 0 50%) 0 0/18px 18px;border:2px solid var(--ink);
+    overflow:hidden;touch-action:none;user-select:none;cursor:crosshair}
+  .ie-wrap{position:relative;line-height:0}
+  .ie-wrap canvas{display:block}
+  .ie-crop{position:absolute;border:2px solid #fff;outline:1px solid var(--ink);box-shadow:0 0 0 9999px rgba(29,26,23,.55);cursor:move}
+  .ie-crop::before,.ie-crop::after{content:"";position:absolute;inset:33.33% 0;border:1px solid rgba(255,255,255,.45);border-width:1px 0;pointer-events:none}
+  .ie-crop::after{inset:0 33.33%;border-width:0 1px}
+  .ie-crop .h{position:absolute;width:14px;height:14px;background:#fff;border:2px solid var(--ink)}
+  .ie-crop .tl{left:-8px;top:-8px;cursor:nwse-resize} .ie-crop .br{right:-8px;bottom:-8px;cursor:nwse-resize}
+  .ie-crop .tr{right:-8px;top:-8px;cursor:nesw-resize} .ie-crop .bl{left:-8px;bottom:-8px;cursor:nesw-resize}
+  .ie-side{display:flex;flex-direction:column;gap:14px;font-size:11px}
+  .ie-side h5{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .ie-btns{display:flex;flex-wrap:wrap;gap:4px}
+  .ie-btns button{border:1.5px solid var(--ink);background:#fff;padding:4px 8px;cursor:pointer;font-size:10.5px;font-weight:600}
+  .ie-btns button:hover{background:var(--ink);color:var(--bone)}
+  .ie-btns button.on{background:var(--ink);color:var(--bone)}
+  .ie-sl{display:grid;grid-template-columns:78px 1fr 34px;align-items:center;gap:6px;margin-bottom:4px}
+  .ie-sl input{width:100%;accent-color:var(--pink)}
+  .ie-sl output{text-align:right;color:var(--muted);font-size:10px}
+  .ie-info{font-size:10.5px;color:var(--muted);line-height:1.5}
+
   /* the field you jumped to from Find, briefly */
   .field.flash,.item.flash{animation:flash 1.4s ease-out}
   @keyframes flash{0%,40%{box-shadow:0 0 0 3px var(--teal)}100%{box-shadow:0 0 0 3px transparent}}
@@ -322,10 +353,12 @@
     </div>
     <select class="btn" id="themeSel" title="Apply a theme preset"><option value="">Theme preset…</option></select>
     <div class="menu-host">
-      <button class="btn" id="pdfMenuBtn" title="Print outputs" aria-haspopup="true" aria-expanded="false">PDF ▾</button>
+      <button class="btn" id="pdfMenuBtn" title="Print outputs: the web PDF, the press booklet, the sticker sheet for a cutter" aria-haspopup="true" aria-expanded="false">Print ▾</button>
       <div class="edmenu right off" id="pdfMenu">
-        <button id="pdfBtn" title="Export exactly what is on screen, right now, through your browser's print dialog: cover, then one page per section, at the trim size set under Print. Choose 'Save as PDF', Margins None, Background graphics ON. This is the studio's own document; 'Magazine PDF' is the TeX press booklet, typeset from the .tex.">Web PDF<small>what is on screen, through the print dialog</small></button>
+        <button id="pdfBtn" title="Export exactly what is on screen, right now, through your browser's print dialog: cover, then one page per section, at the trim size set under Print. Choose 'Save as PDF', Margins None, Background graphics ON. This is the studio's own document; 'Magazine PDF' is the TeX press booklet, typeset from the .tex.">Web PDF<small>one sheet per section, through the print dialog</small></button>
         <button id="magPdfBtn" title="Typeset the edition in view as the press booklet: this model laid over content/&lt;issue&gt;.tex (theme, cover, letter, contents, voices, interview, waitlist, lab, listings, colophon…), 48 A5 pages set by lualatex and imposed two to a Letter-landscape side so the folded, stapled stack reads in order. Print two-sided, short-edge flip, actual size. Takes about ten seconds on press.hq. Pages the studio has no field for are typeset as the .tex has them. Off the estate, where press.hq is out of reach, you get the last CI typesetting of the .tex instead, without your edits — the toast says which.">Magazine PDF ⤓<small>the press booklet, typeset in about ten seconds</small></button>
+        <hr>
+        <button id="cutBtn" title="A transparent PNG of the sticker sheet at 300 dpi, sized for Cricut Print Then Cut (6.75 × 9.25 in). Upload it to Design Space as a Print Then Cut image: Design Space prints it with its own registration marks and the machine cuts round every sticker.">Stickers for a cutter ⤓<small>PNG for Cricut Print Then Cut</small></button>
       </div>
     </div>
     <button class="btn teal" id="publishBtn" title="Download index.html to commit">Publish → index.html</button>
@@ -477,7 +510,7 @@ function populateEditionSelect(){
 function afterSwap(){
   sel = null; inspStale = true;
   hist();                               // this edition's history starts from what it holds now
-  populateEditionSelect(); buildEditor(); renderPreview(); updateHistButtons();
+  populateEditionSelect(); buildEditor(); renderPreview(); updateHistButtons(); scheduleWordLimits();
 }
 
 // commit whatever is on screen before putting a different edition there
@@ -538,6 +571,7 @@ function flush(){
   clearTimeout(saveTimer); saveTimer=null;
   renderPreview(); record(pendingKey);
   if(save()) setStatus("Saved ✓", false);
+  scheduleWordLimits();
 }
 /* srcdoc is replaced on every edit, which reloads the document and used to put
    you back on the cover after each keystroke. Carry the scroll across. */
@@ -598,7 +632,7 @@ function restoreModel(json){
   if(sel && sel.paths.some(p=> getPath(model, p) === undefined)) sel = null;
   buildEditor(); fieldsDirty = false;
   renderInspector();
-  renderPreview(); save(); updateHistButtons();
+  renderPreview(); save(); updateHistButtons(); scheduleWordLimits();
   if(focusPath) refocus(focusPath);
 }
 function updateHistButtons(){
@@ -662,6 +696,7 @@ function buildEditor(){
     wrap.appendChild(head); wrap.appendChild(body); pane.appendChild(wrap);
   });
   pane.scrollTop = top;
+  showWordLimits();                     // a rebuild drops the chips; the numbers are still good
 }
 
 /* inline-rename an accordion section label (class ttl); persists to labels store */
@@ -712,10 +747,13 @@ function fieldEl(f){
     const row=document.createElement("div"); row.className="imgrow";
     const img=document.createElement("img"); img.src=cur||"";
     const pick=document.createElement("button"); pick.className="btn2"; pick.textContent="Upload…";
+    const edit=document.createElement("button"); edit.className="btn2 edit"; edit.textContent="Edit…";
+    edit.title="Crop, rotate or adjust this image"; edit.disabled=!cur;
     const tx=document.createElement("input"); tx.type="text"; tx.value=cur||""; tx.style.flex="1"; tx.style.minWidth="140px"; tx.dataset.path=f.path;
-    pick.addEventListener("click",()=>{ imgFor={path:f.path, img, tx}; $("#fileImage").click(); });
-    tx.addEventListener("input",()=>{ setPath(model,f.path,tx.value); img.src=tx.value; schedule(key); });
-    row.appendChild(img); row.appendChild(pick); row.appendChild(tx);
+    pick.addEventListener("click",()=>{ imgFor={path:f.path, img, tx, edit}; $("#fileImage").click(); });
+    edit.addEventListener("click",()=> editPlacedImage(f.path, { img, tx, edit }));
+    tx.addEventListener("input",()=>{ setPath(model,f.path,tx.value); img.src=tx.value; edit.disabled=!tx.value; schedule(key); });
+    row.appendChild(img); row.appendChild(pick); row.appendChild(edit); row.appendChild(tx);
     wireImageDrop(row, f.path, img, tx);
     d.appendChild(row); return d;
   }
@@ -850,6 +888,7 @@ function redrawList(wrap, l){
 // one field of a list row; `base` is the row's path ("contents.toc.3")
 function subField(sf, obj, onName, base){
   const cur = obj[sf.path], path = base+"."+sf.path, key = "f:"+path;
+  if(sf.type==="image") return fieldEl({ path, label:sf.label, type:"image" });
   const d=document.createElement("div");
   if(sf.type==="color"){
     d.className="field color";
@@ -922,19 +961,384 @@ $("#publishBtn").addEventListener("click",()=>{
   download("index.html", DB.render(model), "text/html");
   toast("Downloaded index.html — commit it to publish");
 });
-$("#pdfBtn").addEventListener("click",()=>{
-  // print the live preview itself — it carries the @page + bleed + pagination
-  // rules, so "Save as PDF" yields a paginated print-ready file (cover on page 1,
-  // then one section per page) at trim + bleed with crop marks on every page.
-  const fr=$("#preview");
-  try{ fr.contentWindow.focus(); fr.contentWindow.print(); }
-  catch(e){
-    const w=window.open("","_blank");
-    if(!w){ toast("Allow pop-ups to export the PDF"); return; }
-    w.document.open(); w.document.write(DB.render(model)); w.document.close();
-    w.onload=()=>{ w.focus(); w.print(); };
+/* ---------- Web PDF: one section, one sheet ----------
+   This used to print the live preview and leave pagination to the browser:
+   db.js's print rules start every section on a new sheet, but a section taller
+   than its sheet ran on (the comic strip, the centrefold and the sticker sheet
+   each took two or three), and the preview carried design mode's outlines.
+
+   Now the studio builds a document of its own for printing. It is DB.render()
+   of the model, with the print rules turned on for the screen too (so the
+   layout can be measured before it is printed), each unit — the cover, every
+   section, the back cover — moved onto a sheet of exactly the trim + bleed +
+   slug size, and a unit that is taller than its sheet scaled down to fit it.
+   A sheet cannot run on, so N units print as N sheets in every browser. */
+function sheetPx(doc, m){
+  const g = DB.printGeom(m), extra = "calc(" + g.bleed + "*2 + " + g.slug + "*2)";
+  const probe = doc.createElement("div");
+  probe.style.cssText = "position:absolute;left:0;top:0;visibility:hidden;width:calc(" + g.tw + " + " + extra + ");height:calc(" + g.th + " + " + extra + ")";
+  doc.body.appendChild(probe);
+  const r = probe.getBoundingClientRect(); probe.remove();
+  return { w: r.width, h: r.height };
+}
+// Lay doc (a DB.render document, loaded in a frame) out one unit per sheet.
+// Returns [{ label, scale }] per sheet.
+async function paginate(frame, m){
+  const doc = frame.contentDocument, win = frame.contentWindow;
+  // the print rules become the only rules, so what is measured is what prints
+  doc.querySelectorAll("style").forEach(st=>{ st.textContent = st.textContent.replace(/@media\s+print\s*\{/g, "@media all{"); });
+  const S = sheetPx(doc, m);
+  frame.style.width = S.w + "px"; frame.style.height = S.h + "px";   // 100vh is a sheet, as on paper
+  const units = Array.from(doc.body.querySelectorAll(".hero, .sec, footer"))
+    .filter(el=> !el.parentElement.closest(".hero, .sec, footer"));
+  const st = doc.createElement("style"); st.id = "pp-style";
+  st.textContent =
+    "@page{ size:" + S.w + "px " + S.h + "px; margin:0 }\n" +
+    "html,body{ margin:0 !important; padding:0 !important }\n" +
+    "body > :not(.pp-book){ display:none !important }\n" +
+    ".pp-sheet{ width:" + S.w + "px; height:" + S.h + "px; overflow:hidden; position:relative; " +
+      "break-after:page; page-break-after:always; break-inside:avoid; page-break-inside:avoid; " +
+      "display:flex; justify-content:center; align-items:flex-start }\n" +
+    ".pp-sheet:last-child{ break-after:auto; page-break-after:auto }\n" +
+    ".pp-fit{ flex:none }\n" +
+    ".pp-fit > *{ margin:0 !important }\n" +
+    // inside a sheet nothing may start another one
+    ".pp-sheet *{ break-before:auto !important; page-break-before:auto !important; break-after:auto !important; page-break-after:auto !important }\n" +
+    ".pp-sheet footer{ min-height:" + S.h + "px !important }";
+  doc.head.appendChild(st);
+  const book = doc.createElement("div"); book.className = "pp-book";
+  const fits = units.map(u=>{
+    const sheet = doc.createElement("div"); sheet.className = "pp-sheet";
+    const fit = doc.createElement("div"); fit.className = "pp-fit";
+    sheet.appendChild(fit); fit.appendChild(u); book.appendChild(sheet);
+    return fit;
+  });
+  doc.body.insertBefore(book, doc.body.firstChild);
+  try{ await doc.fonts.ready; }catch(e){}
+  await Promise.all(Array.from(doc.images).map(im=> im.complete ? 0 : new Promise(r=>{ im.onload = im.onerror = r; })));
+  const bone = win.getComputedStyle(doc.body).backgroundColor;
+  return fits.map((fit, i)=>{
+    const u = units[i];
+    // the sheet takes its section's ground, so a scaled section leaves no bare strip
+    const bg = win.getComputedStyle(u).backgroundColor;
+    fit.parentElement.style.background = (!bg || bg === "rgba(0, 0, 0, 0)" || bg === "transparent") ? bone : bg;
+    // Two ways to fit a tall section: shrink it as laid out (keeps its columns),
+    // or lay it out wider and shrink that (text reflows into the room). Take
+    // whichever ends up bigger; plates with a fixed shape win the first way.
+    // A width's scale is whatever makes BOTH its width and its height fit the
+    // sheet, measured at that width: pictures with a fixed shape grow taller as
+    // the column widens, so a scale found at one width is wrong at another.
+    const at = w=>{ fit.style.width = w + "px"; fit.style.zoom = "";
+      return { w, s: Math.min(1, S.w / w, S.h / fit.offsetHeight) }; };
+    let best = at(S.w);
+    for(let k = 0, s = best.s; k < 5 && s < 0.999; k++){
+      const c = at(S.w / s);
+      if(c.s > best.s) best = c;
+      if(Math.abs(c.s - s) < 0.004) break;
+      s = Math.max(c.s, best.s * 0.98);           // walk toward the width that fits
+    }
+    // zoom, not transform: print breaks pages on the laid-out height, and a
+    // transform leaves that at full size — the sheet then clipped all but the top
+    fit.style.width = best.w + "px";
+    fit.style.zoom = best.s < 1 ? String(best.s) : "";
+    const head = u.querySelector(".sechead, h1, h2, .mast");
+    return { label: u.id || (u.tagName === "FOOTER" ? "back cover" : u.classList.contains("hero") ? "cover" : (head ? head.textContent.trim().slice(0, 30) : "section")), scale: best.s };
+  });
+}
+// a hidden frame holding the one-section-per-sheet document; resolves to {frame, sheets}
+async function buildPrintFrame(){
+  flush();
+  // each job owns its frame: the word-limit measure and a Web PDF may overlap
+  const fr = document.createElement("iframe"); fr.className = "print-frame"; fr.setAttribute("aria-hidden", "true"); fr.tabIndex = -1;
+  fr.style.cssText = "position:fixed;left:-30000px;top:0;width:1200px;height:900px;border:0";
+  document.body.appendChild(fr);
+  // Crop marks are for a trade printer trimming a stack; on a sheet you print
+  // yourself they are just in the way, and so is the slug that holds them.
+  const m = DB.clone(model); m.print = Object.assign({}, m.print, { marks:"off" });
+  await new Promise(r=>{ fr.onload = r; fr.srcdoc = DB.render(m); });
+  const sheets = await paginate(fr, m);
+  return { frame: fr, sheets };
+}
+/* ---------- word limits: how much copy a section's page holds ----------
+   Writers need a number. Each section prints on one Web PDF sheet, so its
+   limit is the most words that sheet holds at full size. It is measured, not
+   guessed: in the one-section-per-sheet document, the section's longest block
+   of copy is grown with words of the section's own (so word length is right)
+   until the section no longer fits its sheet. The limit is the words the
+   section's fields hold now plus what fitted.
+
+   Only the Web PDF sheet is measured. The press booklet is typeset by lualatex
+   on press.hq; a limit from it would need that typesetting, and the smaller of
+   the two is the one to give writers. */
+const WORD_RE = /[\p{L}\p{N}][\p{L}\p{N}'’\-]*/gu;
+function countWords(s){ return (PLAIN(s).match(WORD_RE) || []).length; }
+// words a writer controls in a schema section: its prose fields and list rows
+function sectionWords(sec){
+  let n = 0;
+  const add = (p, type)=>{ if((type==="text" || type==="area") && !NOT_PROSE.test(p) && !/\.(sec|tag)$/.test(p)) n += countWords(getPath(model, p)); };
+  (sec.fields||[]).forEach(f=> add(f.path, f.type));
+  (sec.lists||[]).forEach(l=> (getPath(model, l.path)||[]).forEach((row, i)=>{
+    if(l.strings) add(l.path+"."+i, l.area ? "area" : "text");
+    else (l.fields||[]).forEach(sf=> add(l.path+"."+i+"."+sf.path, sf.type));
+  }));
+  return n;
+}
+// which schema section a page unit came from
+function unitSection(u){
+  if(u.classList.contains("hero")) return "hero";
+  if(u.tagName === "FOOTER") return "footer";
+  if(u.id && DB.SCHEMA.some(s=> s.id === u.id)) return u.id;
+  if(u.classList.contains("tight")) return "interview";
+  const t = PLAIN(u.textContent);
+  if(model.waitlist && model.waitlist.title && t.indexOf(PLAIN(model.waitlist.title)) >= 0) return "waitlist";
+  if(model.interview && model.interview.attrib && t.indexOf(PLAIN(model.interview.attrib)) >= 0) return "interview";
+  return null;
+}
+async function measureWordLimits(){
+  const { frame, sheets } = await buildPrintFrame();
+  try{
+    const doc = frame.contentDocument;
+    const H = parseFloat(frame.style.height), W = parseFloat(frame.style.width);
+    const out = {};
+    doc.querySelectorAll(".pp-fit").forEach((fit, i)=>{
+      const u = fit.firstElementChild, id = u && unitSection(u);
+      if(!id || id === "hero" || id === "footer") return;
+      const sec = DB.SCHEMA.find(s=> s.id === id); if(!sec) return;
+      const now = sectionWords(sec);
+      // measure at full size, at the sheet's width
+      fit.style.zoom = ""; fit.style.width = W + "px";
+      const blocks = Array.from(u.querySelectorAll("p, .bd, .body, figcaption, blockquote, li"))
+        .filter(b=> !b.querySelector("p, .bd, .body, li") && b.textContent.trim().length);
+      const grow = blocks.sort((a, b)=> b.textContent.length - a.textContent.length)[0];
+      if(!grow){ out[id] = { now, limit: now, over: fit.offsetHeight > H }; return; }
+      const pool = (PLAIN(u.textContent).match(WORD_RE) || ["word"]);
+      const base = grow.innerHTML;
+      const fits = n=>{
+        let add = ""; for(let j=0; j<n; j++) add += " " + pool[j % pool.length];
+        grow.innerHTML = base + add;
+        return fit.offsetHeight <= H + 0.5;
+      };
+      let lim;
+      if(!fits(0)){
+        // already over: find how many words of the grown block must go
+        const words = grow.textContent.trim().split(/\s+/);
+        const cut = m=>{ grow.textContent = words.slice(0, words.length - m).join(" "); return fit.offsetHeight <= H + 0.5; };
+        let lo = 0, hi = words.length;             // removing lo words is too few; removing hi is enough
+        if(!cut(hi)){                            // over even without its copy: the pictures fill the page
+          grow.innerHTML = base;
+          out[id] = { now, limit:null, pictures:true, scale: sheets[i] && sheets[i].scale }; return;
+        }
+        else { while(hi - lo > 1){ const mid = (lo + hi) >> 1; if(cut(mid)) hi = mid; else lo = mid; } lim = Math.max(0, now - hi); }
+      } else {
+        let lo = 0, hi = 64;
+        while(fits(hi) && hi < 20000) { lo = hi; hi *= 2; }
+        while(hi - lo > 1){ const mid = (lo + hi) >> 1; if(fits(mid)) lo = mid; else hi = mid; }
+        lim = now + lo;
+      }
+      grow.innerHTML = base;
+      out[id] = { now, limit: lim, over: lim < now, scale: sheets[i] && sheets[i].scale };
+    });
+    return out;
+  } finally { frame.remove(); }
+}
+let wordLimits = {}, wlTimer = null, wlBusy = false;
+// re-measured a while after edits stop: it lays the whole issue out again
+function scheduleWordLimits(){
+  clearTimeout(wlTimer);
+  wlTimer = setTimeout(async ()=>{
+    if(wlBusy){ scheduleWordLimits(); return; }
+    wlBusy = true;
+    try{ wordLimits = await measureWordLimits(); showWordLimits(); }
+    catch(e){ console.warn("word limits", e); }
+    finally{ wlBusy = false; }
+  }, 1500);
+}
+function wlText(w){
+  if(w.pictures) return "pictures fill its page";
+  return w.over ? "over by " + (w.now - w.limit) + " words" : w.now + " / " + w.limit + " words";
+}
+function showWordLimits(){
+  document.querySelectorAll("#fieldsPane .sec").forEach(box=>{
+    const w = wordLimits[box.dataset.sec], head = box.querySelector(".head");
+    let chip = head.querySelector(".wl");
+    if(!w){ if(chip) chip.remove(); return; }
+    if(!chip){ chip = document.createElement("span"); chip.className = "wl"; head.insertBefore(chip, head.querySelector(".chev")); }
+    chip.textContent = w.pictures ? "full" : w.over ? "over" : "≤ " + w.limit + " w";
+    chip.classList.toggle("over", !!w.over || !!w.pictures);
+    chip.title = w.pictures ? "Its pictures fill the page by themselves, so there is no word budget: the Web PDF shrinks the page to fit."
+      : "This section's page holds about " + w.limit + " words of copy; it has " + w.now + " now. Measured on its Web PDF sheet at full size.";
+    let note = box.querySelector(".body > .wlnote");
+    if(!note){ note = document.createElement("div"); note.className = "hint wlnote"; box.querySelector(".body").prepend(note); }
+    note.innerHTML = w.pictures
+      ? "<b>No room for more copy:</b> the pictures fill this page on their own, so the Web PDF prints it at " + Math.round((w.scale||1)*100) + "%. Keep its words short."
+      : (w.over
+        ? "<b>Over its page by about " + (w.now - w.limit) + " words.</b> It has " + w.now + "; its page holds about " + w.limit + ". The Web PDF shrinks it to fit."
+        : "<b>Word limit: about " + w.limit + " words</b> for this section's page (" + w.now + " used, " + (w.limit - w.now) + " to spare).") +
+        " Measured on its Web PDF sheet.";
+  });
+  const c = $("#designPane .crumb");
+  if(c && sel){ const it = itemOf(sel.paths[0]), info = fieldInfo(sel.paths[0]), sec = (it && it.sec) || (info && info.sec);
+    const w = sec && wordLimits[sec.id];
+    c.textContent = (sec ? sectionLabel(sec) : "Model") + (w ? " · " + wlText(w) : ""); }
+}
+
+/* ---------- the sticker sheet, for a cutting machine ----------
+   A Cricut's Print Then Cut only cuts what Design Space itself printed: it
+   draws its own registration frame round the page and the machine reads that,
+   so marks drawn here would be ignored. What Design Space wants is an image
+   whose transparent parts are not cut material — every opaque island becomes
+   one sticker, printed, then cut round its edge.
+
+   So this draws each sticker as a rounded square of its own ground on a
+   transparent sheet at 300 dpi, fitted to Print Then Cut's largest area on
+   Letter (6.75 × 9.25 in), and saves it as a PNG. The drawing is taken from
+   the rendered page, not re-designed: each sticker is laid out by db.js in a
+   hidden frame, straightened, and every picture and line of text in it is
+   measured there and painted onto a canvas that belongs to that frame, so the
+   fonts are the magazine's own. More stickers than fit one sheet go on more. */
+const CUT_DPI = 300, CUT_W_IN = 6.75, CUT_H_IN = 9.25, CUT_GAP_IN = 0.25, CUT_COLS = 3, CUT_MAX_IN = 2, CUT_MIN_IN = 1.25;
+function cutLayout(n){
+  let side = CUT_MAX_IN;
+  const colsFit = Math.floor((CUT_W_IN + CUT_GAP_IN) / (side + CUT_GAP_IN));
+  const cols = Math.min(CUT_COLS, colsFit), rowsNeeded = Math.ceil(n / cols);
+  const rowsAt = s=> Math.floor((CUT_H_IN + CUT_GAP_IN) / (s + CUT_GAP_IN));
+  // shrink toward the minimum until everything fits one sheet, then stop shrinking
+  while(rowsAt(side) < rowsNeeded && side > CUT_MIN_IN) side = Math.max(CUT_MIN_IN, side - 0.05);
+  const rows = Math.min(rowsNeeded, rowsAt(side));
+  return { cols, rows, side, perSheet: cols * rows, sheets: Math.ceil(n / (cols * rows)) };
+}
+function svgImage(win, svgEl){
+  const s = svgEl.cloneNode(true);
+  if(!s.getAttribute("xmlns")) s.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  const r = svgEl.getBoundingClientRect();
+  s.setAttribute("width", r.width); s.setAttribute("height", r.height);
+  return loadImg(win, "data:image/svg+xml;charset=utf-8," + encodeURIComponent(new XMLSerializer().serializeToString(s)));
+}
+function loadImg(win, src){
+  return new Promise((ok, no)=>{ const im = new win.Image(); im.onload = ()=> ok(im); im.onerror = no; im.src = src; });
+}
+// words into lines no wider than w, as the browser wrapped them
+function wrapLines(ctx, text, w){
+  const words = text.split(/\s+/).filter(Boolean), lines = [];
+  let line = "";
+  words.forEach(word=>{
+    const t = line ? line + " " + word : word;
+    if(line && ctx.measureText(t).width > w + 0.5){ lines.push(line); line = word; } else line = t;
+  });
+  if(line) lines.push(line);
+  return lines;
+}
+async function drawSticker(win, ctx, el, x, y, side){
+  const cs = win.getComputedStyle(el), box = el.getBoundingClientRect(), k = side / box.width;
+  const rot = parseFloat((el.style.getPropertyValue("--rot") || "0").replace("deg","")) || 0;
+  // the island: the sticker's ground, rounded — this edge is where the blade goes
+  ctx.save();
+  ctx.fillStyle = cs.backgroundColor && cs.backgroundColor !== "rgba(0, 0, 0, 0)" ? cs.backgroundColor : "#ffffff";
+  const rr = side * 0.07;
+  ctx.beginPath();
+  if(ctx.roundRect) ctx.roundRect(x, y, side, side, rr); else ctx.rect(x, y, side, side);
+  ctx.fill();
+  ctx.clip();
+  const at = n=>{ const r = n.getBoundingClientRect(); return { x:(r.left-box.left)*k, y:(r.top-box.top)*k, w:r.width*k, h:r.height*k }; };
+  // On the page a sticker's art sits small in its cell; on a sticker it should
+  // fill it. Grow the content about its own centre to ~80% of the island.
+  const parts = Array.from(el.querySelectorAll(".ic svg, img.art, .lab, .mono, .quote, .stampbadge, .by")).map(at);
+  let z = 1, cx = side/2, cy = side/2;
+  if(parts.length){
+    const x0 = Math.min(...parts.map(p=> p.x)), y0 = Math.min(...parts.map(p=> p.y));
+    const x1 = Math.max(...parts.map(p=> p.x + p.w)), y1 = Math.max(...parts.map(p=> p.y + p.h));
+    z = Math.max(1, Math.min(0.8 * side / (x1 - x0), 0.8 * side / (y1 - y0), 2.6));
+    cx = (x0 + x1) / 2; cy = (y0 + y1) / 2;
   }
-  toast("Print → Save as PDF · Margins: None · Background graphics: ON");
+  ctx.translate(x + side/2, y + side/2); ctx.rotate(rot * Math.PI / 180); ctx.scale(z, z); ctx.translate(-cx, -cy);
+  for(const n of el.querySelectorAll(".ic svg, img.art")){
+    const b = at(n);
+    try{
+      const im = n.tagName.toLowerCase() === "svg" ? await svgImage(win, n) : await loadImg(win, n.getAttribute("src"));
+      // object-fit:contain, as the page does
+      const s = Math.min(b.w / (im.naturalWidth || b.w), b.h / (im.naturalHeight || b.h));
+      const dw = (im.naturalWidth || b.w) * s, dh = (im.naturalHeight || b.h) * s;
+      ctx.drawImage(im, b.x + (b.w - dw)/2, b.y + (b.h - dh)/2, dw, dh);
+    }catch(e){ console.warn("sticker picture skipped", e); }
+  }
+  el.querySelectorAll(".lab, .mono, .quote, .stampbadge, .by").forEach(n=>{
+    const t = win.getComputedStyle(n), b = at(n);
+    const bw = parseFloat(t.borderTopWidth) || 0;
+    if(bw){ ctx.strokeStyle = t.borderTopColor; ctx.lineWidth = bw * k; ctx.strokeRect(b.x + bw*k/2, b.y + bw*k/2, b.w - bw*k, b.h - bw*k); }
+    const pl = parseFloat(t.paddingLeft) + bw, pr = parseFloat(t.paddingRight) + bw, pt = parseFloat(t.paddingTop) + bw;
+    const size = parseFloat(t.fontSize) * k;
+    ctx.font = t.fontStyle + " " + t.fontWeight + " " + size + "px " + t.fontFamily;
+    ctx.fillStyle = t.color; ctx.textAlign = "center"; ctx.textBaseline = "top";
+    if("letterSpacing" in ctx) ctx.letterSpacing = (parseFloat(t.letterSpacing) || 0) * k + "px";
+    let text = n.textContent.trim();
+    if(t.textTransform === "uppercase") text = text.toUpperCase();
+    const lh = (parseFloat(t.lineHeight) || parseFloat(t.fontSize) * 1.2) * k;
+    const inner = b.w - (pl + pr) * k;
+    const lines = wrapLines(ctx, text, inner);
+    const top = b.y + pt * k + (lh - size) / 2;
+    lines.forEach((ln, i)=> ctx.fillText(ln, b.x + pl*k + inner/2, top + i * lh));
+  });
+  ctx.restore();
+}
+async function stickerCutSheets(){
+  flush();
+  const fr = document.createElement("iframe"); fr.setAttribute("aria-hidden", "true"); fr.tabIndex = -1;
+  fr.style.cssText = "position:fixed;left:-30000px;top:0;width:1200px;height:900px;border:0";
+  document.body.appendChild(fr);
+  try{
+    await new Promise(r=>{ fr.onload = r; fr.srcdoc = DB.render(model); });
+    const doc = fr.contentDocument, win = fr.contentWindow;
+    const st = doc.createElement("style");
+    st.textContent = ".sticker .in{transform:none !important}";   // measured straight; the tilt is painted
+    doc.head.appendChild(st);
+    try{ await doc.fonts.ready; }catch(e){}
+    const els = Array.from(doc.querySelectorAll(".sticker-grid .sticker"));
+    if(!els.length) return [];
+    const L = cutLayout(els.length), px = CUT_DPI, side = L.side * px, gap = CUT_GAP_IN * px;
+    const out = [];
+    for(let sh = 0; sh < L.sheets; sh++){
+      const c = doc.createElement("canvas");
+      c.width = Math.round(CUT_W_IN * px); c.height = Math.round(CUT_H_IN * px);
+      const ctx = c.getContext("2d");
+      const part = els.slice(sh * L.perSheet, (sh + 1) * L.perSheet);
+      const rows = Math.ceil(part.length / L.cols);
+      const gw = L.cols * side + (L.cols - 1) * gap, gh = rows * side + (rows - 1) * gap;
+      const ox = (c.width - gw) / 2, oy = (c.height - gh) / 2;
+      for(let i = 0; i < part.length; i++){
+        await drawSticker(win, ctx, part[i], ox + (i % L.cols) * (side + gap), oy + Math.floor(i / L.cols) * (side + gap), side);
+      }
+      out.push(c.toDataURL("image/png"));
+    }
+    return Object.assign(out, { layout: L });
+  } finally { fr.remove(); }
+}
+$("#cutBtn").addEventListener("click", async ()=>{
+  const btn = $("#pdfMenuBtn"), label = btn.innerHTML;
+  btn.textContent = "Drawing…";
+  let sheets;
+  try{ sheets = await stickerCutSheets(); }
+  catch(e){ console.error(e); toast("Could not draw the sticker sheet: " + e.message); return; }
+  finally{ btn.innerHTML = label; }
+  if(!sheets.length){ toast("This edition has no stickers"); return; }
+  sheets.forEach((url, i)=> saveBlobAs(url, "daily-bread-stickers" + (sheets.length > 1 ? "-" + (i+1) : "") + "-print-then-cut.png"));
+  const L = sheets.layout;
+  toast((sheets.length > 1 ? sheets.length + " sheets" : "Sticker sheet") + " saved: " + L.side.toFixed(2).replace(/0$/,"") +
+    " in stickers. In Design Space: Upload → the PNG → Print Then Cut image → set width to 6.75 in → Make It.");
+});
+$("#pdfBtn").addEventListener("click", async ()=>{
+  const btn = $("#pdfMenuBtn"), label = btn.innerHTML;
+  btn.textContent = "Laying out…";
+  let job;
+  try{ job = await buildPrintFrame(); }
+  catch(e){ console.error(e); toast("Could not lay out the PDF: " + e.message); btn.innerHTML = label; return; }
+  btn.innerHTML = label;
+  const shrunk = job.sheets.filter(s=> s.scale < 0.999);
+  toast(job.sheets.length + " sheets, one per section" +
+    (shrunk.length ? " · " + shrunk.length + " scaled to fit (" + shrunk.map(s=> s.label + " " + Math.round(s.scale*100) + "%").join(", ") + ")" : "") +
+    " · Save as PDF, Margins None, Background graphics on");
+  const w = job.frame.contentWindow;
+  w.focus(); w.print();
+  setTimeout(()=> job.frame.remove(), 60000);
 });
 /* content/<edition>.tex is the press's source; an edition maps to it by issue
    number: "№1" → issue-01. Anything without a number has no press booklet. */
@@ -1022,12 +1426,13 @@ $("#fileImport").addEventListener("change",e=>{
    JPEG. A source the browser cannot decode (SVG without size) is kept raw. */
 const EMBED_MAX_EDGE_PX = 2400;   // ≈290 dpi across an A5 short edge
 const EMBED_JPEG_QUALITY = 0.85;
-function embedImage(file, done){
+function embedImage(file, done, edge){
+  edge = edge || EMBED_MAX_EDGE_PX;
   const r=new FileReader();
   r.onload=()=>{
     const raw=r.result, img=new Image();
     img.onload=()=>{
-      const scale=Math.min(1, EMBED_MAX_EDGE_PX/Math.max(img.width, img.height));
+      const scale=Math.min(1, edge/Math.max(img.width, img.height));
       const c=document.createElement("canvas");
       c.width=Math.round(img.width*scale); c.height=Math.round(img.height*scale);
       c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
@@ -1040,11 +1445,40 @@ function embedImage(file, done){
   };
   r.readAsDataURL(file);
 }
+// A sticker prints about 48 mm across: 1000 px is over 500 dpi there, and twelve
+// of them at the cover's 2400 px would not fit the browser's storage.
+function imageEdge(path){ return /^stickers\./.test(path) ? 1000 : EMBED_MAX_EDGE_PX; }
+// Every image that comes in — picked, or dropped on a field or on the page —
+// opens in the editor first; nothing lands in the magazine until you say OK.
+function takeImage(file, path, done){
+  const r=new FileReader();
+  r.onload=()=> openImageEditor(r.result, { png:file.type==="image/png", edge:imageEdge(path), name:file.name })
+    .then(res=>{
+      if(res===null) return;                          // cancelled
+      if(res===IE_UNCHANGED) embedImage(file, done, imageEdge(path));
+      else done(res);
+    });
+  r.readAsDataURL(file);
+}
+function showPlaced(ui, src){
+  if(!ui) return;
+  ui.img.src=src; ui.tx.value = /^data:/.test(src) ? "(embedded image)" : src;
+  if(ui.edit) ui.edit.disabled=false;
+}
 $("#fileImage").addEventListener("change",e=>{
-  const file=e.target.files[0]; if(!file||!imgFor) return;
-  embedImage(file, src=>{ setPath(model, imgFor.path, src); imgFor.img.src=src; imgFor.tx.value="(embedded image)"; schedule(); toast("Image embedded"); });
+  const file=e.target.files[0], to=imgFor; if(!file||!to) return;
   e.target.value="";
+  takeImage(file, to.path, src=>{ setPath(model, to.path, src); showPlaced(to, src); touched("panel"); toast("Image placed", UNDO); });
 });
+// re-edit what is already there; the original is gone once embedded, so an edit
+// works on the placed image, and Undo is how you get the previous one back
+function editPlacedImage(path, ui){
+  const src=getPath(model, path); if(!src) return;
+  openImageEditor(src, { png:/^data:image\/png|\.png$/i.test(src), edge:imageEdge(path) }).then(res=>{
+    if(res===null || res===IE_UNCHANGED) return;
+    setPath(model, path, res); showPlaced(ui, res); touched("panel"); toast("Image edited", UNDO);
+  });
+}
 $("#resetBtn").addEventListener("click",()=>{
   if(!confirm("Reset “"+shelf.items[shelf.current].name+"” to the built-in Daily Bread №1 default? Other editions are untouched, and Undo brings its edits back until you close the studio.")) return;
   flush();
@@ -1762,13 +2196,20 @@ function markItems(doc, entries){
 
 /* image fields, matched by the src they rendered as — a dropped file replaces one */
 function markImages(doc){
-  DB.SCHEMA.forEach(sec => (sec.fields||[]).forEach(f=>{
-    if(f.type !== "image") return;
-    const v = getPath(model, f.path); if(!v) return;
-    doc.querySelectorAll("img").forEach(im=>{
-      if(im.getAttribute("src") === v) im.setAttribute("data-dbimg", f.path);
-    });
-  }));
+  const imgs = Array.from(doc.querySelectorAll("img"));
+  const mark = (path)=>{
+    const v = getPath(model, path); if(!v) return;
+    // two rows may carry the same picture: each takes the next one on the page
+    const im = imgs.find(n=> !n.hasAttribute("data-dbimg") && n.getAttribute("src") === v);
+    if(im) im.setAttribute("data-dbimg", path);
+  };
+  DB.SCHEMA.forEach(sec=>{
+    (sec.fields||[]).forEach(f=>{ if(f.type === "image") mark(f.path); });
+    (sec.lists||[]).forEach(l=> (l.fields||[]).forEach(sf=>{
+      if(sf.type !== "image") return;
+      (getPath(model, l.path)||[]).forEach((_, i)=> mark(l.path+"."+i+"."+sf.path));
+    }));
+  });
 }
 
 /* ---------- what the preview looks like while you are editing it ---------- */
@@ -1873,7 +2314,7 @@ function wireDesign(doc){
 }
 
 function readImageInto(file, path){
-  embedImage(file, src=>{ setPath(model, path, src); touched(); toast("Image replaced"); });
+  takeImage(file, path, src=>{ setPath(model, path, src); touched("panel"); toast("Image replaced", UNDO); });
 }
 
 /* ---------- drag a row to a new position ---------- */
@@ -2043,6 +2484,7 @@ function renderInspector(){
   go.addEventListener("click", ()=> revealField(first, sec));
   box.appendChild(go);
   pane.appendChild(box);
+  showWordLimits();
 }
 function rowFields(it){
   const l = it.list, base = it.listPath + "." + it.idx;
@@ -2235,8 +2677,270 @@ function wireImageDrop(row, path, img, tx){
     e.preventDefault(); row.classList.remove("hot");
     const f = e.dataTransfer.files[0];
     if(!f || !/^image\//.test(f.type)){ toast("That is not an image"); return; }
-    embedImage(f, src=>{ setPath(model, path, src); img.src = src; tx.value = "(embedded image)"; touched(); toast("Image embedded"); });
+    takeImage(f, path, src=>{ setPath(model, path, src); showPlaced({ img, tx }, src); touched("panel"); toast("Image placed", UNDO); });
   });
+}
+
+/* ============================================================================
+   Image editor — a picture is looked at, and fixed, before it goes in
+   ----------------------------------------------------------------------------
+   Every file picked or dropped opens here; so does Edit… on a placed picture.
+   Crop (free or to a ratio), turn, flip, and brightness / contrast / saturation
+   / black and white. Nothing reaches the model until "Use this image".
+
+   openImageEditor(src, {png, edge}) resolves to a data: URL, to IE_UNCHANGED
+   (nothing was touched: the caller embeds the original the usual way, so an
+   untouched upload is byte-for-byte what it was before the editor existed), or
+   to null (cancelled). The preview shows the adjustments with a CSS filter; the
+   output applies them on a canvas, with ctx.filter where the browser has it and
+   by hand on the pixels where it does not.
+   ========================================================================== */
+const IE_UNCHANGED = {};
+const IE_RATIOS = [["Free",0],["Original",-1],["1:1",1],["4:5",4/5],["3:2",3/2],["16:9",16/9]];
+const IE_SLIDERS = [["b","Brightness",50,150],["c","Contrast",50,150],["s","Saturation",0,200],["g","Black & white",0,100]];
+const IE_FILTER_OK = (function(){ try{ const c=document.createElement("canvas").getContext("2d"); return !!c && typeof c.filter==="string"; }catch(e){ return false; } })();
+let ie = null;
+
+function ieFilter(st){ return "brightness("+st.b+"%) contrast("+st.c+"%) saturate("+st.s+"%) grayscale("+st.g+"%)"; }
+function ieFresh(){ return { rot:0, fx:false, fy:false, b:100, c:100, s:100, g:0, ratio:0, crop:{x:0,y:0,w:1,h:1} }; }
+function ieTouched(st){
+  const c=st.crop;
+  return st.rot || st.fx || st.fy || st.b!==100 || st.c!==100 || st.s!==100 || st.g ||
+    c.x>0.001 || c.y>0.001 || c.w<0.999 || c.h<0.999;
+}
+// the picture as turned and flipped: its width and height
+function ieDims(st, img){ const t = st.rot % 180 !== 0; return { w: t ? img.naturalHeight : img.naturalWidth, h: t ? img.naturalWidth : img.naturalHeight }; }
+// draw the turned, flipped picture at scale k onto ctx (sized to it already)
+function ieDrawOriented(ctx, st, img, k){
+  const o = ieDims(st, img);
+  ctx.save();
+  ctx.translate(o.w*k/2, o.h*k/2);
+  ctx.rotate(st.rot*Math.PI/180);
+  ctx.scale(st.fx ? -1 : 1, st.fy ? -1 : 1);
+  ctx.drawImage(img, -img.naturalWidth*k/2, -img.naturalHeight*k/2, img.naturalWidth*k, img.naturalHeight*k);
+  ctx.restore();
+}
+// what ctx.filter would have done, for browsers without it (same order as CSS)
+function ieFilterPixels(ctx, w, h, st){
+  const d = ctx.getImageData(0, 0, w, h), p = d.data;
+  const B = st.b/100, C = st.c/100, S = st.s/100, G = st.g/100;
+  for(let i=0;i<p.length;i+=4){
+    let r=p[i]*B, g=p[i+1]*B, b=p[i+2]*B;
+    r=(r-127.5)*C+127.5; g=(g-127.5)*C+127.5; b=(b-127.5)*C+127.5;
+    let l=.2126*r+.7152*g+.0722*b;
+    r=l+(r-l)*S; g=l+(g-l)*S; b=l+(b-l)*S;
+    l=.2126*r+.7152*g+.0722*b;
+    p[i]=r+(l-r)*G; p[i+1]=g+(l-g)*G; p[i+2]=b+(l-b)*G;
+  }
+  ctx.putImageData(d, 0, 0);
+}
+function ieOutputSize(st, img, edge){
+  const o = ieDims(st, img), c = st.crop;
+  const w = Math.max(1, Math.round(c.w*o.w)), h = Math.max(1, Math.round(c.h*o.h));
+  const k = Math.min(1, edge/Math.max(w, h));
+  return { w: Math.max(1, Math.round(w*k)), h: Math.max(1, Math.round(h*k)), sw:w, sh:h };
+}
+function ieRender(st, img, opts){
+  const o = ieDims(st, img);
+  const full = document.createElement("canvas"); full.width = o.w; full.height = o.h;
+  ieDrawOriented(full.getContext("2d"), st, img, 1);
+  const sz = ieOutputSize(st, img, opts.edge);
+  const out = document.createElement("canvas"); out.width = sz.w; out.height = sz.h;
+  const ctx = out.getContext("2d");
+  if(IE_FILTER_OK) ctx.filter = ieFilter(st);
+  ctx.drawImage(full, Math.round(st.crop.x*o.w), Math.round(st.crop.y*o.h), sz.sw, sz.sh, 0, 0, sz.w, sz.h);
+  if(!IE_FILTER_OK && (st.b!==100 || st.c!==100 || st.s!==100 || st.g)) ieFilterPixels(ctx, sz.w, sz.h, st);
+  return opts.png ? out.toDataURL("image/png") : out.toDataURL("image/jpeg", EMBED_JPEG_QUALITY);
+}
+
+function openImageEditor(src, opts){
+  opts = opts || {};
+  opts.edge = opts.edge || EMBED_MAX_EDGE_PX;
+  return new Promise(resolve=>{
+    const img = new Image();
+    img.onload = ()=>{
+      if(!img.naturalWidth || !img.naturalHeight){ resolve(IE_UNCHANGED); return; }   // an SVG with no size: nothing to crop
+      ieOpen(img, opts, resolve);
+    };
+    img.onerror = ()=>{ toast("That image cannot be opened for editing"); resolve(IE_UNCHANGED); };
+    img.src = src;
+  });
+}
+
+function ieOpen(img, opts, resolve){
+  if(ie) ieClose(null);
+  const st = ieFresh();
+  const back = document.createElement("div"); back.className = "wiz-back show"; back.id = "ieBack";
+  back.innerHTML =
+    '<div class="wiz ie" role="dialog" aria-label="Image editor">'+
+      '<div class="wh"><span class="t">Image</span><span class="sub">look it over<br>before it goes in</span>'+
+      '<button class="x" title="Cancel (Esc)">✕</button></div>'+
+      '<div class="ie-body">'+
+        '<div class="ie-stage"><div class="ie-wrap"><canvas></canvas>'+
+          '<div class="ie-crop"><i class="h tl"></i><i class="h tr"></i><i class="h bl"></i><i class="h br"></i></div></div></div>'+
+        '<div class="ie-side">'+
+          '<div><h5>Crop</h5><div class="ie-btns ie-ratios"></div></div>'+
+          '<div><h5>Turn &amp; flip</h5><div class="ie-btns">'+
+            '<button data-a="rl" title="Turn left">⟲ 90°</button><button data-a="rr" title="Turn right">⟳ 90°</button>'+
+            '<button data-a="fx">Flip ↔</button><button data-a="fy">Flip ↕</button></div></div>'+
+          '<div><h5>Adjust</h5><div class="ie-sls"></div></div>'+
+          '<div class="ie-info"></div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="wf"><button class="wbtn" data-a="reset">Reset</button><span class="grow"></span>'+
+        '<button class="wbtn" data-a="cancel">Cancel</button>'+
+        '<button class="wbtn teal" data-a="ok">Use this image</button></div>'+
+    '</div>';
+  document.body.appendChild(back);
+  const q = s => back.querySelector(s);
+  const cv = q("canvas"), crop = q(".ie-crop"), stage = q(".ie-stage");
+  ie = { back, st, img, opts, resolve, cv, crop };
+
+  // ratios
+  IE_RATIOS.forEach(([lab, r])=>{
+    const b = document.createElement("button"); b.textContent = lab; b.dataset.r = r;
+    b.addEventListener("click", ()=>{ st.ratio = r; ieFitRatio(); ieSync(); });
+    q(".ie-ratios").appendChild(b);
+  });
+  // sliders
+  IE_SLIDERS.forEach(([k, lab, lo, hi])=>{
+    const row = document.createElement("label"); row.className = "ie-sl";
+    row.innerHTML = '<span>'+lab+'</span><input type="range" min="'+lo+'" max="'+hi+'" data-k="'+k+'"><output></output>';
+    const inp = row.querySelector("input");
+    inp.addEventListener("input", ()=>{ st[k] = +inp.value; ieSync(); });
+    q(".ie-sls").appendChild(row);
+  });
+  back.querySelectorAll("[data-a]").forEach(b=> b.addEventListener("click", ()=>{
+    const a = b.dataset.a;
+    if(a==="rl" || a==="rr"){ st.rot = (st.rot + (a==="rr" ? 90 : 270)) % 360; st.crop = {x:0,y:0,w:1,h:1}; ieFitRatio(); ieDraw(); }
+    else if(a==="fx" || a==="fy"){ st[a] = !st[a]; ieFlipCrop(a); ieDraw(); }
+    else if(a==="reset"){ Object.assign(st, ieFresh()); ieDraw(); }
+    else if(a==="cancel"){ ieClose(null); return; }
+    else if(a==="ok"){ ieAccept(); return; }
+    ieSync();
+  }));
+  q(".x").addEventListener("click", ()=> ieClose(null));
+  back.addEventListener("mousedown", e=>{ if(e.target === back) ieClose(null); });
+  // the editor is modal: its keys win wherever focus is, and nothing else hears them
+  ie.keys = e=>{
+    if(e.key==="Escape"){ e.preventDefault(); e.stopPropagation(); ieClose(null); }
+    else if(e.key==="Enter" && e.target.tagName!=="BUTTON"){ e.preventDefault(); e.stopPropagation(); ieAccept(); }
+    else if(!(e.target.closest && e.target.closest("#ieBack"))) e.stopPropagation();
+  };
+  document.addEventListener("keydown", ie.keys, true);
+  ieWireCrop(stage);
+  ieDraw(); ieSync();
+  q('[data-a="ok"]').focus();
+}
+function ieClose(result){
+  if(!ie) return;
+  const r = ie.resolve;
+  document.removeEventListener("keydown", ie.keys, true);
+  ie.back.remove(); ie = null;
+  r(result);
+}
+function ieAccept(){
+  if(!ie) return;
+  const { st, img, opts } = ie;
+  if(!ieTouched(st)){ ieClose(IE_UNCHANGED); return; }
+  let out;
+  try{ out = ieRender(st, img, opts); }
+  catch(e){
+    // a picture referenced by path from another origin (or from file://) cannot be read back
+    toast("This picture cannot be edited here — upload the file instead");
+    ieClose(null); return;
+  }
+  ieClose(out);
+}
+// the preview: the turned picture fitted to the stage; adjustments as a CSS filter
+function ieDraw(){
+  const { st, img, cv } = ie;
+  const o = ieDims(st, img), stage = ie.back.querySelector(".ie-stage");
+  const maxW = Math.max(200, stage.clientWidth - 24), maxH = Math.min(520, Math.max(260, window.innerHeight*0.62));
+  const k = Math.min(maxW/o.w, maxH/o.h, 1);
+  cv.width = Math.max(1, Math.round(o.w*k)); cv.height = Math.max(1, Math.round(o.h*k));
+  ieDrawOriented(cv.getContext("2d"), st, img, k);
+}
+function ieSync(){
+  const { st, img, cv, crop, back } = ie;
+  cv.style.filter = ieFilter(st);
+  const c = st.crop;
+  crop.style.left = (c.x*cv.width)+"px"; crop.style.top = (c.y*cv.height)+"px";
+  crop.style.width = (c.w*cv.width)+"px"; crop.style.height = (c.h*cv.height)+"px";
+  back.querySelectorAll(".ie-ratios button").forEach(b=> b.classList.toggle("on", +b.dataset.r === st.ratio));
+  back.querySelector('[data-a="fx"]').classList.toggle("on", st.fx);
+  back.querySelector('[data-a="fy"]').classList.toggle("on", st.fy);
+  back.querySelectorAll(".ie-sl input").forEach(inp=>{
+    inp.value = st[inp.dataset.k];
+    inp.nextElementSibling.textContent = st[inp.dataset.k] + "%";
+  });
+  const sz = ieOutputSize(st, img, ie.opts.edge);
+  back.querySelector(".ie-info").innerHTML =
+    'Original '+img.naturalWidth+' × '+img.naturalHeight+' px<br>Goes in at <b>'+sz.w+' × '+sz.h+' px</b>'+
+    (sz.w < sz.sw ? ' (scaled to the '+ie.opts.edge+' px the magazine keeps)' : '')+
+    '<br>Drag on the picture to crop; drag the box to move it.';
+}
+// ratio as width/height of the turned picture, in the crop's 0..1 units
+function ieRatioN(){
+  const { st, img } = ie; if(!st.ratio) return 0;
+  const o = ieDims(st, img), R = st.ratio === -1 ? o.w / o.h : st.ratio;
+  return R * o.h / o.w;
+}
+// the biggest crop of the chosen ratio, centred on the current one
+function ieFitRatio(){
+  const Rn = ieRatioN(), c = ie.st.crop; if(!Rn) return;
+  let w = 1, h = w / Rn;
+  if(h > 1){ h = 1; w = Rn; }
+  const cx = c.x + c.w/2, cy = c.y + c.h/2;
+  ie.st.crop = { w, h, x: Math.min(1-w, Math.max(0, cx - w/2)), y: Math.min(1-h, Math.max(0, cy - h/2)) };
+}
+function ieFlipCrop(a){
+  const c = ie.st.crop;
+  if(a==="fx") c.x = 1 - c.x - c.w; else c.y = 1 - c.y - c.h;
+}
+function ieWireCrop(stage){
+  let drag = null;
+  const pt = e=>{ const r = ie.cv.getBoundingClientRect();
+    return { x: Math.min(1, Math.max(0, (e.clientX - r.left)/r.width)), y: Math.min(1, Math.max(0, (e.clientY - r.top)/r.height)) }; };
+  stage.addEventListener("pointerdown", e=>{
+    if(e.button !== 0) return;
+    e.preventDefault();
+    const p = pt(e), c = ie.st.crop, h = e.target.classList && e.target.classList.contains("h") ? e.target.classList[1] : null;
+    if(h){
+      // the corner opposite the one you hold stays put
+      const ax = /l/.test(h) ? c.x + c.w : c.x, ay = /t/.test(h) ? c.y + c.h : c.y;
+      drag = { mode:"size", ax, ay };
+    } else if(e.target === ie.crop){
+      drag = { mode:"move", ox: p.x - c.x, oy: p.y - c.y };
+    } else drag = { mode:"size", ax: p.x, ay: p.y };
+    try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+  });
+  stage.addEventListener("pointermove", e=>{
+    if(!drag) return;
+    const p = pt(e), c = ie.st.crop;
+    if(drag.mode === "move"){
+      c.x = Math.min(1 - c.w, Math.max(0, p.x - drag.ox));
+      c.y = Math.min(1 - c.h, Math.max(0, p.y - drag.oy));
+    } else {
+      const Rn = ieRatioN();
+      let w = Math.abs(p.x - drag.ax), h = Math.abs(p.y - drag.ay);
+      const sx = p.x < drag.ax ? -1 : 1, sy = p.y < drag.ay ? -1 : 1;
+      if(Rn){
+        const roomW = sx < 0 ? drag.ax : 1 - drag.ax, roomH = sy < 0 ? drag.ay : 1 - drag.ay;
+        if(w / Rn > h) h = w / Rn; else w = h * Rn;
+        if(w > roomW){ w = roomW; h = w / Rn; }
+        if(h > roomH){ h = roomH; w = h * Rn; }
+      }
+      w = Math.max(0.02, w); h = Math.max(0.02, h);
+      ie.st.crop = { w, h, x: sx < 0 ? drag.ax - w : drag.ax, y: sy < 0 ? drag.ay - h : drag.ay };
+      const n = ie.st.crop;
+      n.x = Math.min(1 - n.w, Math.max(0, n.x)); n.y = Math.min(1 - n.h, Math.max(0, n.y));
+    }
+    ieSync();
+  });
+  const end = ()=>{ drag = null; };
+  stage.addEventListener("pointerup", end);
+  stage.addEventListener("pointercancel", end);
 }
 
 /* ============================================================================
@@ -2308,7 +3012,7 @@ function palFields(){
 }
 
 function openPalette(q){
-  if(wiz || $("#keysBack")) return;
+  if(wiz || ie || $("#keysBack")) return;
   if(inlineEl) endInline(true);
   openMenu(null); flush();
   palPrev = document.activeElement;
@@ -2484,7 +3188,7 @@ function isTyping(t){
 /* One handler for the studio and for the preview (focus is often inside the
    page after a click there). Typing on the page keeps the browser's own keys. */
 function onKey(e){
-  if(e.defaultPrevented || inlineEl || wiz || $("#keysBack") || !$("#palBack").hidden) return;
+  if(e.defaultPrevented || inlineEl || wiz || ie || $("#keysBack") || !$("#palBack").hidden) return;
   const mod = e.ctrlKey || e.metaKey, k = (e.key||"").toLowerCase();
   if(mod && !e.altKey){
     if(k==="k"){ e.preventDefault(); openPalette(); return; }
@@ -2525,6 +3229,7 @@ renderInspector();
 renderPreview();
 updateHistButtons();
 setStatus(hadSaved?"Restored ✓":"Loaded default", false);
+scheduleWordLimits();
 </script>
 </body>
 </html>
