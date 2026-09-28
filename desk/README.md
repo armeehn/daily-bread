@@ -76,6 +76,8 @@ desk again.
 
 ## Develop
 
+Node 22 or newer (Wrangler 4 needs it; `package.json` says so under `engines`).
+
 ```sh
 cd desk && npm install
 npm test            # offline: a fake email, a fake KV, a fake Claude

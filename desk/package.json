@@ -3,6 +3,9 @@
   "private": true,
   "type": "module",
   "description": "The Daily Bread submissions desk: an email Worker that reads drafts against STYLE.md",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "test": "node --test test/*.test.mjs",
     "deploy": "wrangler deploy",
