@@ -1,151 +1,88 @@
 {
   "edition": "issue-01",
-  "source": "content/issue-01.tex",
-  "sourceSha256": "c6841c07f925811fe2d130f752e1c510007cef9db4692d12ee42829993172414",
-  "model": "db.js DEFAULT_MODEL",
-  "engine": "This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)",
-  "measured": "tools/db-latex.py limits (each slot grown until its copy leaves its page)",
+  "measuredOn": "db-print.js sheets of DB.render(model) (tools/press/render.js)",
+  "trimPt": [
+    419.53,
+    595.28
+  ],
   "slots": [
     {
       "section": "letter",
       "path": "letter.paragraphs",
       "words": 104,
-      "main": 384,
-      "measured": 792,
-      "capacity": 768,
-      "pages": [
-        3
-      ],
-      "mainLines": 37.47,
-      "first": 342,
-      "continued": 426
+      "capacity": 349,
+      "first": 94,
+      "continued": 255
     },
     {
       "section": "contents",
       "path": "contents.dek",
       "words": 28,
-      "main": 328,
-      "measured": 328,
-      "capacity": 318,
-      "pages": [
-        5
-      ]
+      "capacity": 39
     },
     {
       "section": "history",
       "path": "history.paragraphs",
       "words": 97,
-      "main": 185,
-      "measured": 545,
-      "capacity": 528,
-      "pages": [
-        6
-      ],
-      "mainLines": 18.82,
+      "capacity": 342,
       "first": 137,
-      "continued": 391
+      "continued": 205
     },
     {
       "section": "voices",
       "path": "voices.reports.0.body",
       "words": 30,
-      "main": 386,
-      "measured": 790,
-      "capacity": 766,
-      "pages": [
-        13
-      ],
-      "mainLines": 37.2,
-      "first": 334,
-      "continued": 432
+      "capacity": 494,
+      "first": 249,
+      "continued": 245
     },
     {
       "section": "voices",
       "path": "voices.reports.1.body",
       "words": 44,
-      "main": 428,
-      "measured": 832,
-      "capacity": 807,
-      "pages": [
-        14
-      ],
-      "mainLines": 40.47,
-      "first": 386,
-      "continued": 421
+      "capacity": 614,
+      "first": 344,
+      "continued": 270
     },
     {
       "section": "voices",
       "path": "voices.reports.2.body",
       "words": 32,
-      "main": 388,
-      "measured": 792,
-      "capacity": 768,
-      "pages": [
-        15
-      ],
-      "mainLines": 37.2,
-      "first": 336,
-      "continued": 432
+      "capacity": 584,
+      "first": 340,
+      "continued": 244
     },
     {
       "section": "waitlist",
       "path": "waitlist.dek",
       "words": 40,
-      "main": 224,
-      "measured": 224,
-      "capacity": 217,
-      "pages": [
-        27
-      ]
+      "capacity": 90
     },
     {
       "section": "interview",
       "path": "interview.quote",
       "words": 13,
-      "main": 229,
-      "measured": 229,
-      "capacity": 222,
-      "pages": [
-        18
-      ]
+      "capacity": 73
     },
     {
       "section": "calendar",
       "path": "calendar.dek",
       "words": 12,
-      "main": 348,
-      "measured": 348,
-      "capacity": 337,
-      "pages": [
-        40
-      ]
+      "capacity": 9
     },
     {
       "section": "directory",
       "path": "directory.note",
       "words": 13,
-      "main": 453,
-      "measured": 453,
-      "capacity": 439,
-      "pages": [
-        41
-      ]
+      "capacity": 59
     },
     {
       "section": "lab",
       "path": "lab.paragraphs",
       "words": 74,
-      "main": 342,
-      "measured": 722,
-      "capacity": 700,
-      "pages": [
-        32
-      ],
-      "mainLines": 36.92,
-      "first": 290,
-      "continued": 410
+      "capacity": 287,
+      "first": 70,
+      "continued": 217
     }
-  ],
-  "rounds": 21,
-  "footPt": 558.11
+  ]
 }

@@ -1,36 +1,36 @@
 #!/usr/bin/env python3
-"""press-server.py — typeset the studio's edition on demand.
+"""press-server.py — the press: the studio's edition to PDF, on demand.
 
     python3 tools/press-server.py            # PRESS_PORT (8091), PRESS_ORIGINS
     python3 tools/press-server.py --studio   # on your own machine: the studio too,
                                              # at http://localhost:8091/studio.html
 
-The studio's "Magazine PDF" button POSTs the edition on screen here and gets the
-saddle-stitched booklet back: content/<edition>.tex with that model laid over it
-(tools/latex/dblatex/overlay.py), typeset by lualatex, ~10 s. This runs where the
-press can: a host with /opt/texlive, riposte-latex beside the checkout, and this
-repo — LXC 111 on the estate, published by Caddy as press.hq.ripostelabs.xyz.
+The studio's Print menu POSTs the edition on screen here and gets a PDF back.
+The PDF is made by tools/press/render.js: DB.render(model), the page the
+website shows, laid out on sheets of the edition's trim by db-print.js in
+headless Chromium (exactly the studio's Web PDF), then imposed and marked with
+pdf-lib. One renderer, so the website, the Web PDF and the printed PDFs are the
+same pages in the same fonts. About two seconds.
 
-    POST /press      {"edition": "issue-01", "model": {…}}   -> application/pdf
-                     X-Press-Pages / -Sides / -Overfull / -Touched say what it is
-                     "output": "booklet" (the default: Letter, imposed, for a
-                     desktop duplex printer) or "printer" (A5 pages in order
-                     with bleed and crop marks, for a print shop; the bleed is
-                     the model's print.bleed, 3 mm by default)
-    GET  /health     {"ok": true, "editions": [...], "engine": "..."}
-    GET  /           a status page for a person who opened press.hq in a browser
+    POST /press      {"edition": "issue-01", "model": {…}, "output": …}  -> application/pdf
+                     "output": "booklet" (the default: two pages to a Letter-
+                     landscape side in saddle-stitch order, for a desktop duplex
+                     printer), "printer" (pages in order with bleed and crop
+                     marks and TrimBox/BleedBox, for a print shop) or "print"
+                     (the pages cut to the trim, in order: the proof).
+                     X-Press-Pages / -Sides / -Sheets / -Seconds say what it is.
+    GET  /health     {"ok": true, "engine": "...", ...}
+    GET  /           a status page for a person who opened the press in a browser
 
 With --studio the server also serves this checkout's files (not its dotfiles
-or build/), on 127.0.0.1 only: open the studio from it and the Magazine PDF is
-typeset right there, from the edition on screen. It needs what the estate's
-press has: lualatex (TeX Live with fontspec, tikz, pdfpages' graphicx) and
-poppler's pdfinfo; riposte-latex beside the checkout is optional.
+or build/), on 127.0.0.1 only: open the studio from it and the PDFs are made
+right there, from the edition on screen. It needs Node 20+ and, once,
+`cd tools/press && npm install && npx playwright install chromium`.
 
-One typesetting at a time: lualatex is a whole core for several seconds and the
+One job at a time: a render is a whole Chromium for a couple of seconds and the
 box is shared. A few requests queue on the lock; past that the answer is 503
-with Retry-After rather than a pile of threads that all finish minutes late.
-Bodies are capped because an embedded cover image rides inside the model as a
-data: URL. A build that hangs is killed by press.py's own timeout.
+with Retry-After rather than a pile of threads that all finish late. Bodies are
+capped because an embedded cover image rides inside the model as a data: URL.
 
 Stdlib only, like the estate's other hand-written servers.
 """
@@ -48,12 +48,13 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO / "tools" / "latex"))
-from dblatex import overlay, press  # noqa: E402
+RENDER = REPO / "tools" / "press" / "render.js"
+RENDER_TIMEOUT_S = int(os.environ.get("PRESS_TIMEOUT", "120"))
+OUTPUTS = ("booklet", "printer", "print")
 
 PORT = int(os.environ.get("PRESS_PORT", "8091"))
 # Origins the studio is served from. A browser elsewhere gets no CORS header and
-# its fetch fails closed; the studio then falls back to the CI-typeset booklet.
+# its fetch fails closed; the studio then says how to run a press of your own.
 ORIGINS = set(filter(None, os.environ.get(
     "PRESS_ORIGINS",
     "https://db.ripostelabs.xyz,https://ourdailybre.ad,https://daily-bread-studio.pages.dev").split(",")))
@@ -92,17 +93,24 @@ STATUS_PAGE = """<!doctype html><meta charset="utf-8"><title>Daily Bread press</
 <style>body{{font:15px/1.5 "IBM Plex Mono",ui-monospace,monospace;max-width:40em;margin:3em auto;padding:0 1em;color:#1d1a17;background:#f6f1e7}}
 h1{{font-size:1.2em}}code{{background:#eae4d6;padding:0 .3em}}</style>
 <h1>Daily Bread press</h1>
-<p>This is the typesetting service behind the studio&rsquo;s <b>Magazine PDF</b> button:
-the edition on screen laid over <code>content/&lt;edition&gt;.tex</code>, set by lualatex,
-imposed as a saddle-stitched booklet. Nothing to see here; press the button in the studio.</p>
-<p>Editions: <code>{editions}</code><br>Engine: <code>{engine}</code><br>State: <code>{busy}</code></p>
+<p>This is the press behind the studio&rsquo;s <b>Print</b> menu: the edition on screen,
+laid out as the website draws it and made into a booklet or a printer&rsquo;s PDF.
+Nothing to see here; use the menu in the studio.</p>
+<p>Engine: <code>{engine}</code><br>State: <code>{busy}</code></p>
 <p><code>GET /health</code> is this as JSON. <code>POST /press</code> takes
-<code>{{"edition", "model"}}</code> and answers with the PDF.</p>
+<code>{{"edition", "model", "output"}}</code> and answers with the PDF.</p>
 """
 
 
-def editions():
-    return sorted(p.stem for p in (REPO / "content").glob("issue-*.tex"))
+def engine():
+    try:
+        v = subprocess.run(["node", "--version"], capture_output=True, text=True, timeout=10).stdout.strip()
+    except Exception:
+        v = "no node"
+    return f"tools/press/render.js on node {v} + Chromium"
+
+
+ENGINE = engine()
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -115,7 +123,7 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Access-Control-Allow-Origin", origin)
             self.send_header("Vary", "Origin")
             self.send_header("Access-Control-Expose-Headers",
-                             "X-Press-Pages, X-Press-Sides, X-Press-Sheets, X-Press-Overfull, X-Press-Touched, X-Press-Seconds")
+                             "X-Press-Pages, X-Press-Sides, X-Press-Sheets, X-Press-Seconds")
 
     def reply(self, status, body, ctype="application/json", extra=None):
         data = body if isinstance(body, bytes) else json.dumps(body).encode()
@@ -145,14 +153,14 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         route = self.path.split("?")[0]
-        status = {"ok": True, "editions": editions(), "commit": COMMIT,
-                  "engine": press.engine_version(REPO), "busy": lock.locked(),
+        status = {"ok": True, "commit": COMMIT, "outputs": list(OUTPUTS),
+                  "engine": ENGINE, "busy": lock.locked(),
                   "queued": queued, "maxQueued": MAX_QUEUED}
         if route == "/health":
             return self.reply(HTTPStatus.OK, status)
         if route == "/":
             return self.reply(HTTPStatus.OK, STATUS_PAGE.format(
-                editions=", ".join(status["editions"]), engine=status["engine"],
+                engine=status["engine"],
                 busy="typesetting now" if status["busy"] else "idle").encode(),
                 "text/html; charset=utf-8")
         if STUDIO:
@@ -184,10 +192,10 @@ class Handler(BaseHTTPRequestHandler):
         edition = str(req.get("edition", ""))
         model = req.get("model")
         output = str(req.get("output") or "booklet")
-        if output not in ("booklet", "printer"):
-            return self.fail(HTTPStatus.BAD_REQUEST, 'output must be "booklet" or "printer"')
-        if not EDITION.match(edition) or edition not in editions():
-            return self.fail(HTTPStatus.NOT_FOUND, f"no such edition; have {', '.join(editions())}")
+        if output not in OUTPUTS:
+            return self.fail(HTTPStatus.BAD_REQUEST, "output must be one of " + ", ".join(OUTPUTS))
+        if not EDITION.match(edition):
+            return self.fail(HTTPStatus.BAD_REQUEST, "edition must look like issue-01")
         if not isinstance(model, dict):
             return self.fail(HTTPStatus.BAD_REQUEST, "model must be the studio's edition JSON")
 
@@ -213,27 +221,30 @@ class Handler(BaseHTTPRequestHandler):
                 with queued_lock:
                     queued -= 1
                 waited = time.monotonic() - started
-                booklet, info = overlay.typeset(REPO, edition, model, work)
-                if output == "printer":
-                    bleed = press.length_pt(((model.get("print") or {}).get("bleed")), press.BLEED_MM)
-                    booklet = press.build_printer(REPO, work / "build", bleed)
-            pdf = booklet.read_bytes()
-        except Exception as e:                      # a TeX error is the common case
+                res = subprocess.run(["node", str(RENDER), "--model", "-", "--out", str(work), "--only", output],
+                                     input=json.dumps(model), capture_output=True, text=True,
+                                     timeout=RENDER_TIMEOUT_S, cwd=str(REPO))
+                if res.returncode:
+                    raise RuntimeError((res.stderr or res.stdout).strip()[-2000:] or "render failed")
+            info = json.loads(res.stdout.strip().splitlines()[-1])
+            pdf = Path(info["files"][output]).read_bytes()
+        except subprocess.TimeoutExpired:
+            return self.fail(HTTPStatus.GATEWAY_TIMEOUT, f"the render took longer than {RENDER_TIMEOUT_S} s")
+        except Exception as e:
             sys.stderr.write("press %s %s FAILED after %.1fs: %s\n" % (
                 self.address_string(), edition, time.monotonic() - started, str(e)[-300:].replace("\n", " ")))
             return self.fail(HTTPStatus.UNPROCESSABLE_ENTITY, str(e)[-2000:])
         finally:
             shutil.rmtree(work, ignore_errors=True)
-        sys.stderr.write("press %s %s ok %.1fs (waited %.1fs) %d pages %d bytes overlaid %d overfull %d\n" % (
-            self.address_string(), edition, time.monotonic() - started, waited,
-            info["pages"], len(pdf), len(info["touched"]), info["overfull"]))
+        sys.stderr.write("press %s %s %s ok %.1fs (waited %.1fs) %d pages %d bytes\n" % (
+            self.address_string(), edition, output, time.monotonic() - started, waited, info["pages"], len(pdf)))
 
         name = f"daily-bread-{edition}-{output}.pdf"
         self.reply(HTTPStatus.OK, pdf, "application/pdf", {
             "Content-Disposition": f'attachment; filename="{name}"',
-            "X-Press-Pages": str(info["pages"]), "X-Press-Sides": str(info["sides"]),
-            "X-Press-Sheets": str(info["sheets"]), "X-Press-Overfull": str(info["overfull"]),
-            "X-Press-Touched": " ".join(info["touched"]),
+            "X-Press-Pages": str(info["pages"]),
+            "X-Press-Sides": str((info.get("booklet") or {}).get("sides", info["pages"])),
+            "X-Press-Sheets": str(-(-(info.get("booklet") or {}).get("sides", info["pages"]) // 2)),
             "X-Press-Seconds": "%.1f" % (time.monotonic() - started),
         })
 
@@ -244,7 +255,7 @@ def main():
     # the studio mode serves the checkout: to this machine only
     srv = ThreadingHTTPServer(("127.0.0.1" if STUDIO else "0.0.0.0", PORT), Handler)
     srv.daemon_threads = True
-    sys.stderr.write(f"daily-bread press on :{PORT}  commit {COMMIT}  editions {editions()}  repo {REPO}\n")
+    sys.stderr.write(f"daily-bread press on :{PORT}  commit {COMMIT}  {ENGINE}  repo {REPO}\n")
     if STUDIO:
         sys.stderr.write(f"studio: http://localhost:{PORT}/studio.html\n")
     srv.serve_forever()
