@@ -1,4 +1,8 @@
-"""python3 tools/db-latex.py {import,build,check,press} --edition <slug>"""
+"""python3 tools/db-latex.py {import,build,check} --edition <slug>
+
+The .tex issues feed the website's shared strings (content/<slug>.js, read by
+tools/strings/from-issue.js) and can still be typeset as proofs (build --print).
+The magazine itself prints from the studio's model: tools/press/render.js."""
 import argparse
 import hashlib
 import json
@@ -7,17 +11,13 @@ import subprocess
 import sys
 from pathlib import Path
 
-from . import overlay, press, web
+from . import press, web
 from .reader import read_tex
 from .writer import write_tex
 
 REPO = Path(__file__).resolve().parents[3]
 DEFAULT_EDITION = "issue-01"
 EPS_PT = 0.01
-# Where the studio's "Magazine PDF" button downloads from: press/<edition>/.
-PRESS_DIR = REPO / "press"
-BOOKLET_PDF = "booklet.pdf"
-BOOKLET_MANIFEST = "booklet.json"
 
 
 def paths(slug):
@@ -43,8 +43,7 @@ def cmd_build(args):
         print(f"web: {js.relative_to(REPO)} regenerated, site rebuilt")
     if args.print:
         one_up, booklet = press.build_pdfs(REPO, tex, build)
-        printer = press.build_printer(REPO, build)
-        for pdf in (one_up, booklet, printer):
+        for pdf in (one_up, booklet):
             print("print: %s  %d pages  %.2f x %.2f pt" % ((pdf.relative_to(REPO),) + press.pdf_geometry(pdf)))
 
 
@@ -107,106 +106,15 @@ def check_print(issue, tex, build):
     return failures
 
 
-def cmd_press(args):
-    """Typeset the edition and publish its saddle-stitched booklet to press/<edition>/,
-    the fallback the studio's "Magazine PDF" button downloads when the press service
-    is out of reach. Beside it goes a manifest that names the source and the bytes,
-    so the studio can say what it is handing over and CI can tell a stale copy from
-    a fresh one.
-
-    With --model, the studio's edition JSON is laid over the .tex first (overlay.py)
-    and the booklet goes to --out instead: the same path the press service takes,
-    so the CLI can prove it."""
-    if args.model:
-        model = json.loads(Path(args.model).read_text())
-        work = REPO / "build" / "latex" / f"{args.edition}-studio"
-        shutil.rmtree(work, ignore_errors=True)
-        booklet, info = overlay.typeset(REPO, args.edition, model, work)
-        out = Path(args.out) if args.out else work / BOOKLET_PDF
-        out.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(booklet, out)
-        print("press: %s  %d pages on %d sides  overlaid %d page(s): %s" % (
-            out, info["pages"], info["sides"], len(info["touched"]), " ".join(info["touched"])))
-        return 0
-
-    tex, _, build = paths(args.edition)
-    issue = read_tex(tex.read_text())
-    failures = check_print(issue, tex, build)
-    for f in failures:
-        print("FAIL:", f)
-    if failures:
-        return 1
-
-    out = PRESS_DIR / args.edition
-    out.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(build / BOOKLET_PDF, out / BOOKLET_PDF)
-    pdf = (out / BOOKLET_PDF).read_bytes()
-    pages, sheet_w, sheet_h = press.pdf_geometry(out / BOOKLET_PDF)
-    n = len(issue["pages"])
-    manifest = {
-        "edition": args.edition,
-        "source": str(tex.relative_to(REPO)),
-        "sourceSha256": hashlib.sha256(tex.read_bytes()).hexdigest(),
-        "pages": n, "sides": pages, "sheets": pages // 2,
-        "pageWidthPt": press.A5_PT[0], "pageHeightPt": press.A5_PT[1],
-        "sheetWidthPt": round(sheet_w, 2), "sheetHeightPt": round(sheet_h, 2),
-        "order": ["%d|%d" % lr for lr in press.saddle_stitch(n)],
-        "pdfSha256": hashlib.sha256(pdf).hexdigest(), "pdfBytes": len(pdf),
-        "sourceDateEpoch": int(press.source_date_epoch()),
-        "engine": press.engine_version(REPO),
-        "press": "tools/db-latex.py press (lualatex + dailybread.cls; saddle-stitch on Letter)",
-    }
-    (out / BOOKLET_MANIFEST).write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
-    print("press: %s  %d pages on %d sides  sha256 %s" % (
-        (out / BOOKLET_PDF).relative_to(REPO), n, pages, manifest["pdfSha256"][:12]))
-    return 0
-
-
-def cmd_limits(args):
-    """Measure how many words each writer's slot holds on its printed page and
-    write press/<edition>/limits.json, which the studio reads for the print half
-    of its word limits. Typesets the edition about a dozen times (dblatex/limits.py)."""
-    from . import limits
-    if args.model:
-        model = json.loads(Path(args.model).read_text())
-        what = str(args.model)
-    else:
-        js = "process.stdout.write(JSON.stringify(require('./db.js').DEFAULT_MODEL))"
-        model = json.loads(subprocess.run(["node", "-e", js], cwd=REPO, capture_output=True,
-                                          text=True, check=True).stdout)
-        what = "db.js DEFAULT_MODEL"
-    tex = REPO / "content" / f"{args.edition}.tex"
-    res = limits.measure(REPO, args.edition, model)
-    out = PRESS_DIR / args.edition
-    out.mkdir(parents=True, exist_ok=True)
-    manifest = {
-        "edition": args.edition,
-        "source": str(tex.relative_to(REPO)),
-        "sourceSha256": hashlib.sha256(tex.read_bytes()).hexdigest(),
-        "model": what,
-        "engine": press.engine_version(REPO),
-        "measured": "tools/db-latex.py limits (each slot grown until its copy leaves its page)",
-        **res,
-    }
-    (out / "limits.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
-    for s in res["slots"]:
-        print("limits: %-28s %4s words now, holds %s" % (s["path"], s["words"], s["capacity"]))
-    return 0
-
-
 def main(argv=None):
     p = argparse.ArgumentParser(prog="db-latex", description=__doc__)
     sub = p.add_subparsers(dest="cmd", required=True)
-    for name, fn in (("import", cmd_import), ("build", cmd_build), ("check", cmd_check),
-                     ("press", cmd_press), ("limits", cmd_limits)):
+    for name, fn in (("import", cmd_import), ("build", cmd_build), ("check", cmd_check)):
         s = sub.add_parser(name)
         s.add_argument("--edition", default=DEFAULT_EDITION)
         if name in ("build", "check"):
             s.add_argument("--web", action="store_true")
             s.add_argument("--print", action="store_true")
-        if name in ("press", "limits"):
-            s.add_argument("--model", help="studio edition JSON to lay over the .tex")
-            s.add_argument("--out", help="where the overlaid booklet goes (with --model)")
         s.set_defaults(fn=fn)
     args = p.parse_args(argv)
     if args.cmd in ("build", "check") and not (args.web or args.print):

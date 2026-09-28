@@ -2,7 +2,7 @@
 
 A page is `{id, template, [variant], [slug], [chrome], content}`; a content
 value is a string or a block sequence (list of strings). This is exactly the
-shape tools/strings/from-issue.js and tools/print/build-print.js consume.
+shape tools/strings/from-issue.js consumes.
 """
 import re
 

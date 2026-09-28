@@ -39,7 +39,7 @@ These are genuinely common ancestry, and should stay in sync:
 | **UnifrakturMaguntia blackletter masthead** | The magazine's own identity. Riposte has no blackletter except inside its wordmark artwork. |
 | **IBM Plex Mono** rather than JetBrains Mono | Plex is the publication's text face. It is the Riposte stack's own first fallback, so the two are siblings, not strangers — but they are not the same face and should not be unified. |
 | Editorial voice — first person, warmth, humour | Riposte's voice is a builder reporting results. A magazine is allowed feelings and exclamation marks. |
-| Print spec driven by `PRINT-SPEC.md` | The magazine's press constraints outrank the brand guide's print section. |
+| Print follows the magazine's own renderer (`db.js` + `db-print.js`, pressed by `tools/press/`) | The magazine's press constraints outrank the brand guide's print section. |
 
 ## Where the guide still applies
 

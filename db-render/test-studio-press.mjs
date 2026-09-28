@@ -12,15 +12,17 @@
  * (3) an edition maps to its .tex by issue number; (4) Printer PDF asks the
  * press for the printer's output; (5) the press is looked for on this machine
  * before press.hq.
- * Needs playwright and a chromium, so it runs on the build host only and is NOT
- * in CI. The press itself is proven by `db-latex.py press --model`.
+ * Needs the press's Playwright (cd tools/press && npm install). The press itself
+ * is proven by tools/press/test-press.js.
  */
 import http from "node:http";
 import fs from "node:fs";
 import crypto from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { chromium } from "playwright";
+import { createRequire } from "node:module";
+// the press's pinned Playwright: `cd tools/press && npm install` once
+const { chromium } = createRequire(new URL("../tools/press/package.json", import.meta.url))("playwright");
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(HERE, "..");

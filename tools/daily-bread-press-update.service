@@ -6,8 +6,9 @@ After=network-online.target
 [Service]
 Type=oneshot
 # Fast-forward only: a checkout another session left dirty or on a branch is
-# left alone and reported, never reset. The press is restarted only when the
-# code it imported at start changed; a content change is read per request.
+# left alone and reported, never reset. Every request starts a fresh
+# tools/press/render.js, so only the server itself needs a restart; a changed
+# lockfile reinstalls the press first.
 ExecStart=/bin/bash -c '\
   set -u; cd /home/user/daily-bread || exit 90; \
   old=$(runuser -u user -- git rev-parse HEAD); \
@@ -17,8 +18,10 @@ ExecStart=/bin/bash -c '\
   new=$(runuser -u user -- git rev-parse HEAD); \
   [ "$old" = "$new" ] && exit 0; \
   echo "advanced $old -> $new"; \
-  if runuser -u user -- git diff --quiet "$old" "$new" -- tools/press-server.py tools/latex; then exit 0; fi; \
-  echo "press code changed; restarting"; systemctl try-restart daily-bread-press.service'
+  if ! runuser -u user -- git diff --quiet "$old" "$new" -- tools/press/package-lock.json; then \
+    echo "press dependencies changed; reinstalling"; (cd tools/press && runuser -u user -- npm ci --no-audit --no-fund) || echo "npm ci failed"; fi; \
+  if runuser -u user -- git diff --quiet "$old" "$new" -- tools/press-server.py; then exit 0; fi; \
+  echo "press server changed; restarting"; systemctl try-restart daily-bread-press.service'
 
 [Install]
 WantedBy=multi-user.target

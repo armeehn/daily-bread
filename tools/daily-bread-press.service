@@ -1,5 +1,5 @@
 [Unit]
-Description=Daily Bread press — typeset the studio's edition on demand (press.hq)
+Description=Daily Bread press — the studio's edition to PDF on demand (press.hq)
 Documentation=file:/home/user/daily-bread/tools/press-server.py
 After=network-online.target
 Wants=network-online.target
@@ -17,14 +17,15 @@ Restart=always
 RestartSec=5
 TimeoutStopSec=20
 
-# lualatex is a whole core for several seconds on a shared, RAM-oversubscribed
-# host; one typesetting at a time is enforced in the server, and it yields.
+# A render is a headless Chromium for a couple of seconds on a shared,
+# RAM-oversubscribed host; one job at a time is enforced in the server, and it yields.
 Nice=5
 MemoryMax=2G
 TasksMax=64
 
-# Sandbox: the press reads the checkout, riposte-latex and TeX Live, and writes
-# only its own build/ (per-request temp dirs and the per-build font cache).
+# Sandbox: the press reads the checkout (tools/press/node_modules included) and
+# the Playwright browsers in ~/.cache, and writes only its own build/ (a temp dir
+# per request); Chromium's scratch goes to the private /tmp.
 NoNewPrivileges=yes
 PrivateTmp=yes
 ProtectSystem=strict
