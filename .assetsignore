@@ -15,3 +15,6 @@ PRINT-SPEC.md
 LICENSE
 magazine.env
 .magazine.applied
+STYLE.md
+# the submissions desk is a separate Worker (desk/README.md): never served as site assets
+desk/

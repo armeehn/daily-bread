@@ -1,6 +1,11 @@
 node_modules/
 package.json
 package-lock.json
+# the submissions desk is its own Worker with its own dependencies (desk/README.md)
+!desk/package.json
+!desk/package-lock.json
+desk/dist/
+desk/.wrangler/
 .claude/
 
 # wrangler / Cloudflare

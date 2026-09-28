@@ -1,0 +1,18 @@
+{
+  "name": "daily-bread-desk",
+  "private": true,
+  "type": "module",
+  "description": "The Daily Bread submissions desk: an email Worker that reads drafts against STYLE.md",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "deploy": "wrangler deploy",
+    "check": "wrangler deploy --dry-run --outdir dist"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.128.0",
+    "postal-mime": "^4.0.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.142.0"
+  }
+}

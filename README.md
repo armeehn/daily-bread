@@ -28,6 +28,7 @@ accent cascade over a bone/ink base. The same source typesets the print run.
 | [`tools/newsproof/`](tools/newsproof/) + [`verify/`](verify/) | Tamper-evidence: every page is hashed, logged and signed; the badge on the page checks it |
 | [`tools/strings/`](tools/strings/) | The web chrome in English (`en.js`) and fifteen translations |
 | [`shop/`](shop/), [`tools/merch/`](tools/merch/) | The shop pane and the merch artwork pipeline |
+| [`desk/`](desk/), [`STYLE.md`](STYLE.md) | The submissions desk: an email Worker that reads writers' drafts against the house style guide and word limits, and replies with notes |
 | [`wrangler.jsonc`](wrangler.jsonc), [`CLOUDFLARE.md`](CLOUDFLARE.md) | Deploy: the repo root served as Cloudflare Worker static assets |
 | [`magazine.env`](magazine.env), [`FORKING.md`](FORKING.md), [`LICENSE`](LICENSE) | Make it yours |
 | [`db-render/`](db-render/) | The original hand-laid-out kit, kept for reference; not served |

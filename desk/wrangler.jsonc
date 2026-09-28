@@ -1,0 +1,29 @@
+{
+  // The submissions desk: a Cloudflare Email Worker, separate from the site's
+  // assets-only Worker so the magazine's deploy never depends on it.
+  // Setup, step by step: desk/README.md.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "daily-bread-desk",
+  "main": "src/index.js",
+  "compatibility_date": "2026-07-23",
+  "compatibility_flags": ["nodejs_compat"],
+  // STYLE.md is bundled as text
+  "rules": [{ "type": "Text", "globs": ["**/*.md"], "fallthrough": true }],
+  "vars": {
+    "MAGAZINE": "Daily Bread",
+    // the address writers send to; route it to this Worker in Email Routing
+    "DESK_ADDRESS": "submit@dailybread.example",
+    // a verified destination address in Email Routing: gets every original and every note
+    "EDITORS_ADDRESS": "editors@dailybread.example",
+    // point | suggest | rewrite  (STYLE.md, "The submissions desk")
+    "DESK_MODE": "suggest",
+    // drafts read per sender per day; past it, editors only
+    "DAILY_LIMIT": "8"
+  },
+  // threads and per-sender counts: `npx wrangler kv namespace create DESK`, then paste the id
+  "kv_namespaces": [{ "binding": "DESK", "id": "REPLACE_WITH_KV_NAMESPACE_ID" }],
+  // the copy of the desk's notes to the editors
+  "send_email": [{ "name": "EDITORS", "destination_address": "editors@dailybread.example" }],
+  // ANTHROPIC_API_KEY is a secret: `npx wrangler secret put ANTHROPIC_API_KEY`
+  "observability": { "enabled": true }
+}
