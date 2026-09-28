@@ -71,7 +71,7 @@ Anthropic API key.
 6. Send it a draft from your own address.
 
 `STYLE.md` and the word limits are bundled when the Worker is deployed: after
-editing the guide, or re-running `python3 tools/db-latex.py limits`, deploy the
+editing the guide, or re-publishing the limits (`node tools/press/render.js --publish`), deploy the
 desk again.
 
 ## Develop

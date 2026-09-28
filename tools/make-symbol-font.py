@@ -26,7 +26,7 @@ import tempfile
 from fontTools.ttLib import TTFont
 
 # Every character the magazine uses that IBM Plex Mono does not carry. Keep this
-# list in step with what db-render/render-studio-pdf.js reports as unpinned: if it
+# list in step with the faces tools/press/test-press.js finds in the PDF: if it
 # names a new face, a new glyph has crept into the model and belongs here.
 GLYPHS = [0x2192, 0x2318, 0x25B8, 0x25E6, 0x2610, 0x2665, 0x2702, 0x2715, 0x2726]
 

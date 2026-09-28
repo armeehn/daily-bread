@@ -1,11 +1,11 @@
-"""content/<edition>.tex -> print.pdf (A5 one-up) and booklet.pdf (Letter two-up),
-and on request printer.pdf (A5 one-up with bleed and crop marks, for a print shop).
+"""content/<edition>.tex -> print.pdf (A5 one-up) and booklet.pdf (Letter two-up):
+proofs of a .tex issue. The magazine prints from the studio's model instead
+(tools/press/render.js); this stays for an issue still kept as .tex.
 
     print.pdf    48 pages  420 x 594.96 pt  (A5, the trim every template is drawn at)
     booklet.pdf  24 sides  792 x 612 pt     (Letter landscape, the paper in the printer)
-    printer.pdf  48 pages  465.35 x 640.31 pt (A5 + 3 mm bleed + 5 mm slug; build_printer)
 The A5 pages are typeset by lualatex + dailybread.cls; the booklet is those
-pages re-imposed in saddle-stitch order (tools/print/imposition.js derives the
+pages re-imposed in saddle-stitch order (tools/press/render.js imposes the
 same pairing for the Chromium path), sized for a desktop duplex laser: print,
 fold, staple. Nothing is trimmed.
 """
@@ -182,98 +182,6 @@ def build_pdfs(repo, tex, build, assets=None):
     _run(common + ["-jobname=booklet", "booklet.tex"], build, env, build / "booklet.log")
 
     return build / "print.pdf", build / "booklet.pdf"
-
-
-# The printer's PDF: for a print shop, not the desktop laser. Every page one-up
-# in reading order (the shop imposes), on a sheet of trim + bleed + slug, with
-# crop marks in the slug and /TrimBox and /BleedBox set so the shop's software
-# knows where to cut. The pages are drawn at the trim, so the bleed is made by
-# stretching each page's outermost half point out over it: a background, a
-# strip or a picture that runs to the trim carries on past it in its own
-# colour, and nothing inside the page (a strip's label a couple of mm from the
-# edge) is copied out where a trim that drifts would show it.
-BLEED_MM = 3.0                 # the default, as the studio's Print settings
-SLUG_MM = 5.0                  # room for the crop marks, outside the bleed
-MARK_PT = 0.25
-EDGE_PT = 0.5                  # the slice of the page's edge stretched over the bleed
-
-PRINTER_TEX = r"""\documentclass{article}
-\usepackage[paperwidth=%(W).3fbp,paperheight=%(H).3fbp,margin=0pt,noheadfoot,nomarginpar]{geometry}
-\usepackage{tikz}
-\pagestyle{empty}
-\pdfvariable pageattr{/TrimBox [%(o).3f %(o).3f %(ow).3f %(oh).3f] /BleedBox [%(s).3f %(s).3f %(bw).3f %(bh).3f]}
-\newcommand\dbsheet[1]{%%
-  \begin{tikzpicture}[x=1bp,y=1bp]
-    \useasboundingbox (0,0) rectangle (%(W).3f,%(H).3f);
-%(tiles)s
-    \begin{scope}[line width=%(mark)sbp]
-%(marks)s
-    \end{scope}
-  \end{tikzpicture}}
-\newcommand\dbpage[1]{%%
-  \saveimageresource page #1 {print.pdf}%%
-  \edef\next{\noexpand\AddToHookNext{shipout/background}{\noexpand\put(0,-\noexpand\paperheight){\noexpand\dbsheet{\the\lastsavedimageresourceindex}}}}\next
-  \null\newpage}
-\begin{document}
-%(pages)s
-\end{document}
-"""
-
-
-def length_pt(v, default_mm):
-    """A CSS-ish length ("3mm", "0.125in", "9pt") in points; the default if unreadable."""
-    m = re.match(r"^\s*([\d.]+)\s*(mm|cm|in|pt|px)?\s*$", str(v or ""))
-    if not m:
-        return default_mm * MM_PT
-    n, u = float(m.group(1)), m.group(2) or "mm"
-    return n * {"mm": MM_PT, "cm": 10 * MM_PT, "in": 72.0, "pt": 1.0, "px": 0.75}[u]
-
-
-def printer_geometry(bleed_pt=None):
-    b = BLEED_MM * MM_PT if bleed_pt is None else max(0.0, min(bleed_pt, 12 * MM_PT))
-    s = SLUG_MM * MM_PT
-    w, h = A5_PT
-    return {"b": b, "s": s, "o": s + b, "w": w, "h": h, "W": w + 2 * (s + b), "H": h + 2 * (s + b)}
-
-
-def build_printer(repo, build, bleed_pt=None):
-    """build/print.pdf -> build/printer.pdf: trim + bleed + slug, crop marks, boxes."""
-    g = printer_geometry(bleed_pt)
-    b, s, o, w, h, W, H = (g[k] for k in "bsowhWH")
-    tiles = []
-    # nine tiles: the page, then its outermost EDGE_PT stretched over the bleed
-    # on each side and at each corner
-    k = b / EDGE_PT if b > 0 else 1
-    for dy in (0, -1, 1):
-        for dx in (0, -1, 1):
-            if (dx or dy) and b <= 0:
-                continue
-            xr = {0: (o, o + w), -1: (o - b, o), 1: (o + w, o + w + b)}[dx]
-            yr = {0: (o, o + h), -1: (o - b, o), 1: (o + h, o + h + b)}[dy]
-            # where the page's origin goes, and its scale, so that its edge slice lands on the band
-            sx, xs = {0: (o, 1), -1: (o - b, k), 1: (o + w - (w - EDGE_PT) * k, k)}[dx]
-            sy, ys = {0: (o, 1), -1: (o - b, k), 1: (o + h - (h - EDGE_PT) * k, k)}[dy]
-            tiles.append(
-                "    \\begin{scope}\\clip (%.3f,%.3f) rectangle (%.3f,%.3f);"
-                "\\begin{scope}[shift={(%.4f,%.4f)},xscale=%.4f,yscale=%.4f]"
-                "\\node[anchor=south west,inner sep=0pt,outer sep=0pt,transform shape] at (0,0) {\\useimageresource #1};"
-                "\\end{scope}\\end{scope}" % (xr[0], yr[0], xr[1], yr[1], sx, sy, xs, ys))
-    marks = []
-    for x in (o, o + w):            # vertical marks, above and below the trim corners
-        marks += ["      \\draw (%.3f,0) -- (%.3f,%.3f);" % (x, x, s),
-                  "      \\draw (%.3f,%.3f) -- (%.3f,%.3f);" % (x, H - s, x, H)]
-    for y in (o, o + h):            # horizontal marks, left and right
-        marks += ["      \\draw (0,%.3f) -- (%.3f,%.3f);" % (y, s, y),
-                  "      \\draw (%.3f,%.3f) -- (%.3f,%.3f);" % (W - s, y, W, y)]
-    n = pdf_geometry(build / "print.pdf")[0]
-    (build / "printer.tex").write_text(PRINTER_TEX % {
-        "W": W, "H": H, "o": o, "ow": o + w, "oh": o + h, "s": s, "bw": W - s, "bh": H - s,
-        "mark": MARK_PT, "tiles": "\n".join(tiles), "marks": "\n".join(marks),
-        "pages": "\n".join("\\dbpage{%d}" % i for i in range(1, n + 1))})
-    env = _env(repo, build)
-    _run([ENGINE, "-interaction=nonstopmode", "-halt-on-error", f"-output-directory={build}",
-          "-jobname=printer", "printer.tex"], build, env, build / "printer.log")
-    return build / "printer.pdf"
 
 
 def overfull_boxes(log):

@@ -17,7 +17,9 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { chromium } from "playwright";
+import { createRequire } from "node:module";
+// the press's pinned Playwright: `cd tools/press && npm install` once
+const { chromium } = createRequire(new URL("../tools/press/package.json", import.meta.url))("playwright");
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(HERE, "..");

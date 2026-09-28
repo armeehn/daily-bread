@@ -70,17 +70,24 @@ not run it.
 
 ## 5. The press (optional)
 
-`press/<edition>/booklet.pdf` is the saddle-stitch print file, typeset by
-`.gitea/workflows/press-booklet.yml` in a TeX Live container and required
-to be byte-identical to what is committed. A fork's first press differs by
-definition: run the workflow with `commit = true` once, or press locally with
-`python3 tools/db-latex.py press`, and commit.
+The printed magazine is the website's own pages: `tools/press/render.js`
+lays `DB.render(model)` out with `db-print.js` in headless Chromium and makes
+the booklet and the printer's PDF from it. `press/<edition>/` holds the
+booklet the studio offers when no press is running, its manifest and the
+word limits; re-publish them after changing the default edition:
 
-`tools/press-server.py` typesets the studio's edition on demand. It needs
-TeX Live at the path in `tools/latex/dblatex/press.py` and the upstream's
-`riposte-latex` package beside the checkout (the class falls back to a
-shim without it). The systemd units and Caddy site in `tools/` are the
-upstream's own deployment, kept as a worked example.
+```sh
+cd tools/press && npm install && cd ../..
+node tools/press/render.js --publish
+```
+
+`.gitea/workflows/press-booklet.yml` checks the published booklet describes
+the edition (model hash, pages, trim) and that two renders are byte-identical.
+
+`tools/press-server.py` makes the PDFs on demand for the studio's Print menu
+(`--studio` also serves the studio, on your own machine). It needs Node and
+the press installed as above. The systemd units and Caddy site in `tools/`
+are the upstream's own deployment, kept as a worked example.
 
 ## 6. Publish
 

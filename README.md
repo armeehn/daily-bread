@@ -10,149 +10,155 @@ domain, place and mailbox it carries lives in [`magazine.env`](magazine.env),
 and `python3 tools/rebrand.py` makes the tree follow it. [`FORKING.md`](FORKING.md)
 is the checklist from fork to your first edition.
 
-Read it at [db.ripostelabs.xyz](https://db.ripostelabs.xyz). The web edition is
-static HTML in sixteen languages, styled from the print design: blackletter
+Read it at [db.ripostelabs.xyz](https://db.ripostelabs.xyz): blackletter
 masthead, IBM Plex Mono spec-sheet chrome, checker bands, the pink/teal/orange
-accent cascade over a bone/ink base. The same source typesets the print run.
+accent cascade over a bone/ink base, in sixteen languages.
+
+## One magazine, one renderer
+
+```
+            studio.html  ──edits──►  the edition (a JSON model)
+                                          │
+                                   db.js  DB.render(model)       one HTML document, no runtime JS
+                                          │
+             ┌────────────────────────────┼─────────────────────────────┐
+             ▼                            ▼                             ▼
+      the page (Publish)      db-print.js lays it out on        tools/press/render.js:
+                              sheets of the trim: Web PDF       the same sheets in headless
+                                                                Chromium → booklet.pdf
+                                                                and printer.pdf
+```
+
+The website, the Web PDF and the printed booklet are the same pages, drawn by
+the same CSS in the same self-hosted fonts (`assets/fonts/`). Print differs
+only where paper does: sections start on a fresh A5 page, a long section runs
+on to the next page, a long piece carries on to a Continued page, and text
+prints at one size throughout (0.8 of the web's, about 9.3 pt).
+`tools/press/test-press.js` checks that the studio's Web PDF and the press lay
+out the same sheets at the same scales.
 
 ## Repository map
 
 | Path | What it is |
 |---|---|
-| [`content/`](content/) | The issues. One LaTeX file each (`issue-01.tex`) and its generated `.js` twin, which the web build reads |
-| [`tools/build.js`](tools/build.js) | The web build: 48 pages (16 languages × full, lite, e-ink) from `content/`, `tools/strings/` and `tools/assets/` |
+| [`studio.html`](studio.html) | The browser studio: edit, re-skin, preview and print an edition. Served at `/studio` |
+| [`db.js`](db.js) | The engine: `DEFAULT_MODEL` (the whole of №1), theme presets, the form `SCHEMA`, and `DB.render(model)` |
+| [`db-print.js`](db-print.js) | The pager: lays `DB.render` out on sheets, and measures each writer's word limit on them |
+| [`tools/press/`](tools/press/) | The press: `render.js` (sheets → booklet, printer's PDF, proof), `test-press.js` |
+| [`tools/press-server.py`](tools/press-server.py) | The press over HTTP, for the studio's Print menu (`--studio` also serves the studio) |
+| [`press/`](press/) | Per edition: the published booklet, its manifest, and `limits.json` for the desk |
+| [`assets/`](assets/) | Cover, logo and the magazine's fonts (`fonts/magazine.css`) |
+| [`tools/build.js`](tools/build.js), [`tools/strings/`](tools/strings/), [`tools/assets/`](tools/assets/) | The multilingual site: 48 pages (16 languages × full, lite, e-ink) |
 | `index.html`, `<lang>/`, `lite/`, `eink/` | The built pages, committed; CI fails if they differ from a rebuild |
-| [`studio.html`](studio.html) + [`db.js`](db.js) | The browser studio: edit, re-skin and preview an edition, typeset it through the press. Served at `/studio` |
-| [`tools/latex/`](tools/latex/) | The press: `dailybread.cls`, the `.tex` ⇄ `.js` round trip, the saddle-stitch booklet imposition |
-| [`press/`](press/) | The pressed booklets, one per issue, byte-checked by CI |
-| [`tools/newsproof/`](tools/newsproof/) + [`verify/`](verify/) | Tamper-evidence: every page is hashed, logged and signed; the badge on the page checks it |
-| [`tools/strings/`](tools/strings/) | The web chrome in English (`en.js`) and fifteen translations |
+| [`content/`](content/), [`tools/latex/`](tools/latex/) | The issues as `.tex`, which feed the site's shared strings; see [below](#the-tex-issues) |
+| [`tools/newsproof/`](tools/newsproof/) + [`verify/`](verify/) | Tamper-evidence: every page is hashed, logged and signed |
+| [`desk/`](desk/), [`STYLE.md`](STYLE.md) | The submissions desk: an email Worker that reads drafts against the house style and the word limits |
 | [`shop/`](shop/), [`tools/merch/`](tools/merch/) | The shop pane and the merch artwork pipeline |
-| [`desk/`](desk/), [`STYLE.md`](STYLE.md) | The submissions desk: an email Worker that reads writers' drafts against the house style guide and word limits, and replies with notes |
-| [`wrangler.jsonc`](wrangler.jsonc), [`CLOUDFLARE.md`](CLOUDFLARE.md) | Deploy: the repo root served as Cloudflare Worker static assets |
+| [`db-render/`](db-render/) | The studio's browser tests, the logos and uploaded images |
+| [`wrangler.jsonc`](wrangler.jsonc), [`CLOUDFLARE.md`](CLOUDFLARE.md) | Deploy: the repo root as Cloudflare Worker static assets |
 | [`magazine.env`](magazine.env), [`FORKING.md`](FORKING.md), [`LICENSE`](LICENSE) | Make it yours |
-| [`db-render/`](db-render/) | The original hand-laid-out kit, kept for reference; not served |
 
 ## Quickstart
 
 ```sh
-node tools/build.js               # rebuild the 48 pages (Node standard library only)
-node tools/check-site.js          # read them back: links, hreflang, sitemap, headers
-python3 tools/db-latex.py build   # .tex → .js round trip and both press PDFs (needs TeX Live)
-python3 tools/db-latex.py check   # prove the round trip
-open studio.html                  # the studio works from file://
+cd tools/press && npm install && cd ../..   # the press (Playwright + pdf-lib), once
+python3 tools/press-server.py --studio      # the studio and the press, on this machine
+# open http://localhost:8091/studio.html
+
+node tools/build.js                         # rebuild the 48 site pages
+node tools/check-site.js                    # read them back: links, hreflang, sitemap, headers
+node tools/press/render.js --publish        # re-publish press/<edition>/ after changing the default edition
 ```
 
-CI (`.gitea/workflows/verify-editions.yml`) runs the rebuild, the read-back,
-the round trip, the press geometry and the rebrand round trip on every push.
+Tests: `cd tools/press && npm test` (the press), and
+`node db-render/test-studio-{editor,design,editions,press}.mjs` (the studio, in
+a real browser). CI (`.gitea/workflows/`) rebuilds and reads back the site,
+checks the `.tex` round trip and the rebrand, and renders, tests and guards
+the press booklet.
 
-## Reading — the contents rail and the section tabs
+## The studio
 
-The issue is read **one section at a time**, not as a single long scroll. A
-contents rail lists all eleven sections with their `Sec.` numbers — a sticky,
-independently scrolling column down the left at desktop widths, and a
-horizontally scrolling strip pinned under the top bar on narrow screens. Picking
-one shows that section on its own.
+`studio.html` edits the whole issue in the browser; nothing is saved anywhere
+but your browser until you export or publish. It is served at `/studio` by the
+same Worker as the magazine ([`CLOUDFLARE.md`](CLOUDFLARE.md) shows how to put
+it behind a login), or from the press server on your own machine.
 
-It is still **one document with the same markup and no runtime JS**: each tab is
-a `.pane` wrapper carrying the section's existing anchor (`#letter`, `#comics`,
-…), revealed by CSS `:target`. So deep links keep working (`/#calendar` opens
-straight onto that tab), the browser's back button steps through tabs, `hreflang`
-and the sitemap are untouched, and **printing still yields the whole issue in
-document order** — the tabs are a screen affordance only.
+- **Design and All fields.** Click anything on the page to edit it there:
+  double-click text to type on the page, drag rows to reorder, drop an image
+  on a picture. All fields is every section as a form, with add, delete and
+  reorder for every list.
+- **Undo / Redo** (`Ctrl+Z` / `Ctrl+Shift+Z`) covers every edit, per edition.
+- **Find** (`Ctrl+K`) searches field names, sections, what each field says,
+  and the studio's commands.
+- **Formatting** — fields that print `<b>`, `<i>` and `<a>` get a B / I / Link
+  strip. `?` lists the keyboard shortcuts.
+- **Pictures** open in the image editor (crop, turn, flip, brightness,
+  contrast, saturation, black and white) before they go in. A picture that has
+  not been uploaded yet shows as a labelled slot on the page.
+- **Themes** — colours, the three fonts and four presets. Editions (`⋯`): new,
+  duplicate, rename, export and import JSON.
+- **Word limits.** Each section shows its pieces' limits (`≤ 349 w`) and how
+  many words each has. They are measured, not estimated, on the pages that
+  print: each piece is grown with words of its own section until its sheet
+  would overflow. A long piece (the letter, History, each Young Voices report,
+  the Lab) holds its first page and a whole Continued page. The desk tells
+  writers the same numbers, from `press/<edition>/limits.json`.
 
-The rules live in `tools/assets/style.css` behind `@supports selector(:has(*))`,
-because the landing state ("nothing targeted yet, so show the first tab") can
-only be written as `body:not(:has(.pane:target))`. A browser without `:has()`
-never applies any of it and gets exactly the continuous scroll the site had
-before, with the top bar's section list back as its navigation — the failure mode
-is the old page, never a blank one.
+## Print
 
-Two sections have no tab of their own and ride inside the pane they follow —
-WAITLIST STATS and the INTERVIEW QUOTE both sit in **Voices** — so a tab costs no
-new string in sixteen languages. The tab table is `TABS` in `tools/build.js`; it
-feeds the rail, the top-bar list and the pane wrappers. `style.css` needs one
-`a[href="#<id>"]` selector per tab for the current-tab highlight, which CSS
-cannot derive from the target, so `checkTabs()` **fails the build** if a tab is
-added without one.
+The **Print ▾** menu:
 
-## Languages — the multilingual build
+- **Web PDF** — the magazine's pages through your browser's print dialog
+  (Save as PDF, Margins None, Background graphics on), at the trim set under
+  Print & bleed (A5 by default). No crop marks: the copy you print yourself.
+- **Magazine PDF** — the booklet for a desktop duplex printer: the same pages,
+  two to a Letter-landscape side in saddle-stitch order, padded with blank
+  pages to a multiple of four and clear of the band a laser cannot ink. Print
+  two-sided, short-edge flip, actual size; fold and staple.
+- **Printer PDF** — for a print shop: the same pages one per PDF page in
+  reading order, each on trim + bleed + a 5 mm slug with crop marks, with
+  `/TrimBox` and `/BleedBox` set. The bleed is real: each section's ground is
+  laid out into it. The PDF is RGB; ask the shop whether they convert to CMYK.
+- **Stickers for a cutter** — a transparent PNG of the sticker sheet at 300 dpi
+  for Cricut Print Then Cut (6.75 × 9.25 in). In Design Space: *Upload*, *Print
+  Then Cut image*, width 6.75 in, *Make It*.
 
-The site ships in **16 languages** (English plus the 12 the Government of BC
-officially supports, plus Italian, Polish and Latin), matching the language set of
-the sibling ripostelabs.xyz site. English lives at the root (`/`); every other
-language is a fully static page under `/<lang>/` (`/fr/`, `/es/`, `/ar/`, …), with
-a JS-free language picker in the top bar, `hreflang` alternates, a `sitemap.xml`,
-`dir="rtl"` for Arabic and Farsi, and a machine-translation notice on non-English
-pages.
+The Magazine and Printer PDFs come from the press, which needs a headless
+Chromium a web page cannot drive. The studio uses a press on this machine
+(`python3 tools/press-server.py`, port 8091) first, then `press.hq`. With
+neither, it says so and offers the booklet last published in `press/`, which
+does not have your edits.
 
-Each language is emitted in **three renderings**, chosen with the Full / Lite /
-E-ink switch in the top bar (and the footer):
+The press is deterministic: with `SOURCE_DATE_EPOCH` set, two renders are
+byte-identical, and every face in the PDF is one the magazine declares.
 
-- **Full** — the rich, web-font, colour edition, at the language root (`/`, `/fr/`).
-- **Lite** — the same content with the web fonts and heavy decoration (glows, hard
-  offset shadows, checker/harlequin bands) stripped for low-bandwidth reading;
-  colour kept. Under `/lite/`, `/<lang>/lite/`.
-- **E-ink** — Lite plus a pure-monochrome, high-contrast, motion-free treatment for
-  e-readers; colour art is rendered greyscale. Under `/eink/`, `/<lang>/eink/`.
+## The website
 
-Full pages advertise the lighter renderings to data-saver and monochrome clients
-via `<link rel="alternate" media="(prefers-reduced-data: reduce)|(monochrome)">`
-hints; every rendering carries the full set of `hreflang` alternates and is listed
-in `sitemap.xml` (16 languages × 3 renderings = 48 pages).
+`tools/build.js` builds the published site from `tools/strings/` (English in
+`en.js`, fifteen machine translations beside it, unreviewed), in sixteen
+languages and three renderings: **full**, **lite** (no web fonts or heavy
+decoration) and **e-ink** (monochrome, high contrast). `hreflang`, a JS-free
+language picker, `dir="rtl"` for Arabic and Farsi and a `sitemap.xml` come
+with it. The issue reads one section at a time from a contents rail, done with
+CSS `:target` and no runtime JS; printing still gives the whole issue.
+`node tools/check-site.js` reads every built page back and fails on dead
+links, missing assets, bad `hreflang` and the like.
 
-It is generated by a committed build system under `tools/`:
+**Known gap.** The site's pages are drawn by `tools/build.js` and
+`tools/assets/style.css`, a twin of `db.js` kept in step by hand, so the
+multilingual site is not yet the one renderer the studio and the press share
+(the studio's Publish writes `DB.render`'s page). Folding it in re-renders
+every signed page, so it waits for a re-signing.
 
-- `tools/strings/en.js` — the English strings (source of truth; one key = one
-  unit). `tools/strings/en.json` is the same content as flat JSON, for handing to
-  translators alongside `tools/strings/TRANSLATE.md`.
-- `tools/strings/<lang>.json` — machine translations (same keys; any missing key
-  falls back to English).
-- `tools/assets/style.css` — the page stylesheet, inlined into each Full page.
-- `tools/assets/alt.css` — a small override layer inlined *after* `style.css` on
-  the Lite and E-ink pages (which reuse the same markup); it strips the decoration
-  and, for E-ink, collapses the accent tokens to black/white.
-- `tools/build.js` — renders every language × rendering from the strings. Run
-  `node tools/build.js` (everything), `node tools/build.js fr` (one language, all
-  renderings), `node tools/build.js eink` (one rendering, all languages), or
-  `node tools/build.js fr eink` (both); add `--clean` to remove the generated
-  language and `lite/`/`eink/` dirs first. It also writes `sitemap.xml`. The
-  generated pages are static (no runtime JS); editing shared content means editing
-  `tools/strings/en.js` and re-running the build.
-- `tools/check-site.js` — reads the 48 built pages back and complains: dead
-  internal links and `#anchors`, missing assets, raw `&`, duplicate ids, `<img>`
-  without `alt`, `<html lang>`/`dir` against the directory it sits in, the full
-  `hreflang` set + `x-default` (each pointing at a page that exists), the
-  canonical URL, unnamed `<nav>` landmarks, and sitemap ↔ disk agreement. Run
-  `node tools/check-site.js` after a build; it exits non-zero on any finding and
-  installs nothing.
+## Verified publishing
 
-The non-English strings are **unreviewed machine output**; a native pass is
-recommended before any official use. To (re)translate a language, hand an agent
-`tools/strings/en.json` + `tools/strings/TRANSLATE.md` and the target code.
-
-## Verified publishing — tamper-evidence
-
-Every language edition is signed with a key kept off the web server, recorded in
-an append-only [RFC 6962](https://www.rfc-editor.org/rfc/rfc6962) transparency
-log, and pinned to a public anchor. Readers can confirm — cryptographically —
-that the issue they are reading is the exact one Daily Bread published, and that
-the correction history is complete. It cannot make an article *true*; it proves
-only that the words are the ones that were published.
-
-- **[`/verify/`](verify/)** — a self-contained page that checks all sixteen
-  editions live in the browser (WebCrypto, no dependencies), plus a small
-  "Verified publishing ✓" link in every edition's footer that points to it.
-- **`.well-known/newsproof/`** — the public proof material: `publisher-key.json`,
-  `log-key.json`, `leaves.jsonl` (the full log), `sth.json`, `anchors.jsonl`,
-  `consistency.json`, `manifest.json`, and `proofs/<lang>.proof.json` per edition.
-- **[`verify/verify_standalone.py`](verify/verify_standalone.py)** — the real
-  check: a one-file offline verifier (standard library only, no `pip`) run against
-  a publisher fingerprint you obtained somewhere other than this site.
-
-The toolchain lives in [`tools/newsproof/`](tools/newsproof/) and is pure Python
-(Ed25519 is the RFC 8032 reference implementation — no packages to install). To
-re-sign after editing the issue:
+Every language edition is signed with a key kept off the web server, recorded
+in an append-only [RFC 6962](https://www.rfc-editor.org/rfc/rfc6962)
+transparency log, and pinned to a public anchor. [`/verify/`](verify/) checks
+all sixteen in the browser; [`verify/verify_standalone.py`](verify/verify_standalone.py)
+is the offline check against a fingerprint obtained elsewhere. It proves the
+words are the ones published, not that they are true. To re-sign after a
+rebuild:
 
 ```sh
 node tools/build.js
@@ -160,273 +166,20 @@ cd tools && python3 -m newsproof.dbproof sign
 python3 -m newsproof.dbproof anchor --via git --ref "git tag in <org>/daily-bread"
 ```
 
-The private signing keys stay in `tools/newsproof/store/` (git-ignored) and must
-be moved offline for a real deployment. Read
-[`tools/newsproof/THREAT-MODEL.md`](tools/newsproof/THREAT-MODEL.md) before
-trusting any of it: the in-browser badge is convenience against third parties and
-accidents; the offline verifier is what holds against the publisher.
+The signing keys stay in `tools/newsproof/store/` (git-ignored) and belong
+offline. Read [`tools/newsproof/THREAT-MODEL.md`](tools/newsproof/THREAT-MODEL.md)
+before trusting any of it.
 
-## Daily Bread Studio — edit & configure the magazine
+## The .tex issues
 
-`studio.html` is a bespoke, self-contained editor for building and re-skinning
-the whole issue. No backend, no build server: it runs entirely in the browser.
-
-It lives on `main` and is served at `/studio` by the same Worker as the
-magazine. The studio lets anyone rewrite the edition in their own browser and
-nothing else: publishing is a commit, so the page is safe to expose, and
-[`CLOUDFLARE.md`](CLOUDFLARE.md) shows how to put it behind a login anyway.
-Locally, open `studio.html` from `file://`; autosave, import/export and Publish
-all work there.
-
-**Two ways to edit.** The left pane has a **Design** tab and an **All fields** tab.
-
-- **Design** — click anything on the page and it opens in the panel. A contents
-  line brings its page number, title, kicker *and* chip colour, none of which the
-  page itself gives you a handle for. Double-click a line of text to type straight
-  onto the page. Drag a row — a TOC line, a badge, a calendar event — to a new
-  position, with a drop line showing where it lands. Drop an image file on a
-  picture to replace it. A selected row also gets Up / Down / Duplicate / Add
-  below / Delete.
-- **All fields** — the section-by-section accordion below, every field in the
-  schema, with a `⠿` grip on each list row for dragging.
-
-Design mode works out which element on the page came from which model field on
-its own. It renders a second, invisible copy of the model with a marker appended
-to every text value, notes which element each marker landed in, and replays that
-address against the live preview; tag names are checked on the way and a node is
-dropped rather than guessed at when the two disagree. So `db.js` gains no editing
-hooks and none of this reaches the published `index.html`.
-
-`node db-render/test-studio-design.mjs` asserts that last point along with the
-click, type, drag and drop behaviour, in a real browser. It needs playwright in
-`db-render/node_modules` (gitignored, as for the other scripts there) and is not
-wired into CI.
-
-**Arrange** (in the preview bar) is still there for free positioning, and takes
-over from Design while it is on.
-
-**Finding your way, and taking it back.**
-
-- **Undo / Redo** (the two arrows in the top bar, `Ctrl+Z` / `Ctrl+Shift+Z`)
-  covers every edit: typing, rows added, moved or deleted, dropped images,
-  theme presets, Arrange drags, Reset. Typing into one field is one step until
-  you pause. Each edition keeps its own history for as long as the studio is
-  open; it is not saved. Deleting a row asks nothing now: the toast offers Undo.
-- **Find** (`Ctrl+K`, or the button) searches every field by name, every
-  section, and what each field currently says, plus the studio's commands.
-  Type `deadline`, `Bernard Ave` or `phone` and press Enter. A field that prints
-  is selected on the page with the cursor in it; one that does not (colours,
-  print settings, links) opens in All fields.
-- **The preview holds its place.** It used to jump back to the cover after
-  every keystroke. In All fields, focusing a field scrolls the page to where it
-  prints and flashes it, and opening a section scrolls to that section.
-- **Formatting without HTML.** Fields that print `<b>`, `<i>` and `<a>` show a
-  B / I / Link strip while you are in them (`Ctrl+B`, `Ctrl+I` work too);
-  fields that would print the tags as text do not. Which is which is not a
-  list: the studio renders a probe of the default model with `<b>` appended to
-  every field and sees which ones came out bold.
-- **Keys.** With a row selected on the page, `Alt+↑/↓` moves it, `Ctrl+D`
-  duplicates it and `Delete` removes it. `Ctrl+S` confirms the autosave instead
-  of opening the browser's save dialog. `?` lists all of it.
-
-- **Pictures are looked at before they go in.** Every image you upload or drop
-  opens in the studio's image editor first: crop (free, or 1:1, 4:5, 3:2,
-  16:9), turn, flip, brightness, contrast, saturation, black and white. Nothing
-  reaches the page until *Use this image*; an image left untouched is embedded
-  exactly as before. *Edit…* beside a placed picture opens it again, and Undo
-  brings the previous one back.
-- **Word limits, one per writer's piece.** A writer sends in a piece (the
-  letter, one young-voices report, the lab's pages, a dek or a note) and gets
-  one number for it, which holds on paper and on the web alike. Each section in
-  All fields shows its pieces' limits (`≤ 444 w`) and, under its heading, how
-  many words each piece has, how many it may have, or how far over it is.
-
-  The printed booklet sets the number. `python3 tools/db-latex.py limits
-  --edition issue-01` grows each piece on its A5 page until its copy leaves the
-  page, and writes `press/<edition>/limits.json`. The long pieces (the letter,
-  History, each Young Voices report, the Lab) may run on: past their page they
-  continue on a whole Continued page of their own near the back ("Continued on
-  page 45 →"), so their limits are about twice a page: the letter 768 words,
-  History 528, the reports 766–807, the Lab 700 for №1. Limits
-  are measured with paragraphs of about 45 words; much shorter paragraphs hold
-  somewhat fewer, and a continuation that overruns is cut and flagged in the
-  press proof. The web page then follows
-  print: each piece's Web PDF sheet is scaled until it holds the same number of
-  words, measured by growing the piece on the sheet, and must agree within 5%
-  (for №1 the worst is 2.3%). The Web PDF prints each such sheet at that scale,
-  and gives Young Voices a sheet per report, as print gives each a page. A long
-  piece gets a Continued sheet of its own there too, before the back cover:
-  its first sheet is calibrated to print's first page and its Continued sheet
-  (a running head, the rest in two columns) to print's Continued page; the
-  piece is split at a word, keeping its links and emphasis, and each sheet
-  names the other's number. A piece that fits its first sheet has none. The
-  interview's quote takes its sheet's full width there, as it takes its page in
-  print. Submit has no printed slot and keeps its web measure; Comics, Art and
-  Stickers are filled by their pictures, so they say that instead of a number.
-  Re-run `limits` after changing a page's layout in `dailybread.cls` or the
-  `.tex`; it typesets the issue about a dozen times (two to three minutes).
-
-`node db-render/test-studio-editor.mjs` drives all of the above in a real
-browser, under the same conditions as the design test.
-
-**What you can edit** — every section is a form: masthead & issue metadata, the
-cover (upload an image or point at a path), the editor's letter, contents/TOC,
-the collapse ledger, young-voices reports, the waitlist stats, the interview
-band, calendar events and screenings, the mutual-aid directory, submissions, the
-Riposte disclosure, and the back cover. List sections (TOC rows, events, ledger,
-reports, …) let you **add, delete, and reorder** rows inline.
-
-**What you can configure** — theme colours (ink / bone / panel / pink / teal /
-orange / muted), the display / body / script fonts, and the page width. Four
-theme presets ship in the toolbar (Kelowna's Collapse, The Thaw, Night Shift,
-Orchard Bust); pick one or hand-tune every swatch. A live preview on the right
-shows exactly what will publish, at full / tablet / phone widths.
-
-**How it saves & publishes**
-
-- **Autosave** — every change is written to your browser (`localStorage`), so
-  the studio reopens where you left off.
-- **Export / Import JSON** (in the edition menu, `⋯`, beside the switcher,
-  with New, Duplicate, Rename, Reset and Delete) — download the whole issue as
-  a portable `daily-bread-№1.json` you can commit, back up, or move between
-  machines; import it to pick up where you left off.
-- **Print ▾** holds the print outputs:
-  - **Web PDF**: one sheet per section, cover to back cover, through the
-    browser's print dialog (Save as PDF, Margins None, Background graphics on).
-    The studio builds its own document for it rather than printing the preview:
-    every section goes on exactly one sheet of the trim size set under Print,
-    and a section taller than its sheet (the comic strip, the centrefold, the
-    sticker sheet) is scaled down to fit it instead of running onto another.
-    A long piece that outgrows its sheet carries on onto a Continued sheet
-    before the back cover, as it does in print. There are no crop marks; this is the copy you print yourself.
-  - **Magazine PDF**: the press booklet, for a desktop duplex printer; and
-    **Printer PDF**: A5 pages with bleed and crop marks, for a print shop.
-    Both are described below.
-  - **Stickers for a cutter**: a transparent PNG of the sticker sheet at
-    300 dpi, sized for Cricut Print Then Cut (6.75 × 9.25 in, twelve 2 in
-    stickers; more go on more sheets). A Cricut only cuts what Design Space
-    printed with its own registration marks, so marks on a page from anywhere
-    else would be ignored. In Design Space: *Upload* the PNG, choose *Print
-    Then Cut image*, set its width to 6.75 in, *Make It*. It prints the sheet
-    with its marks and cuts round each sticker.
-
-Each sticker also takes **artwork**: an uploaded image replaces the drawn
-sticker, with the artist's credit printed under it, and it carries into the
-cutter sheet. Artwork is kept at 1000 px, over 500 dpi at sticker size, so a
-full sheet still fits the browser's storage. The press booklet's sticker page
-is typeset from the `.tex` and does not take the artwork yet.
-- **Publish → `index.html`** — downloads a complete, self-contained
-  `index.html`. Drop it in the repo root and commit; Cloudflare deploys the new
-  edition on push. (If you embedded a cover via upload, it travels inside the file as a
-  data URL; if you referenced `assets/cover.jpg`, keep that file in `assets/`.)
-
-### How it's wired
-
-- **`db.js`** is the engine: one `DEFAULT_MODEL` (the full text of №1), the theme
-  presets, a form `SCHEMA` that the studio builds its UI from, and
-  `DB.render(model)` — a pure function that turns the model into the finished,
-  static magazine HTML (no runtime JS in the output). The studio's live preview
-  and its "Publish" button both call `render()`, so what you see is what ships.
-- **`tools/build.js`** builds the published pages from `content/<edition>.js`
-  and `tools/strings/`, all sixteen languages and three variants, on the command
-  line: `node tools/build.js`. CI requires the committed pages to match.
-- **`index.html`** is the published English edition; `db.js`'s default model
-  reproduces it, so the studio's Publish button and the build agree.
-- **`db-render/render-studio-pdf.js`** renders the print magazine PDF from that
-  same `DB.render(model)` output — the document in the studio's preview — so the
-  studio view and the printer's file are one thing. Page size, bleed, safe area
-  and crop marks all come from the model's **Print & bleed** panel; nothing in the
-  renderer hardcodes a paper size, and it refuses to write a PDF whose sheets do
-  not match the size that document's own `@page` rule declares.
-
-  ```bash
-  cd db-render && npm install playwright@1.61.0 --no-save
-  SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct) \
-    node render-studio-pdf.js "out/Daily Bread №1 — print.pdf"
-  ```
-
-  It resolves the model in this order: `--model <file>`, `$MAGAZINE_MODEL`,
-  `magazine.model.json` in the repo root, then `DB.DEFAULT_MODEL`. Alongside the
-  PDF it writes `out/magazine-render.json` with the model's fingerprint. This is
-  the studio document on paper, a proof of the web edition; it is not what the
-  printer gets.
-
-  **The studio's "Magazine PDF" button typesets the edition in view as the TeX
-  press booklet**: the model is laid over `content/<edition>.tex`
-  (`tools/latex/dblatex/overlay.py` — theme, cover, letter, contents, voices,
-  interview, waitlist, lab, listings, colophon; pages the studio has no field for
-  stay as the `.tex` has them), typeset by lualatex into A5 pages and imposed two
-  to an A4-landscape side in saddle-stitch order. The edition maps to its `.tex`
-  by issue number (№1 → `issue-01`). The typesetting runs on a press: the
-  studio asks one on this machine first, then `press.hq` (LXC 111); about ten
-  seconds either way. With neither it says how to start one, and only if you
-  agree hands over `press/<edition>/booklet.pdf`, the CI typesetting of the
-  plain `.tex`, which does not have your edits.
-
-  **Printer PDF** (in the same menu) is for a print shop: the same pages, one A5
-  page per PDF page in reading order (the shop imposes them), with the bleed set
-  under Print (3 mm by default) and crop marks in a 5 mm slug outside it;
-  `/TrimBox` and `/BleedBox` say where to cut. The pages are drawn at the trim,
-  so the bleed is each page's outermost half point stretched out over it:
-  backgrounds, strips and pictures that reach the edge carry on in their own
-  colour. The PDF is RGB; ask the shop whether they convert to CMYK themselves.
-
-  **Your own press.** On a machine with TeX Live (lualatex, fontspec, TikZ) and
-  poppler:
-
-  ```sh
-  python3 tools/press-server.py --studio
-  # then open http://localhost:8091/studio.html
-  ```
-
-  `--studio` serves this checkout's files to this machine only, so the studio and
-  the press share an origin. Without it the press listens on port 8091 for a
-  studio served from anywhere on `localhost`. On Arch: `pacman -S texlive-basic
-  texlive-latex texlive-latexrecommended texlive-latexextra texlive-luatex
-  texlive-pictures texlive-fontsrecommended poppler`.
-  `python3 tools/db-latex.py press --model <json>` is the same path from the
-  command line; see `tools/latex/README.md`.
-
-  The render is reproducible: fonts are served from `db-render/vendor/`, and the
-  script rewrites the PDF's `/CreationDate` and `/ModDate` from `SOURCE_DATE_EPOCH`
-  (Chromium stamps wall-clock time and ignores that variable itself, which is the
-  only reason two runs of an identical document ever differed). It also reads the
-  faces back out of the finished PDF and reports any that arrived by *system*
-  fallback; `STRICT_FONTS=1` turns that into a failure. The magazine currently
-  passes under `STRICT_FONTS=1` — the only faces in the file are the four the
-  document declares.
-
-  The older `render-print-pdf.js` and the `*.dc.html` kit beside it built a
-  separate, hand-laid-out 24-page magazine that no studio edit could reach. They are
-  kept for reference only. `db-render/out/` is not tracked.
-
-- **`assets/fonts/db-symbols.woff2`** is a 9-glyph subset of DejaVu Sans (rebuild:
-  `python3 tools/make-symbol-font.py`) carrying `→ ⌘ ▸ ◦ ☐ ♥ ✂ ✕ ✦`, the marks none
-  of the three Google families provide. `db.js` names it second in every font stack,
-  bounded by `unicode-range` so it can never step in front of a family that owns the
-  character. Without it those glyphs came from whatever the rendering machine had,
-  which is what kept the PDF from being reproducible across machines. Its licence
-  (Bitstream Vera / Arev, notice required) is in `assets/fonts/LICENSE-DejaVu.txt`
-  and must travel with the font.
-
-Editing model: plain-text fields accept `<a>`, `<b>`, `<i>`, and `<br>` for
-links and emphasis; everything else is escaped, so copy is safe to paste.
-Newlines in masthead/headline fields become line breaks.
-
-### Private online access
-
-The deploy is a Cloudflare Worker, so a real login can sit in front of `/studio`:
-Cloudflare Access, a policy of your own e-mail addresses, nothing in the repo.
-[`CLOUDFLARE.md`](CLOUDFLARE.md) is the click-by-click.
-
----
-
-## Source — the issue is one LaTeX file
-
-`content/issue-01.tex` is the issue; `content/issue-01.js` is generated from
-it and is what the web build reads. `python3 tools/db-latex.py build` produces
-the site and both press PDFs (48 x A5, 24 x A4 landscape) from that one file;
-`check` proves the round-trip and runs in CI on every pull request. See
+`content/issue-01.tex` and `issue-02.tex` are the issues as LaTeX, from before
+the studio printed. They still feed the site's shared facts (calendar,
+directory, screenings, contents, ledger, lab status: `content/<slug>.js`,
+read by `tools/strings/from-issue.js`), and `python3 tools/db-latex.py
+{build,check}` keeps that round trip honest. **Issue №2 ("The Thaw") exists
+only as `.tex`**: its pages use layouts №1 does not (an interview in Q&A, a
+feature with stats), so it moves into the studio once the model has those
+sections. Until then `db-latex.py build --print` typesets it as a proof. See
 [tools/latex/README.md](tools/latex/README.md).
 
 ## Brand

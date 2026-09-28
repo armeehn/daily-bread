@@ -1,9 +1,20 @@
-# Daily Bread from one LaTeX source
+# The .tex issues
 
-`content/issue-01.tex` is the issue. Everything else is derived.
+The magazine prints from the studio's model now (`db.js` → `db-print.js` →
+`tools/press/`; see the [README](../../README.md#print)). What is left here is
+the issue as LaTeX, from before that, for two jobs:
+
+1. **The site's shared facts.** `content/<edition>.tex` is read into
+   `content/<edition>.js`, and `tools/strings/from-issue.js` takes the facts the
+   website and the issue must agree on (calendar, directory, screenings,
+   contents, ledger, lab status) from it rather than writing them twice.
+2. **Issue №2.** `content/issue-02.tex` ("The Thaw") has not moved into the
+   studio yet: its pages use layouts №1 does not (an interview in Q&A, a feature
+   opener with stats). Until the model has those sections, `build --print`
+   typesets it as a proof.
 
 ```
-                     content/<edition>.tex            (source of truth)
+                     content/<edition>.tex
                                |
                  tools/latex/dblatex/reader.py         (documented macros only)
                                |
@@ -14,178 +25,68 @@
                |                                   |
    content/<edition>.js  (generated)     lualatex + dailybread.cls
                |                                   |
-  tools/strings/from-issue.js            build/latex/<edition>/print.pdf
-               |                          48 x A5, 420 x 594.96 pt
-   tools/build.js  (unchanged)                     |
-               |                         graphicx, saddle-stitch order
-   48 pages, newsproof proofs                      |
-   (bytes identical, still signed)       build/latex/<edition>/booklet.pdf
-                                          24 x Letter landscape, 792 x 612 pt
+  tools/strings/from-issue.js            build/latex/<edition>/print.pdf  (48 x A5)
+               |                         build/latex/<edition>/booklet.pdf (Letter, 2-up)
+   tools/build.js -> 48 site pages
 ```
-
-Layers talk only to their neighbour: `cli` -> `web` / `press` -> `reader` /
-`writer` -> `model`. Nothing below `web` knows node exists; nothing below
-`press` knows lualatex exists. `db.js` and its `@media print` are untouched:
-the A5 booklet the studio prints is a different renderer and stays so.
 
 ## Commands
 
 ```
-python3 tools/db-latex.py build --edition issue-01          # web + print
-python3 tools/db-latex.py build --edition issue-01 --web    # only the site
-python3 tools/db-latex.py build --edition issue-01 --print  # only the PDFs
-python3 tools/db-latex.py check --edition issue-01          # the round-trip (CI)
-python3 tools/db-latex.py press --edition issue-01          # publish press/issue-01/
+python3 tools/db-latex.py build --edition issue-01          # web + print proof
+python3 tools/db-latex.py build --edition issue-01 --web    # only content/<edition>.js and the site
+python3 tools/db-latex.py build --edition issue-02 --print  # only the proof PDFs
+python3 tools/db-latex.py check --edition issue-01          # the round trip (CI)
 python3 tools/db-latex.py import --edition issue-01         # old .js -> .tex, once
-python3 tools/db-latex.py limits --edition issue-01         # words each slot's printed page holds
 ```
 
-`press` typesets, runs the print checks, and copies `booklet.pdf` to
-`press/<edition>/` with a `booklet.json` beside it (source, geometry, sha256,
-engine). That directory is the studio's **Magazine PDF** fallback when
-`press.hq` is out of reach, and it is tracked: `.gitea/workflows/press-booklet.yml`
-typesets it twice, requires the tracked copy to match, and only commits on a
-manual `commit = true` run. Do not typeset it on a workstation and commit that:
-a different TeX Live and font set give the same pages and different bytes.
-
-`press --model <studio.json> --out <pdf>` lays the studio's edition over the
-`.tex` first (`dblatex/overlay.py`): the theme becomes `\palette{…}` in the
-preamble, and every studio field with a print counterpart replaces it, cased
-like the print copy; the other pages are typeset untouched. This is exactly
-what `tools/press-server.py` does for the studio's button, on demand, as
-`daily-bread-press.service` in LXC 111 behind `press.hq`. `python3
-tools/latex/test_overlay.py` proves the overlay keeps the issue whole for the
-default, an empty and a hostile model (CI runs it; no TeX needed), and
-`press-booklet.yml` typesets the default overlay once per run.
-
-`build --print` also writes `printer.pdf` (`press.build_printer`): the A5
-pages one-up in reading order on trim + 3 mm bleed + 5 mm slug, crop marks in
-the slug, `/TrimBox` and `/BleedBox` set, the bleed made by stretching each
-page's outermost half point over it. The press server gives the studio the same
-with `"output": "printer"`, at the edition's own bleed.
-
-The press in production: one typesetting at a time, three more may queue, the
-rest get `503 Retry-After`; a build is killed after `RIPOSTE_TEX_TIMEOUT`
-(150 s); each build has its own `TEXMFVAR`, because luaotfload caches a font
-under the absolute path it first saw it at and a deleted build dir then breaks
-every later build on the box. `daily-bread-press-update.timer` fast-forwards
-the checkout to `origin/main` every ten minutes and restarts the press when
-`tools/` changed; a checkout left dirty or on a branch is reported, not reset.
-Unit files: `tools/daily-bread-press*.{service,timer}`, Caddy: `tools/press.caddy`.
-
-`limits` writes `press/<edition>/limits.json`, the print half of the studio's
-word limits (`dblatex/limits.py`). A body too long for its box does not warn:
-the class lets it run silently off the foot of the page, and TeX reports no
-overfull box. So each slot is grown with words of its own section and a marker
-word, typeset, and read back with `pdftotext -bbox`: it fits while the marker is
-on its page above the foot of the text area and nothing else on the page has
-been pushed below that line. Slots on different pages are probed in the same
-run, so the whole issue takes about two dozen typesettings (four minutes).
-
-Long pieces continue. When the studio's letter, History, a Young Voices report
-or the Lab runs past its page, the overlay breaks it by line budget (body copy
-is monospaced, so a paragraph's lines are known before TeX sets it: 71
-characters to the line), ends the page "Continued on page N →", and sets the
-rest on a whole **Continued** page of its own (`Jump` template, `full`
-variant) after p44. Pages are added only when a piece continues, padded with a
-ruled Notes page to a multiple of four. A continuation longer than its page is
-cut at the foot (`\vsplit`) rather than run off it; the log says so and the
-press counts it as overfull. `limits.json` records how each long piece's limit
-divides between its first page and its Continued page (`first`,
-`continued`), which the studio's Web PDF uses. The base
-issue has no Continued pages: `check` and the tracked booklet are unchanged.
-
 `check` proves, in order: tex -> issue -> tex loses nothing; the issue equals
-the committed `content/<edition>.js`; rebuilding the site from the .tex
-changes no file (so every newsproof signature still verifies, checked with
-`check_live.py --offline`); both PDFs have the page count and page size
-`press.py` declares (`pdfinfo`), and no side of the booklet has ink in the
-4.2 mm a desktop laser cannot print (`pdftoppm`, every side). It is the
-`latex` and `latex-print`
-jobs of `.gitea/workflows/verify-editions.yml`, and both run on pull
-requests.
+the committed `content/<edition>.js`; rebuilding the site from the .tex changes
+no file (so every newsproof signature still verifies); and, with `--print`,
+both PDFs have the page count and size the issue implies and no side of the
+booklet has ink in the 4.2 mm a desktop laser cannot print. These are the
+`latex` and `latex-print` jobs of `.gitea/workflows/verify-editions.yml`.
 
-Print needs `/opt/texlive` (lualatex) and poppler-utils. It finds riposte-latex
-at `$RIPOSTE_LATEX` or the sibling checkout `../riposte-latex`; without it
-the class shims the brand layer (same geometry, plainer page).
+Printing needs TeX Live (lualatex, fontspec, TikZ) and poppler-utils. The class
+finds riposte-latex at `$RIPOSTE_LATEX` or `../riposte-latex`; without it it
+shims the brand layer (same geometry, plainer page).
 
 ## The macro set
 
-The reader accepts exactly these and errors on anything else, so a page
-cannot pick up LaTeX the web never sees.
+The reader accepts exactly these and errors on anything else.
 
 | Macro | Meaning |
 | --- | --- |
 | `\issue{} \theme{} \edition{} \trim{}` | issue metadata |
 | `\begin{page}{id}{Template}[variant]` … `\end{page}` | one A5 page; `id` is stable across reordering |
-| `\slug{}` | the kit's page slug |
+| `\slug{}` | the page slug |
 | `\chrome{key}{value}` | running head, accent, doc number, folio |
 | `\field{name}{value}` | any string prop of the template |
 | `\headline{}` `\kicker{}` `\standfirst{}` `\byline{}` `\pullquote{}` | sugar for `title` `kicker` `dek` `byline` `quote` |
 | `\begin{seq}{name}` `\block{…}` … `\end{seq}` | a block sequence (paragraphs, rows, panels, poems) |
 | `\begin{body}` … `\end{body}` | sugar for `seq{body}` |
 
-Values are verbatim strings. Inside them the issue's own notation applies:
-`a | b | c` are fields of one row, ` / ` is a line break in a poem, `Q:` /
-`A:` prefix speakers, a trailing `#hex` field pins a row's accent, `none`
-hides an optional element. TeX specials are escaped (`\# \$ \% \& \_ \{ \}
-\textbackslash{}`) and unescaped by the reader; write `\#f0477d`.
+Values are verbatim strings: `a | b | c` are fields of one row, ` / ` is a line
+break in a poem, `Q:` / `A:` prefix speakers, a trailing `#hex` field pins a
+row's accent, `none` hides an optional element. TeX specials are escaped
+(`\# \$ \% \& \_ \{ \} \textbackslash{}`); write `\#f0477d`.
 
-Templates and their props are the fifteen `db-render/DB *.dc.html` kits
-(Cover, Letter, Contents, Feature, Body, Photo Essay, Opinion, Comic,
-Interview, Poetry, Insert, Lab, Review, Listings, Colophon). Two pages that
-share one content bag (Letter masthead/letter, Contents, Interview, Lab,
-Colophon) carry it twice in the .tex; the class lays out the half its variant
-owns.
+Fifteen templates (Cover, Letter, Contents, Feature, Body, Photo Essay,
+Opinion, Comic, Interview, Poetry, Insert, Lab, Review, Listings, Colophon),
+each with variants; a page carries every prop of its template, and the class
+prints the ones its variant owns (`dailybread.cls`, `% TEMPLATES`).
 
-## Printing the booklet
+## The class
 
-`booklet.pdf` is made for the estate's Brother MFC-L2710DW and any desktop
-duplex laser like it: Letter, landscape, two A5 pages a side, saddle-stitch
-order. Print it at **actual size (100%), two-sided, flip on the short
-edge**; the file carries that as its viewer preference, so a dialog that
-honours it opens pre-set. Fold the stack down the middle, staple the spine.
+`dailybread.cls` draws each page as one fixed-height A5 box, so the page count
+is the number of `\begin{page}`s; content that does not fit shows up as an
+`Overfull \vbox` that `check` reports. The furniture follows the retired HTML
+print kit (in git history): running heads over an accent rule, `DOC NO.` and
+folio over a full-bleed footer strip, ink-framed row tables, dashed photo
+slots, UnifrakturMaguntia on brands and the wordmark, Caveat on sign-offs, IBM
+Plex Mono for the rest. `art` paths resolve against `db-render/`.
 
-The pages are scaled to 0.909 and sit flush at the fold, leaving 5 mm at the
-outer edge and 12.5 mm head and foot: a laser leaves the outer 4.2 mm of a
-sheet white whatever it is sent, and nothing is trimmed after folding, so
-what bleeds in the design ends at that band. Every side has a white frame.
-A true bleed (ink to the paper's edge) needs oversize stock and a guillotine,
-which this pipeline does not target.
-
-## Print layout
-
-`dailybread.cls` stores every prop at `\field`/`\block` time and typesets
-at `\end{page}` through a per-template order list. Each page is one
-fixed-height box, so the page count is the number of `\begin{page}`s
-whatever the content does; content that does not fit shows up as an
-`Overfull \vbox` in the log and `check` reports it. Anything a template does
-not place is still printed small under a dashed rule, so nothing in the
-source is silently absent from paper.
-
-The face is IBM Plex Mono (the kit's); riposte-latex supplies the palette,
-rules and the JetBrains fallback. The kit's Caveat and UnifrakturMaguntia
-are web fonts only and are not used on paper.
-
-## The look
-
-`dailybread.cls` v0.2 draws the page furniture of the `db-render/*.dc.html`
-kit in TeX, so a press PDF reads as Daily Bread without the browser:
-
-- running heads over the page's accent rule; `DOC NO.` and folio over a
-  full-bleed footer strip (`footer=mono` checkerboard, `footer=duo` diamonds),
-  painted from the shipout hook so one `lualatex` pass is enough;
-- ink-framed row tables with dashed rules, numbered chips and a right-hand
-  label; a `#hex` last field pins the chip colour;
-- dashed photo slots sized by the kit's `imgH` (`px` = 1/96 in), accent-barred
-  pull quotes, kiss-cut sticker die-lines, hatched comic panels;
-- UnifrakturMaguntia on the brands and the wordmark, Caveat on the sign-offs
-  (`tools/latex/fonts/`, OFL); IBM Plex Mono for everything else;
-- body copy justified and hyphenated with microtype protrusion.
-
-Front and back covers are full bleed; `art` paths resolve against
-`db-render/` (press.py passes `\dbassets`). Pixel identity with the Chromium
-kit is not a goal; the same 48 pages, chrome and imposition are.
-
-`content/issue-02.tex` (№2, "The Thaw") is the second edition and the proof
-the class generalises: `python3 tools/db-latex.py build --edition issue-02`.
+The booklet is made for a desktop duplex laser: Letter, landscape, two A5 pages
+a side, saddle-stitch order, scaled to 0.909 and flush at the fold, clear of the
+4.2 mm band a laser leaves white. Print at actual size, two-sided, flip on the
+short edge.

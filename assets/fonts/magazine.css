@@ -2,7 +2,7 @@
    UnifrakturMaguntia (all OFL). DB.render links this file, so the studio, the
    published page, the Web PDF and the press all set type from these exact files;
    none of them depends on what Google Fonts serves that day or on the fonts a
-   machine has installed. Same subsets as db-render/vendor (fontsource). */
+   machine has installed. Subsets as fontsource publishes them. */
 /* ibm-plex-mono-cyrillic-ext-400-normal */
 @font-face {
   font-family: 'IBM Plex Mono';
