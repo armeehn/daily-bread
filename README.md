@@ -234,18 +234,24 @@ over from Design while it is on.
   reaches the page until *Use this image*; an image left untouched is embedded
   exactly as before. *Edit…* beside a placed picture opens it again, and Undo
   brings the previous one back.
-- **Word limits.** Each section in All fields shows how many words its page
-  holds (`≤ 197 w`), and a line under its heading says how many are used and
-  how many are to spare, or how far over it is. The number is measured: the
-  section's longest block of copy is grown on its Web PDF sheet until the page
-  is full. The printed booklet is measured too, on the press:
-  `python3 tools/db-latex.py limits --edition issue-01` grows each writer's slot
-  (the letter, each young-voices report, the lab's pages, …) until its copy
-  leaves its A5 page, and writes `press/<edition>/limits.json`. The studio shows
-  the smaller of the two and says which is which. Comics, Art and Stickers are
-  filled by their pictures, so they say that instead of giving a number. Re-run
-  `limits` after changing a page's layout in `dailybread.cls` or the `.tex`; it
-  typesets the issue about a dozen times (two to three minutes).
+- **Word limits, one per writer's piece.** A writer sends in a piece (the
+  letter, one young-voices report, the lab's pages, a dek or a note) and gets
+  one number for it, which holds on paper and on the web alike. Each section in
+  All fields shows its pieces' limits (`≤ 444 w`) and, under its heading, how
+  many words each piece has, how many it may have, or how far over it is.
+
+  The printed booklet sets the number. `python3 tools/db-latex.py limits
+  --edition issue-01` grows each piece on its A5 page until its copy leaves the
+  page, and writes `press/<edition>/limits.json`. The web page then follows
+  print: each piece's Web PDF sheet is scaled until it holds the same number of
+  words, measured by growing the piece on the sheet, and must agree within 5%
+  (for №1 the worst is 2.2%). The Web PDF prints each such sheet at that scale,
+  and gives Young Voices a sheet per report, as print gives each a page. The
+  interview's quote takes its sheet's full width there, as it takes its page in
+  print. Submit has no printed slot and keeps its web measure; Comics, Art and
+  Stickers are filled by their pictures, so they say that instead of a number.
+  Re-run `limits` after changing a page's layout in `dailybread.cls` or the
+  `.tex`; it typesets the issue about a dozen times (two to three minutes).
 
 `node db-render/test-studio-editor.mjs` drives all of the above in a real
 browser, under the same conditions as the design test.

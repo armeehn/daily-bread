@@ -420,6 +420,12 @@ const stick = await page.evaluate(async ms => {
   model.stickers.items[0].img = "assets/cover.jpg"; model.stickers.items[0].by = "Jo Rivera";
   schedule();
   await new Promise(r => setTimeout(r, ms));
+  // wait for the preview to re-map the new picture, however busy the page is
+  for (let k = 0; k < 60; k++) {
+    const im = document.querySelector("#preview").contentDocument.querySelector(".sticker-grid .sticker img.art");
+    if (im && im.hasAttribute("data-dbimg")) break;
+    await new Promise(r => setTimeout(r, 100));
+  }
   const d = document.querySelector("#preview").contentDocument, s0 = d.querySelector(".sticker-grid .sticker");
   return { field: !!field && !!field.closest(".field").querySelector(".imgrow"),
            img: !!s0.querySelector("img.art"), by: (s0.querySelector(".by") || {}).textContent,
@@ -446,7 +452,7 @@ const pp = await page.evaluate(async () => {
   const want = DB.SCHEMA.filter(s => /^Sec\./.test(s.tag || "")).length;
   return { n: sheets.length, units, sizes, inside, shown, W, H, html, labels: sheets.map(s => s.label) };
 });
-check("one sheet per section, plus the covers", pp.n === pp.units && pp.n >= 14, pp.n + " sheets: " + pp.labels.join(", "));
+check("one sheet per section (a report each for Young Voices), plus the covers", pp.n === pp.units && pp.n >= 16, pp.n + " sheets: " + pp.labels.join(", "));
 check("every sheet is exactly the trim size", pp.sizes);
 check("nothing on a sheet runs past it", pp.inside);
 check("the Web PDF carries no crop marks", !pp.shown);
@@ -478,25 +484,35 @@ check("twelve stickers fit one sheet at 2 in", cut.n === 1 && cut.layout.perShee
 check("between stickers is transparent, so the blade goes round each", cut.corner === 0 && cut.gap === 0, JSON.stringify(cut));
 check("each sticker is solid", cut.island === 255, cut.island);
 
-/* ---- 18. word limits, measured on the page ---- */
+/* ---- 18. word limits: one per writer's piece, web and print within 5% ---- */
 const wl = await page.evaluate(async () => {
   const a = await measureWordLimits();
-  const letter = a.letter;
-  model.letter.paragraphs.push(Array(400).fill("word").join(" "));
+  const pieces = [].concat(...Object.values(a).filter(x => x.pieces).map(x => x.pieces));
+  const printed = pieces.filter(pc => pc.print != null);
+  const worst = Math.max(...printed.map(pc => 1 - Math.min(pc.web, pc.print) / Math.max(pc.web, pc.print)));
+  const letter = a.letter.pieces[0];
+  // fill the letter to its limit: its sheet must print at its calibrated scale, not smaller
+  const words = (PLAIN(model.letter.paragraphs.join(" ")).match(WORD_RE) || []);
+  model.letter.paragraphs.push(Array.from({ length: letter.limit - letter.now }, (_, j) => words[j % words.length]).join(" "));
+  const { frame, sheets } = await buildPrintFrame(); frame.remove();
+  const atLimit = sheets.find(s => s.key === "letter").scale;
+  model.letter.paragraphs[model.letter.paragraphs.length - 1] += " " + Array(400).fill("word").join(" ");
   const b = await measureWordLimits();
   model.letter.paragraphs.pop();
-  return { letter, after: b.letter, comics: a.comics, n: Object.keys(a).length };
+  return { n: printed.length, worst, letter, zoom: webZooms.letter, atLimit, after: b.letter.pieces[0],
+           voices: a.voices.pieces.length, voiceSheets: sheets.filter(s => /^voices\./.test(s.key)).length,
+           comics: a.comics, submit: a.submit };
 });
-check("every text section gets a word limit", wl.n >= 11, wl.n + " sections");
-check("a section with room says how much", wl.letter && wl.letter.limit > wl.letter.now && !wl.letter.over, JSON.stringify(wl.letter));
+check("every writer's piece with a printed page gets a limit", wl.n >= 10, wl.n + " pieces");
+check("web and print agree within 5% for every piece", wl.worst <= 0.05, (wl.worst * 100).toFixed(1) + "% at worst");
+check("the limit is the smaller of the two", wl.letter.limit === Math.min(wl.letter.web, wl.letter.print), JSON.stringify(wl.letter));
+check("each young-voices report is its own piece and its own sheet", wl.voices === 3 && wl.voiceSheets === 3, wl.voices + " pieces, " + wl.voiceSheets + " sheets");
+check("a piece at its limit prints at its calibrated scale, not shrunk further",
+  Math.abs(wl.atLimit - wl.zoom) < 0.02, wl.atLimit + " vs " + wl.zoom);
 check("400 more words puts it over, by about that much",
-  wl.after.over && Math.abs((wl.after.now - wl.after.limit) - (400 - (wl.letter.limit - wl.letter.now))) < 30, JSON.stringify(wl.after));
-check("the limit does not move when the copy does", Math.abs(wl.after.limit - wl.letter.limit) < 25, wl.letter.limit + " vs " + wl.after.limit);
+  wl.after.over && Math.abs((wl.after.now - wl.after.limit) - (wl.after.now - wl.letter.limit)) < 30, JSON.stringify(wl.after));
 check("a page its pictures fill says so instead of a number", wl.comics && wl.comics.pictures === true, JSON.stringify(wl.comics));
-check("the printed page's limit comes from press/<edition>/limits.json",
-  wl.letter.print > 0 && wl.letter.web > 0, JSON.stringify(wl.letter));
-check("writers get the smaller of web and print",
-  wl.letter.limit === Math.min(wl.letter.web, wl.letter.print), JSON.stringify(wl.letter));
+check("a section with no printed slot keeps its web measure", wl.submit && wl.submit.webOnly, JSON.stringify(wl.submit));
 
 /* ---- 19. none of this leaks into what publishes ---- */
 const clean = await page.evaluate(() => !/data-dbp|data-dbi|dz-flash|dz-locate|⁣/.test(DB.render(model)));

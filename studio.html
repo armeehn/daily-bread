@@ -983,14 +983,34 @@ function sheetPx(doc, m){
 }
 // Lay doc (a DB.render document, loaded in a frame) out one unit per sheet.
 // Returns [{ label, scale }] per sheet.
-async function paginate(frame, m){
+// Lay doc (a DB.render document, loaded in a frame) out one unit per sheet.
+// `zooms` sets a sheet's scale by its key (the calibration that makes a
+// writer's page hold what its printed page holds); a sheet with no entry is
+// shrunk only if it would not fit. Returns [{ key, label, scale, fit, unit }].
+async function paginate(frame, m, zooms){
+  zooms = zooms || {};
   const doc = frame.contentDocument, win = frame.contentWindow;
   // the print rules become the only rules, so what is measured is what prints
   doc.querySelectorAll("style").forEach(st=>{ st.textContent = st.textContent.replace(/@media\s+print\s*\{/g, "@media all{"); });
   const S = sheetPx(doc, m);
   frame.style.width = S.w + "px"; frame.style.height = S.h + "px";   // 100vh is a sheet, as on paper
-  const units = Array.from(doc.body.querySelectorAll(".hero, .sec, footer"))
-    .filter(el=> !el.parentElement.closest(".hero, .sec, footer"));
+  const units = [];
+  Array.from(doc.body.querySelectorAll(".hero, .sec, footer"))
+    .filter(el=> !el.parentElement.closest(".hero, .sec, footer"))
+    .forEach(u=>{
+      const key = unitKey(u);
+      const reports = key === "voices" ? u.querySelectorAll(".thirds > .report") : [];
+      if(reports.length < 2){ units.push({ el:u, key }); return; }
+      // Print gives each young writer a page; so does the Web PDF: one sheet per
+      // report, the section's head on the first, each report the full width.
+      Array.from(reports).forEach((_, i)=>{
+        const c = i === reports.length - 1 ? u : u.cloneNode(true);
+        Array.from(c.querySelectorAll(".thirds > .report")).forEach((r, j)=>{ if(j !== i) r.remove(); });
+        c.querySelector(".thirds").style.gridTemplateColumns = "1fr";
+        if(i){ c.querySelectorAll("h2.display, .dek").forEach(n=> n.remove()); c.removeAttribute("id"); }
+        units.push({ el:c, key:"voices." + i });
+      });
+    });
   const st = doc.createElement("style"); st.id = "pp-style";
   st.textContent =
     "@page{ size:" + S.w + "px " + S.h + "px; margin:0 }\n" +
@@ -1004,13 +1024,17 @@ async function paginate(frame, m){
     ".pp-fit > *{ margin:0 !important }\n" +
     // inside a sheet nothing may start another one
     ".pp-sheet *{ break-before:auto !important; page-break-before:auto !important; break-after:auto !important; page-break-after:auto !important }\n" +
-    ".pp-sheet footer{ min-height:" + S.h + "px !important }";
+    ".pp-sheet footer{ min-height:" + S.h + "px !important }\n" +
+    // In print the interview's quote has a page; on the web it is held to 20ch,
+    // three words a line, and no scale gives it print's room. On a sheet it
+    // takes the sheet's width, as the printed page gives it.
+    ".pp-sheet .bigquote{ max-width:none !important }";
   doc.head.appendChild(st);
   const book = doc.createElement("div"); book.className = "pp-book";
-  const fits = units.map(u=>{
+  const fits = units.map(un=>{
     const sheet = doc.createElement("div"); sheet.className = "pp-sheet";
     const fit = doc.createElement("div"); fit.className = "pp-fit";
-    sheet.appendChild(fit); fit.appendChild(u); book.appendChild(sheet);
+    sheet.appendChild(fit); fit.appendChild(un.el); book.appendChild(sheet);
     return fit;
   });
   doc.body.insertBefore(book, doc.body.firstChild);
@@ -1018,7 +1042,7 @@ async function paginate(frame, m){
   await Promise.all(Array.from(doc.images).map(im=> im.complete ? 0 : new Promise(r=>{ im.onload = im.onerror = r; })));
   const bone = win.getComputedStyle(doc.body).backgroundColor;
   return fits.map((fit, i)=>{
-    const u = units[i];
+    const u = units[i].el, key = units[i].key, cap = zooms[key] || 1;
     // the sheet takes its section's ground, so a scaled section leaves no bare strip
     const bg = win.getComputedStyle(u).backgroundColor;
     fit.parentElement.style.background = (!bg || bg === "rgba(0, 0, 0, 0)" || bg === "transparent") ? bone : bg;
@@ -1028,10 +1052,11 @@ async function paginate(frame, m){
     // A width's scale is whatever makes BOTH its width and its height fit the
     // sheet, measured at that width: pictures with a fixed shape grow taller as
     // the column widens, so a scale found at one width is wrong at another.
+    // A calibrated sheet starts from its scale and never goes above it.
     const at = w=>{ fit.style.width = w + "px"; fit.style.zoom = "";
-      return { w, s: Math.min(1, S.w / w, S.h / fit.offsetHeight) }; };
-    let best = at(S.w);
-    for(let k = 0, s = best.s; k < 5 && s < 0.999; k++){
+      return { w, s: Math.min(cap, S.w / w, S.h / fit.offsetHeight) }; };
+    let best = at(S.w / cap);
+    for(let k = 0, s = best.s; k < 5 && s < cap - 0.001; k++){
       const c = at(S.w / s);
       if(c.s > best.s) best = c;
       if(Math.abs(c.s - s) < 0.004) break;
@@ -1040,13 +1065,28 @@ async function paginate(frame, m){
     // zoom, not transform: print breaks pages on the laid-out height, and a
     // transform leaves that at full size — the sheet then clipped all but the top
     fit.style.width = best.w + "px";
-    fit.style.zoom = best.s < 1 ? String(best.s) : "";
+    fit.style.zoom = best.s !== 1 ? String(best.s) : "";
     const head = u.querySelector(".sechead, h1, h2, .mast");
-    return { label: u.id || (u.tagName === "FOOTER" ? "back cover" : u.classList.contains("hero") ? "cover" : (head ? head.textContent.trim().slice(0, 30) : "section")), scale: best.s };
+    return { key, fit, unit: u, scale: best.s,
+      label: /^voices\./.test(key) ? "voices, report " + (+key.split(".")[1] + 1)
+        : u.id || (u.tagName === "FOOTER" ? "back cover" : u.classList.contains("hero") ? "cover" : (head ? head.textContent.trim().slice(0, 30) : "section")) };
   });
 }
-// a hidden frame holding the one-section-per-sheet document; resolves to {frame, sheets}
-async function buildPrintFrame(){
+// which part of the magazine a page unit is: a schema section id, "hero" or "footer"
+function unitKey(u){
+  if(u.classList.contains("hero")) return "hero";
+  if(u.tagName === "FOOTER") return "footer";
+  if(u.id && DB.SCHEMA.some(s=> s.id === u.id)) return u.id;
+  if(u.classList.contains("tight")) return "interview";
+  const t = PLAIN(u.textContent);
+  if(model.waitlist && model.waitlist.title && t.indexOf(PLAIN(model.waitlist.title)) >= 0) return "waitlist";
+  if(model.interview && model.interview.attrib && t.indexOf(PLAIN(model.interview.attrib)) >= 0) return "interview";
+  return "section";
+}
+// a hidden frame holding the one-section-per-sheet document; resolves to {frame, sheets}.
+// `mark` (model paths) tags those fields in the text so a measure can find them.
+async function buildPrintFrame(opts){
+  opts = opts || {};
   flush();
   // each job owns its frame: the word-limit measure and a Web PDF may overlap
   const fr = document.createElement("iframe"); fr.className = "print-frame"; fr.setAttribute("aria-hidden", "true"); fr.tabIndex = -1;
@@ -1055,26 +1095,36 @@ async function buildPrintFrame(){
   // Crop marks are for a trade printer trimming a stack; on a sheet you print
   // yourself they are just in the way, and so is the slug that holds them.
   const m = DB.clone(model); m.print = Object.assign({}, m.print, { marks:"off" });
+  (opts.mark || []).forEach((p, k)=>{
+    const v = getPath(m, p), tag = TOK + k + TOK;
+    if(Array.isArray(v)){ if(v.length) v[v.length - 1] = v[v.length - 1] + tag; }
+    else if(typeof v === "string") setPath(m, p, v + tag);
+  });
   await new Promise(r=>{ fr.onload = r; fr.srcdoc = DB.render(m); });
-  const sheets = await paginate(fr, m);
+  const sheets = await paginate(fr, m, opts.zooms || webZooms);
   return { frame: fr, sheets };
 }
-/* ---------- word limits: how much copy a section's page holds ----------
-   Writers need a number. Each section prints on one Web PDF sheet, so its
-   limit is the most words that sheet holds at full size. It is measured, not
-   guessed: in the one-section-per-sheet document, the section's longest block
-   of copy is grown with words of the section's own (so word length is right)
-   until the section no longer fits its sheet. The limit is the words the
-   section's fields hold now plus what fitted.
+/* ---------- word limits: one number per writer's piece, web and print alike ----------
+   A writer sends in a piece — the letter, a young-voices report, the lab's
+   pages, a dek — and needs one number for it. The printed booklet is the
+   magazine, so the press sets that number: `tools/db-latex.py limits` grows
+   each piece on its A5 page until it no longer fits and writes
+   press/<edition>/limits.json.
 
-   The printed page is the other half. It cannot be measured in a browser (the
-   booklet is typeset by lualatex), so `tools/db-latex.py limits` measures it on
-   the press and writes press/<edition>/limits.json: for each writer's slot (the
-   letter's paragraphs, each young-voices report, …) how many words its printed
-   page holds. A section's print limit is its words now, less what its slots
-   hold now, plus what they can hold. Writers get the smaller of the two. */
+   The web page then follows print. Each piece's Web PDF sheet is calibrated:
+   its scale is searched until the sheet holds, within 5%, the words the printed
+   page holds, and the Web PDF prints that sheet at that scale. Holding is
+   measured, not estimated — the piece's own text on the sheet is grown with
+   words of its section until the sheet overflows. (Young Voices gets a sheet
+   per report, as print gives each report a page.)
+
+   Sections with no printed slot (Submit, and the picture pages) keep the web
+   measure: their longest block grown on their sheet at full size. */
 const WORD_RE = /[\p{L}\p{N}][\p{L}\p{N}'’\-]*/gu;
 function countWords(s){ return (PLAIN(s).match(WORD_RE) || []).length; }
+const WL_TOLERANCE = 0.05;               // web and print may differ by this share of the larger
+const WL_ZOOM_MIN = 0.3, WL_ZOOM_MAX = 1.6;
+let webZooms = {};                       // sheet key -> calibrated scale, used by the Web PDF
 // words a writer controls in a schema section: its prose fields and list rows
 function sectionWords(sec){
   let n = 0;
@@ -1086,72 +1136,41 @@ function sectionWords(sec){
   }));
   return n;
 }
-// which schema section a page unit came from
-function unitSection(u){
-  if(u.classList.contains("hero")) return "hero";
-  if(u.tagName === "FOOTER") return "footer";
-  if(u.id && DB.SCHEMA.some(s=> s.id === u.id)) return u.id;
-  if(u.classList.contains("tight")) return "interview";
-  const t = PLAIN(u.textContent);
-  if(model.waitlist && model.waitlist.title && t.indexOf(PLAIN(model.waitlist.title)) >= 0) return "waitlist";
-  if(model.interview && model.interview.attrib && t.indexOf(PLAIN(model.interview.attrib)) >= 0) return "interview";
-  return null;
+function pieceWords(path){ return countWords([].concat(getPath(model, path) || []).join(" ")); }
+function pieceLabel(path){
+  const m = path.match(/^voices\.reports\.(\d+)\./);
+  if(m){ const r = (model.voices.reports || [])[+m[1]]; return "Report " + (+m[1] + 1) + (r && r.title ? " · " + PLAIN(r.title) : ""); }
+  const info = fieldInfo(path) || (LISTS[path] && { label: LISTS[path].list.label });
+  return info ? info.label.replace(/\s*\(.*$/, "") : path;
 }
-async function measureWordLimits(){
-  const { frame, sheets } = await buildPrintFrame();
+// the sheet a piece prints on
+function pieceSheet(path){ const m = path.match(/^voices\.reports\.(\d+)\./); return m ? "voices." + m[1] : path.split(".")[0]; }
+
+// How many words `target`'s piece can hold on its sheet printed at `zoom`: the
+// sheet is laid out 1/zoom wider and taller, the piece grown until it overflows.
+// null when the sheet overflows with the piece empty (its pictures fill it).
+function sheetCapacity(fit, target, W, H, zoom, now, pool){
+  const base = target.innerHTML;
+  fit.style.zoom = ""; fit.style.width = (W / zoom) + "px";
+  const ok = ()=> fit.offsetHeight <= H / zoom + 0.5;
+  const fits = n=>{ let add = ""; for(let j=0; j<n; j++) add += " " + pool[j % pool.length]; target.innerHTML = base + add; return ok(); };
+  let lim;
   try{
-    const doc = frame.contentDocument;
-    const H = parseFloat(frame.style.height), W = parseFloat(frame.style.width);
-    const out = {};
-    doc.querySelectorAll(".pp-fit").forEach((fit, i)=>{
-      const u = fit.firstElementChild, id = u && unitSection(u);
-      if(!id || id === "hero" || id === "footer") return;
-      const sec = DB.SCHEMA.find(s=> s.id === id); if(!sec) return;
-      const now = sectionWords(sec);
-      // measure at full size, at the sheet's width
-      fit.style.zoom = ""; fit.style.width = W + "px";
-      const blocks = Array.from(u.querySelectorAll("p, .bd, .body, figcaption, blockquote, li"))
-        .filter(b=> !b.querySelector("p, .bd, .body, li") && b.textContent.trim().length);
-      const grow = blocks.sort((a, b)=> b.textContent.length - a.textContent.length)[0];
-      if(!grow){ out[id] = { now, limit: now, over: fit.offsetHeight > H }; return; }
-      const pool = (PLAIN(u.textContent).match(WORD_RE) || ["word"]);
-      const base = grow.innerHTML;
-      const fits = n=>{
-        let add = ""; for(let j=0; j<n; j++) add += " " + pool[j % pool.length];
-        grow.innerHTML = base + add;
-        return fit.offsetHeight <= H + 0.5;
-      };
-      let lim;
-      if(!fits(0)){
-        // already over: find how many words of the grown block must go
-        const words = grow.textContent.trim().split(/\s+/);
-        const cut = m=>{ grow.textContent = words.slice(0, words.length - m).join(" "); return fit.offsetHeight <= H + 0.5; };
-        let lo = 0, hi = words.length;             // removing lo words is too few; removing hi is enough
-        if(!cut(hi)){                            // over even without its copy: the pictures fill the page
-          grow.innerHTML = base;
-          out[id] = { now, limit:null, pictures:true, scale: sheets[i] && sheets[i].scale }; return;
-        }
-        else { while(hi - lo > 1){ const mid = (lo + hi) >> 1; if(cut(mid)) hi = mid; else lo = mid; } lim = Math.max(0, now - hi); }
-      } else {
-        let lo = 0, hi = 64;
-        while(fits(hi) && hi < 20000) { lo = hi; hi *= 2; }
-        while(hi - lo > 1){ const mid = (lo + hi) >> 1; if(fits(mid)) lo = mid; else hi = mid; }
-        lim = now + lo;
-      }
-      grow.innerHTML = base;
-      out[id] = { now, limit: lim, over: lim < now, scale: sheets[i] && sheets[i].scale };
-    });
-    const data = await loadPrintLimits();
-    Object.keys(out).forEach(id=>{
-      const w = out[id]; w.web = w.limit;
-      const p = printLimit(id, data);
-      if(p == null || w.pictures) return;
-      w.print = p;
-      w.limit = w.web == null ? p : Math.min(w.web, p);
-      w.over = w.now > w.limit;
-    });
-    return out;
-  } finally { frame.remove(); }
+    if(!fits(0)){
+      const words = target.textContent.trim().split(/\s+/);
+      const cut = k=>{ target.textContent = words.slice(0, words.length - k).join(" "); return ok(); };
+      let lo = 0, hi = words.length;
+      if(!cut(hi)) return null;
+      while(hi - lo > 1){ const mid = (lo + hi) >> 1; if(cut(mid)) hi = mid; else lo = mid; }
+      lim = Math.max(0, now - hi);
+    } else {
+      let lo = 0, hi = 64;
+      while(fits(hi) && hi < 40000){ lo = hi; hi *= 2; }
+      while(hi - lo > 1){ const mid = (lo + hi) >> 1; if(fits(mid)) lo = mid; else hi = mid; }
+      lim = now + lo;
+    }
+  } finally { target.innerHTML = base; }
+  return lim;
 }
 let printLimits = { ed:null, data:null };
 async function loadPrintLimits(){
@@ -1162,14 +1181,83 @@ async function loadPrintLimits(){
   printLimits = { ed, data };
   return data;
 }
-// the printed page's limit for a schema section, or null if the press has none
-function printLimit(secId, data){
-  const slots = data && (data.slots || []).filter(s=> s.section === secId && s.capacity != null && getPath(model, s.path) != null);
-  if(!slots || !slots.length) return null;
-  const sec = DB.SCHEMA.find(x=> x.id === secId);
-  let lim = sectionWords(sec);
-  slots.forEach(s=>{ lim += s.capacity - countWords([].concat(getPath(model, s.path)).join(" ")); });
-  return Math.max(0, lim);
+async function measureWordLimits(){
+  const data = await loadPrintLimits();
+  const slots = ((data && data.slots) || []).filter(s=> s.capacity != null && getPath(model, s.path) != null);
+  const paths = slots.map(s=> s.path);
+  const { frame, sheets } = await buildPrintFrame({ mark: paths, zooms: {} });
+  try{
+    const doc = frame.contentDocument;
+    const H = parseFloat(frame.style.height), W = parseFloat(frame.style.width);
+    // find each piece's text on the page by its marker, then take the marker out
+    const targets = {};
+    const tw = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
+    const hits = [];
+    for(let n = tw.nextNode(); n; n = tw.nextNode()) if(n.nodeValue.indexOf(TOK) >= 0) hits.push(n);
+    hits.forEach(n=>{
+      let m; TOK_RE.lastIndex = 0;
+      while((m = TOK_RE.exec(n.nodeValue))) targets[paths[+m[1]]] = n.parentElement;
+      n.nodeValue = n.nodeValue.replace(TOK_RE, "");
+    });
+    const bySheet = {}; sheets.forEach(sh=>{ bySheet[sh.key] = sh; });
+    const out = {}, zooms = {};
+    // 1. writers' pieces: the web sheet is calibrated to hold what print holds
+    slots.forEach(sl=>{
+      const target = targets[sl.path], sh = bySheet[pieceSheet(sl.path)];
+      if(!target || !sh || !sh.fit.contains(target)) return;
+      const now = pieceWords(sl.path);
+      const p = sl.capacity;                           // what its printed page holds, however much is written
+      const pool = (PLAIN(sh.unit.textContent).match(WORD_RE) || ["word"]);
+      const cap = z=> sheetCapacity(sh.fit, target, W, H, z, now, pool);
+      // Holding falls as the scale rises, but in steps (lines reflow, columns
+      // re-balance), so the scale is found by bracketing and halving rather than
+      // by extrapolating: a scale that holds too few, one that holds too many,
+      // and the gap between them halved until the sheet holds print's words.
+      const gap = w=> w == null ? Infinity : Math.abs(w - p) / Math.max(w, p, 1);
+      // start from the last calibration: between edits it rarely moves, and one
+      // measure then confirms it instead of a search
+      let z = webZooms[sh.key] || 1, w = cap(z);
+      if(w == null) return;
+      let best = { z, w };
+      let lo = null, hi = null;                    // lo: holds >= p (small scale); hi: holds < p
+      if(w >= p) lo = { z, w }; else hi = { z, w };
+      for(let f = z; !(lo && hi) && gap(best.w) > WL_TOLERANCE / 2; ){               // widen the bracket by factors of 1.25
+        f = lo ? f * 1.25 : f / 1.25;
+        if(f < WL_ZOOM_MIN || f > WL_ZOOM_MAX) break;
+        const c = cap(f); if(c == null) break;
+        if(gap(c) < gap(best.w)) best = { z:f, w:c };
+        if(c >= p) lo = { z:f, w:c }; else hi = { z:f, w:c };
+      }
+      for(let k = 0; k < 14 && lo && hi && gap(best.w) > WL_TOLERANCE / 2; k++){
+        if(gap(w) <= WL_TOLERANCE / 2 && k === 0 && best.z === z) break;
+        const mid = Math.sqrt(lo.z * hi.z), c = cap(mid);
+        if(c == null) break;
+        if(gap(c) < gap(best.w)) best = { z:mid, w:c };
+        if(c >= p) lo = { z:mid, w:c }; else hi = { z:mid, w:c };
+      }
+      z = best.z; w = best.w;
+      zooms[sh.key] = +z.toFixed(4);
+      const sec = sl.section;
+      (out[sec] = out[sec] || { pieces: [] }).pieces.push({
+        path: sl.path, label: pieceLabel(sl.path), now, web: w, print: p, limit: Math.min(w, p),
+        zoom: z, agree: Math.min(w, p) / Math.max(w, p, 1) >= 1 - WL_TOLERANCE, over: now > Math.min(w, p) });
+    });
+    // 2. sections with no printed slot: the old web measure, longest block at full size
+    sheets.forEach(sh=>{
+      const id = sh.key.split(".")[0];
+      if(out[id] || id === "hero" || id === "footer" || id === "section" || /^voices\./.test(sh.key)) return;
+      const sec = DB.SCHEMA.find(x=> x.id === id); if(!sec) return;
+      const blocks = Array.from(sh.unit.querySelectorAll("p, .bd, .body, figcaption, blockquote, li"))
+        .filter(b=> !b.querySelector("p, .bd, .body, li") && b.textContent.trim().length);
+      const grow = blocks.sort((a, b)=> b.textContent.length - a.textContent.length)[0];
+      const now = sectionWords(sec);
+      const lim = grow ? sheetCapacity(sh.fit, grow, W, H, 1, now, PLAIN(sh.unit.textContent).match(WORD_RE) || ["word"]) : null;
+      out[id] = lim == null ? { pictures: true, scale: sh.scale, now }
+                            : { webOnly: true, pieces: [{ path: id, label: sectionLabel(sec), now, web: lim, limit: lim, over: now > lim }] };
+    });
+    webZooms = zooms;
+    return out;
+  } finally { frame.remove(); }
 }
 let wordLimits = {}, wlTimer = null, wlBusy = false;
 // re-measured a while after edits stop: it lays the whole issue out again
@@ -1183,36 +1271,37 @@ function scheduleWordLimits(){
     finally{ wlBusy = false; }
   }, 1500);
 }
-function wlText(w){
-  if(w.pictures) return "pictures fill its page";
-  return w.over ? "over by " + (w.now - w.limit) + " words" : w.now + " / " + w.limit + " words";
-}
+function pieceText(pc){ return pc.over ? pc.label + ": over by " + (pc.now - pc.limit) + " words" : pc.label + ": " + pc.now + " / " + pc.limit + " words"; }
 function showWordLimits(){
   document.querySelectorAll("#fieldsPane .sec").forEach(box=>{
     const w = wordLimits[box.dataset.sec], head = box.querySelector(".head");
     let chip = head.querySelector(".wl");
-    if(!w){ if(chip) chip.remove(); return; }
+    if(!w){ if(chip) chip.remove(); const n = box.querySelector(".body > .wlnote"); if(n) n.remove(); return; }
     if(!chip){ chip = document.createElement("span"); chip.className = "wl"; head.insertBefore(chip, head.querySelector(".chev")); }
-    chip.textContent = w.pictures ? "full" : w.over ? "over" : "≤ " + w.limit + " w";
-    chip.classList.toggle("over", !!w.over || !!w.pictures);
+    const pcs = w.pieces || [], over = pcs.some(pc=> pc.over);
+    const lims = pcs.map(pc=> pc.limit);
+    chip.textContent = w.pictures ? "full" : over ? "over"
+      : "≤ " + (Math.min(...lims) === Math.max(...lims) ? lims[0] : Math.min(...lims) + "–" + Math.max(...lims)) + " w";
+    chip.classList.toggle("over", over || !!w.pictures);
     chip.title = w.pictures ? "Its pictures fill the page by themselves, so there is no word budget: the Web PDF shrinks the page to fit."
-      : "This section holds about " + w.limit + " words of copy; it has " + w.now + " now." +
-        (w.print != null ? " Web page " + w.web + ", printed page " + w.print + ": the smaller one." : " Measured on its Web PDF sheet.");
+      : pcs.map(pieceText).join("\n");
     let note = box.querySelector(".body > .wlnote");
     if(!note){ note = document.createElement("div"); note.className = "hint wlnote"; box.querySelector(".body").prepend(note); }
     note.innerHTML = w.pictures
       ? "<b>No room for more copy:</b> the pictures fill this page on their own, so the Web PDF prints it at " + Math.round((w.scale||1)*100) + "%. Keep its words short."
-      : (w.over
-        ? "<b>Over its page by about " + (w.now - w.limit) + " words.</b> It has " + w.now + "; its page holds about " + w.limit + ". The Web PDF shrinks it to fit."
-        : "<b>Word limit: about " + w.limit + " words</b> for this section's page (" + w.now + " used, " + (w.limit - w.now) + " to spare).") +
-        (w.print != null
-          ? " The web page holds " + w.web + ", the printed booklet " + w.print + "; this is the smaller."
-          : " Measured on its Web PDF sheet; the printed booklet has no measure for it.");
+      : "<b>Word limit" + (pcs.length > 1 ? "s" : "") + "</b> " + pcs.map(pc=>
+          "<br>· " + esc(pc.label) + ": " + (pc.over ? "<b>over by " + (pc.now - pc.limit) + "</b>" : pc.now + " / <b>" + pc.limit + "</b>") + " words" +
+          (pc.print != null ? " <span style='opacity:.75'>(print " + pc.print + " · web " + pc.web + ")</span>" : "")).join("") +
+        (w.webOnly ? "<br>Measured on its Web PDF sheet; the printed booklet has no slot for it."
+                   : "<br>The printed page sets the limit; the web page is scaled to hold the same, within 5%.");
   });
   const c = $("#designPane .crumb");
-  if(c && sel){ const it = itemOf(sel.paths[0]), info = fieldInfo(sel.paths[0]), sec = (it && it.sec) || (info && info.sec);
+  if(c && sel){
+    const it = itemOf(sel.paths[0]), info = fieldInfo(sel.paths[0]), sec = (it && it.sec) || (info && info.sec);
     const w = sec && wordLimits[sec.id];
-    c.textContent = (sec ? sectionLabel(sec) : "Model") + (w ? " · " + wlText(w) : ""); }
+    const pc = w && w.pieces && (w.pieces.find(x=> sel.paths[0].indexOf(x.path) === 0) || (w.pieces.length === 1 && w.pieces[0]));
+    c.textContent = (sec ? sectionLabel(sec) : "Model") + (pc ? " · " + pieceText(pc) : "");
+  }
 }
 
 /* ---------- the sticker sheet, for a cutting machine ----------
@@ -1361,6 +1450,8 @@ $("#cutBtn").addEventListener("click", async ()=>{
 $("#pdfBtn").addEventListener("click", async ()=>{
   const btn = $("#pdfMenuBtn"), label = btn.innerHTML;
   btn.textContent = "Laying out…";
+  // each writer's sheet prints at the scale that makes it hold what print holds
+  if(!Object.keys(webZooms).length){ try{ wordLimits = await measureWordLimits(); showWordLimits(); }catch(e){ console.warn(e); } }
   let job;
   try{ job = await buildPrintFrame(); }
   catch(e){ console.error(e); toast("Could not lay out the PDF: " + e.message); btn.innerHTML = label; return; }
