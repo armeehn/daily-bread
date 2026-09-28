@@ -2,6 +2,8 @@
 """press-server.py — typeset the studio's edition on demand.
 
     python3 tools/press-server.py            # PRESS_PORT (8091), PRESS_ORIGINS
+    python3 tools/press-server.py --studio   # on your own machine: the studio too,
+                                             # at http://localhost:8091/studio.html
 
 The studio's "Magazine PDF" button POSTs the edition on screen here and gets the
 saddle-stitched booklet back: content/<edition>.tex with that model laid over it
@@ -11,8 +13,18 @@ repo — LXC 111 on the estate, published by Caddy as press.hq.ripostelabs.xyz.
 
     POST /press      {"edition": "issue-01", "model": {…}}   -> application/pdf
                      X-Press-Pages / -Sides / -Overfull / -Touched say what it is
+                     "output": "booklet" (the default: Letter, imposed, for a
+                     desktop duplex printer) or "printer" (A5 pages in order
+                     with bleed and crop marks, for a print shop; the bleed is
+                     the model's print.bleed, 3 mm by default)
     GET  /health     {"ok": true, "editions": [...], "engine": "..."}
     GET  /           a status page for a person who opened press.hq in a browser
+
+With --studio the server also serves this checkout's files (not its dotfiles
+or build/), on 127.0.0.1 only: open the studio from it and the Magazine PDF is
+typeset right there, from the edition on screen. It needs what the estate's
+press has: lualatex (TeX Live with fontspec, tikz, pdfpages' graphicx) and
+poppler's pdfinfo; riposte-latex beside the checkout is optional.
 
 One typesetting at a time: lualatex is a whole core for several seconds and the
 box is shared. A few requests queue on the lock; past that the answer is 503
@@ -49,6 +61,14 @@ LOCAL_ORIGIN = re.compile(r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$")
 MAX_BODY = 24 * 1024 * 1024        # the model, cover image included
 EDITION = re.compile(r"^issue-\d{2}$")
 WORK = REPO / "build" / "studio"    # one temp dir per request, removed after
+STUDIO = "--studio" in sys.argv[1:] or os.environ.get("PRESS_STUDIO") == "1"
+TYPES = {".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8",
+         ".mjs": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8",
+         ".json": "application/json", ".pdf": "application/pdf", ".png": "image/png",
+         ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".gif": "image/gif",
+         ".svg": "image/svg+xml", ".woff2": "font/woff2", ".woff": "font/woff", ".ttf": "font/ttf",
+         ".otf": "font/otf", ".ico": "image/x-icon", ".txt": "text/plain; charset=utf-8",
+         ".md": "text/plain; charset=utf-8", ".xml": "application/xml"}
 MAX_QUEUED = int(os.environ.get("PRESS_MAX_QUEUED", "3"))   # waiting, not counting the one running
 RETRY_AFTER_S = "15"
 
@@ -135,7 +155,21 @@ class Handler(BaseHTTPRequestHandler):
                 editions=", ".join(status["editions"]), engine=status["engine"],
                 busy="typesetting now" if status["busy"] else "idle").encode(),
                 "text/html; charset=utf-8")
+        if STUDIO:
+            return self.static(route)
         self.fail(HTTPStatus.NOT_FOUND, "no such route: GET /health or POST /press")
+
+    def static(self, route):
+        """--studio: a file of this checkout, never a dotfile, build/ or outside it."""
+        from urllib.parse import unquote
+        rel = unquote(route).lstrip("/")
+        parts = [p for p in rel.split("/") if p]
+        f = (REPO / rel).resolve()
+        if (not parts or any(p.startswith(".") for p in parts) or parts[0] == "build"
+                or REPO not in f.parents or not f.is_file()):
+            return self.fail(HTTPStatus.NOT_FOUND, "no such file")
+        self.reply(HTTPStatus.OK, f.read_bytes(), TYPES.get(f.suffix.lower(), "application/octet-stream"),
+                   {"Cache-Control": "no-store"})
 
     def do_POST(self):
         if self.path.split("?")[0] != "/press":
@@ -149,6 +183,9 @@ class Handler(BaseHTTPRequestHandler):
             return self.fail(HTTPStatus.BAD_REQUEST, "body is not JSON")
         edition = str(req.get("edition", ""))
         model = req.get("model")
+        output = str(req.get("output") or "booklet")
+        if output not in ("booklet", "printer"):
+            return self.fail(HTTPStatus.BAD_REQUEST, 'output must be "booklet" or "printer"')
         if not EDITION.match(edition) or edition not in editions():
             return self.fail(HTTPStatus.NOT_FOUND, f"no such edition; have {', '.join(editions())}")
         if not isinstance(model, dict):
@@ -177,6 +214,9 @@ class Handler(BaseHTTPRequestHandler):
                     queued -= 1
                 waited = time.monotonic() - started
                 booklet, info = overlay.typeset(REPO, edition, model, work)
+                if output == "printer":
+                    bleed = press.length_pt(((model.get("print") or {}).get("bleed")), press.BLEED_MM)
+                    booklet = press.build_printer(REPO, work / "build", bleed)
             pdf = booklet.read_bytes()
         except Exception as e:                      # a TeX error is the common case
             sys.stderr.write("press %s %s FAILED after %.1fs: %s\n" % (
@@ -188,7 +228,7 @@ class Handler(BaseHTTPRequestHandler):
             self.address_string(), edition, time.monotonic() - started, waited,
             info["pages"], len(pdf), len(info["touched"]), info["overfull"]))
 
-        name = f"daily-bread-{edition}-booklet.pdf"
+        name = f"daily-bread-{edition}-{output}.pdf"
         self.reply(HTTPStatus.OK, pdf, "application/pdf", {
             "Content-Disposition": f'attachment; filename="{name}"',
             "X-Press-Pages": str(info["pages"]), "X-Press-Sides": str(info["sides"]),
@@ -201,9 +241,12 @@ class Handler(BaseHTTPRequestHandler):
 def main():
     # Leftovers from a build the previous process did not live to clean up.
     shutil.rmtree(WORK, ignore_errors=True)
-    srv = ThreadingHTTPServer(("0.0.0.0", PORT), Handler)
+    # the studio mode serves the checkout: to this machine only
+    srv = ThreadingHTTPServer(("127.0.0.1" if STUDIO else "0.0.0.0", PORT), Handler)
     srv.daemon_threads = True
     sys.stderr.write(f"daily-bread press on :{PORT}  commit {COMMIT}  editions {editions()}  repo {REPO}\n")
+    if STUDIO:
+        sys.stderr.write(f"studio: http://localhost:{PORT}/studio.html\n")
     srv.serve_forever()
 
 

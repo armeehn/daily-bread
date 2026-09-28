@@ -356,7 +356,8 @@
       <button class="btn" id="pdfMenuBtn" title="Print outputs: the web PDF, the press booklet, the sticker sheet for a cutter" aria-haspopup="true" aria-expanded="false">Print ▾</button>
       <div class="edmenu right off" id="pdfMenu">
         <button id="pdfBtn" title="Export exactly what is on screen, right now, through your browser's print dialog: cover, then one page per section, at the trim size set under Print. Choose 'Save as PDF', Margins None, Background graphics ON. This is the studio's own document; 'Magazine PDF' is the TeX press booklet, typeset from the .tex.">Web PDF<small>one sheet per section, through the print dialog</small></button>
-        <button id="magPdfBtn" title="Typeset the edition in view as the press booklet: this model laid over content/&lt;issue&gt;.tex (theme, cover, letter, contents, voices, interview, waitlist, lab, listings, colophon…), 48 A5 pages set by lualatex and imposed two to a Letter-landscape side so the folded, stapled stack reads in order. Print two-sided, short-edge flip, actual size. Takes about ten seconds on press.hq. Pages the studio has no field for are typeset as the .tex has them. Off the estate, where press.hq is out of reach, you get the last CI typesetting of the .tex instead, without your edits — the toast says which.">Magazine PDF ⤓<small>the press booklet, typeset in about ten seconds</small></button>
+        <button id="magPdfBtn" title="Typeset the edition in view as the press booklet: this model laid over content/&lt;issue&gt;.tex (theme, cover, letter, contents, voices, interview, waitlist, lab, listings, colophon…), 48 A5 pages set by lualatex and imposed two to a Letter-landscape side so the folded, stapled stack reads in order. Print two-sided, short-edge flip, actual size. Takes about ten seconds. Pages the studio has no field for are typeset as the .tex has them. The studio uses a press on this machine first (python3 tools/press-server.py), then press.hq; with neither, it offers the last CI typesetting of the .tex, which does not have your edits.">Magazine PDF ⤓<small>the press booklet, typeset in about ten seconds</small></button>
+        <button id="printerPdfBtn" title="Typeset the edition in view for a print shop: the same pages as the Magazine PDF, one A5 page per PDF page in reading order (the shop imposes them), with the bleed set under Print (3 mm by default) and crop marks in the slug outside it. TrimBox and BleedBox are set, so the shop's software knows where to cut. Needs the press: on your own machine, run python3 tools/press-server.py.">Printer PDF ⤓<small>A5 pages with bleed and crop marks, for a print shop</small></button>
         <hr>
         <button id="cutBtn" title="A transparent PNG of the sticker sheet at 300 dpi, sized for Cricut Print Then Cut (6.75 × 9.25 in). Upload it to Design Space as a Print Then Cut image: Design Space prints it with its own registration marks and the machine cuts round every sticker.">Stickers for a cutter ⤓<small>PNG for Cricut Print Then Cut</small></button>
       </div>
@@ -1646,7 +1647,18 @@ function pressEdition(m){
   return n ? "issue-"+n[0].padStart(2,"0") : null;
 }
 // The press: tools/press-server.py, typesetting on demand where lualatex lives.
-const PRESS_URL = window.DB_PRESS_URL || "https://press.hq.ripostelabs.xyz";
+// The studio asks, in order: the page's own origin when it is served from this
+// machine (press-server.py --studio serves the studio too), a press running on
+// this machine (python3 tools/press-server.py, port 8091), then press.hq.
+const PRESS_URL = "https://press.hq.ripostelabs.xyz";
+const LOCAL_PRESS = "http://localhost:8091";
+function pressUrls(){
+  if(window.DB_PRESS_URL) return [window.DB_PRESS_URL];
+  const out = [];
+  if(/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && /^https?:$/.test(location.protocol)) out.push(location.origin);
+  out.push(LOCAL_PRESS, PRESS_URL);
+  return out.filter((u, i)=> out.indexOf(u) === i);
+}
 const PRESS_TIMEOUT_MS = 120000;
 
 function saveBlobAs(href, name){
@@ -1655,30 +1667,36 @@ function saveBlobAs(href, name){
   document.body.appendChild(a); a.click(); a.remove();
 }
 
-$("#magPdfBtn").addEventListener("click", async ()=>{
+async function typesetMagazine(output){
   // The booklet is the TeX press: content/<edition>.tex typeset by lualatex, 48 A5
   // pages imposed two to a Letter-landscape side. The studio is the web edition and
   // the .tex is the print edition, so the model cannot be the print source; what
   // it can be is an overlay (tools/latex/dblatex/overlay.py): theme, cover, letter,
   // contents, and every other field with a print counterpart replace the .tex's,
-  // and the rest of the pages are typeset as the .tex has them. press.hq does
-  // that on demand. When it is out of reach the button hands over the CI
-  // typesetting of the plain .tex and says so, rather than nothing.
+  // and the rest of the pages are typeset as the .tex has them. The press does
+  // that on demand. `output` is "booklet" (for a desktop duplex printer) or
+  // "printer" (A5 pages in order, with bleed and crop marks, for a print shop).
   const ed=pressEdition(model);
   if(!ed){ toast("No press booklet: this edition has no issue number (Meta → Issue №)"); return; }
+  flush();
   // ASCII on purpose: Chromium drops a download name it cannot sanitise and
   // saves the file as "download".
-  const name="daily-bread-"+ed+"-booklet.pdf";
-  // the button lives in the PDF menu, which closes on click: the menu's own
+  const name="daily-bread-"+ed+"-"+output+".pdf";
+  // the buttons live in the Print menu, which closes on click: the menu's own
   // button carries the "Typesetting…" while the press works
-  const btn=$("#magPdfBtn"), label=btn.innerHTML, trig=$("#pdfMenuBtn"), tlabel=trig.innerHTML;
+  const btn=$(output==="printer" ? "#printerPdfBtn" : "#magPdfBtn"), label=btn.innerHTML, trig=$("#pdfMenuBtn"), tlabel=trig.innerHTML;
   btn.disabled=true; btn.textContent="Typesetting…"; trig.textContent="Typesetting…";
   try{
-    let r=null;
-    try{
-      r=await fetch(PRESS_URL+"/press",{method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({edition:ed, model}), signal:AbortSignal.timeout(PRESS_TIMEOUT_MS)});
-    }catch(e){ r=null; }                       // no route, CORS refused, timed out
+    let r=null, at=null;
+    for(const url of pressUrls()){
+      try{
+        r=await fetch(url+"/press",{method:"POST",headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({edition:ed, model, output}), signal:AbortSignal.timeout(PRESS_TIMEOUT_MS)});
+      }catch(e){ r=null; }                     // no route, CORS refused, timed out
+      // a static server (this page's own, when it is not the press) says no to a POST
+      if(r && [404,405,501].indexOf(r.status)>=0 && r.headers.get("Content-Type")!=="application/json"){ r=null; }
+      if(r){ at=url; break; }
+    }
     if(r && r.ok){
       const blob=await r.blob();
       const url=URL.createObjectURL(blob);
@@ -1686,8 +1704,10 @@ $("#magPdfBtn").addEventListener("click", async ()=>{
       setTimeout(()=>URL.revokeObjectURL(url), 60000);
       const h=k=>r.headers.get("X-Press-"+k)||"?";
       const over=Number(r.headers.get("X-Press-Overfull")||0);
-      toast("Typeset the edition in view — "+h("Pages")+" pages on "+h("Sheets")+" sheets in "+h("Seconds")+" s"
-            +(over?" · "+over+" box(es) overfull, check the proof":""));
+      const where=(at===LOCAL_PRESS || at===location.origin) ? " on this machine" : "";
+      toast((output==="printer" ? "Typeset the edition in view for the printer — "+h("Pages")+" pages with bleed and crop marks"
+                                : "Typeset the edition in view — "+h("Pages")+" pages on "+h("Sheets")+" sheets")
+            +" in "+h("Seconds")+" s"+where+(over?" · "+over+" box(es) overfull, check the proof":""));
       return;
     }
     if(r){
@@ -1695,19 +1715,25 @@ $("#magPdfBtn").addEventListener("click", async ()=>{
       toast("The press refused this edition: "+(err.error||("HTTP "+r.status)));
       return;
     }
-    // Fallback: the last CI typesetting of the plain .tex.
+    const how="No press is running. To typeset your edits, run  python3 tools/press-server.py  in the checkout (it needs lualatex), "
+      +"or  python3 tools/press-server.py --studio  and open the studio from http://localhost:8091/studio.html.";
+    if(output==="printer"){ alert(how); return; }
+    // Fallback, and only when asked for: the last CI typesetting of the plain .tex.
     let man=null;
     try{
       const m=await fetch("/press/"+ed+"/booklet.json",{cache:"no-store"});
       if(m.ok) man=await m.json();
     }catch(e){}
-    if(!man){ toast("press.hq is out of reach and there is no CI typesetting of content/"+ed+".tex"); return; }
+    if(!man){ alert(how); return; }
+    if(!confirm(how+"\n\nDownload the last CI typesetting of "+man.source+" instead? It does NOT have your edits.")){ return; }
     saveBlobAs("/press/"+ed+"/booklet.pdf", name);
-    toast("press.hq is out of reach — downloading the last CI typesetting of "+man.source+", without your edits");
+    toast("No press — downloaded the last CI typesetting of "+man.source+", without your edits");
   }finally{
     btn.disabled=false; btn.innerHTML=label; trig.innerHTML=tlabel;
   }
-});
+}
+$("#magPdfBtn").addEventListener("click", ()=> typesetMagazine("booklet"));
+$("#printerPdfBtn").addEventListener("click", ()=> typesetMagazine("printer"));
 $("#importBtn").addEventListener("click",()=> $("#fileImport").click());
 $("#fileImport").addEventListener("change",e=>{
   const file=e.target.files[0]; if(!file) return;
@@ -3265,6 +3291,7 @@ function palCommands(){
     c("Undo", undo, MODK+" Z", "back revert"),
     c("Redo", redo, MODK+" ⇧ Z", "again"),
     c("Magazine PDF — typeset the press booklet", ()=> $("#magPdfBtn").click(), "", "print pdf press booklet tex latex"),
+    c("Printer PDF — A5 pages with bleed and crop marks", ()=> $("#printerPdfBtn").click(), "", "print pdf press printer bleed crop marks trim shop"),
     c("Web PDF — print what is on screen", ()=> $("#pdfBtn").click(), "", "print pdf"),
     c("Import JSON as a new edition…", ()=> $("#importBtn").click(), "", "open load file"),
     c("New edition…", ()=> $("#edNewBtn").click(), "", "issue add create"),

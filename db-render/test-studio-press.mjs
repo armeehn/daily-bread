@@ -7,8 +7,11 @@
  * Serves the repo root, opens studio.html with the press pointed at a routed
  * origin, and checks: (1) the button POSTs {edition, model} for the edition on
  * screen and the browser saves exactly the bytes the press returns; (2) with the
- * press unreachable it downloads press/<edition>/booklet.pdf and the toast says
- * the edits are not in it; (3) an edition maps to its .tex by issue number.
+ * press unreachable it says how to start one and, only when the person agrees,
+ * downloads press/<edition>/booklet.pdf, saying the edits are not in it;
+ * (3) an edition maps to its .tex by issue number; (4) Printer PDF asks the
+ * press for the printer's output; (5) the press is looked for on this machine
+ * before press.hq.
  * Needs playwright and a chromium, so it runs on the build host only and is NOT
  * in CI. The press itself is proven by `db-latex.py press --model`.
  */
@@ -113,12 +116,39 @@ async function pressButton(page) {
   const t = await toastText(page);
   check("toast says it typeset the edition in view", /Typeset the edition in view — 48 pages on 12 sheets/.test(t), t);
   check("button is usable again", await page.evaluate(() => !document.querySelector("#magPdfBtn").disabled));
+  check("asks for the booklet", posted && posted.output === "booklet", posted && posted.output);
+
+  // (4) Printer PDF: the same press, the printer's output
+  posted = null;
+  const [dl2] = await Promise.all([
+    page.waitForEvent("download", { timeout: 20000 }),
+    page.click("#pdfMenuBtn").then(() => page.click("#printerPdfBtn")),
+  ]);
+  check("Printer PDF asks the press for the printer's output", posted && posted.output === "printer", posted && posted.output);
+  check("…and names the file for it", dl2.suggestedFilename() === `daily-bread-${EDITION}-printer.pdf`, dl2.suggestedFilename());
+  const t2 = await toastText(page);
+  check("…and says what it is", /for the printer — 48 pages with bleed and crop marks/.test(t2), t2);
+
+  // (5) with no press set, this machine's first, then press.hq
+  const urls = await page.evaluate(() => { delete window.DB_PRESS_URL; return pressUrls(); });
+  check("looks for a press on this machine before press.hq",
+    urls.length === 3 && /^http:\/\/127\.0\.0\.1:\d+$/.test(urls[0]) && urls[1] === "http://localhost:8091" && /press\.hq/.test(urls[2]), urls.join(" "));
   await ctx.close();
 }
 
 /* ---- (2) the press is out of reach: the CI booklet, and an honest toast ---- */
 {
   const { ctx, page } = await open(route => route.abort("connectionrefused"));
+  // first say no: nothing is downloaded behind the person's back
+  let asked = "";
+  page.once("dialog", d => { asked = d.message(); d.dismiss(); });
+  let early = null;
+  page.once("download", d => { early = d; });
+  await pressButton(page);
+  await page.waitForTimeout(1500);
+  check("with no press, it says how to start one", /press-server\.py/.test(asked), asked.slice(0, 90));
+  check("…and asks before handing over the copy without the edits", /does NOT have your edits/.test(asked) && !early);
+  page.once("dialog", d => d.accept());
   const [download] = await Promise.all([
     page.waitForEvent("download", { timeout: 20000 }),
     pressButton(page),
@@ -128,7 +158,7 @@ async function pressButton(page) {
   check("falls back to press/<edition>/booklet.pdf", download.url().endsWith(`/press/${EDITION}/booklet.pdf`), download.url());
   check("fallback bytes are the tracked CI booklet", sha(got) === sha(want), `${got.length} vs ${want.length} bytes`);
   const t = await toastText(page);
-  check("toast says the edits are not in it", /out of reach/.test(t) && /without your edits/.test(t), t);
+  check("toast says the edits are not in it", /No press/.test(t) && /without your edits/.test(t), t);
   await ctx.close();
 }
 

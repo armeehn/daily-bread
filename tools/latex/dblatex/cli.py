@@ -43,7 +43,8 @@ def cmd_build(args):
         print(f"web: {js.relative_to(REPO)} regenerated, site rebuilt")
     if args.print:
         one_up, booklet = press.build_pdfs(REPO, tex, build)
-        for pdf in (one_up, booklet):
+        printer = press.build_printer(REPO, build)
+        for pdf in (one_up, booklet, printer):
             print("print: %s  %d pages  %.2f x %.2f pt" % ((pdf.relative_to(REPO),) + press.pdf_geometry(pdf)))
 
 

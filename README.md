@@ -299,7 +299,9 @@ shows exactly what will publish, at full / tablet / phone widths.
     sticker sheet) is scaled down to fit it instead of running onto another.
     A long piece that outgrows its sheet carries on onto a Continued sheet
     before the back cover, as it does in print. There are no crop marks; this is the copy you print yourself.
-  - **Magazine PDF**: the press booklet, described below.
+  - **Magazine PDF**: the press booklet, for a desktop duplex printer; and
+    **Printer PDF**: A5 pages with bleed and crop marks, for a print shop.
+    Both are described below.
   - **Stickers for a cutter**: a transparent PNG of the sticker sheet at
     300 dpi, sized for Cricut Print Then Cut (6.75 × 9.25 in, twelve 2 in
     stickers; more go on more sheets). A Cricut only cuts what Design Space
@@ -355,11 +357,35 @@ is typeset from the `.tex` and does not take the artwork yet.
   interview, waitlist, lab, listings, colophon; pages the studio has no field for
   stay as the `.tex` has them), typeset by lualatex into A5 pages and imposed two
   to an A4-landscape side in saddle-stitch order. The edition maps to its `.tex`
-  by issue number (№1 → `issue-01`). The typesetting runs on `press.hq`
-  (`tools/press-server.py`, LXC 111), about ten seconds. Off the estate the
-  button falls back to `press/<edition>/booklet.pdf`, the CI typesetting of the
-  plain `.tex`, and says so. `python3 tools/db-latex.py press --model <json>` is
-  the same path from the command line; see `tools/latex/README.md`.
+  by issue number (№1 → `issue-01`). The typesetting runs on a press: the
+  studio asks one on this machine first, then `press.hq` (LXC 111); about ten
+  seconds either way. With neither it says how to start one, and only if you
+  agree hands over `press/<edition>/booklet.pdf`, the CI typesetting of the
+  plain `.tex`, which does not have your edits.
+
+  **Printer PDF** (in the same menu) is for a print shop: the same pages, one A5
+  page per PDF page in reading order (the shop imposes them), with the bleed set
+  under Print (3 mm by default) and crop marks in a 5 mm slug outside it;
+  `/TrimBox` and `/BleedBox` say where to cut. The pages are drawn at the trim,
+  so the bleed is each page's outermost half point stretched out over it:
+  backgrounds, strips and pictures that reach the edge carry on in their own
+  colour. The PDF is RGB; ask the shop whether they convert to CMYK themselves.
+
+  **Your own press.** On a machine with TeX Live (lualatex, fontspec, TikZ) and
+  poppler:
+
+  ```sh
+  python3 tools/press-server.py --studio
+  # then open http://localhost:8091/studio.html
+  ```
+
+  `--studio` serves this checkout's files to this machine only, so the studio and
+  the press share an origin. Without it the press listens on port 8091 for a
+  studio served from anywhere on `localhost`. On Arch: `pacman -S texlive-basic
+  texlive-latex texlive-latexrecommended texlive-latexextra texlive-luatex
+  texlive-pictures texlive-fontsrecommended poppler`.
+  `python3 tools/db-latex.py press --model <json>` is the same path from the
+  command line; see `tools/latex/README.md`.
 
   The render is reproducible: fonts are served from `db-render/vendor/`, and the
   script rewrites the PDF's `/CreationDate` and `/ModDate` from `SOURCE_DATE_EPOCH`

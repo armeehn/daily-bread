@@ -58,6 +58,12 @@ tools/latex/test_overlay.py` proves the overlay keeps the issue whole for the
 default, an empty and a hostile model (CI runs it; no TeX needed), and
 `press-booklet.yml` typesets the default overlay once per run.
 
+`build --print` also writes `printer.pdf` (`press.build_printer`): the A5
+pages one-up in reading order on trim + 3 mm bleed + 5 mm slug, crop marks in
+the slug, `/TrimBox` and `/BleedBox` set, the bleed made by stretching each
+page's outermost half point over it. The press server gives the studio the same
+with `"output": "printer"`, at the edition's own bleed.
+
 The press in production: one typesetting at a time, three more may queue, the
 rest get `503 Retry-After`; a build is killed after `RIPOSTE_TEX_TIMEOUT`
 (150 s); each build has its own `TEXMFVAR`, because luaotfload caches a font
