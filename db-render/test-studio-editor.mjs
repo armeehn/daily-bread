@@ -256,6 +256,12 @@ const found = await page.evaluate(() => ({
 check("Find ranks the field named for the query first", found.first === "submit.deadline", JSON.stringify(found));
 await page.keyboard.press("Enter");
 await settle();
+// a long page takes a smooth scroll a moment: wait for it to land (up to 5 s)
+await page.waitForFunction(() => {
+  const d = document.querySelector("#preview").contentDocument, s = d && d.querySelector(".dz-sel");
+  const r = s && s.getBoundingClientRect(), h = document.querySelector("#preview").clientHeight;
+  return !!r && r.top >= 0 && r.bottom <= h;
+}, null, { timeout: 5000 }).catch(() => {});
 const went = await page.evaluate(() => {
   const d = document.querySelector("#preview").contentDocument, s = d.querySelector(".dz-sel");
   const r = s && s.getBoundingClientRect(), h = document.querySelector("#preview").clientHeight;
