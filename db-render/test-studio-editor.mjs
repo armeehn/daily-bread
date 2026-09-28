@@ -494,44 +494,39 @@ check("twelve stickers fit one sheet at 2 in", cut.n === 1 && cut.layout.perShee
 check("between stickers is transparent, so the blade goes round each", cut.corner === 0 && cut.gap === 0, JSON.stringify(cut));
 check("each sticker is solid", cut.island === 255, cut.island);
 
-/* ---- 18. word limits: one per writer's piece, web and print within 5% ---- */
+/* ---- 18. word limits: one per writer's piece, measured on the pages that print ---- */
 const wl = await page.evaluate(async () => {
   const a = await measureWordLimits();
-  const pieces = [].concat(...Object.values(a).filter(x => x.pieces).map(x => x.pieces));
-  const printed = pieces.filter(pc => pc.print != null);
-  const worst = Math.max(...printed.map(pc => 1 - Math.min(pc.web, pc.print) / Math.max(pc.web, pc.print)));
+  const pieces = [].concat(...Object.values(a).filter(x => x.pieces && !x.webOnly).map(x => x.pieces));
   const letter = a.letter.pieces[0];
-  // fill the letter to its limit: its sheet must print at its calibrated scale, not smaller
+  // fill the letter to its limit: its sheets must print at full size, nothing moved or lost
   const words = (PLAIN(model.letter.paragraphs.join(" ")).match(WORD_RE) || []);
   model.letter.paragraphs.push(Array.from({ length: letter.limit - letter.now }, (_, j) => words[j % words.length]).join(" "));
   const { frame, sheets } = await buildPrintFrame();
-  const atLimit = sheets.find(s => s.key === "letter").scale;
-  // a long piece carries on onto a Continued sheet: nothing lost, nothing twice
+  const main = sheets.find(s => s.key === "letter");
   const ci = sheets.findIndex(s => s.key === "letter.cont"), cs = sheets[ci];
   const count = el => (PLAIN(el.textContent).match(WORD_RE) || []).length;
-  const main = sheets.find(s => s.key === "letter");
   const jump = main.unit.querySelector(".pp-jump");
-  const cont = cs && { scale: cs.scale, zoom: webZooms["letter.cont"], sheet: ci + 1, of: sheets.length,
+  const cont = cs && { scale: cs.scale, sheet: ci + 1, of: sheets.length,
     split: count(main.unit.querySelector(".prose")) - count(jump) - 1 + count(cs.unit.querySelector(".pp-cont-body")),  // less the drop cap
     jump: jump.textContent, head: cs.unit.querySelector(".pp-cont-k").textContent,
-    beforeBack: sheets[ci + 1] && sheets[ci + 1].key === "footer" || sheets.slice(ci + 1).every(s => /\.cont$|^footer$/.test(s.key)) };
+    beforeBack: sheets.slice(ci + 1).every(s => /\.cont$|^footer$/.test(s.key)) };
   frame.remove();
   model.letter.paragraphs[model.letter.paragraphs.length - 1] += " " + Array(400).fill("word").join(" ");
   const b = await measureWordLimits();
   model.letter.paragraphs.pop();
-  return { n: printed.length, worst, letter, zoom: webZooms.letter, atLimit, after: b.letter.pieces[0], cont, target: letter.limit,
-           voices: a.voices.pieces.length, voiceSheets: sheets.filter(s => /^voices\./.test(s.key)).length,
+  return { n: pieces.length, letter, atLimit: main.scale, after: b.letter.pieces[0], cont, target: letter.limit,
+           voices: a.voices.pieces.length, voiceSheets: sheets.filter(s => /^voices\.\d+$/.test(s.key)).length,
            comics: a.comics, submit: a.submit };
 });
-check("every writer's piece with a printed page gets a limit", wl.n >= 10, wl.n + " pieces");
-check("web and print agree within 5% for every piece", wl.worst <= 0.05, (wl.worst * 100).toFixed(1) + "% at worst");
-check("the limit is the smaller of the two", wl.letter.limit === Math.min(wl.letter.web, wl.letter.print), JSON.stringify(wl.letter));
+check("every writer's piece gets a limit", wl.n >= 10, wl.n + " pieces");
+check("a long piece's limit is its first page and its Continued page", wl.letter.pages && wl.letter.pages.length === 2 &&
+  wl.letter.pages[0] + wl.letter.pages[1] === wl.letter.limit, JSON.stringify(wl.letter));
 check("each young-voices report is its own piece and its own sheet", wl.voices === 3 && wl.voiceSheets === 3, wl.voices + " pieces, " + wl.voiceSheets + " sheets");
-check("a piece at its limit prints at its calibrated scale, not shrunk further",
-  Math.abs(wl.atLimit - wl.zoom) < 0.02, wl.atLimit + " vs " + wl.zoom);
+check("a piece at its limit prints at the size it was measured at, not shrunk", wl.atLimit >= wl.letter.scale - 0.01, wl.atLimit + " vs " + wl.letter.scale);
 check("a long piece at its limit carries on onto a Continued sheet before the back cover",
   wl.cont && wl.cont.beforeBack, JSON.stringify(wl.cont));
-check("…which prints at its own calibrated scale", wl.cont && Math.abs(wl.cont.scale - wl.cont.zoom) < 0.02, wl.cont && wl.cont.scale + " vs " + wl.cont.zoom);
+check("…which prints at the magazine's one text size", wl.cont && Math.abs(wl.cont.scale - 0.8) < 0.005, wl.cont && String(wl.cont.scale));
 check("…and between the two sheets no word is lost or doubled", wl.cont && wl.cont.split === wl.target, wl.cont && wl.cont.split + " of " + wl.target);
 check("…and each sheet points to the other", wl.cont && wl.cont.jump === "Continued on sheet " + wl.cont.sheet + " →" && /^Continued from sheet \d+$/.test(wl.cont.head),
   wl.cont && wl.cont.jump + " / " + wl.cont.head);

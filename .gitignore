@@ -4,6 +4,9 @@ package-lock.json
 # the submissions desk is its own Worker with its own dependencies (desk/README.md)
 !desk/package.json
 !desk/package-lock.json
+# the press (tools/press/render.js): Playwright + pdf-lib, versions pinned
+!tools/press/package.json
+!tools/press/package-lock.json
 desk/dist/
 desk/.wrangler/
 .claude/

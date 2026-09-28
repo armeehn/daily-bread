@@ -3,20 +3,20 @@
 //
 // Every edition lives in ONE localStorage key (~5 MB per origin). A raw
 // camera JPEG embedded as a data: URL blows that cap on its own, so the
-// studio must shrink what it embeds. Runs inside LXC 111 only (playwright).
+// studio must shrink what it embeds. Needs tools/press installed (npm install there).
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { readFileSync } from "node:fs";
 
-const MCP_MODULES = "/usr/lib/node_modules/@playwright/mcp/node_modules/";
-const CHROME = "/home/user/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome";
+// the press's pinned Playwright (tools/press: npm install), which finds its own Chromium
+const PRESS_MODULES = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "press", "node_modules") + "/";
 const PHOTO_EDGE_PX = 4000;               // a 12 MP phone photo, several MB
 const STUDIO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "studio.html");
 const MAX_EMBED_CHARS = 1_500_000;        // what one embedded image may cost the shelf
 
-const { chromium } = createRequire(MCP_MODULES)("playwright-core");
-const browser = await chromium.launch({ executablePath: CHROME });
+const { chromium } = createRequire(PRESS_MODULES)("playwright");
+const browser = await chromium.launch();
 const page = await browser.newPage();
 await page.goto("file://" + STUDIO);
 
