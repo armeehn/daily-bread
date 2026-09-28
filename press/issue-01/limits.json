@@ -24,9 +24,9 @@
       "section": "history",
       "path": "history.paragraphs",
       "words": 97,
-      "capacity": 342,
-      "first": 137,
-      "continued": 205
+      "capacity": 511,
+      "first": 310,
+      "continued": 201
     },
     {
       "section": "voices",
@@ -62,7 +62,7 @@
       "section": "interview",
       "path": "interview.quote",
       "words": 13,
-      "capacity": 73
+      "capacity": 25
     },
     {
       "section": "calendar",
