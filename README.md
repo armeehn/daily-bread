@@ -238,9 +238,14 @@ over from Design while it is on.
   holds (`≤ 197 w`), and a line under its heading says how many are used and
   how many are to spare, or how far over it is. The number is measured: the
   section's longest block of copy is grown on its Web PDF sheet until the page
-  is full. Comics, Art and Stickers are filled by their pictures, so they say
-  that instead of giving a number. It is the web sheet's limit only; the press
-  booklet is typeset by lualatex on press.hq and is not measured yet.
+  is full. The printed booklet is measured too, on the press:
+  `python3 tools/db-latex.py limits --edition issue-01` grows each writer's slot
+  (the letter, each young-voices report, the lab's pages, …) until its copy
+  leaves its A5 page, and writes `press/<edition>/limits.json`. The studio shows
+  the smaller of the two and says which is which. Comics, Art and Stickers are
+  filled by their pictures, so they say that instead of giving a number. Re-run
+  `limits` after changing a page's layout in `dailybread.cls` or the `.tex`; it
+  typesets the issue about a dozen times (two to three minutes).
 
 `node db-render/test-studio-editor.mjs` drives all of the above in a real
 browser, under the same conditions as the design test.

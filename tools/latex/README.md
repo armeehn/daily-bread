@@ -37,6 +37,7 @@ python3 tools/db-latex.py build --edition issue-01 --print  # only the PDFs
 python3 tools/db-latex.py check --edition issue-01          # the round-trip (CI)
 python3 tools/db-latex.py press --edition issue-01          # publish press/issue-01/
 python3 tools/db-latex.py import --edition issue-01         # old .js -> .tex, once
+python3 tools/db-latex.py limits --edition issue-01         # words each slot's printed page holds
 ```
 
 `press` typesets, runs the print checks, and copies `booklet.pdf` to
@@ -65,6 +66,15 @@ every later build on the box. `daily-bread-press-update.timer` fast-forwards
 the checkout to `origin/main` every ten minutes and restarts the press when
 `tools/` changed; a checkout left dirty or on a branch is reported, not reset.
 Unit files: `tools/daily-bread-press*.{service,timer}`, Caddy: `tools/press.caddy`.
+
+`limits` writes `press/<edition>/limits.json`, the print half of the studio's
+word limits (`dblatex/limits.py`). A body too long for its box does not warn:
+the class lets it run silently off the foot of the page, and TeX reports no
+overfull box. So each slot is grown with words of its own section and a marker
+word, typeset, and read back with `pdftotext -bbox`: it fits while the marker is
+on its page above the foot of the text area and nothing else on the page has
+been pushed below that line. Slots on different pages are probed in the same
+run, so the whole issue takes about a dozen typesettings.
 
 `check` proves, in order: tex -> issue -> tex loses nothing; the issue equals
 the committed `content/<edition>.js`; rebuilding the site from the .tex

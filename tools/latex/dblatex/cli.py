@@ -161,17 +161,49 @@ def cmd_press(args):
     return 0
 
 
+def cmd_limits(args):
+    """Measure how many words each writer's slot holds on its printed page and
+    write press/<edition>/limits.json, which the studio reads for the print half
+    of its word limits. Typesets the edition about a dozen times (dblatex/limits.py)."""
+    from . import limits
+    if args.model:
+        model = json.loads(Path(args.model).read_text())
+        what = str(args.model)
+    else:
+        js = "process.stdout.write(JSON.stringify(require('./db.js').DEFAULT_MODEL))"
+        model = json.loads(subprocess.run(["node", "-e", js], cwd=REPO, capture_output=True,
+                                          text=True, check=True).stdout)
+        what = "db.js DEFAULT_MODEL"
+    tex = REPO / "content" / f"{args.edition}.tex"
+    res = limits.measure(REPO, args.edition, model)
+    out = PRESS_DIR / args.edition
+    out.mkdir(parents=True, exist_ok=True)
+    manifest = {
+        "edition": args.edition,
+        "source": str(tex.relative_to(REPO)),
+        "sourceSha256": hashlib.sha256(tex.read_bytes()).hexdigest(),
+        "model": what,
+        "engine": press.engine_version(REPO),
+        "measured": "tools/db-latex.py limits (each slot grown until its copy leaves its page)",
+        **res,
+    }
+    (out / "limits.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
+    for s in res["slots"]:
+        print("limits: %-28s %4s words now, holds %s" % (s["path"], s["words"], s["capacity"]))
+    return 0
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(prog="db-latex", description=__doc__)
     sub = p.add_subparsers(dest="cmd", required=True)
     for name, fn in (("import", cmd_import), ("build", cmd_build), ("check", cmd_check),
-                     ("press", cmd_press)):
+                     ("press", cmd_press), ("limits", cmd_limits)):
         s = sub.add_parser(name)
         s.add_argument("--edition", default=DEFAULT_EDITION)
         if name in ("build", "check"):
             s.add_argument("--web", action="store_true")
             s.add_argument("--print", action="store_true")
-        if name == "press":
+        if name in ("press", "limits"):
             s.add_argument("--model", help="studio edition JSON to lay over the .tex")
             s.add_argument("--out", help="where the overlaid booklet goes (with --model)")
         s.set_defaults(fn=fn)

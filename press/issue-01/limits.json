@@ -1,0 +1,111 @@
+{
+  "edition": "issue-01",
+  "source": "content/issue-01.tex",
+  "sourceSha256": "c6841c07f925811fe2d130f752e1c510007cef9db4692d12ee42829993172414",
+  "model": "db.js DEFAULT_MODEL",
+  "engine": "This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)",
+  "measured": "tools/db-latex.py limits (each slot grown until its copy leaves its page)",
+  "slots": [
+    {
+      "section": "letter",
+      "path": "letter.paragraphs",
+      "words": 104,
+      "capacity": 444,
+      "pages": [
+        3
+      ]
+    },
+    {
+      "section": "contents",
+      "path": "contents.dek",
+      "words": 28,
+      "capacity": 328,
+      "pages": [
+        5
+      ]
+    },
+    {
+      "section": "history",
+      "path": "history.paragraphs",
+      "words": 97,
+      "capacity": 205,
+      "pages": [
+        6
+      ]
+    },
+    {
+      "section": "voices",
+      "path": "voices.reports.0.body",
+      "words": 30,
+      "capacity": 478,
+      "pages": [
+        13
+      ]
+    },
+    {
+      "section": "voices",
+      "path": "voices.reports.1.body",
+      "words": 44,
+      "capacity": 536,
+      "pages": [
+        14
+      ]
+    },
+    {
+      "section": "voices",
+      "path": "voices.reports.2.body",
+      "words": 32,
+      "capacity": 496,
+      "pages": [
+        15
+      ]
+    },
+    {
+      "section": "waitlist",
+      "path": "waitlist.dek",
+      "words": 40,
+      "capacity": 224,
+      "pages": [
+        27
+      ]
+    },
+    {
+      "section": "interview",
+      "path": "interview.quote",
+      "words": 13,
+      "capacity": 229,
+      "pages": [
+        18
+      ]
+    },
+    {
+      "section": "calendar",
+      "path": "calendar.dek",
+      "words": 12,
+      "capacity": 348,
+      "pages": [
+        40
+      ]
+    },
+    {
+      "section": "directory",
+      "path": "directory.note",
+      "words": 13,
+      "capacity": 453,
+      "pages": [
+        41
+      ]
+    },
+    {
+      "section": "lab",
+      "path": "lab.paragraphs",
+      "words": 74,
+      "capacity": 386,
+      "pages": [
+        32
+      ]
+    }
+  ],
+  "rounds": 13,
+  "footPt": 558.11
+}

@@ -1067,9 +1067,12 @@ async function buildPrintFrame(){
    until the section no longer fits its sheet. The limit is the words the
    section's fields hold now plus what fitted.
 
-   Only the Web PDF sheet is measured. The press booklet is typeset by lualatex
-   on press.hq; a limit from it would need that typesetting, and the smaller of
-   the two is the one to give writers. */
+   The printed page is the other half. It cannot be measured in a browser (the
+   booklet is typeset by lualatex), so `tools/db-latex.py limits` measures it on
+   the press and writes press/<edition>/limits.json: for each writer's slot (the
+   letter's paragraphs, each young-voices report, …) how many words its printed
+   page holds. A section's print limit is its words now, less what its slots
+   hold now, plus what they can hold. Writers get the smaller of the two. */
 const WORD_RE = /[\p{L}\p{N}][\p{L}\p{N}'’\-]*/gu;
 function countWords(s){ return (PLAIN(s).match(WORD_RE) || []).length; }
 // words a writer controls in a schema section: its prose fields and list rows
@@ -1138,8 +1141,35 @@ async function measureWordLimits(){
       grow.innerHTML = base;
       out[id] = { now, limit: lim, over: lim < now, scale: sheets[i] && sheets[i].scale };
     });
+    const data = await loadPrintLimits();
+    Object.keys(out).forEach(id=>{
+      const w = out[id]; w.web = w.limit;
+      const p = printLimit(id, data);
+      if(p == null || w.pictures) return;
+      w.print = p;
+      w.limit = w.web == null ? p : Math.min(w.web, p);
+      w.over = w.now > w.limit;
+    });
     return out;
   } finally { frame.remove(); }
+}
+let printLimits = { ed:null, data:null };
+async function loadPrintLimits(){
+  const ed = pressEdition(model);
+  if(printLimits.ed === ed) return printLimits.data;
+  let data = null;
+  if(ed){ try{ const r = await fetch("/press/" + ed + "/limits.json", { cache:"no-store" }); if(r.ok) data = await r.json(); }catch(e){} }
+  printLimits = { ed, data };
+  return data;
+}
+// the printed page's limit for a schema section, or null if the press has none
+function printLimit(secId, data){
+  const slots = data && (data.slots || []).filter(s=> s.section === secId && s.capacity != null && getPath(model, s.path) != null);
+  if(!slots || !slots.length) return null;
+  const sec = DB.SCHEMA.find(x=> x.id === secId);
+  let lim = sectionWords(sec);
+  slots.forEach(s=>{ lim += s.capacity - countWords([].concat(getPath(model, s.path)).join(" ")); });
+  return Math.max(0, lim);
 }
 let wordLimits = {}, wlTimer = null, wlBusy = false;
 // re-measured a while after edits stop: it lays the whole issue out again
@@ -1166,7 +1196,8 @@ function showWordLimits(){
     chip.textContent = w.pictures ? "full" : w.over ? "over" : "≤ " + w.limit + " w";
     chip.classList.toggle("over", !!w.over || !!w.pictures);
     chip.title = w.pictures ? "Its pictures fill the page by themselves, so there is no word budget: the Web PDF shrinks the page to fit."
-      : "This section's page holds about " + w.limit + " words of copy; it has " + w.now + " now. Measured on its Web PDF sheet at full size.";
+      : "This section holds about " + w.limit + " words of copy; it has " + w.now + " now." +
+        (w.print != null ? " Web page " + w.web + ", printed page " + w.print + ": the smaller one." : " Measured on its Web PDF sheet.");
     let note = box.querySelector(".body > .wlnote");
     if(!note){ note = document.createElement("div"); note.className = "hint wlnote"; box.querySelector(".body").prepend(note); }
     note.innerHTML = w.pictures
@@ -1174,7 +1205,9 @@ function showWordLimits(){
       : (w.over
         ? "<b>Over its page by about " + (w.now - w.limit) + " words.</b> It has " + w.now + "; its page holds about " + w.limit + ". The Web PDF shrinks it to fit."
         : "<b>Word limit: about " + w.limit + " words</b> for this section's page (" + w.now + " used, " + (w.limit - w.now) + " to spare).") +
-        " Measured on its Web PDF sheet.";
+        (w.print != null
+          ? " The web page holds " + w.web + ", the printed booklet " + w.print + "; this is the smaller."
+          : " Measured on its Web PDF sheet; the printed booklet has no measure for it.");
   });
   const c = $("#designPane .crumb");
   if(c && sel){ const it = itemOf(sel.paths[0]), info = fieldInfo(sel.paths[0]), sec = (it && it.sec) || (info && info.sec);

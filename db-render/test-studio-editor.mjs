@@ -493,6 +493,10 @@ check("400 more words puts it over, by about that much",
   wl.after.over && Math.abs((wl.after.now - wl.after.limit) - (400 - (wl.letter.limit - wl.letter.now))) < 30, JSON.stringify(wl.after));
 check("the limit does not move when the copy does", Math.abs(wl.after.limit - wl.letter.limit) < 25, wl.letter.limit + " vs " + wl.after.limit);
 check("a page its pictures fill says so instead of a number", wl.comics && wl.comics.pictures === true, JSON.stringify(wl.comics));
+check("the printed page's limit comes from press/<edition>/limits.json",
+  wl.letter.print > 0 && wl.letter.web > 0, JSON.stringify(wl.letter));
+check("writers get the smaller of web and print",
+  wl.letter.limit === Math.min(wl.letter.web, wl.letter.print), JSON.stringify(wl.letter));
 
 /* ---- 19. none of this leaks into what publishes ---- */
 const clean = await page.evaluate(() => !/data-dbp|data-dbi|dz-flash|dz-locate|⁣/.test(DB.render(model)));
