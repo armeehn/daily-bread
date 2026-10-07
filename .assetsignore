@@ -17,3 +17,5 @@ magazine.env
 STYLE.md
 # the submissions desk is a separate Worker (desk/README.md): never served as site assets
 desk/
+# the DTP wireframe (wireframe/README.md): a production file, not part of the site
+wireframe/

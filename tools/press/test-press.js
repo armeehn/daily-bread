@@ -72,13 +72,14 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
     const sheets = await load("sheets"), print = await load("print"), printer = await load("printer"), booklet = await load("booklet");
     const [sw, sh] = sheets.getPage(0).getSize().width !== undefined ? [sheets.getPage(0).getWidth(), sheets.getPage(0).getHeight()] : [0, 0];
     check("the sheets are the trim plus bleed", near(sw, g.tw + 2 * g.b) && near(sh, g.th + 2 * g.b), `${sw.toFixed(1)} x ${sh.toFixed(1)} pt`);
-    check("print.pdf is every sheet cut to the trim", print.getPageCount() === n &&
+    const printed = Math.ceil(n / 4) * 4;
+    check("print.pdf is every sheet cut to the trim, padded to a multiple of four before the back cover", print.getPageCount() === printed &&
       print.getPages().every(p => near(p.getWidth(), g.tw) && near(p.getHeight(), g.th)), `${print.getPageCount()} pages`);
     const slug = 5 * 72 / 25.4;
     const pp = printer.getPages();
     const trimOk = pp.every(p => { const t = p.getTrimBox(); return near(t.x, slug + g.b) && near(t.width, g.tw) && near(t.height, g.th); });
     const bleedOk = pp.every(p => { const b = p.getBleedBox(); return near(b.x, slug) && near(b.width, g.tw + 2 * g.b); });
-    check("printer.pdf: every page on trim + bleed + slug", printer.getPageCount() === n &&
+    check("printer.pdf: every page on trim + bleed + slug", printer.getPageCount() === printed &&
       pp.every(p => near(p.getWidth(), g.tw + 2 * (g.b + slug))), `${pp[0].getWidth().toFixed(1)} pt wide`);
     check("…with its TrimBox on the trim", trimOk);
     check("…and its BleedBox on the bleed", bleedOk);
@@ -86,6 +87,11 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
     check("booklet.pdf: two pages to a Letter-landscape side, a multiple of four pages",
       booklet.getPageCount() === sides && booklet.getPages().every(p => near(p.getWidth(), 792) && near(p.getHeight(), 612)),
       `${booklet.getPageCount()} sides for ${n} pages`);
+
+    // the back cover is the last page, as a saddle-stitched magazine has it
+    const lastIsBack = info.sheets[n - 1].key === "footer" && info.printedPages === printed &&
+      (await PDFDocument.load(fs.readFileSync(info.files.print))).getPage(printed - 1).node.Contents() != null;
+    check("the back cover is the last printed page; spare pages go before it", lastIsBack, `${info.spare} spare of ${printed}`);
 
     /* ---- (3) fonts ---- */
     check("every face the magazine declares is loaded", !info.fontsMissing.length, info.fontsMissing.join(", ") || "all");

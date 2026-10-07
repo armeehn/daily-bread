@@ -82,7 +82,7 @@ function serve(html) {
 }
 
 /** DB.render(model) on sheets, as the Web PDF lays it out. */
-async function renderSheets(model, { browser } = {}) {
+async function renderSheets(model, { browser, inspect } = {}) {
   const m = DB.clone(model);
   m.print = Object.assign({}, m.print, { marks: "off" });   // the slug and its marks are added below, as PDF
   const html = DB.render(m);
@@ -103,12 +103,14 @@ async function renderSheets(model, { browser } = {}) {
       const out = await DBPrint.paginate({ doc: document, win: window, size: () => {} }, mm, {}, { conts });
       return out.map(s => ({ key: s.key, label: s.label, scale: +s.scale.toFixed(4) }));
     }, { mm: m, conts });
+    // a look at the laid-out sheets before they print (tools/wireframe measures them)
+    const inspected = inspect ? await inspect(page, m) : undefined;
     const fonts = await page.evaluate(() => document.fonts.ready.then(() =>
       Array.from(document.fonts).filter(f => f.status === "loaded").map(f => f.family.replace(/["']/g, ""))));
     const pdf = await page.pdf({ printBackground: true, preferCSSPageSize: true,
       margin: { top: 0, right: 0, bottom: 0, left: 0 } });
     await page.close();
-    return { pdf, sheets, fonts: [...new Set(fonts)], model: m };
+    return { pdf, sheets, fonts: [...new Set(fonts)], model: m, inspected };
   } finally {
     if (own) await browser.close();
     server.close();
@@ -137,11 +139,15 @@ async function products(sheetsPdf, geom, title, only) {
   const { tw, th, b } = geom;
   const [W0, H0] = [tw + 2 * b, th + 2 * b];
   const trimBox = { left: b, bottom: b, right: b + tw, top: b + th };
+  // A saddle-stitched magazine has a multiple of four pages and the back cover
+  // last: spare (blank) pages go in just before it. null is a spare page.
+  const order = [...Array(n).keys()];
+  while (order.length % 4) order.splice(order.length - 1, 0, null);
 
   if (only.has("print")) {
     const d = await PDFDocument.create(); stamp(d); d.setTitle(title + " — pages");
     const embT = await Promise.all(src.getPages().map(p => d.embedPage(p, trimBox)));
-    embT.forEach(e => { const pg = d.addPage([tw, th]); pg.drawPage(e, { x: 0, y: 0 }); });
+    order.forEach(i => { const pg = d.addPage([tw, th]); if (i !== null) pg.drawPage(embT[i], { x: 0, y: 0 }); });
     out.print = await d.save();
   }
   if (only.has("printer")) {
@@ -149,9 +155,9 @@ async function products(sheetsPdf, geom, title, only) {
     const d = await PDFDocument.create(); stamp(d); d.setTitle(title + " — for the printer");
     const emb = await Promise.all(src.getPages().map(p => d.embedPage(p)));
     const ink = rgb(0, 0, 0);
-    emb.forEach(e => {
+    order.forEach(i => {
       const pg = d.addPage([W, H]);
-      pg.drawPage(e, { x: s, y: s, width: W0, height: H0 });
+      if (i !== null) pg.drawPage(emb[i], { x: s, y: s, width: W0, height: H0 });
       // crop marks: from the sheet's edge to the bleed, in line with the trim
       for (const x of [o, o + tw]) {
         pg.drawLine({ start: { x, y: 0 }, end: { x, y: s }, thickness: MARK_PT, color: ink });
@@ -174,8 +180,7 @@ async function products(sheetsPdf, geom, title, only) {
     const twoUp = Math.min(cellW / tw, cellH / th) >= 0.6;   // a portrait trim: two to a side
     if (twoUp) {
       const k = Math.min(cellW / tw, cellH / th), w = tw * k, h = th * k, y = (SH - h) / 2;
-      const pages = emb.slice();
-      while (pages.length % 4) pages.push(null);           // blank pages to a multiple of four
+      const pages = order.map(i => (i === null ? null : emb[i]));   // spare pages before the back cover
       const N = pages.length;
       for (let side = 1; side <= N / 2; side++) {
         const near = side, far = N - side + 1;
@@ -197,6 +202,7 @@ async function products(sheetsPdf, geom, title, only) {
     }
     out.booklet = await d.save();
   }
+  out.order = order;
   return out;
 }
 
@@ -222,6 +228,8 @@ async function press(model, outDir, opts = {}) {
   return {
     pages: r.sheets.length, sheets: r.sheets, files,
     trimPt: [+geom.tw.toFixed(2), +geom.th.toFixed(2)], bleedPt: +geom.b.toFixed(2),
+    // the printed page order: sheet indices, null for a spare page before the back cover
+    printedPages: made.order ? made.order.length : r.sheets.length, spare: made.order ? made.order.filter(i => i === null).length : 0,
     booklet: made.bookletLayout || null,
     shrunk: r.sheets.filter(s => s.scale < 0.999).map(s => ({ label: s.label, scale: s.scale })),
     fontsMissing: declared.filter(f => !r.fonts.includes(f)),

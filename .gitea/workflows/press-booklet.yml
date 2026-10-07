@@ -32,6 +32,7 @@ on:
       - 'db-print.js'
       - 'assets/fonts/**'
       - 'tools/press/**'
+      - 'tools/wireframe/**'
       - 'press/**'
       - '.gitea/workflows/press-booklet.yml'
   pull_request:
@@ -40,6 +41,7 @@ on:
       - 'db-print.js'
       - 'assets/fonts/**'
       - 'tools/press/**'
+      - 'tools/wireframe/**'
       - 'press/**'
       - '.gitea/workflows/press-booklet.yml'
   workflow_dispatch:
@@ -93,6 +95,15 @@ jobs:
             diff -r /tmp/first press | head -20
             exit 1
           fi
+
+      # the DTP wireframe (wireframe/README.md): measure the same layout and
+      # write a well-formed IDML; Scribus for the .sla is not in this image
+      - name: Build and check the IDML wireframe
+        run: |
+          command -v python3 >/dev/null || { apt-get update -qq && apt-get install -y -qq python3 >/dev/null; }
+          node tools/wireframe/extract.js --out /tmp/wireframe/spec.json
+          python3 tools/wireframe/build_idml.py /tmp/wireframe/spec.json /tmp/wireframe/issue.idml
+          python3 tools/wireframe/check_idml.py /tmp/wireframe/issue.idml
 
       - name: Upload the booklet
         uses: ChristopherHX/gitea-upload-artifact@v4

@@ -46,6 +46,7 @@ out the same sheets at the same scales.
 | [`db-print.js`](db-print.js) | The pager: lays `DB.render` out on sheets, and measures each writer's word limit on them |
 | [`tools/press/`](tools/press/) | The press: `render.js` (sheets → booklet, printer's PDF, proof), `test-press.js` |
 | [`tools/press-server.py`](tools/press-server.py) | The press over HTTP, for the studio's Print menu (`--studio` also serves the studio) |
+| [`tools/wireframe/`](tools/wireframe/) → [`wireframe/`](wireframe/) | The issue as a DTP wireframe: Scribus `.sla`, InDesign/Affinity `.idml`, proof PDF and fonts |
 | [`press/`](press/) | Per edition: the published booklet, its manifest, and `limits.json` for the desk |
 | [`assets/`](assets/) | Cover, logo and the magazine's fonts (`fonts/magazine.css`) |
 | [`tools/build.js`](tools/build.js), [`tools/strings/`](tools/strings/), [`tools/assets/`](tools/assets/) | The multilingual site: 48 pages (16 languages × full, lite, e-ink) |
@@ -113,8 +114,9 @@ The **Print ▾** menu:
   Print & bleed (A5 by default). No crop marks: the copy you print yourself.
 - **Magazine PDF** — the booklet for a desktop duplex printer: the same pages,
   two to a Letter-landscape side in saddle-stitch order, padded with blank
-  pages to a multiple of four and clear of the band a laser cannot ink. Print
-  two-sided, short-edge flip, actual size; fold and staple.
+  pages to a multiple of four (spares go before the back cover) and clear of
+  the band a laser cannot ink. Print two-sided, short-edge flip, actual size;
+  fold and staple.
 - **Printer PDF** — for a print shop: the same pages one per PDF page in
   reading order, each on trim + bleed + a 5 mm slug with crop marks, with
   `/TrimBox` and `/BleedBox` set. The bleed is real: each section's ground is
@@ -131,6 +133,11 @@ does not have your edits.
 
 The press is deterministic: with `SOURCE_DATE_EPOCH` set, two renders are
 byte-identical, and every face in the PDF is one the magazine declares.
+
+To lay an issue out by hand in Scribus, InDesign or Affinity Publisher, start
+from the [wireframe](wireframe/README.md): the same pages as frames, with the
+house grid, styles, swatches and masters, rebuilt by
+`sh tools/wireframe/build.sh`.
 
 ## The website
 
