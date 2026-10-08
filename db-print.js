@@ -169,7 +169,9 @@ async function paginate(ctx, m, zooms, opts){
   await ctx.size(S.w, S.h);                                  // 100vh is a sheet, as on paper
   // What is laid out is the trim: the bleed around it carries only the section's
   // ground (the sheet's background), so nothing that matters is cut off with it.
-  const B = bleedPx(doc, m), A = { w: S.w - 2 * B, h: S.h - 2 * B };
+  // What a page lays out in is the trim less the folio's band at its foot.
+  const B = bleedPx(doc, m), pxmm = (S.w - 2 * B) / trimMm(m).w;
+  const A = { w: S.w - 2 * B, h: S.h - 2 * B - FOLIO_BAND_MM * pxmm };
   const units = [];
   Array.from(doc.body.querySelectorAll(".hero, .sec, footer"))
     .filter(el=> !el.parentElement.closest(".hero, .sec, footer"))
@@ -187,6 +189,23 @@ async function paginate(ctx, m, zooms, opts){
         units.push({ el:c, key:"voices." + i });
       });
     });
+  // The letter's aside (the masthead box, the land acknowledgement, the funder)
+  // sits beside the letter on the web; in one column it took the page and left
+  // the letter a line. It prints as a page of its own after the letter.
+  const letter = units.find(u=> u.key === "letter"), aside = letter && letter.el.querySelector(".split > div:last-child");
+  if(aside && aside.previousElementSibling){
+    const pg = doc.createElement("section"); pg.className = letter.el.className + " pp-aside"; pg.removeAttribute("id");
+    const wrap = doc.createElement("div"); wrap.className = "wrap"; wrap.appendChild(aside); pg.appendChild(wrap);
+    units.splice(units.indexOf(letter) + 1, 0, { el: pg, key: "letter.aside" });
+  }
+  // The centrefold poster prints on a page of its own after the Wall's page: left
+  // in, it scaled the whole page to half size and its notes to 4 pt.
+  const wall = units.find(u=> u.key === "art"), poster = wall && wall.el.querySelector("figure.centrefold");
+  if(poster){
+    const pg = doc.createElement("section"); pg.className = wall.el.className + " pp-poster"; pg.removeAttribute("id");
+    const wrap = doc.createElement("div"); wrap.className = "wrap"; wrap.appendChild(poster); pg.appendChild(wrap);
+    units.splice(units.indexOf(wall) + 1, 0, { el: pg, key: "art.poster" });
+  }
   // The web shows the cover art beside the masthead; a magazine prints it as its
   // front cover, a page of its own before the masthead page, which then gives
   // its whole width to the masthead. The price stamp goes with it, as on a
@@ -195,8 +214,13 @@ async function paginate(ctx, m, zooms, opts){
   if(art){
     const cover = doc.createElement("section"); cover.className = "pp-cover";
     cover.appendChild(art.cloneNode());
+    // top left, where a café rack still shows it: the price, and the issue
+    const tl = doc.createElement("div"); tl.className = "pp-cover-tl";
     const free = hero.el.querySelector(".cover-wrap .free");
-    if(free){ cover.appendChild(free); }
+    if(free){ tl.appendChild(free); }
+    const issue = doc.createElement("span"); issue.className = "pp-cover-issue";
+    issue.textContent = [m.meta && m.meta.issueNo, m.meta && m.meta.season].filter(Boolean).join(" · ");
+    tl.appendChild(issue); cover.appendChild(tl);
     art.closest(".cover-wrap").remove();
     units.splice(units.indexOf(hero), 0, { el: cover, key: "cover" });
   }
@@ -249,16 +273,43 @@ async function paginate(ctx, m, zooms, opts){
     ".pp-appx-hd{ font-family:var(--mono) }\n" +
     ".pp-appx-k{ display:block; font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:#555 }\n" +
     ".pp-appx-hd h3{ font-size:17px; margin:3px 0 5px; line-height:1.1 }\n" +
-    ".pp-appx-hd p, .pp-appx-note{ font-family:var(--mono); font-size:9.5px; line-height:1.4; margin:0 }\n" +
+    ".pp-appx-hd p, .pp-appx-note{ font-family:var(--mono); font-size:11px; line-height:1.4; margin:0 }\n" +
     ".pp-appx-note{ color:#555 }\n" +
     ".pp-cover{ position:relative }\n" +
     ".pp-cover img{ width:100%; height:100%; object-fit:cover; display:block }\n" +
     // inside the trim, clear of the cut
-    ".pp-cover .free{ position:absolute; right:" + (B + COVER_INSET) + "px; bottom:" + (B + COVER_INSET) + "px; transform:rotate(4deg) }\n" +
-    ".pp-sheet .hero-grid{ grid-template-columns:1fr }\n" +
+
+    "html body .pp-sheet .hero-grid{ grid-template-columns:1fr }\n" +
+    // set for reading (local-magazine-design): one column of running text,
+    // 45-75 characters a line at 10 pt, ragged right, roman, muted text dark
+    // enough to read (4.5:1 on bone). "html body" outranks db.js's print rules.
+    "html body .pp-sheet .wrap > .prose, html body .pp-sheet .wrap > .dek{ columns:auto }\n" +
+    "html body .pp-sheet .split, html body .pp-sheet .toc-grid{ grid-template-columns:1fr }\n" +
+    "html body .pp-sheet .justify{ text-align:left; hyphens:manual }\n" +
+    "html body .pp-sheet .said{ font-style:normal }\n" +
+    // captions and credits print at 8 pt or more, the sticker page's note too,
+    // though that page is scaled whole (about 0.65)
+    "html body .pp-sheet p.meta{ font-size:12.5px }\n" +
+
+    "html body .pp-sheet #stickers .dek{ font-size:17.5px }\n" +
+    "html body .pp-sheet .hero p.intro{ max-width:none }\n" +
+    // the aside's funder line beside the logo: room to spare, so a DTP font with
+    // wider caps (the wireframe's Scribus) still sets it in two lines
+    "html body .pp-sheet .pp-aside .meta{ flex:1 1 auto; min-width:45mm }\n" +
+    // the folio: outer edge of the page, in the band kept for it
+    ".pp-folio{ position:absolute; bottom:" + (B + FOLIO_BAND_MM * pxmm * 0.3) + "px; font-family:var(--mono); font-size:9px; " +
+      "letter-spacing:.12em; text-transform:uppercase; white-space:nowrap }\n" +
+    ".pp-folio b{ font-weight:700; margin:0 6px }\n" +
+    // the cover on a rack: price and issue in its top-left third
+    ".pp-cover .pp-cover-tl{ position:absolute; left:" + (B + COVER_INSET) + "px; top:" + (B + COVER_INSET) + "px; " +
+      "display:flex; flex-direction:column; align-items:flex-start; gap:8px }\n" +
+    ".pp-cover .pp-cover-tl .free{ position:static; transform:rotate(-4deg); font-size:15px }\n" +
+    ".pp-cover-issue{ background:var(--ink); color:var(--bone); font-family:var(--mono); font-size:11px; " +
+      "letter-spacing:.14em; text-transform:uppercase; padding:4px 9px }\n" +
     // a sheet's cards are narrower than the web's: a row's end note wraps under
     // its own column instead of running out of the card
-    ".pp-sheet .list .li .end{ flex:0 1 auto; min-width:0; overflow-wrap:anywhere }\n" +
+    // (break-word, not anywhere: a tag never narrower than its longest word)
+    ".pp-sheet .list .li .end{ flex:0 1 auto; overflow-wrap:break-word }\n" +
     // the sticker sheet keeps its 4 x 3 grid (db.js caps it at 720px): its card
     // takes the grid's width, and the page is scaled whole to fit, rather than
     // the grid running out of a card the width of the text column
@@ -285,6 +336,16 @@ async function paginate(ctx, m, zooms, opts){
     return fit;
   });
   doc.body.insertBefore(book, doc.body.firstChild);
+  // one body size: a card's or a report's running text (14 px on the web) prints
+  // at the prose's, so no page's body falls under 10 pt
+  units.forEach(un=>{
+    if(NO_FLOW.test(un.key)){ return; }
+    un.el.querySelectorAll("p, li").forEach(e=>{
+      const own = Array.from(e.childNodes).filter(n=> n.nodeType === 3).map(n=> n.nodeValue).join(" ");
+      if((own.match(/[\p{L}\p{N}]+/gu) || []).length < BODY_WORDS){ return; }
+      if(parseFloat(win.getComputedStyle(e).fontSize) < BODY_PX){ e.style.fontSize = BODY_PX + "px"; }
+    });
+  });
   try{ await doc.fonts.ready; }catch(e){}
   await Promise.all(Array.from(doc.images).map(im=> im.complete ? 0 : new Promise(r=>{ im.onload = im.onerror = r; })));
   // Long pieces: what the first sheet does not hold at its scale moves on to
@@ -347,6 +408,7 @@ async function paginate(ctx, m, zooms, opts){
     // the sheet takes its section's ground, so a scaled section leaves no bare strip
     const bg = win.getComputedStyle(u).backgroundColor;
     fit.parentElement.style.background = (!bg || bg === "rgba(0, 0, 0, 0)" || bg === "transparent") ? bone : bg;
+    fit.parentElement.style.setProperty("--muted", PRINT_MUTED[isDark(fit.parentElement.style.background) ? "dark" : "light"]);
     // the cover art and the appendix are already the sheet's size: nothing to fit
     if(FULL.test(key)){ return { key, fit, unit: u, scale: 1, cont: null, part: 1, label: key === "cover" ? "cover" : key.replace(".", ": ") }; }
     // Two ways to fit a tall section: shrink it as laid out (keeps its columns),
@@ -372,7 +434,8 @@ async function paginate(ctx, m, zooms, opts){
     return { key, fit, unit: u, scale: best.s, cont: units[i].of ? null : units[i].cont, part: units[i].part || 1,
       label: units[i].part ? label + " (" + units[i].part + ")" : label };
   });
-  laid.area = A;                                  // the trim, in px: what a sheet lays out
+  wayfind(doc, m, laid, fits);
+  laid.area = A;                                  // the trim less the folio band, in px: what a sheet lays out
   return laid;
 }
 
@@ -502,7 +565,8 @@ async function measurePieces(doc, sheets, model, slots){
       if(F == null || C == null) continue;
       out.push({ section: sec, path: path, now: now, limit: F + C, pages: [F, C], scale: +z1.toFixed(4) });
     } else {
-      var z = Math.min(TEXT_SCALE, Math.max(sh.scale, FLOW_MIN * FLOW_SNUG));
+      // a page scaled whole (the contents) is measured at its own scale
+      var z = NO_FLOW.test(sh.key) ? sh.scale : Math.min(TEXT_SCALE, Math.max(sh.scale, FLOW_MIN * FLOW_SNUG));
       var lim = sheetCapacity(sh.fit, target, A.w, A.h, z, now, pool);
       if(lim == null) continue;
       out.push({ section: sec, path: path, now: now, limit: lim, scale: +z.toFixed(4) });
@@ -510,18 +574,25 @@ async function measurePieces(doc, sheets, model, slots){
   }
   return out;
 }
-const FLOW_MIN = 0.8;
+const FLOW_MIN = 0.9;
 // One body size for the whole magazine: text pages print at TEXT_SCALE of the
-// website's type (15.5 px x 0.8: 9.3 pt, near the 8.8 pt the printed edition
-// has always set its body in) and never larger, so a short section does not
-// come out in bigger type than its neighbour. Covers and picture pages fill
+// website's type (15.5 px x 0.9: 10.5 pt; readable print starts at 10 pt, see
+// the local-magazine-design skill) and never larger, so a short section does
+// not come out in bigger type than its neighbour. Covers and picture pages fill
 // their sheet instead.
 const TEXT_SCALE = FLOW_MIN;
 function capFor(key){ return NO_FLOW.test(key) ? 1 : TEXT_SCALE; }
-const FLOW_SNUG = 0.92;          // 0.8 x 0.92: 8.6 pt, still the printed edition's body size
-const NO_FLOW = /^(cover|hero|footer|comics|art|stickers|appendix\..+)$/;
+const FLOW_SNUG = 0.97;          // 0.9 x 0.97: 10.15 pt, over the 10 pt floor for body copy
+// pages scaled whole rather than run on: covers, plates, and the contents, which
+// is no use split from its list (the Wall's page flows; its poster is the plate)
+const NO_FLOW = /^(cover|hero|contents|footer|comics|art\.poster|stickers|appendix\..+)$/;
 const FULL = /^(cover|appendix\..+)$/;    // sheets laid out at the sheet's own size, not fitted
 const COVER_INSET = 28;          // px from the trim to the cover's price stamp
+const FOLIO_BAND_MM = 8;         // the strip at a page's foot kept for its folio
+// muted text in print, by the page's ground: 6:1 either way (the web's grey is 3.2:1 on bone)
+const PRINT_MUTED = { light: "#5e574e", dark: "#b9b0a3" };
+const BODY_PX = 15.5;            // the web's body size; running text below it is brought up to it
+const BODY_WORDS = 40;           // a block this long is running text
 // The part of `unit` that does not fit (`ok()` false) moved into a copy of it,
 // returned as a unit of its own; null if nothing could move. Blocks move from
 // the end until the rest fits; one block that is itself too tall is divided the
@@ -556,6 +627,59 @@ function splitFlow(unit, ok){
   const rest = shell(unit);
   tail(unit, rest);
   return rest.firstChild ? rest : null;
+}
+// whether a CSS colour is a dark ground (relative luminance under a fifth)
+function isDark(c){
+  const v = (String(c).match(/[\d.]+/g) || []).map(Number), k = /^color\(srgb/.test(c) ? 255 : 1;
+  if(v.length < 3){ return false; }
+  const f = x=>{ x = x * k / 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); };
+  return 0.2126 * f(v[0]) + 0.7152 * f(v[1]) + 0.0722 * f(v[2]) < 0.2;
+}
+// Wayfinding, once every page is laid out: a folio on each inside page (outer
+// edge: right on odd pages, left on even), the contents' page numbers set from
+// where each section really prints, and "48 pp" claims set to the real count.
+// Readers who cannot find the calendar do not use it (local-magazine-design).
+const NO_FOLIO = /^(cover|footer|appendix\..+)$/;
+const TOC_STOP = /^(the|and|for|our|its|you|with|from|that|this|your|into|three|ep\.?\d*)$/;
+function wayfind(doc, m, laid, fits){
+  const run = [m.meta && m.meta.brand, m.meta && m.meta.issueNo].filter(Boolean).join(" ") +
+    (m.meta && m.meta.issueName ? " · " + m.meta.issueName : "");
+  laid.forEach((l, i)=>{
+    if(NO_FOLIO.test(l.key)){ return; }
+    const sheet = fits[i].parentElement, n = i + 1, f = doc.createElement("div"), right = n % 2 === 1;
+    f.className = "pp-folio";
+    f.style[right ? "right" : "left"] = sheet.style.paddingLeft || getComputedStyle(sheet).paddingLeft;
+    f.style.color = getComputedStyle(l.unit).color;
+    f.innerHTML = right ? "<span></span><b></b>" : "<b></b><span></span>";
+    f.querySelector("span").textContent = run; f.querySelector("b").textContent = String(n);
+    sheet.appendChild(f);
+  });
+  // each contents line names a section: point it at the page that section starts on
+  const words = t=> (t.toLowerCase().match(/[a-z][a-z'’-]{2,}/g) || []).filter(w=> !TOC_STOP.test(w));
+  // a page is named by its key, its section's title in the schema, its head and its headline
+  const named = l=> { const sec = DB.SCHEMA.find(x=> x.id === l.key.split(".")[0]);
+    return [l.key, sec && sec.title, (l.unit.querySelector(".sechead") || {}).textContent, (l.unit.querySelector("h1, h2, h3, .display") || {}).textContent].join(" "); };
+  const firsts = laid.map((l, i)=> ({ i, words: new Set(words(named(l))), skip: !!l.cont || l.part > 1 || NO_FOLIO.test(l.key) || l.key === "contents" }));
+  const toc = laid.find(l=> l.key === "contents");
+  if(toc){
+    toc.unit.querySelectorAll(".toc-grid .li").forEach(li=>{
+      const chip = li.querySelector(".pgchip"), t = li.querySelector(".t");
+      if(!chip || !t){ return; }
+      const want = words(t.textContent.split(/\s[\/+]\s/)[0]);
+      const scored = firsts.filter(f=> !f.skip).map(f=> ({ f, s: want.filter(w=> f.words.has(w)).length }));
+      const top = Math.max(0, ...scored.map(x=> x.s)), best = scored.filter(x=> x.s === top && top > 0);
+      // a clear match only: the pages naming most of the line's words are one
+      // section's (its report pages share a head); the line points at the first
+      const sec = new Set(best.map(x=> laid[x.f.i].key.split(".")[0]));
+      if(best.length && sec.size === 1){ chip.textContent = String(best[0].f.i + 1).padStart(2, "0"); }
+    });
+  }
+  // "48 pp": the pages the press prints, padded to a multiple of four
+  const pp = Math.ceil(laid.length / 4) * 4;
+  laid.forEach(l=>{
+    const tw = doc.createTreeWalker(l.unit, NodeFilter.SHOW_TEXT);
+    for(let n = tw.nextNode(); n; n = tw.nextNode()){ if(/\b\d+\s?pp\b/i.test(n.nodeValue)){ n.nodeValue = n.nodeValue.replace(/\b\d+(\s?)pp\b/gi, pp + "$1pp"); } }
+  });
 }
 // Zoom is not linear: text set small wraps and spaces differently, so a section
 // printed at 0.78 comes out up to a tenth taller than its unzoomed height times
@@ -681,7 +805,7 @@ function unitKey(u, m){
               cutterPage: cutterPage, trimMm: trimMm, CUTTERS: CUTTERS,
               pieceTitle: pieceTitle, wordStarts: wordStarts, splitPiece: splitPiece, longPieces: longPieces, PLAIN: PLAIN,
               writerSlots: writerSlots, markModel: markModel, measurePieces: measurePieces, sheetCapacity: sheetCapacity,
-              countWords: countWords, WORD_RE: WORD_RE, TOK: TOK, TOK_RE: TOK_RE, getPath: getPath };
+              countWords: countWords, WORD_RE: WORD_RE, TOK: TOK, TOK_RE: TOK_RE, getPath: getPath, TEXT_SCALE: TEXT_SCALE, NO_FLOW: NO_FLOW };
   root.DBPrint = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof window !== "undefined" ? window : globalThis);

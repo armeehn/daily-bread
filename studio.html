@@ -1056,7 +1056,8 @@ async function measureWordLimits(){
         .filter(b=> !b.querySelector("p, .bd, .body, li") && b.textContent.trim().length);
       const grow = blocks.sort((a, b)=> b.textContent.length - a.textContent.length)[0];
       const now = sectionWords(sec);
-      const lim = grow ? DBPrint.sheetCapacity(sh.fit, grow, A.w, A.h, 1, now, PLAIN(sh.unit.textContent).match(WORD_RE) || ["word"]) : null;
+      // grown at the scale the page prints at; a picture page at the web's (it holds no more words)
+      const lim = grow ? DBPrint.sheetCapacity(sh.fit, grow, A.w, A.h, DBPrint.NO_FLOW.test(sh.key) ? 1 : Math.min(1, sh.scale), now, PLAIN(sh.unit.textContent).match(WORD_RE) || ["word"]) : null;
       out[id] = lim == null ? { pictures: true, scale: sh.scale, now }
                             : { webOnly: true, pieces: [{ path: id, label: sectionLabel(sec), now, limit: lim, over: now > lim }] };
     });

@@ -22,6 +22,7 @@ const { press, geometry } = require("./render.js");
 
 const ROOT = path.resolve(__dirname, "..", "..");
 const DB = require(path.join(ROOT, "db.js"));
+const { TEXT_SCALE, NO_FLOW } = require(path.join(ROOT, "db-print.js"));   // the one body scale, and the pages scaled whole
 const ok = [], bad = [];
 const check = (name, cond, extra) => (cond ? ok : bad).push(name + (extra != null ? " — " + extra : ""));
 const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
@@ -54,8 +55,9 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
       const d = frame.contentDocument, sheet = d.querySelector(".pp-sheet"), img = sheet && sheet.querySelector("img");
       const s = sheet.getBoundingClientRect(), r = img ? img.getBoundingClientRect() : { left: 1e9, top: 1e9, right: 0, bottom: 0 };
       const cover = { full: r.left <= s.left + 0.5 && r.top <= s.top + 0.5 && r.right >= s.right - 0.5 && r.bottom >= s.bottom - 0.5,
+                      // the art, with only the price stamp and the issue on it
                       alone: sheet.querySelectorAll("img").length === 1 &&
-                             sheet.textContent.trim() === (sheet.querySelector(".free") || {}).textContent,
+                             sheet.textContent.replace(/\s+/g, "") === Array.from(sheet.querySelectorAll(".free, .pp-cover-issue")).map(e => e.textContent).join("").replace(/\s+/g, ""),
                       inset: !!d.querySelector(".pp-sheet .hero .cover-frame"),
                       stamp: (() => { const f = sheet.querySelector(".free"); if (!f) { return false; }
                         const b = f.getBoundingClientRect(), bl = parseFloat(getComputedStyle(d.querySelector(".pp-sheet:not(.pp-full)")).paddingLeft);
@@ -116,7 +118,7 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
     check("nothing prints past the trim", !spill.length, spill.join("; ") || "every sheet");
     check("…nor out of the card it is printed in", !cardSpill.length, cardSpill.join("; ") || "every card");
     check("text pages never print larger than the magazine's one text size",
-      info.sheets.filter(s => !/^(cover|hero|footer|comics|art|stickers|appendix\..+)$/.test(s.key)).every(s => s.scale <= 0.8 + 1e-6));
+      info.sheets.filter(s => !NO_FLOW.test(s.key)).every(s => s.scale <= TEXT_SCALE + 1e-6));
 
     /* ---- (2) the products ---- */
     const g = geometry(model), n = info.pages;
