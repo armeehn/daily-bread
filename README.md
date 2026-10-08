@@ -72,7 +72,7 @@ node tools/press/render.js --publish        # re-publish press/<edition>/ after 
 ```
 
 Tests: `cd tools/press && npm test` (the press), and
-`node db-render/test-studio-{editor,design,editions,press}.mjs` (the studio, in
+`node db-render/test-studio-{editor,design,editions,press,cutter}.mjs` (the studio, in
 a real browser). CI (`.gitea/workflows/`) rebuilds and reads back the site,
 checks the `.tex` round trip and the rebrand, and renders, tests and guards
 the press booklet.
@@ -124,6 +124,17 @@ The **Print ▾** menu:
 - **Stickers for a cutter** — a transparent PNG of the sticker sheet at 300 dpi
   for Cricut Print Then Cut (6.75 × 9.25 in). In Design Space: *Upload*, *Print
   Then Cut image*, width 6.75 in, *Make It*.
+- **Stickers + cut marks**, one for each machine that cuts a sheet printed from
+  anywhere (a Cricut does not): the same twelve stickers on US Letter with the
+  machine's marks, and a cut file (`.svg` in mm, `.dxf` in inches) of every
+  sticker's edge at the same place. Print at 100 % (Actual size, Margins None).
+  - *Silhouette*: Type 1 marks, a 5 mm square and two 20 mm L-brackets, 0.5 mm
+    thick, 10 mm in. Set the same in Silhouette Studio (page Letter), open the
+    cut file, *Send*.
+  - *Brother ScanNCut*: no marks; a solid outline round each sticker for the
+    scanner. *Scan*, *Direct Cut*, or the cut file in CanvasWorkspace.
+  - *Crosshairs*: a target 10 mm in from three corners, for cutters registered
+    by hand.
 
 The Magazine and Printer PDFs come from the press, which needs a headless
 Chromium a web page cannot drive. The studio uses a press on this machine

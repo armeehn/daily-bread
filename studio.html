@@ -360,6 +360,9 @@
         <button id="printerPdfBtn" title="The edition on screen for a print shop: the same pages, one per PDF page in reading order (the shop imposes them), with the bleed set under Print (3 mm by default) and crop marks in the slug outside it. TrimBox and BleedBox are set, so the shop's software knows where to cut. Made by the press (python3 tools/press-server.py on this machine, or press.hq).">Printer PDF ⤓<small>pages with bleed and crop marks, for a print shop</small></button>
         <hr>
         <button id="cutBtn" title="A transparent PNG of the sticker sheet at 300 dpi, sized for Cricut Print Then Cut (6.75 × 9.25 in). Upload it to Design Space as a Print Then Cut image: Design Space prints it with its own registration marks and the machine cuts round every sticker.">Stickers for a cutter ⤓<small>PNG for Cricut Print Then Cut</small></button>
+        <button data-cutter="silhouette" title="The sticker sheet on US Letter with Silhouette's Type 1 registration marks (a 5 mm square and two 20 mm L-brackets, 10 mm in, 0.5 mm thick), plus a cut file (SVG and DXF) of every sticker's edge. Print at 100 %; in Silhouette Studio set the same marks, open the cut file and send.">Stickers + Silhouette marks ⤓<small>print, then cut on a Cameo or Portrait</small></button>
+        <button data-cutter="scanncut" title="The sticker sheet on US Letter with a solid outline round each sticker for a Brother ScanNCut to find by scanning, plus the cut file (SVG and DXF). Print at 100 %; scan it on the mat and Direct Cut, or open the cut file in CanvasWorkspace.">Stickers + ScanNCut outlines ⤓<small>print, then scan and cut</small></button>
+        <button data-cutter="crosshair" title="The sticker sheet on US Letter with crosshair targets 10 mm in from three corners, for cutters whose marks are placed by hand, plus the cut file (SVG and DXF). Print at 100 %.">Stickers + crosshair marks ⤓<small>print, then register by hand and cut</small></button>
       </div>
     </div>
     <button class="btn teal" id="publishBtn" title="Download index.html to commit">Publish → index.html</button>
@@ -1122,6 +1125,7 @@ function showWordLimits(){
    measured there and painted onto a canvas that belongs to that frame, so the
    fonts are the magazine's own. More stickers than fit one sheet go on more. */
 const CUT_DPI = 300, CUT_W_IN = 6.75, CUT_H_IN = 9.25, CUT_GAP_IN = 0.25, CUT_COLS = 3, CUT_MAX_IN = 2, CUT_MIN_IN = 1.25;
+const ISLAND_ROUND = 0.07;       // a sticker's corner radius, as a share of its side
 function cutLayout(n){
   let side = CUT_MAX_IN;
   const colsFit = Math.floor((CUT_W_IN + CUT_GAP_IN) / (side + CUT_GAP_IN));
@@ -1159,7 +1163,7 @@ async function drawSticker(win, ctx, el, x, y, side){
   // the island: the sticker's ground, rounded — this edge is where the blade goes
   ctx.save();
   ctx.fillStyle = cs.backgroundColor && cs.backgroundColor !== "rgba(0, 0, 0, 0)" ? cs.backgroundColor : "#ffffff";
-  const rr = side * 0.07;
+  const rr = side * ISLAND_ROUND;
   ctx.beginPath();
   if(ctx.roundRect) ctx.roundRect(x, y, side, side, rr); else ctx.rect(x, y, side, side);
   ctx.fill();
@@ -1234,7 +1238,7 @@ async function stickerCutSheets(){
       }
       out.push(c.toDataURL("image/png"));
     }
-    return Object.assign(out, { layout: L });
+    return Object.assign(out, { layout: L, count: els.length });
   } finally { fr.remove(); }
 }
 $("#cutBtn").addEventListener("click", async ()=>{
@@ -1250,6 +1254,146 @@ $("#cutBtn").addEventListener("click", async ()=>{
   toast((sheets.length > 1 ? sheets.length + " sheets" : "Sticker sheet") + " saved: " + L.side.toFixed(2).replace(/0$/,"") +
     " in stickers. In Design Space: Upload → the PNG → Print Then Cut image → set width to 6.75 in → Make It.");
 });
+/* ---------- the sticker sheet with a cutting machine's own marks ----------
+   Unlike a Cricut, Silhouette and Brother machines cut a sheet printed from
+   anywhere, if they can find it: the page carries the marks the machine looks
+   for, and a cut file says where each sticker is relative to them. Both come
+   from one geometry (cutPage), in millimetres on US Letter printed at 100 %:
+
+     ┌──────────────────── 215.9 mm ───────────────────┐
+     │ ■ 5 mm, 10 mm in                  ━━━━━━━━━┓     │  Silhouette Type 1:
+     │                                    20 mm   ┃     │  the square and two
+     │        ┌─── 6.75 × 9.25 in: the PNG ───┐         │  L-brackets, 0.5 mm
+     │        │   □ □ □   twelve stickers,    │         │  thick, 10 mm in
+     │        │   □ □ □   as the Cricut PNG   │         │
+     │        └────────────────────────────────┘         │
+     │ ┃                                                 │
+     │ ┗━━━━━━━━━                                       │
+     └──────────────────────────────────────────────────┘
+   A ScanNCut finds the stickers by scanning, so it gets a solid outline round
+   each one instead of marks; "crosshair" puts a target at the same three corners
+   for cutters whose marks are placed by hand. */
+const MM_PER_IN = 25.4;
+const PAGE_W_MM = 8.5 * MM_PER_IN, PAGE_H_MM = 11 * MM_PER_IN;          // US Letter
+const MARK_INSET_MM = 10, MARK_LEN_MM = 20, MARK_THICK_MM = 0.5, MARK_SQUARE_MM = 5;
+const CROSS_MM = 10;             // a crosshair's arms, end to end
+const OUTLINE_MM = 0.5;          // the ScanNCut outline
+const DXF_BULGE_90 = Math.tan(Math.PI / 8);   // a quarter circle, as a DXF polyline bulge
+const CUTTERS = {
+  silhouette: "Silhouette Studio: page Letter, Registration Marks on, Type 1, length 20 mm, thickness 0.5 mm, inset 10 mm. Open the cut file, then Send.",
+  scanncut: "ScanNCut: put the sheet on the mat, Scan, Direct Cut. Or open the cut file in CanvasWorkspace.",
+  crosshair: "Crosshairs sit 10 mm in from the top-left, top-right and bottom-left corners: register on them, then cut with the cut file.",
+};
+// Where each mark (black boxes, mm) sits on the page for a kind of cutter
+function cutMarks(kind){
+  const i = MARK_INSET_MM, L = MARK_LEN_MM, t = MARK_THICK_MM, W = PAGE_W_MM, H = PAGE_H_MM;
+  if(kind === "silhouette"){
+    return [
+      { x: i, y: i, w: MARK_SQUARE_MM, h: MARK_SQUARE_MM },                       // top left: the square
+      { x: W - i - L, y: i, w: L, h: t }, { x: W - i - t, y: i, w: t, h: L },      // top right: ┐
+      { x: i, y: H - i - t, w: L, h: t }, { x: i, y: H - i - L, w: t, h: L },      // bottom left: └
+    ];
+  }
+  if(kind === "crosshair"){
+    const h = CROSS_MM / 2, c = [[i + h, i + h], [W - i - h, i + h], [i + h, H - i - h]];
+    return c.flatMap(([x, y])=> [{ x: x - h, y: y - t / 2, w: CROSS_MM, h: t }, { x: x - t / 2, y: y - h, w: t, h: CROSS_MM }]);
+  }
+  return [];
+}
+// The page for `n` stickers laid out as the Cricut PNG lays them (cutLayout),
+// that PNG's 6.75 × 9.25 in centred on the page: each sticker's island, in mm
+function cutPage(kind, layout, n){
+  const side = layout.side * MM_PER_IN, gap = CUT_GAP_IN * MM_PER_IN, rows = Math.ceil(n / layout.cols);
+  const area = { w: CUT_W_IN * MM_PER_IN, h: CUT_H_IN * MM_PER_IN };
+  area.x = (PAGE_W_MM - area.w) / 2; area.y = (PAGE_H_MM - area.h) / 2;
+  const gw = layout.cols * side + (layout.cols - 1) * gap, gh = rows * side + (rows - 1) * gap;
+  const ox = area.x + (area.w - gw) / 2, oy = area.y + (area.h - gh) / 2;
+  const islands = Array.from({ length: n }, (_, i)=> ({
+    x: ox + (i % layout.cols) * (side + gap), y: oy + Math.floor(i / layout.cols) * (side + gap), side, r: side * ISLAND_ROUND }));
+  return { kind, w: PAGE_W_MM, h: PAGE_H_MM, area, islands, marks: cutMarks(kind), outline: kind === "scanncut" };
+}
+const mm = v=> +v.toFixed(3);
+// The cut file: one rounded square per sticker, nothing else (whatever is in it gets cut)
+function cutSvg(P){
+  const rects = P.islands.map(s=> '  <rect x="' + mm(s.x) + '" y="' + mm(s.y) + '" width="' + mm(s.side) + '" height="' + mm(s.side) +
+    '" rx="' + mm(s.r) + '" ry="' + mm(s.r) + '" fill="none" stroke="#ff0000" stroke-width="0.1"/>').join("\n");
+  return '<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="' + mm(P.w) + 'mm" height="' + mm(P.h) +
+    'mm" viewBox="0 0 ' + mm(P.w) + ' ' + mm(P.h) + '">\n  <title>Daily Bread stickers: cut lines (' + P.kind + ')</title>\n' + rects + '\n</svg>\n';
+}
+// The same paths as R12 DXF polylines, in inches, y up from the page's bottom edge
+function cutDxf(P){
+  const g = (code, v)=> code + "\n" + v + "\n", inch = v=> (v / MM_PER_IN).toFixed(5);
+  let out = g(0, "SECTION") + g(2, "HEADER") + g(9, "$INSUNITS") + g(70, 1) + g(0, "ENDSEC") + g(0, "SECTION") + g(2, "ENTITIES");
+  P.islands.forEach(s=>{
+    const { x, y, side: d, r } = s, b = DXF_BULGE_90;
+    // round the square clockwise on the page: a straight edge, then a corner
+    const pts = [[x + r, y, 0], [x + d - r, y, b], [x + d, y + r, 0], [x + d, y + d - r, b],
+                 [x + d - r, y + d, 0], [x + r, y + d, b], [x, y + d - r, 0], [x, y + r, b]];
+    out += g(0, "POLYLINE") + g(8, "CUT") + g(66, 1) + g(70, 1);
+    pts.forEach(([px, py, bulge])=>{
+      out += g(0, "VERTEX") + g(8, "CUT") + g(10, inch(px)) + g(20, inch(P.h - py));
+      if(bulge){ out += g(42, bulge.toFixed(8)); }
+    });
+    out += g(0, "SEQEND");
+  });
+  return out + g(0, "ENDSEC") + g(0, "EOF");
+}
+// The print: each sheet of stickers on a Letter page with the marks, in a
+// frame ready for the print dialog; and the cut files for that page
+async function stickerMarkSheet(kind){
+  const sheets = await stickerCutSheets();
+  if(!sheets.length){ return null; }
+  const L = sheets.layout;
+  const fr = document.createElement("iframe"); fr.setAttribute("aria-hidden", "true"); fr.tabIndex = -1;
+  fr.style.cssText = "position:fixed;left:-30000px;top:0;width:8.5in;height:11in;border:0";
+  document.body.appendChild(fr);
+  const box = b=> 'left:' + mm(b.x) + 'mm;top:' + mm(b.y) + 'mm;width:' + mm(b.w) + 'mm;height:' + mm(b.h) + 'mm';
+  const pages = sheets.map((url, n)=>{
+    const P = cutPage(kind, L, Math.min(L.perSheet, sheets.count - n * L.perSheet));
+    // marks and outlines in one SVG drawn in millimetres: CSS would snap a
+    // 0.5 mm border to a whole pixel, the cutter needs the size it was told
+    const outlines = P.outline ? P.islands.map(s=> '<rect x="' + mm(s.x) + '" y="' + mm(s.y) + '" width="' + mm(s.side) + '" height="' + mm(s.side) +
+      '" rx="' + mm(s.r) + '" fill="none" stroke="#000" stroke-width="' + OUTLINE_MM + '"/>').join("") : "";
+    const marks = P.marks.map(m=> '<rect x="' + mm(m.x) + '" y="' + mm(m.y) + '" width="' + mm(m.w) + '" height="' + mm(m.h) + '" fill="#000"/>').join("");
+    return '<div class="pg"><img src="' + url + '" style="' + box(P.area) + '"><svg xmlns="http://www.w3.org/2000/svg" width="' + mm(P.w) +
+      'mm" height="' + mm(P.h) + 'mm" viewBox="0 0 ' + mm(P.w) + ' ' + mm(P.h) + '">' + outlines + marks + '</svg></div>';
+  });
+  fr.srcdoc = '<!doctype html><meta charset="utf-8"><title>Daily Bread stickers — ' + kind + '</title><style>' +
+    '@page{ size:8.5in 11in; margin:0 }' +
+    'html,body{ margin:0; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact }' +
+    '.pg{ position:relative; width:' + mm(PAGE_W_MM) + 'mm; height:' + mm(PAGE_H_MM) + 'mm; overflow:hidden; break-after:page }' +
+    '.pg:last-child{ break-after:auto }' +
+    '.pg img, .pg svg{ position:absolute; display:block }' +
+    '.pg svg{ left:0; top:0 }' +
+    '</style>' + pages.join("");
+  await new Promise(r=>{ fr.onload = r; });
+  await Promise.all(Array.from(fr.contentDocument.images).map(im=> im.complete ? 0 : new Promise(r=>{ im.onload = im.onerror = r; })));
+  // the cut files describe the first sheet; every sheet has the same places
+  const P = cutPage(kind, L, Math.min(L.perSheet, sheets.count));
+  return { kind, frame: fr, page: P, sheets: sheets.length, layout: L, svg: cutSvg(P), dxf: cutDxf(P) };
+}
+function printSheet(job){
+  const w = job.frame.contentWindow;
+  w.focus(); w.print();
+  setTimeout(()=> job.frame.remove(), 60000);
+}
+document.querySelectorAll("#pdfMenu [data-cutter]").forEach(b=> b.addEventListener("click", async ()=>{
+  const kind = b.dataset.cutter, btn = $("#pdfMenuBtn"), label = btn.innerHTML;
+  btn.textContent = "Drawing…";
+  let job;
+  try{ job = await stickerMarkSheet(kind); }
+  catch(e){ console.error(e); toast("Could not draw the sticker sheet: " + e.message); return; }
+  finally{ btn.innerHTML = label; }
+  if(!job){ toast("This edition has no stickers"); return; }
+  const base = "daily-bread-stickers-" + kind + "-cut";
+  [[job.svg, ".svg", "image/svg+xml"], [job.dxf, ".dxf", "application/dxf"]].forEach(([text, ext, type])=>{
+    const url = URL.createObjectURL(new Blob([text], { type }));
+    saveBlobAs(url, base + ext);
+    setTimeout(()=> URL.revokeObjectURL(url), 60000);
+  });
+  toast("Print the sheet on Letter at 100 % (Actual size, Margins None), then cut. " + CUTTERS[kind]);
+  printSheet(job);
+}));
 $("#pdfBtn").addEventListener("click", async ()=>{
   const btn = $("#pdfMenuBtn"), label = btn.innerHTML;
   btn.textContent = "Laying out…";
