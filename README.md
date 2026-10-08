@@ -71,7 +71,7 @@ node tools/check-site.js                    # read them back: links, hreflang, s
 node tools/press/render.js --publish        # re-publish press/<edition>/ after changing the default edition
 ```
 
-Tests: `cd tools/press && npm test` (the press), and
+Tests: `cd tools/press && npm test` (the press), `npm run audit` (the print design), and
 `node db-render/test-studio-{editor,design,editions,press,cutter}.mjs` (the studio, in
 a real browser). CI (`.gitea/workflows/`) rebuilds and reads back the site,
 checks the `.tex` round trip and the rebrand, and renders, tests and guards
@@ -142,6 +142,19 @@ does not have your edits.
 
 The press is deterministic: with `SOURCE_DATE_EPOCH` set, two renders are
 byte-identical, and every face in the PDF is one the magazine declares.
+
+The printed issue is set for reading, by rules with sources behind them (body
+type, measure, contrast, wayfinding, the cover on a café rack):
+
+- body copy at 10.5 pt, never under 10; captions and credits at 8 pt or more;
+- one column of running text, 45–75 characters a line, ragged right, roman;
+- muted text at 4.5:1 or better on its ground, light or dark;
+- a folio on every inside page; the contents' page numbers set from where each
+  section really prints, and the page count from the press;
+- the cover art on page 1 with the price and the issue in its top-left third.
+
+`cd tools/press && npm run audit` measures all of them on the laid-out issue;
+CI runs it with `--strict`. A layout change that breaks one fails the press job.
 
 To lay an issue out by hand in Scribus, InDesign or Affinity Publisher, start
 from the [wireframe](wireframe/README.md): the same pages as frames, with the

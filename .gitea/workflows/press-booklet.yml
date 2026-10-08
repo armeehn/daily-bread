@@ -77,6 +77,12 @@ jobs:
         working-directory: tools/press
         run: npm test
 
+      # the reading rules (local-magazine-design): body size and measure, ragged
+      # right, contrast, folios, the contents' page numbers, the cover on a rack
+      - name: Audit the print design
+        working-directory: tools/press
+        run: node audit.js --strict
+
       - name: Keep the tracked manifest aside
         run: cp press/issue-01/booklet.json /tmp/tracked-booklet.json
 

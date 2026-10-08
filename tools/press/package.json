@@ -5,7 +5,8 @@
   "engines": { "node": ">=20" },
   "scripts": {
     "render": "node render.js",
-    "test": "node test-press.js"
+    "test": "node test-press.js",
+    "audit": "node audit.js"
   },
   "dependencies": {
     "pdf-lib": "^1.17.1",

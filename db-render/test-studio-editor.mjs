@@ -525,7 +525,7 @@ const wl = await page.evaluate(async () => {
   model.letter.paragraphs.pop();
   return { n: pieces.length, letter, atLimit: main.scale, after: b.letter.pieces[0], cont, target: letter.limit,
            voices: a.voices.pieces.length, voiceSheets: sheets.filter(s => /^voices\.\d+$/.test(s.key)).length,
-           comics: a.comics, submit: a.submit };
+           comics: a.comics, submit: a.submit, textScale: DBPrint.TEXT_SCALE };
 });
 check("every writer's piece gets a limit", wl.n >= 10, wl.n + " pieces");
 check("a long piece's limit is its first page and its Continued page", wl.letter.pages && wl.letter.pages.length === 2 &&
@@ -534,7 +534,7 @@ check("each young-voices report is its own piece and its own sheet", wl.voices =
 check("a piece at its limit prints at the size it was measured at, not shrunk", wl.atLimit >= wl.letter.scale - 0.01, wl.atLimit + " vs " + wl.letter.scale);
 check("a long piece at its limit carries on onto a Continued sheet before the back cover",
   wl.cont && wl.cont.beforeBack, JSON.stringify(wl.cont));
-check("…which prints at the magazine's one text size", wl.cont && Math.abs(wl.cont.scale - 0.8) < 0.005, wl.cont && String(wl.cont.scale));
+check("…which prints at the magazine's one text size", wl.cont && Math.abs(wl.cont.scale - wl.textScale) < 0.005, wl.cont && String(wl.cont.scale));
 check("…and between the two sheets no word is lost or doubled", wl.cont && wl.cont.split === wl.target, wl.cont && wl.cont.split + " of " + wl.target);
 check("…and each sheet points to the other", wl.cont && wl.cont.jump === "Continued on sheet " + wl.cont.sheet + " →" && /^Continued from sheet \d+$/.test(wl.cont.head),
   wl.cont && wl.cont.jump + " / " + wl.cont.head);
