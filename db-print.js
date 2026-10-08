@@ -7,8 +7,9 @@
    headless Chromium), so the website, the Web PDF and the printed booklet are
    the same pages drawn by the same CSS, in the same fonts.
 
-   Each unit — the cover, every section, a sheet per Young Voices report, the
-   back cover — goes on a sheet of its own, scaled down only if it would not fit.
+   Each unit — the cover art, the masthead, every section, a sheet per Young
+   Voices report, the back cover — goes on a sheet of its own, scaled down only
+   if it would not fit. The cover art alone fills its sheet, bleed and all.
    The long pieces (LONG_PIECES) carry on onto a Continued sheet before the back
    cover instead: what their first sheet cannot hold at full size moves there.
 
@@ -81,6 +82,19 @@ async function paginate(ctx, m, zooms, opts){
         units.push({ el:c, key:"voices." + i });
       });
     });
+  // The web shows the cover art beside the masthead; a magazine prints it as its
+  // front cover, a page of its own before the masthead page, which then gives
+  // its whole width to the masthead. The price stamp goes with it, as on a
+  // newsstand cover; the file tab and caption strip are the web's framing.
+  const hero = units.find(u=> u.key === "hero"), art = hero && hero.el.querySelector(".cover-frame img");
+  if(art){
+    const cover = doc.createElement("section"); cover.className = "pp-cover";
+    cover.appendChild(art.cloneNode());
+    const free = hero.el.querySelector(".cover-wrap .free");
+    if(free){ cover.appendChild(free); }
+    art.closest(".cover-wrap").remove();
+    units.splice(units.indexOf(hero), 0, { el: cover, key: "cover" });
+  }
   const conts = (opts.conts || []).map(path=>{
     const key = pieceSheet(path), un = units.find(u=> u.key === key);
     const box = un && pieceBox(un.el, path);
@@ -109,6 +123,14 @@ async function paginate(ctx, m, zooms, opts){
     ".pp-sheet:last-child{ break-after:auto; page-break-after:auto }\n" +
     ".pp-fit{ flex:none }\n" +
     ".pp-fit > *{ margin:0 !important }\n" +
+    // the cover art: no trim margin, the picture cut to the sheet, bleed included
+    ".pp-sheet.pp-full{ padding:0 }\n" +
+    ".pp-full .pp-fit, .pp-cover{ width:" + S.w + "px; height:" + S.h + "px }\n" +
+    ".pp-cover{ position:relative }\n" +
+    ".pp-cover img{ width:100%; height:100%; object-fit:cover; display:block }\n" +
+    // inside the trim, clear of the cut
+    ".pp-cover .free{ position:absolute; right:" + (B + COVER_INSET) + "px; bottom:" + (B + COVER_INSET) + "px; transform:rotate(4deg) }\n" +
+    ".pp-sheet .hero-grid{ grid-template-columns:1fr }\n" +
     // inside a sheet nothing may start another one
     ".pp-sheet *{ break-before:auto !important; page-break-before:auto !important; break-after:auto !important; page-break-after:auto !important }\n" +
     ".pp-sheet footer{ min-height:" + A.h + "px !important }\n" +
@@ -125,7 +147,7 @@ async function paginate(ctx, m, zooms, opts){
   doc.head.appendChild(st);
   const book = doc.createElement("div"); book.className = "pp-book";
   const fits = units.map(un=>{
-    const sheet = doc.createElement("div"); sheet.className = "pp-sheet";
+    const sheet = doc.createElement("div"); sheet.className = un.key === "cover" ? "pp-sheet pp-full" : "pp-sheet";
     const fit = doc.createElement("div"); fit.className = "pp-fit";
     sheet.appendChild(fit); fit.appendChild(un.el); book.appendChild(sheet);
     return fit;
@@ -193,6 +215,8 @@ async function paginate(ctx, m, zooms, opts){
     // the sheet takes its section's ground, so a scaled section leaves no bare strip
     const bg = win.getComputedStyle(u).backgroundColor;
     fit.parentElement.style.background = (!bg || bg === "rgba(0, 0, 0, 0)" || bg === "transparent") ? bone : bg;
+    // the cover art is already the sheet's size: nothing to fit
+    if(key === "cover"){ return { key, fit, unit: u, scale: 1, cont: null, part: 1, label: "cover" }; }
     // Two ways to fit a tall section: shrink it as laid out (keeps its columns),
     // or lay it out wider and shrink that (text reflows into the room). Take
     // whichever ends up bigger; plates with a fixed shape win the first way.
@@ -212,7 +236,7 @@ async function paginate(ctx, m, zooms, opts){
     const lead = units[i].of ? units[i].of.el : u, head = lead.querySelector(".sechead, h1, h2, .mast");
     const label = units[i].cont && !units[i].of ? "continued: " + units[i].cont.key.replace(/^voices\.(\d+)$/, (_, n)=> "voices, report " + (+n + 1))
         : /^voices\./.test(key) ? "voices, report " + (+key.split(".")[1] + 1)
-        : lead.id || (lead.tagName === "FOOTER" ? "back cover" : lead.classList.contains("hero") ? "cover" : (head ? head.textContent.trim().slice(0, 30) : "section"));
+        : lead.id || (lead.tagName === "FOOTER" ? "back cover" : lead.classList.contains("hero") ? "masthead" : (head ? head.textContent.trim().slice(0, 30) : "section"));
     return { key, fit, unit: u, scale: best.s, cont: units[i].of ? null : units[i].cont, part: units[i].part || 1,
       label: units[i].part ? label + " (" + units[i].part + ")" : label };
   });
@@ -363,7 +387,8 @@ const FLOW_MIN = 0.8;
 const TEXT_SCALE = FLOW_MIN;
 function capFor(key){ return NO_FLOW.test(key) ? 1 : TEXT_SCALE; }
 const FLOW_SNUG = 0.92;          // 0.8 x 0.92: 8.6 pt, still the printed edition's body size
-const NO_FLOW = /^(hero|footer|comics|art|stickers)$/;
+const NO_FLOW = /^(cover|hero|footer|comics|art|stickers)$/;
+const COVER_INSET = 28;          // px from the trim to the cover's price stamp
 // The part of `unit` that does not fit (`ok()` false) moved into a copy of it,
 // returned as a unit of its own; null if nothing could move. Blocks move from
 // the end until the rest fits; one block that is itself too tall is divided the

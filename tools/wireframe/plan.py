@@ -117,7 +117,7 @@ def foot(spec):
     return "%s · %s" % (spec["title"], spec["theme"]) if spec.get("theme") else spec["title"]
 
 
-COVERS = {"hero", "footer"}
+COVERS = {"cover", "hero", "footer"}           # the cover art, the masthead page, the back cover
 
 
 def master_for(page, spec):
