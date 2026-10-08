@@ -43,10 +43,10 @@ pink.
 | Baseline grid | 15 pt (body leading) |
 | Colour | CMYK swatches named `DB …` |
 
-Page 1 is the front cover and page 36 the back cover. **Page 35 is a spare**:
-the issue has 35 pages of content and a booklet needs a multiple of four, so the
-press puts the blank before the back cover. Use it for an ad, a house notice or
-an extra piece, or leave it blank.
+Page 1 is the front cover: the cover art alone, bled on every edge, with the
+price stamp. Page 2 is the masthead and page 36 the back cover. The issue fills
+all 36 pages, a multiple of four, so there is no spare; when an issue runs
+short, the press puts the blanks before the back cover.
 
 ### Layers
 
@@ -63,7 +63,7 @@ an extra piece, or leave it blank.
 | --- | --- | --- |
 | A (light) | pages on bone/paper grounds | folio and running foot in ink, mirrored left/right |
 | B (dark) | pages on ink/dark grounds | the same, reversed in bone |
-| none | covers (1 and 36) | nothing: no folio on a cover |
+| none | covers (1 and 36) and the masthead (2) | nothing: no folio on a cover |
 
 ### Paragraph styles
 

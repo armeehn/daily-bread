@@ -47,11 +47,21 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
     await page.evaluate(() => localStorage.clear());
     await page.reload();
     await page.waitForFunction(() => typeof buildPrintFrame === "function");
-    const studio = await page.evaluate(async () => {
+    const { studio, cover } = await page.evaluate(async () => {
       const { frame, sheets } = await buildPrintFrame();
       const out = sheets.map(s => ({ key: s.key, label: s.label, scale: +s.scale.toFixed(3) }));
+      // the cover art's sheet: how much of it the picture covers, and whether the masthead kept an inset
+      const d = frame.contentDocument, sheet = d.querySelector(".pp-sheet"), img = sheet && sheet.querySelector("img");
+      const s = sheet.getBoundingClientRect(), r = img ? img.getBoundingClientRect() : { left: 1e9, top: 1e9, right: 0, bottom: 0 };
+      const cover = { full: r.left <= s.left + 0.5 && r.top <= s.top + 0.5 && r.right >= s.right - 0.5 && r.bottom >= s.bottom - 0.5,
+                      alone: sheet.querySelectorAll("img").length === 1 &&
+                             sheet.textContent.trim() === (sheet.querySelector(".free") || {}).textContent,
+                      inset: !!d.querySelector(".pp-sheet .hero .cover-frame"),
+                      stamp: (() => { const f = sheet.querySelector(".free"); if (!f) { return false; }
+                        const b = f.getBoundingClientRect(), bl = parseFloat(getComputedStyle(d.querySelector(".pp-sheet:not(.pp-full)")).paddingLeft);
+                        return b.left >= s.left + bl && b.top >= s.top + bl && b.right <= s.right - bl && b.bottom <= s.bottom - bl; })() };
       frame.remove();
-      return out;
+      return { studio: out, cover };
     });
     await page.close();
     server.close();
@@ -63,8 +73,14 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
       pressed.length + " sheets");
     const off = studio.map((s, i) => pressed[i] && Math.abs(s.scale - pressed[i].scale) > 0.01 ? `${s.label} ${s.scale}/${pressed[i].scale}` : null).filter(Boolean);
     check("…at the same scales", !off.length, off.join(", ") || "all within 0.01");
+    check("the cover art is the first page, on its own, then the masthead",
+      pressed[0] && pressed[0].key === "cover" && pressed[1] && pressed[1].key === "hero" && cover.alone,
+      pressed.slice(0, 2).map(s => s.label).join(", "));
+    check("…edge to edge: the picture fills the trim and the bleed", cover.full);
+    check("…and the masthead page no longer carries an inset of it", !cover.inset);
+    check("…with the price stamp on the cover, inside the trim", cover.stamp);
     check("text pages never print larger than the magazine's one text size",
-      info.sheets.filter(s => !/^(hero|footer|comics|art|stickers)$/.test(s.key)).every(s => s.scale <= 0.8 + 1e-6));
+      info.sheets.filter(s => !/^(cover|hero|footer|comics|art|stickers)$/.test(s.key)).every(s => s.scale <= 0.8 + 1e-6));
 
     /* ---- (2) the products ---- */
     const g = geometry(model), n = info.pages;
