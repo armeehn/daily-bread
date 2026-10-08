@@ -10,6 +10,8 @@
    Each unit — the cover art, the masthead, every section, a sheet per Young
    Voices report, the back cover — goes on a sheet of its own, scaled down only
    if it would not fit. The cover art alone fills its sheet, bleed and all.
+   The appendix prints the sticker sheet once for each cutting machine that
+   reads marks printed anywhere (cutterPage), measured from the trim.
    The long pieces (LONG_PIECES) carry on onto a Continued sheet before the back
    cover instead: what their first sheet cannot hold at full size moves there.
 
@@ -27,6 +29,109 @@
     ((m.voices && m.voices.reports) || []).forEach(function(_, i){ out.push("voices.reports." + i + ".body"); });
     out.push("lab.paragraphs");
     return out;
+  }
+  /* ---- the appendix: the sticker sheet for each cutting machine ----
+     A Cricut cuts only what Design Space printed, so the sticker page is its
+     sheet (the studio's PNG goes to Design Space). Silhouette and Brother
+     machines cut a page printed anywhere if it carries what they look for, so
+     the appendix gives each a page: the stickers, and the machine's marks,
+     in mm from the trim's top-left. The studio's cut files use the same numbers.
+
+       ┌─────────── trim ───────────┐   Silhouette Type 1: a 5 mm square and
+       │ ■ 10 mm in        ━━━━━━┓  │   two 20 mm L-brackets, 0.5 mm thick.
+       │   Appendix A1 · head     ┃  │   ScanNCut: no marks, an outline round
+       │    □ □ □                    │   each sticker for its scanner.
+       │    □ □ □  the stickers,     │   Crosshairs: a 10 mm target at the
+       │    □ □ □  CUT_REGION        │   same three corners.
+       │ ┃  □ □ □                    │
+       │ ┗━━━━━━                     │
+       └─────────────────────────────┘ */
+  var CUTTERS = ["silhouette", "scanncut", "crosshair"];
+  var MARK = { inset: 10, len: 20, thick: 0.5, square: 5, cross: 10 };     // mm
+  var CUT_REGION = { side: 18, top: 42, bottom: 36 };   // mm kept clear of the marks, the head and the foot note
+  var CUT_GAP = 5, CUT_COLS = 3;                        // mm between stickers; stickers across
+  var CUT_ROUND = 0.07;                                 // corner radius, as a share of the side (the PNG's)
+  var MM = { mm: 1, cm: 10, in: 25.4, pt: 25.4 / 72, px: 25.4 / 96 };
+  function toMm(v){ var m = String(v).match(/^([\d.]+)\s*(mm|cm|in|pt|px)?$/); return m ? parseFloat(m[1]) * MM[m[2] || "mm"] : NaN; }
+  // the trim, in mm
+  function trimMm(m){ var g = DB.printGeom(m); return { w: toMm(g.tw), h: toMm(g.th) }; }
+  // where a machine's marks sit (black boxes, mm from the trim's top-left)
+  function cutterMarks(kind, W, H){
+    var i = MARK.inset, L = MARK.len, t = MARK.thick;
+    if(kind === "silhouette"){
+      return [
+        { x: i, y: i, w: MARK.square, h: MARK.square },                            // top left: the square
+        { x: W - i - L, y: i, w: L, h: t }, { x: W - i - t, y: i, w: t, h: L },     // top right: ┐
+        { x: i, y: H - i - t, w: L, h: t }, { x: i, y: H - i - L, w: t, h: L }      // bottom left: └
+      ];
+    }
+    if(kind === "crosshair"){
+      var h = MARK.cross / 2, out = [];
+      [[i + h, i + h], [W - i - h, i + h], [i + h, H - i - h]].forEach(function(c){
+        out.push({ x: c[0] - h, y: c[1] - t / 2, w: MARK.cross, h: t }, { x: c[0] - t / 2, y: c[1] - h, w: t, h: MARK.cross });
+      });
+      return out;
+    }
+    return [];
+  }
+  // a machine's page for `n` stickers on trim T (mm): its marks and each sticker's island
+  function cutterPage(kind, T, n){
+    var R = { x: CUT_REGION.side, y: CUT_REGION.top, w: T.w - 2 * CUT_REGION.side, h: T.h - CUT_REGION.top - CUT_REGION.bottom };
+    var rows = Math.max(1, Math.ceil(n / CUT_COLS));
+    var side = Math.min((R.w - (CUT_COLS - 1) * CUT_GAP) / CUT_COLS, (R.h - (rows - 1) * CUT_GAP) / rows);
+    var gw = CUT_COLS * side + (CUT_COLS - 1) * CUT_GAP, gh = rows * side + (rows - 1) * CUT_GAP;
+    var ox = R.x + (R.w - gw) / 2, oy = R.y + (R.h - gh) / 2, islands = [];
+    for(var k = 0; k < n; k++){
+      islands.push({ x: ox + (k % CUT_COLS) * (side + CUT_GAP), y: oy + Math.floor(k / CUT_COLS) * (side + CUT_GAP), side: side, r: side * CUT_ROUND });
+    }
+    return { kind: kind, w: T.w, h: T.h, islands: islands, marks: cutterMarks(kind, T.w, T.h), outline: kind === "scanncut" };
+  }
+  var CUTTER_NAME = { silhouette: "Silhouette", scanncut: "Brother ScanNCut", crosshair: "crosshairs" };
+  function cutterHow(kind, T){
+    var size = T.w + " × " + T.h + " mm";
+    if(kind === "silhouette"){
+      return "Silhouette Studio: page " + size + ", Registration Marks on, Type 1, length 20 mm, thickness 0.5 mm, inset 10 mm. Open the cut file, then Send.";
+    }
+    if(kind === "scanncut"){ return "Brother ScanNCut: no marks needed. Put the page on the mat, Scan, Direct Cut: the outlines are the cut lines."; }
+    return "Crosshairs 10 mm in from three corners of the trim: register the cutter on them, then cut with the cut file.";
+  }
+  // the page as a unit for the pager: the stickers (clones of the page's own,
+  // scaled onto their islands), the marks as SVG drawn in mm, and the head
+  var STICKER_PX = 180;            // a sticker laid out at its web size, then scaled to its island
+  function appendixSheet(doc, kind, n, T, stickers, bleed){
+    var P = cutterPage(kind, T, stickers.length), mm = function(v){ return +v.toFixed(3) + "mm"; };
+    var el = doc.createElement("section"); el.className = "pp-appx";
+    var trim = doc.createElement("div"); trim.className = "pp-appx-trim";
+    trim.style.cssText = "left:" + bleed + ";top:" + bleed + ";width:" + mm(T.w) + ";height:" + mm(T.h);
+    var hd = doc.createElement("div"); hd.className = "pp-appx-hd";
+    hd.style.cssText = "left:" + mm(CUT_REGION.side) + ";top:" + mm(MARK.inset + MARK.square + 2) + ";width:" + mm(T.w - 2 * CUT_REGION.side);
+    hd.innerHTML = '<span class="pp-appx-k"></span><h3></h3><p class="pp-appx-how"></p>';
+    hd.children[0].textContent = "Appendix A" + n + " · cut on a machine";
+    hd.children[1].textContent = "Stickers · " + CUTTER_NAME[kind];
+    hd.children[2].textContent = cutterHow(kind, T);
+    // the note sits in the foot, right of the bottom-left mark
+    var note = doc.createElement("p"); note.className = "pp-appx-note";
+    var nx = MARK.inset + MARK.len + 5;
+    note.style.cssText = "left:" + mm(nx) + ";top:" + mm(T.h - CUT_REGION.bottom + 6) + ";width:" + mm(T.w - nx - CUT_REGION.side);
+    note.textContent = "Cut from a copy printed at 100 % (Printer PDF, or Web PDF at actual size), not the booklet, which prints smaller. " +
+      "A Cricut uses the sticker page itself: the studio's Stickers for a cutter PNG, through Design Space.";
+    trim.appendChild(hd); trim.appendChild(note);
+    P.islands.forEach(function(s, i){
+      var box = doc.createElement("div"); box.className = "pp-appx-st";
+      box.style.cssText = "left:" + mm(s.x) + ";top:" + mm(s.y) + ";width:" + mm(s.side) + ";height:" + mm(s.side);
+      var c = stickers[i].cloneNode(true);
+      c.style.width = STICKER_PX + "px"; c.style.margin = "0";
+      c.style.zoom = String(s.side / toMm(STICKER_PX + "px"));
+      box.appendChild(c); trim.appendChild(box);
+    });
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + mm(T.w) + '" height="' + mm(T.h) + '" viewBox="0 0 ' + T.w + " " + T.h + '">';
+    if(P.outline){
+      P.islands.forEach(function(s){ svg += '<rect class="ol" x="' + s.x + '" y="' + s.y + '" width="' + s.side + '" height="' + s.side + '" rx="' + s.r + '" fill="none" stroke="#000" stroke-width="0.5"/>'; });
+    }
+    P.marks.forEach(function(m){ svg += '<rect class="mk" x="' + m.x + '" y="' + m.y + '" width="' + m.w + '" height="' + m.h + '" fill="#000"/>'; });
+    trim.insertAdjacentHTML("beforeend", svg + "</svg>");
+    el.appendChild(trim);
+    return el;
   }
   // the sheet a piece prints on
   function pieceSheet(path){ var r = path.match(/^voices\.reports\.(\d+)\./); return r ? "voices." + r[1] : path.split(".")[0]; }
@@ -112,6 +217,14 @@ async function paginate(ctx, m, zooms, opts){
   // before the back cover, as print's Continued pages go before its inside back cover
   const fi = units.findIndex(u=> u.key === "footer");
   units.splice(fi < 0 ? units.length : fi, 0, ...conts.map(c=> ({ el: c.el, key: c.key + ".cont", cont: c })));
+  // the appendix, after them: the sticker sheet for each machine (not measured
+  // for word limits: it holds none)
+  const stk = !opts.measure && units.find(u=> u.key === "stickers");
+  const stickerArt = stk ? Array.from(stk.el.querySelectorAll(".sticker-grid .sticker")) : [];
+  if(stickerArt.length){
+    const T = trimMm(m), bi = units.findIndex(u=> u.key === "footer");
+    units.splice(bi < 0 ? units.length : bi, 0, ...CUTTERS.map((kind, i)=> ({ el: appendixSheet(doc, kind, i + 1, T, stickerArt, DB.printGeom(m).bleed), key: "appendix." + kind })));
+  }
   const st = doc.createElement("style"); st.id = "pp-style";
   st.textContent =
     "@page{ size:" + S.w + "px " + S.h + "px; margin:0 }\n" +
@@ -125,7 +238,19 @@ async function paginate(ctx, m, zooms, opts){
     ".pp-fit > *{ margin:0 !important }\n" +
     // the cover art: no trim margin, the picture cut to the sheet, bleed included
     ".pp-sheet.pp-full{ padding:0 }\n" +
-    ".pp-full .pp-fit, .pp-cover{ width:" + S.w + "px; height:" + S.h + "px }\n" +
+    ".pp-full .pp-fit, .pp-cover, .pp-appx{ width:" + S.w + "px; height:" + S.h + "px }\n" +
+    // an appendix page: white paper (a cutter's sensor reads marks on it), the
+    // trim positioned inside the bleed, everything on it placed in mm
+    ".pp-appx{ position:relative; background:#fff; color:#111 }\n" +
+    ".pp-appx-trim, .pp-appx-trim > *{ position:absolute }\n" +
+    ".pp-appx-trim > svg{ left:0; top:0 }\n" +
+    ".pp-appx-st{ overflow:visible }\n" +
+    ".pp-appx-st > .sticker{ position:absolute; left:0; top:0; border:0 !important; box-shadow:none !important }\n" +
+    ".pp-appx-hd{ font-family:var(--mono) }\n" +
+    ".pp-appx-k{ display:block; font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:#555 }\n" +
+    ".pp-appx-hd h3{ font-size:17px; margin:3px 0 5px; line-height:1.1 }\n" +
+    ".pp-appx-hd p, .pp-appx-note{ font-family:var(--mono); font-size:9.5px; line-height:1.4; margin:0 }\n" +
+    ".pp-appx-note{ color:#555 }\n" +
     ".pp-cover{ position:relative }\n" +
     ".pp-cover img{ width:100%; height:100%; object-fit:cover; display:block }\n" +
     // inside the trim, clear of the cut
@@ -154,7 +279,7 @@ async function paginate(ctx, m, zooms, opts){
   doc.head.appendChild(st);
   const book = doc.createElement("div"); book.className = "pp-book";
   const fits = units.map(un=>{
-    const sheet = doc.createElement("div"); sheet.className = un.key === "cover" ? "pp-sheet pp-full" : "pp-sheet";
+    const sheet = doc.createElement("div"); sheet.className = FULL.test(un.key) ? "pp-sheet pp-full" : "pp-sheet";
     const fit = doc.createElement("div"); fit.className = "pp-fit";
     sheet.appendChild(fit); fit.appendChild(un.el); book.appendChild(sheet);
     return fit;
@@ -222,8 +347,8 @@ async function paginate(ctx, m, zooms, opts){
     // the sheet takes its section's ground, so a scaled section leaves no bare strip
     const bg = win.getComputedStyle(u).backgroundColor;
     fit.parentElement.style.background = (!bg || bg === "rgba(0, 0, 0, 0)" || bg === "transparent") ? bone : bg;
-    // the cover art is already the sheet's size: nothing to fit
-    if(key === "cover"){ return { key, fit, unit: u, scale: 1, cont: null, part: 1, label: "cover" }; }
+    // the cover art and the appendix are already the sheet's size: nothing to fit
+    if(FULL.test(key)){ return { key, fit, unit: u, scale: 1, cont: null, part: 1, label: key === "cover" ? "cover" : key.replace(".", ": ") }; }
     // Two ways to fit a tall section: shrink it as laid out (keeps its columns),
     // or lay it out wider and shrink that (text reflows into the room). Take
     // whichever ends up bigger; plates with a fixed shape win the first way.
@@ -394,7 +519,8 @@ const FLOW_MIN = 0.8;
 const TEXT_SCALE = FLOW_MIN;
 function capFor(key){ return NO_FLOW.test(key) ? 1 : TEXT_SCALE; }
 const FLOW_SNUG = 0.92;          // 0.8 x 0.92: 8.6 pt, still the printed edition's body size
-const NO_FLOW = /^(cover|hero|footer|comics|art|stickers)$/;
+const NO_FLOW = /^(cover|hero|footer|comics|art|stickers|appendix\..+)$/;
+const FULL = /^(cover|appendix\..+)$/;    // sheets laid out at the sheet's own size, not fitted
 const COVER_INSET = 28;          // px from the trim to the cover's price stamp
 // The part of `unit` that does not fit (`ok()` false) moved into a copy of it,
 // returned as a unit of its own; null if nothing could move. Blocks move from
@@ -552,6 +678,7 @@ function unitKey(u, m){
 }
 
   var api = { paginate: paginate, sheetPx: sheetPx, unitKey: unitKey, pieceSheet: pieceSheet, pieceBox: pieceBox,
+              cutterPage: cutterPage, trimMm: trimMm, CUTTERS: CUTTERS,
               pieceTitle: pieceTitle, wordStarts: wordStarts, splitPiece: splitPiece, longPieces: longPieces, PLAIN: PLAIN,
               writerSlots: writerSlots, markModel: markModel, measurePieces: measurePieces, sheetCapacity: sheetCapacity,
               countWords: countWords, WORD_RE: WORD_RE, TOK: TOK, TOK_RE: TOK_RE, getPath: getPath };

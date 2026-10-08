@@ -1,16 +1,18 @@
 /**
- * test-studio-cutter.mjs — the sticker sheet with a cutting machine's own marks.
+ * test-studio-cutter.mjs — the sticker sheet for every cutting machine.
  *
  *   node db-render/test-studio-cutter.mjs
  *
- * A Cricut only cuts what Design Space printed (the PNG export covers it).
- * Silhouette and Brother machines cut a sheet printed from anywhere, if the page
- * carries what they look for and a cut file says where each sticker is. For each
- * of the three kinds this checks: (1) the marks sit where the machine's software
- * is told they are, and no sticker touches them; (2) the printed page is a US
- * Letter PDF with the marks and the stickers where the geometry says; (3) the SVG
- * and DXF cut files trace every sticker's island at the same place; (4) the Print
- * menu offers one button per machine, which saves the cut files and prints.
+ * A Cricut cuts only what Design Space printed, so the magazine's sticker page
+ * is its sheet (the studio's "Stickers for a cutter" PNG goes to Design Space)
+ * and stays the default. Machines that read marks printed anywhere get the
+ * appendix: one page each for Silhouette, Brother ScanNCut and crosshairs, the
+ * twelve stickers with that machine's marks, measured from the trim. Checks:
+ * (1) the appendix pages, after the Continued pages and before the back cover;
+ * (2) on each, the marks sit where the geometry says, in mm from the trim, the
+ * stickers sit on their islands clear of the marks, and nothing on a sticker
+ * runs off it; (3) the cut files trace the same islands on the trim; (4) the
+ * Print menu keeps the Cricut PNG first and saves every machine's cut files.
  * Needs the press's Playwright (cd tools/press && npm install).
  */
 import http from "node:http";
@@ -25,9 +27,7 @@ const ROOT = path.join(HERE, "..");
 const TYPES = { ".html": "text/html", ".js": "text/javascript", ".json": "application/json",
                 ".css": "text/css", ".png": "image/png", ".woff2": "font/woff2", ".jpg": "image/jpeg" };
 const KINDS = ["silhouette", "scanncut", "crosshair"];
-const LETTER_PT = [612, 792];
-const SHOT_SCALE = 4;              // screenshot at 4x, so a 0.5 mm line is two pixels wide and more
-const PX_PER_MM = 96 / 25.4 * SHOT_SCALE;
+const TOL_MM = 0.15;               // a laid-out box against its geometry
 
 const ok = [], bad = [];
 const check = (name, cond, extra) => (cond ? ok : bad).push(name + (extra ? " — " + extra : ""));
@@ -52,105 +52,95 @@ const page = await ctx.newPage();
 await page.goto(URL_, { waitUntil: "networkidle" });
 await page.evaluate(() => localStorage.clear());
 await page.reload({ waitUntil: "networkidle" });
-const ready = await page.evaluate(() => typeof stickerMarkSheet === "function" && typeof cutPage === "function");
-check("the studio has the marked sticker sheet", ready);
+const ready = await page.evaluate(() => typeof DBPrint.cutterPage === "function" && typeof buildPrintFrame === "function");
+check("the pager knows the cutters' pages", ready);
 
-for (const kind of ready ? KINDS : []) {
-  const job = await page.evaluate(async k => {
-    const j = await stickerMarkSheet(k);
-    const out = { page: j.page, sheets: j.sheets, html: "<!doctype html>" + j.frame.contentDocument.documentElement.outerHTML,
-                  svg: j.svg, dxf: j.dxf };
-    j.frame.remove();
-    return out;
-  }, kind);
-  const P = job.page, isl = P.islands, near = (a, b) => Math.abs(a - b) < 0.01;
-
-  /* (1) the geometry */
-  if (kind === "silhouette") {
-    const sq = P.marks[0];
-    check(`${kind}: a 5 mm square 10 mm in from the top-left corner`, sq && near(sq.x, 10) && near(sq.y, 10) && near(sq.w, 5) && near(sq.h, 5));
-    const tr = P.marks.filter(m => m.x > P.w / 2 && m.y < P.h / 2), bl = P.marks.filter(m => m.x < P.w / 2 && m.y > P.h / 2);
-    const reach = ms => [Math.max(...ms.map(m => m.w)), Math.max(...ms.map(m => m.h))];
-    check(`${kind}: 20 mm L-brackets at the top-right and bottom-left, 0.5 mm thick`,
-      tr.length === 2 && bl.length === 2 && reach(tr).every(v => near(v, 20)) && reach(bl).every(v => near(v, 20)) &&
-      [...tr, ...bl].every(m => near(Math.min(m.w, m.h), 0.5)) &&
-      near(Math.max(...tr.map(m => m.x + m.w)), P.w - 10) && near(Math.max(...bl.map(m => m.y + m.h)), P.h - 10),
-      JSON.stringify(P.marks.map(m => [m.x, m.y, m.w, m.h].map(v => +v.toFixed(2)))));
-  }
-  if (kind === "scanncut") {
-    check(`${kind}: no registration marks (the machine scans), an outline round each sticker`, P.marks.length === 0 && P.outline === true);
-  }
-  if (kind === "crosshair") {
-    check(`${kind}: crosshairs at three corners, 10 mm in`, P.marks.length === 6, P.marks.length + " bars");
-  }
-  check(`${kind}: the page is US Letter`, near(P.w, 215.9) && near(P.h, 279.4), P.w + " x " + P.h);
-  check(`${kind}: every sticker of the edition is on it`, isl.length === 12, isl.length + " stickers");
-  const clear = isl.every(s => P.marks.every(m => m.x + m.w + 3 < s.x || s.x + s.side + 3 < m.x || m.y + m.h + 3 < s.y || s.y + s.side + 3 < m.y));
-  check(`${kind}: no sticker comes within 3 mm of a mark`, clear);
-
-  /* (2) the printed page */
-  const q = await browser.newPage({ viewport: { width: 816, height: 1056 }, deviceScaleFactor: SHOT_SCALE });
-  await q.setContent(job.html, { waitUntil: "load" });
-  await q.evaluate(() => Promise.all(Array.from(document.images).map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))));
-  const pdf = (await q.pdf({ preferCSSPageSize: true, printBackground: true })).toString("latin1");
-  const box = (pdf.match(/\/MediaBox\s*\[\s*0\s+0\s+([\d.]+)\s+([\d.]+)\s*\]/) || []).slice(1).map(Number);
-  const pages = (pdf.match(/\/Type\s*\/Page[^s]/g) || []).length;
-  check(`${kind}: it prints on US Letter, one page per sheet`,
-    Math.round(box[0]) === LETTER_PT[0] && Math.round(box[1]) === LETTER_PT[1] && pages === job.sheets, box.join(" x ") + ", " + pages + " page(s)");
-  const shot = await q.screenshot({ clip: { x: 0, y: 0, width: 816, height: 1056 } });
-  await q.close();
-  const px = await page.evaluate(async ({ b64, pts }) => {
-    const im = new Image(); im.src = "data:image/png;base64," + b64; await im.decode();
-    const c = document.createElement("canvas"); c.width = im.width; c.height = im.height;
-    const x = c.getContext("2d"); x.drawImage(im, 0, 0);
-    return pts.map(([u, v]) => Array.from(x.getImageData(Math.round(u), Math.round(v), 1, 1).data.slice(0, 3)));
-  }, { b64: shot.toString("base64"), pts: [
-    ...P.marks.map(m => [(m.x + m.w / 2) * PX_PER_MM, (m.y + m.h / 2) * PX_PER_MM]),
-    [(isl[0].x + isl[0].side / 2) * PX_PER_MM, (isl[0].y + isl[0].side * 0.9) * PX_PER_MM],
-    [(isl[0].x - 2) * PX_PER_MM, (isl[0].y + isl[0].side / 2) * PX_PER_MM],
-    ...isl.map(s => [s.x * PX_PER_MM, (s.y + s.side / 2) * PX_PER_MM]),          // on the cut line
-  ] });
-  const dark = p => p.every(v => v < 60), white = p => p.every(v => v > 245);
-  const markPx = px.slice(0, P.marks.length), islandPx = px[P.marks.length], besidePx = px[P.marks.length + 1];
-  check(`${kind}: every mark prints black where the geometry puts it`, markPx.every(dark), JSON.stringify(markPx));
-  const edgePx = px.slice(P.marks.length + 2);
-  if (P.outline) {
-    check(`${kind}: the outline prints on every sticker's edge`, edgePx.every(dark), edgePx.filter(p => !dark(p)).length + " of " + edgePx.length + " not dark");
-  }
-  check(`${kind}: the first sticker prints where its island is, on white paper`, !white(islandPx) && white(besidePx),
-    JSON.stringify([islandPx, besidePx]));
-
-  /* (3) the cut files */
-  const rects = [...job.svg.matchAll(/<rect [^>]*>/g)].map(m => m[0]);
-  const num = (s, a) => parseFloat((s.match(new RegExp(" " + a + '="([\\d.]+)"')) || [])[1]);
-  check(`${kind}: the SVG cut file is Letter in millimetres`, /width="215\.9mm"/.test(job.svg) && /height="279\.4mm"/.test(job.svg) && /viewBox="0 0 215\.9 279\.4"/.test(job.svg));
-  check(`${kind}: …one cut path per sticker, on its island`, rects.length === isl.length &&
-    rects.every((r, i) => Math.abs(num(r, "x") - isl[i].x) < 0.01 && Math.abs(num(r, "y") - isl[i].y) < 0.01 &&
-                          Math.abs(num(r, "width") - isl[i].side) < 0.01 && Math.abs(num(r, "rx") - isl[i].r) < 0.01),
-    rects.length + " paths");
-  const polys = job.dxf.split(/\n/).filter(l => l.trim() === "POLYLINE").length;
-  const v1 = job.dxf.match(/VERTEX\n\s*8\nCUT\n\s*10\n([\d.]+)\n\s*20\n([\d.]+)/);
-  check(`${kind}: the DXF cut file has the same paths, in inches`, polys === isl.length && /\$INSUNITS\n\s*70\n1\b/.test(job.dxf) &&
-    v1 && Math.abs(+v1[1] - (isl[0].x + isl[0].r) / 25.4) < 0.001 && Math.abs(+v1[2] - (P.h - isl[0].y) / 25.4) < 0.001,
-    polys + " polylines");
-}
-
-/* (4) the Print menu: a button for each machine */
 if (ready) {
-  const kinds = await page.evaluate(() => Array.from(document.querySelectorAll("#pdfMenu [data-cutter]")).map(b => b.dataset.cutter));
-  check("the Print menu has a button for each machine", KINDS.every(k => kinds.includes(k)), kinds.join(", "));
-  await page.evaluate(() => { window.printSheet = j => { window.__printed = j.kind; j.frame.remove(); }; });
+  /* (1)-(2) the appendix as laid out */
+  const laid = await page.evaluate(async kinds => {
+    const { frame, sheets } = await buildPrintFrame();
+    const d = frame.contentDocument, sh = Array.from(d.querySelectorAll(".pp-sheet"));
+    const T = DBPrint.trimMm(model), n = (model.stickers.items || []).length;
+    const keys = sheets.map(s => s.key), out = { keys, pages: {} };
+    for (const kind of kinds) {
+      const i = keys.indexOf("appendix." + kind);
+      if (i < 0) { continue; }
+      const s = sh[i], r = s.getBoundingClientRect(), b = parseFloat(getComputedStyle(d.querySelector(".pp-sheet:not(.pp-full)")).paddingLeft);
+      const pxmm = (r.width - 2 * b) / T.w;                       // px to the mm, on the trim
+      const mmBox = e => { const q = e.getBoundingClientRect(); return { x: (q.left - r.left - b) / pxmm, y: (q.top - r.top - b) / pxmm, w: q.width / pxmm, h: q.height / pxmm }; };
+      const marks = Array.from(s.querySelectorAll("svg .mk")).map(mmBox);
+      const isl = Array.from(s.querySelectorAll(".pp-appx-st")).map(mmBox);
+      // anything with its own text, or a picture, that runs off its sticker
+      const spill = Array.from(s.querySelectorAll(".pp-appx-st")).filter(st => {
+        const q = st.getBoundingClientRect();
+        return Array.from(st.querySelectorAll("*")).some(e => {
+          const own = Array.from(e.childNodes).some(c => c.nodeType === 3 && /\S/.test(c.nodeValue)) || /^(svg|IMG)$/.test(e.tagName);
+          const z = e.getBoundingClientRect();
+          return own && z.width && (z.left < q.left - 1 || z.right > q.right + 1 || z.top < q.top - 1 || z.bottom > q.bottom + 1);
+        });
+      }).length;
+      out.pages[kind] = { marks, isl, spill, geo: DBPrint.cutterPage(kind, T, n), text: s.textContent.replace(/\s+/g, " ").trim().slice(0, 400) };
+    }
+    frame.remove();
+    return out;
+  }, KINDS);
+
+  const at = laid.keys.indexOf("appendix.silhouette"), back = laid.keys.indexOf("footer"), lastCont = laid.keys.map(k => /\.cont$/.test(k)).lastIndexOf(true);
+  check("the appendix is a page per machine, after the Continued pages, before the back cover",
+    at > lastCont && laid.keys.slice(at, at + 3).join() === KINDS.map(k => "appendix." + k).join() && at + 3 <= back,
+    laid.keys.slice(Math.max(0, at - 1), at + 4).join(", "));
+  check("the sticker page itself stays (the Cricut's sheet)", laid.keys.includes("stickers"));
+
+  for (const kind of KINDS) {
+    const p = laid.pages[kind];
+    if (!p) { check(`${kind}: has its page`, false); continue; }
+    const G = p.geo, near = (a, b) => Math.abs(a - b) < TOL_MM;
+    const same = (a, b) => near(a.x, b.x) && near(a.y, b.y) && near(a.w, b.w) && near(a.h, b.h);
+    check(`${kind}: the marks print where the geometry puts them, from the trim`,
+      p.marks.length === G.marks.length && G.marks.every((m, i) => same(m, p.marks[i])),
+      p.marks.length + " of " + G.marks.length);
+    check(`${kind}: every sticker on its island`, p.isl.length === 12 && G.islands.every((s, i) => same({ x: s.x, y: s.y, w: s.side, h: s.side }, p.isl[i])),
+      p.isl.length + " stickers");
+    check(`${kind}: no sticker within 3 mm of a mark, all inside the trim`,
+      G.islands.every(s => s.x > 0 && s.y > 0 && s.x + s.side < G.w && s.y + s.side < G.h &&
+        G.marks.every(m => m.x + m.w + 3 < s.x || s.x + s.side + 3 < m.x || m.y + m.h + 3 < s.y || s.y + s.side + 3 < m.y)));
+    check(`${kind}: nothing on a sticker runs off it`, p.spill === 0, p.spill + " stickers spill");
+    check(`${kind}: the page says how to cut it`, /100 ?%/.test(p.text) && (kind !== "silhouette" || (/Type 1/.test(p.text) && /10 mm/.test(p.text))), p.text.slice(0, 90));
+  }
+  const sil = laid.pages.silhouette && laid.pages.silhouette.geo;
+  if (sil) {
+    check("silhouette: a 5 mm square 10 mm in from the trim's top-left, 20 mm L-brackets at two corners",
+      Math.abs(sil.marks[0].x - 10) < 0.01 && Math.abs(sil.marks[0].w - 5) < 0.01 && sil.marks.length === 5);
+  }
+  check("scanncut: no marks, an outline round each sticker", laid.pages.scanncut && laid.pages.scanncut.marks.length === 0 && laid.pages.scanncut.geo.outline === true);
+  check("crosshair: three crosshairs", laid.pages.crosshair && laid.pages.crosshair.marks.length === 6);
+
+  /* (3)-(4) the Print menu and the cut files */
+  const menu = await page.evaluate(() => Array.from(document.querySelectorAll("#pdfMenu button")).map(b => b.id || b.dataset.cutter || ""));
+  check("the Cricut PNG is the default, first of the sticker outputs", menu.indexOf("cutBtn") >= 0 && menu.indexOf("cutBtn") < menu.indexOf("cutFilesBtn"), menu.join(", "));
+  check("the per-machine Letter sheets are gone", !menu.some(m => KINDS.includes(m)));
+  const saved = {};
+  page.on("download", async d => { saved[d.suggestedFilename()] = fs.readFileSync(await d.path(), "utf8"); });
   await page.click("#pdfMenuBtn");
-  const saved = [];
-  page.on("download", d => saved.push(d.suggestedFilename()));
-  await page.click('#pdfMenu [data-cutter="silhouette"]');
-  await page.waitForFunction(() => window.__printed, null, { timeout: 30000 });
-  await page.waitForTimeout(500);
-  check("Silhouette saves its cut files and prints the sheet",
-    saved.includes("daily-bread-stickers-silhouette-cut.svg") && saved.includes("daily-bread-stickers-silhouette-cut.dxf") &&
-    await page.evaluate(() => window.__printed === "silhouette"), saved.join(", "));
-  const t = await page.evaluate(() => document.querySelector("#toast")?.textContent || "");
-  check("…and says how to set the machine up", /Type 1/.test(t) && /10 mm/.test(t) && /100 ?%/.test(t), t.slice(0, 120));
+  await page.click("#cutFilesBtn");
+  await page.waitForFunction(() => /Cut files saved/.test(document.querySelector("#toast")?.textContent || ""), null, { timeout: 20000 });
+  await page.waitForTimeout(800);
+  for (const kind of KINDS) {
+    const svg = saved[`daily-bread-stickers-${kind}-cut.svg`] || "", dxf = saved[`daily-bread-stickers-${kind}-cut.dxf`] || "";
+    const G = laid.pages[kind] && laid.pages[kind].geo;
+    const rects = [...svg.matchAll(/<rect [^>]*>/g)].map(m => m[0]);
+    const num = (s, a) => parseFloat((s.match(new RegExp(" " + a + '="([\\d.]+)"')) || [])[1]);
+    check(`${kind}: the SVG cut file is the trim, in mm, one path per sticker on its island`,
+      G && new RegExp(`width="${G.w}mm"`).test(svg) && new RegExp(`height="${G.h}mm"`).test(svg) && rects.length === G.islands.length &&
+      rects.every((r, i) => Math.abs(num(r, "x") - G.islands[i].x) < 0.01 && Math.abs(num(r, "y") - G.islands[i].y) < 0.01 && Math.abs(num(r, "width") - G.islands[i].side) < 0.01),
+      rects.length + " paths");
+    const polys = dxf.split(/\n/).filter(l => l.trim() === "POLYLINE").length;
+    const v1 = dxf.match(/VERTEX\n\s*8\nCUT\n\s*10\n([\d.]+)\n\s*20\n([\d.]+)/);
+    check(`${kind}: the DXF has the same paths, in inches from the trim's bottom-left`,
+      G && polys === G.islands.length && /\$INSUNITS\n\s*70\n1\b/.test(dxf) && v1 &&
+      Math.abs(+v1[1] - (G.islands[0].x + G.islands[0].r) / 25.4) < 0.001 && Math.abs(+v1[2] - (G.h - G.islands[0].y) / 25.4) < 0.001,
+      polys + " polylines");
+  }
 }
 
 await browser.close();
