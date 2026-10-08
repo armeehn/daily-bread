@@ -44,9 +44,11 @@ pink.
 | Colour | CMYK swatches named `DB …` |
 
 Page 1 is the front cover: the cover art alone, bled on every edge, with the
-price stamp. Page 2 is the masthead and page 36 the back cover. The issue fills
-all 36 pages, a multiple of four, so there is no spare; when an issue runs
-short, the press puts the blanks before the back cover.
+price stamp. Page 2 is the masthead; the last page is the back cover. Before it
+come the Continued pages, then the appendix: the sticker sheet once for each
+cutting machine (Silhouette, Brother ScanNCut, crosshairs), with its marks.
+The press pads the issue to a multiple of four with spare pages before the
+back cover; use one for an ad, a house notice or an extra piece.
 
 ### Layers
 
@@ -63,7 +65,7 @@ short, the press puts the blanks before the back cover.
 | --- | --- | --- |
 | A (light) | pages on bone/paper grounds | folio and running foot in ink, mirrored left/right |
 | B (dark) | pages on ink/dark grounds | the same, reversed in bone |
-| none | covers (1 and 36) and the masthead (2) | nothing: no folio on a cover |
+| none | the covers, the masthead (2) and the appendix | nothing: no folio on a cover or beside a cutter's marks |
 
 ### Paragraph styles
 

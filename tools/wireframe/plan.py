@@ -123,6 +123,6 @@ COVERS = {"cover", "hero", "footer"}           # the cover art, the masthead pag
 def master_for(page, spec):
     """The master a page takes: none on the covers (no folio on a cover), "B"
     (the foot reversed, in bone) on a dark ground, "A" otherwise."""
-    if page["key"] in COVERS:
+    if page["key"] in COVERS or page["key"].startswith("appendix."):   # an appendix page carries a cutter's marks
         return None
     return "B" if page["ground"] in dark_swatches(spec) else "A"

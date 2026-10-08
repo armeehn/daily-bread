@@ -518,7 +518,7 @@ const wl = await page.evaluate(async () => {
   const cont = cs && { scale: cs.scale, sheet: ci + 1, of: sheets.length,
     split: count(main.unit.querySelector(".prose")) - count(jump) - 1 + count(cs.unit.querySelector(".pp-cont-body")),  // less the drop cap
     jump: jump.textContent, head: cs.unit.querySelector(".pp-cont-k").textContent,
-    beforeBack: sheets.slice(ci + 1).every(s => /\.cont$|^footer$/.test(s.key)) };
+    beforeBack: sheets.slice(ci + 1).every(s => /\.cont$|^appendix\.|^footer$/.test(s.key)) };   // back matter only
   frame.remove();
   model.letter.paragraphs[model.letter.paragraphs.length - 1] += " " + Array(400).fill("word").join(" ");
   const b = await measureWordLimits();

@@ -61,7 +61,8 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
                         const b = f.getBoundingClientRect(), bl = parseFloat(getComputedStyle(d.querySelector(".pp-sheet:not(.pp-full)")).paddingLeft);
                         return b.left >= s.left + bl && b.top >= s.top + bl && b.right <= s.right - bl && b.bottom <= s.bottom - bl; })() };
       // anything printed past the trim is cut off: every visible box on a sheet
-      // must sit inside it (the cover art alone is meant to bleed)
+      // must sit inside it (the cover art alone is meant to bleed; the appendix
+      // pages are full sheets too, but their ink stays on the trim)
       const spill = [], cardSpill = [];
       // what prints is ink: text, pictures, rules, a card's border or fill; a
       // section's own ground may run into the bleed
@@ -70,7 +71,7 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
         (parseFloat(cs.borderBottomWidth) > 0 && cs.borderBottomStyle !== "none") ||
         (cs.backgroundColor !== "rgba(0, 0, 0, 0)" && cs.backgroundColor !== "transparent" && !el.matches(".pp-fit > *"));
       d.querySelectorAll(".pp-sheet").forEach((sh, i) => {
-        if (sh.classList.contains("pp-full")) { return; }
+        if (sh.querySelector(".pp-cover")) { return; }
         const r = sh.getBoundingClientRect(), b = parseFloat(getComputedStyle(sh).paddingLeft);
         const trim = { left: r.left + b, top: r.top + b, right: r.right - b, bottom: r.bottom - b };
         let worst = null;
@@ -115,7 +116,7 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
     check("nothing prints past the trim", !spill.length, spill.join("; ") || "every sheet");
     check("…nor out of the card it is printed in", !cardSpill.length, cardSpill.join("; ") || "every card");
     check("text pages never print larger than the magazine's one text size",
-      info.sheets.filter(s => !/^(cover|hero|footer|comics|art|stickers)$/.test(s.key)).every(s => s.scale <= 0.8 + 1e-6));
+      info.sheets.filter(s => !/^(cover|hero|footer|comics|art|stickers|appendix\..+)$/.test(s.key)).every(s => s.scale <= 0.8 + 1e-6));
 
     /* ---- (2) the products ---- */
     const g = geometry(model), n = info.pages;
