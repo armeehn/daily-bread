@@ -10,79 +10,79 @@
       "section": "letter",
       "path": "letter.paragraphs",
       "words": 104,
-      "capacity": 349,
-      "first": 94,
-      "continued": 255
+      "capacity": 395,
+      "first": 107,
+      "continued": 288
     },
     {
       "section": "contents",
       "path": "contents.dek",
       "words": 28,
-      "capacity": 39
+      "capacity": 36
     },
     {
       "section": "history",
       "path": "history.paragraphs",
       "words": 97,
-      "capacity": 511,
-      "first": 310,
-      "continued": 201
+      "capacity": 561,
+      "first": 336,
+      "continued": 225
     },
     {
       "section": "voices",
       "path": "voices.reports.0.body",
       "words": 30,
-      "capacity": 494,
-      "first": 249,
-      "continued": 245
+      "capacity": 496,
+      "first": 226,
+      "continued": 270
     },
     {
       "section": "voices",
       "path": "voices.reports.1.body",
       "words": 44,
-      "capacity": 614,
-      "first": 344,
+      "capacity": 581,
+      "first": 311,
       "continued": 270
     },
     {
       "section": "voices",
       "path": "voices.reports.2.body",
       "words": 32,
-      "capacity": 584,
-      "first": 340,
-      "continued": 244
+      "capacity": 576,
+      "first": 317,
+      "continued": 259
     },
     {
       "section": "waitlist",
       "path": "waitlist.dek",
       "words": 40,
-      "capacity": 90
+      "capacity": 101
     },
     {
       "section": "interview",
       "path": "interview.quote",
       "words": 13,
-      "capacity": 25
+      "capacity": 35
     },
     {
       "section": "calendar",
       "path": "calendar.dek",
       "words": 12,
-      "capacity": 9
+      "capacity": 10
     },
     {
       "section": "directory",
       "path": "directory.note",
       "words": 13,
-      "capacity": 59
+      "capacity": 85
     },
     {
       "section": "lab",
       "path": "lab.paragraphs",
       "words": 74,
-      "capacity": 287,
-      "first": 70,
-      "continued": 217
+      "capacity": 338,
+      "first": 85,
+      "continued": 253
     }
   ]
 }

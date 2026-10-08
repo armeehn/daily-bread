@@ -131,6 +131,13 @@ async function paginate(ctx, m, zooms, opts){
     // inside the trim, clear of the cut
     ".pp-cover .free{ position:absolute; right:" + (B + COVER_INSET) + "px; bottom:" + (B + COVER_INSET) + "px; transform:rotate(4deg) }\n" +
     ".pp-sheet .hero-grid{ grid-template-columns:1fr }\n" +
+    // a sheet's cards are narrower than the web's: a row's end note wraps under
+    // its own column instead of running out of the card
+    ".pp-sheet .list .li .end{ flex:0 1 auto; min-width:0; overflow-wrap:anywhere }\n" +
+    // the sticker sheet keeps its 4 x 3 grid (db.js caps it at 720px): its card
+    // takes the grid's width, and the page is scaled whole to fit, rather than
+    // the grid running out of a card the width of the text column
+    ".pp-sheet #stickers .card.sheet{ width:max-content; max-width:none }\n" +
     // inside a sheet nothing may start another one
     ".pp-sheet *{ break-before:auto !important; page-break-before:auto !important; break-after:auto !important; page-break-after:auto !important }\n" +
     ".pp-sheet footer{ min-height:" + A.h + "px !important }\n" +
@@ -161,8 +168,8 @@ async function paginate(ctx, m, zooms, opts){
     conts.forEach(c=>{
       const fit = fits[units.indexOf(c.main)];
       const z = c.z = pieceScale(fit, c, A, zooms[c.key] || capFor(c.key));
-      fit.style.zoom = ""; fit.style.width = (A.w / z) + "px";
-      const ok = ()=> fit.offsetHeight <= A.h / z + 0.5;
+      layAt(fit, A.w, z);
+      const ok = ()=> holds(fit, A.h);
       if(ok()) return;
       c.jump.style.display = "";
       splitPiece(doc, c, ok);
@@ -184,14 +191,14 @@ async function paginate(ctx, m, zooms, opts){
       const un = units[i];
       if(NO_FLOW.test(un.key)) continue;
       const fit = fits[i], s = Math.min(FLOW_MIN, zooms[un.key] || capFor(un.key));
-      fit.style.zoom = ""; fit.style.width = (A.w / s) + "px";
-      const ok = ()=> fit.offsetHeight <= A.h / s + 0.5;
+      layAt(fit, A.w, s);
+      const ok = ()=> holds(fit, A.h);
       if(ok()) continue;
       // a few lines over: a slightly smaller type (FLOW_SNUG) beats a near-empty sheet
       const s2 = s * FLOW_SNUG;
-      fit.style.width = (A.w / s2) + "px";
-      if(fit.offsetHeight <= A.h / s2 + 0.5){ un.cap = s2; continue; }
-      fit.style.width = (A.w / s) + "px";
+      layAt(fit, A.w, s2);
+      if(holds(fit, A.h)){ un.cap = s2; continue; }
+      layAt(fit, A.w, s);
       const rest = splitFlow(un.el, ok);
       if(!rest) continue;
       un.cap = s;
@@ -282,8 +289,8 @@ async function paginate(ctx, m, zooms, opts){
 // null when the sheet overflows with the piece empty (its pictures fill it).
 function sheetCapacity(fit, target, W, H, zoom, now, pool){
   const base = target.innerHTML;
-  fit.style.zoom = ""; fit.style.width = (W / zoom) + "px";
-  const ok = ()=> fit.offsetHeight <= H / zoom + 0.5;
+  layAt(fit, W, zoom);
+  const ok = ()=> holds(fit, H);
   const fits = n=>{ let add = ""; for(let j=0; j<n; j++) add += " " + pool[j % pool.length]; target.innerHTML = base + add; return ok(); };
   let lim;
   try{
@@ -305,8 +312,8 @@ function sheetCapacity(fit, target, W, H, zoom, now, pool){
 }
 // Words a sheet holds at `zoom` when `fill(n)` puts n words in the piece's place.
 function growCapacity(fit, W, H, zoom, fill){
-  fit.style.zoom = ""; fit.style.width = (W / zoom) + "px";
-  const fits = n=>{ fill(n); return fit.offsetHeight <= H / zoom + 0.5; };
+  layAt(fit, W, zoom);
+  const fits = n=>{ fill(n); return holds(fit, H); };
   if(!fits(0)) return null;
   let lo = 0, hi = 64;
   while(fits(hi) && hi < 40000){ lo = hi; hi *= 2; }
@@ -424,6 +431,15 @@ function splitFlow(unit, ok){
   tail(unit, rest);
   return rest.firstChild ? rest : null;
 }
+// Zoom is not linear: text set small wraps and spaces differently, so a section
+// printed at 0.78 comes out up to a tenth taller than its unzoomed height times
+// 0.78. Whether something fits is therefore measured at the zoom it prints at.
+const ZOOM_TRIES = 6;            // a scale settles in two or three
+const ZOOM_SLACK = 0.002;
+// `fit` laid out to print `W` px wide at `zoom`
+function layAt(fit, W, zoom){ fit.style.width = (W / zoom) + "px"; fit.style.zoom = zoom !== 1 ? String(zoom) : ""; }
+// whether it then holds `H` px, as printed
+function holds(fit, H){ return fit.getBoundingClientRect().height <= H + 0.5; }
 // The scale `u` prints at on a sheet whose trim is A (px), never above `cap`, and
 // the width it is laid out at. Two ways to fit a tall section: shrink it as laid
 // out (keeps its columns), or lay it out wider and shrink that (text reflows into
@@ -434,7 +450,16 @@ function bestFit(fit, u, A, cap, flowable, hint){
   const at = w=>{ fit.style.width = w + "px"; fit.style.zoom = "";
     // content wider than its box (a row of cards that will not wrap) counts too
     const wide = Math.max(w, fit.scrollWidth, u.scrollWidth);
-    return { w, wide, s: Math.min(cap, A.w / wide, A.h / fit.offsetHeight) }; };
+    let s = Math.min(cap, A.w / wide, A.h / fit.offsetHeight);
+    // the estimate is unzoomed; what prints is zoomed, and comes out larger
+    for(let k = 0; k < ZOOM_TRIES; k++){
+      fit.style.zoom = String(s);
+      const r = fit.getBoundingClientRect(), over = Math.max(r.height / A.h, wide * s / A.w);
+      if(over <= 1 + ZOOM_SLACK) break;
+      s = s / over * (1 - ZOOM_SLACK);
+    }
+    fit.style.zoom = "";
+    return { w, wide, s }; };
   let best = at(A.w / cap);
   // the width the run-on check measures at: a section that passed it fits at FLOW_MIN there
   if(flowable){ const f = at(A.w / Math.min(cap, FLOW_MIN)); if(f.s > best.s) best = f; }

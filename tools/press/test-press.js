@@ -47,7 +47,7 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
     await page.evaluate(() => localStorage.clear());
     await page.reload();
     await page.waitForFunction(() => typeof buildPrintFrame === "function");
-    const { studio, cover } = await page.evaluate(async () => {
+    const { studio, cover, spill, cardSpill } = await page.evaluate(async () => {
       const { frame, sheets } = await buildPrintFrame();
       const out = sheets.map(s => ({ key: s.key, label: s.label, scale: +s.scale.toFixed(3) }));
       // the cover art's sheet: how much of it the picture covers, and whether the masthead kept an inset
@@ -60,8 +60,41 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
                       stamp: (() => { const f = sheet.querySelector(".free"); if (!f) { return false; }
                         const b = f.getBoundingClientRect(), bl = parseFloat(getComputedStyle(d.querySelector(".pp-sheet:not(.pp-full)")).paddingLeft);
                         return b.left >= s.left + bl && b.top >= s.top + bl && b.right <= s.right - bl && b.bottom <= s.bottom - bl; })() };
+      // anything printed past the trim is cut off: every visible box on a sheet
+      // must sit inside it (the cover art alone is meant to bleed)
+      const spill = [], cardSpill = [];
+      // what prints is ink: text, pictures, rules, a card's border or fill; a
+      // section's own ground may run into the bleed
+      const own = el => Array.from(el.childNodes).some(n => n.nodeType === 3 && /\S/.test(n.nodeValue));
+      const ink = (el, cs) => own(el) || /^(IMG|SVG|CANVAS|HR|svg)$/.test(el.tagName) ||
+        (parseFloat(cs.borderBottomWidth) > 0 && cs.borderBottomStyle !== "none") ||
+        (cs.backgroundColor !== "rgba(0, 0, 0, 0)" && cs.backgroundColor !== "transparent" && !el.matches(".pp-fit > *"));
+      d.querySelectorAll(".pp-sheet").forEach((sh, i) => {
+        if (sh.classList.contains("pp-full")) { return; }
+        const r = sh.getBoundingClientRect(), b = parseFloat(getComputedStyle(sh).paddingLeft);
+        const trim = { left: r.left + b, top: r.top + b, right: r.right - b, bottom: r.bottom - b };
+        let worst = null;
+        sh.querySelectorAll(".pp-fit *").forEach(el => {
+          const e = el.getBoundingClientRect(), cs = getComputedStyle(el);
+          if (!e.width || !e.height || cs.visibility === "hidden" || +cs.opacity === 0 || !ink(el, cs)) { return; }
+          const over = Math.max(trim.left - e.left, trim.top - e.top, e.right - trim.right, e.bottom - trim.bottom);
+          if (over > 1 && (!worst || over > worst.over)) {
+            worst = { over: Math.round(over), el: el.tagName.toLowerCase() + (el.className && typeof el.className === "string" ? "." + el.className.trim().split(/\s+/).join(".") : "") };
+          }
+        });
+        if (worst) { spill.push(`${out[i] ? out[i].label : i} (${worst.el} +${worst.over}px)`); }
+        // nor out of the card it is printed in
+        sh.querySelectorAll(".card").forEach(card => {
+          const c = card.getBoundingClientRect();
+          const out2 = Array.from(card.querySelectorAll("*")).find(el => {
+            const e = el.getBoundingClientRect(), cs = getComputedStyle(el);
+            return e.width && own(el) && cs.visibility !== "hidden" && (e.right > c.right + 1 || e.left < c.left - 1 || e.bottom > c.bottom + 1);
+          });
+          if (out2) { cardSpill.push(`${out[i] ? out[i].label : i} (“${out2.textContent.trim().slice(0, 24)}”)`); }
+        });
+      });
       frame.remove();
-      return { studio: out, cover };
+      return { studio: out, cover, spill, cardSpill };
     });
     await page.close();
     server.close();
@@ -79,6 +112,8 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
     check("…edge to edge: the picture fills the trim and the bleed", cover.full);
     check("…and the masthead page no longer carries an inset of it", !cover.inset);
     check("…with the price stamp on the cover, inside the trim", cover.stamp);
+    check("nothing prints past the trim", !spill.length, spill.join("; ") || "every sheet");
+    check("…nor out of the card it is printed in", !cardSpill.length, cardSpill.join("; ") || "every card");
     check("text pages never print larger than the magazine's one text size",
       info.sheets.filter(s => !/^(cover|hero|footer|comics|art|stickers)$/.test(s.key)).every(s => s.scale <= 0.8 + 1e-6));
 
