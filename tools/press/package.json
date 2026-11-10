@@ -2,14 +2,20 @@
   "name": "daily-bread-press",
   "private": true,
   "description": "The press: DB.render(model) laid out by db-print.js in headless Chromium, then imposed and marked with pdf-lib",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "render": "node render.js",
     "test": "node test-press.js",
-    "audit": "node audit.js"
+    "audit": "node audit.js",
+    "a11y": "node ../check-a11y.js"
   },
   "dependencies": {
     "pdf-lib": "^1.17.1",
     "playwright": "1.56.1"
+  },
+  "devDependencies": {
+    "axe-core": "^4.14.0"
   }
 }

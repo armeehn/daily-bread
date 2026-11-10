@@ -55,7 +55,7 @@
   "history.ledgerKicker": "Registro / cosa è crollato e quando",
   "history.entryHd": "Voce",
   "history.statusHd": "Stato",
-  "history.method": "<span style=\"color:var(--pink);font-weight:700\">Metodo</span>: compilato da archivi cittadini, emeroteche e anziani che c'erano. Correzioni benvenute e attese.",
+  "history.method": "<span style=\"color:var(--pink-t);font-weight:700\">Metodo</span>: compilato da archivi cittadini, emeroteche e anziani che c'erano. Correzioni benvenute e attese.",
   "voices.tag": "// redazione giovani voci · non riviste. non corrette. giuste.",
   "voices.h": "Giovani voci",
   "voices.dek": "Tre reportage sul campo da autori che non possono ancora votare ma sanno già fare i conti dell'affitto. Li abbiamo pagati; non abbiamo toccato una parola.",

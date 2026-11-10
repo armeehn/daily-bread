@@ -55,7 +55,7 @@
   "history.ledgerKicker": "Sổ cái / cái gì sụp đổ khi nào",
   "history.entryHd": "Mục",
   "history.statusHd": "Trạng thái",
-  "history.method": "<span style=\"color:var(--pink);font-weight:700\">Phương pháp</span> — biên soạn từ văn khố thành phố, kho lưu báo cũ, và những bậc cao niên từng có mặt ở đó. Đón nhận và mong chờ mọi đính chính.",
+  "history.method": "<span style=\"color:var(--pink-t);font-weight:700\">Phương pháp</span> — biên soạn từ văn khố thành phố, kho lưu báo cũ, và những bậc cao niên từng có mặt ở đó. Đón nhận và mong chờ mọi đính chính.",
   "voices.tag": "// ban tiếng nói trẻ · chưa duyệt. chưa biên tập. chuẩn xác.",
   "voices.h": "Tiếng Nói Trẻ",
   "voices.dek": "Ba bài phóng sự thực địa từ những cây bút chưa được đi bầu nhưng đã tính được bài toán tiền thuê nhà. Chúng tôi đã trả thù lao cho họ; chúng tôi không đụng đến một chữ nào.",

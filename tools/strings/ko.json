@@ -55,7 +55,7 @@
   "history.ledgerKicker": "장부 / 무엇이 언제 무너졌나",
   "history.entryHd": "항목",
   "history.statusHd": "상태",
-  "history.method": "<span style=\"color:var(--pink);font-weight:700\">방법</span> — 시 기록보관소, 신문 자료실, 그리고 그 자리에 있었던 어르신들로부터 취합함. 정정은 환영이며, 예정된 수순이다.",
+  "history.method": "<span style=\"color:var(--pink-t);font-weight:700\">방법</span> — 시 기록보관소, 신문 자료실, 그리고 그 자리에 있었던 어르신들로부터 취합함. 정정은 환영이며, 예정된 수순이다.",
   "voices.tag": "// 젊은 목소리 데스크 · 검토 안 함. 편집 안 함. 정확함.",
   "voices.h": "젊은 목소리",
   "voices.dek": "아직 투표는 못 하지만 월세 계산은 이미 하는 필자들이 보낸 세 편의 현장 보고. 우리는 그들에게 원고료를 냈고, 한 글자도 손대지 않았다.",

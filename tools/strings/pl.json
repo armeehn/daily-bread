@@ -55,7 +55,7 @@
   "history.ledgerKicker": "Rejestr / co i kiedy runęło",
   "history.entryHd": "Wpis",
   "history.statusHd": "Status",
-  "history.method": "<span style=\"color:var(--pink);font-weight:700\">Metoda</span>: zestawione z miejskich archiwów, gazetowych archiwów i seniorów, którzy tam byli. Sprostowania mile widziane i oczekiwane.",
+  "history.method": "<span style=\"color:var(--pink-t);font-weight:700\">Metoda</span>: zestawione z miejskich archiwów, gazetowych archiwów i seniorów, którzy tam byli. Sprostowania mile widziane i oczekiwane.",
   "voices.tag": "// dział młodych głosów · nierecenzowane. nieredagowane. słuszne.",
   "voices.h": "Młode głosy",
   "voices.dek": "Trzy reportaże z terenu od piszących, którzy nie mogą jeszcze głosować, ale już potrafią policzyć czynsz. Zapłaciliśmy im; nie tknęliśmy ani słowa.",

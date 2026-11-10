@@ -33,13 +33,32 @@
 <style>
   :root{
     --ink:#1d1a17; --bone:#f6f1e7; --panel:#eae4d6; --paper2:#efe9db;
-    --dark:#2a2723; --muted:#8d857a;
+    --dark:#2a2723;
     --pink:#f0477d; --teal:#12b795; --orange:#fe9a0d;
+    /* Words need 4.5:1 on their ground, and the bright inks do not give it on
+       paper: pink 3.2, teal 2.3, orange 1.9. So the bright inks stay fills,
+       edges and art, and an accent that carries words changes ink:
+         -deep  on paper (BRAND.md's contrast table), and under bone words
+         -lift  on ink; only pink needs letting down, for the charcoal panels
+       A bright ground takes ink words. Muted is the press's grey, 6:1. */
+    --pink-deep:#d81150; --teal-deep:#0c7a63; --orange-deep:#a15e01;
+    --pink-lift:#f77aa1; --teal-lift:var(--teal); --orange-lift:var(--orange);
+    --muted-paper:#5e574e; --muted-ink:#b9b0a3;
+    /* the ink in use here: paper unless a rule below says the ground is ink */
+    --pink-t:var(--pink-deep); --teal-t:var(--teal-deep); --orange-t:var(--orange-deep);
+    --muted:var(--muted-paper);
     --maxw:1080px; --topbar:56px;
     --checker:repeating-conic-gradient(var(--ink) 0% 25%,var(--bone) 0% 50%) 0 0/18px 18px;
     --checker-inv:repeating-conic-gradient(var(--bone) 0% 25%,var(--ink) 0% 50%) 0 0/18px 18px;
     --harlequin:repeating-conic-gradient(from 45deg,var(--pink) 0% 25%,var(--teal) 0% 50%) 0 0/26px 26px;
   }
+  /* ink grounds, then the paper laid on them */
+  .field-ink,.field-ink .card,.hero,.backcover,.plate,header.top,.rail,footer.slim{
+    --pink-t:var(--pink-lift); --teal-t:var(--teal-lift); --orange-t:var(--orange-lift);
+    --muted:var(--muted-ink)}
+  .card,.stat,.panel,.sticker,.shop-card,.langmenu,.cover-wrap .free{
+    --pink-t:var(--pink-deep); --teal-t:var(--teal-deep); --orange-t:var(--orange-deep);
+    --muted:var(--muted-paper)}
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{
@@ -47,8 +66,8 @@
     background:var(--bone); color:var(--ink);
     -webkit-font-smoothing:antialiased; line-height:1.7; font-size:16px;
   }
-  a{color:var(--pink);text-decoration:none;transition:color .15s}
-  a:hover{color:var(--teal)}
+  a{color:var(--pink-t);text-decoration:none;transition:color .15s}
+  a:hover{color:var(--teal-t)}
   img{max-width:100%;display:block}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
   section{scroll-margin-top:52px}
@@ -56,8 +75,8 @@
   /* ---------- shared type ---------- */
   .kicker{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.18em;
     text-transform:uppercase;padding:5px 12px;background:var(--ink);color:var(--bone)}
-  .kicker.pink{background:var(--pink);color:var(--bone)}
-  .kicker.teal{background:var(--teal);color:var(--bone)}
+  .kicker.pink{background:var(--pink);color:var(--ink)}
+  .kicker.teal{background:var(--teal);color:var(--ink)}
   .kicker.orange{background:var(--orange);color:var(--ink)}
   /* .display headings are fitted per language at build time: --fit caps the
      font so the translated headline holds the same line count as English, and
@@ -67,21 +86,23 @@
   .display{font-size:min(clamp(32px,5.4vw,54px),var(--fit,999px));line-height:.96;font-weight:800;
     text-transform:uppercase;letter-spacing:-.015em;text-wrap:balance;overflow-wrap:break-word;
     min-height:calc(var(--dl,1) * .96 * clamp(32px,5.4vw,54px))}
-  .display .dot{color:var(--pink)}
+  .display .dot{color:var(--pink-t)}
   .frak{font-family:'UnifrakturMaguntia',serif;font-weight:400;line-height:.9}
   .dek{font-size:15.5px;line-height:1.7;max-width:62ch;color:#3a352e;margin-top:14px}
   .prose{font-size:15.5px;line-height:1.78;max-width:64ch}
   .prose p{margin:0 0 15px} .prose p:last-child{margin-bottom:0}
   .justify{text-align:justify;hyphens:auto}
   .meta{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-  .stamp{display:inline-block;border:2px solid var(--orange);color:var(--orange);
+  /* a link in a muted line is told by its underline, not by a second colour */
+  .meta a{color:inherit;text-decoration:underline}
+  .stamp{display:inline-block;border:2px solid var(--orange-t);color:var(--orange-t);
     font-size:11px;font-weight:700;letter-spacing:.16em;padding:7px 13px;
     transform:rotate(-2.5deg);text-transform:uppercase;white-space:nowrap;background:transparent}
-  .stamp.pink{border-color:var(--pink);color:var(--pink)}
-  .stamp.teal{border-color:var(--teal);color:var(--teal)}
-  .scribble{font-family:'Caveat',cursive;font-size:26px;line-height:1.1;color:var(--pink);
+  .stamp.pink{border-color:var(--pink-t);color:var(--pink-t)}
+  .stamp.teal{border-color:var(--teal-t);color:var(--teal-t)}
+  .scribble{font-family:'Caveat',cursive;font-size:26px;line-height:1.1;color:var(--pink-t);
     transform:rotate(-2.5deg);display:inline-block}
-  .scribble.teal{color:var(--teal)} .scribble.orange{color:var(--orange)}
+  .scribble.teal{color:var(--teal-t)} .scribble.orange{color:var(--orange-t)}
 
   /* ---------- section headers ---------- */
   .sec{padding:84px 0}
@@ -98,8 +119,8 @@
   .card > .hd{display:flex;justify-content:space-between;gap:12px;align-items:center;
     padding:10px 15px;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
     border-bottom:2px solid var(--ink);background:var(--panel)}
-  .card > .hd.pink{background:var(--pink);color:var(--bone)}
-  .card > .hd.teal{background:var(--teal);color:var(--bone)}
+  .card > .hd.pink{background:var(--pink);color:var(--ink)}
+  .card > .hd.teal{background:var(--teal);color:var(--ink)}
   .card > .hd.orange{background:var(--orange);color:var(--ink)}
   .card > .hd .r{opacity:.85}
   .card > .bd{padding:16px 18px}
@@ -121,7 +142,7 @@
 
   /* ---------- full-bleed fields ---------- */
   .field-ink{background:var(--ink);color:var(--bone)}
-  .field-ink a{color:var(--pink)} .field-ink .rule{color:var(--bone)}
+  .field-ink a{color:var(--pink-t)} .field-ink .rule{color:var(--bone)}
   .field-ink .card{background:#26221e;border-color:var(--bone);box-shadow:6px 6px 0 rgba(246,241,231,.85);color:var(--bone)}
   .field-ink .card>.hd{background:#332e28;color:var(--bone);border-color:var(--bone)}
   .field-ink .sechead .no{background:var(--bone);color:var(--ink)}
@@ -136,7 +157,7 @@
   header.top .brand{order:1;display:flex;align-items:center;text-decoration:none;color:var(--bone);
     padding:7px 0;margin-inline-end:22px}
   header.top .brand:hover{color:var(--bone)}
-  header.top .brand .mark{font-family:'UnifrakturMaguntia',serif;font-size:30px;line-height:.9;
+  header.top .brand .mark{font-family:'UnifrakturMaguntia',serif;font-size:30px;font-weight:400;line-height:.9;
     white-space:nowrap;padding-inline-end:15px}
   header.top .brand .lock{display:flex;flex-direction:column;justify-content:center;gap:4px;
     padding-inline-start:15px;border-inline-start:1px dashed rgba(246,241,231,.5)}
@@ -191,7 +212,7 @@
       justify-content:space-between;gap:10px;padding:11px 16px;
       font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
       background:#332e28;border-bottom:1px dashed rgba(246,241,231,.4)}
-    .rail-hd .r{color:var(--pink);direction:ltr;unicode-bidi:isolate}
+    .rail-hd .r{color:var(--pink-t);direction:ltr;unicode-bidi:isolate}
     .rail-list{display:flex;flex-direction:column;padding-bottom:20px}
     .rail a{--edge:transparent;--no:#b7ad9e;
       display:flex;align-items:baseline;gap:11px;padding:11px 16px;color:var(--bone);
@@ -218,7 +239,7 @@
     body:has(#shop:target) .rail a[href="#shop"],
     body:has(#stickers:target) .rail a[href="#stickers"],
     body:not(:has(.pane:target)) .rail a[href="#letter"]{
-      --edge:var(--pink);--no:var(--muted);
+      --edge:var(--pink);--no:var(--muted-paper);
       background:var(--bone);color:var(--ink);font-weight:700}
 
     /* ---- the panes ---- */
@@ -269,10 +290,10 @@
     .cover-wrap{max-width:420px}.cover-frame{box-shadow:9px 9px 0 rgba(240,71,125,.85)}}
 
   /* ---------- editor letter ---------- */
-  .letter .prose .drop{font-weight:700;background:var(--pink);color:var(--bone);padding:0 6px}
+  .letter .prose .drop{font-weight:700;background:var(--pink-deep);color:var(--bone);padding:0 6px}
   .dropcap::first-letter{font-family:'UnifrakturMaguntia',serif;font-size:4.6em;float:left;
     line-height:.66;padding:6px 12px 0 0;color:var(--ink)}
-  .signoff{font-family:'Caveat',cursive;font-size:34px;color:var(--teal);transform:rotate(-2deg);margin-top:18px}
+  .signoff{font-family:'Caveat',cursive;font-size:34px;color:var(--teal-t);transform:rotate(-2deg);margin-top:18px}
   .masthead-list .li .lab{color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
   .masthead-list .li .val{margin-left:auto;font-weight:700;text-align:right;font-size:13.5px}
 
@@ -348,7 +369,7 @@
   footer.slim{background:var(--ink);color:var(--bone);border-top:2px solid var(--bone)}
   footer.slim .finner{padding-block:13px;display:flex;align-items:center;justify-content:space-between;
     flex-wrap:wrap;gap:8px 26px}
-  footer.slim .tg{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#8d857a}
+  footer.slim .tg{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
   footer.slim .verify-note{margin-top:0;justify-content:flex-start}
   footer.slim .fswitch{margin-top:0;margin-inline-start:auto}
   /* narrow: the strip wraps to three rows, so the reserve above it grows too */
@@ -358,7 +379,7 @@
 
   .verify-note{font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-top:2px;
     display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
-  .verify-note a{color:var(--teal);text-decoration:none;border-bottom:1px dotted rgba(18,183,149,.5);padding-bottom:1px}
+  .verify-note a{color:var(--teal-t);text-decoration:none;border-bottom:1px dotted rgba(18,183,149,.5);padding-bottom:1px}
   .verify-note a:hover{color:var(--bone);border-bottom-color:var(--bone)}
   /* live self-verification badge: a coloured status dot + message, added by the
      inline verifier the full editions carry (see tools/build.js verifyNote). */
@@ -368,9 +389,9 @@
   .verify-note.np-ok   .np-dot{background:var(--teal)}
   .verify-note.np-warn .np-dot{background:var(--orange)}
   .verify-note.np-bad  .np-dot{background:var(--pink)}
-  .verify-note.np-ok   .np-msg{color:var(--teal)}
-  .verify-note.np-warn .np-msg{color:var(--orange)}
-  .verify-note.np-bad  .np-msg{color:var(--pink)}
+  .verify-note.np-ok   .np-msg{color:var(--teal-t)}
+  .verify-note.np-warn .np-msg{color:var(--orange-t)}
+  .verify-note.np-bad  .np-msg{color:var(--pink-t)}
   @keyframes npPulse{50%{opacity:.35}}
   @media (prefers-reduced-motion:reduce){.verify-note.np-checking .np-dot{animation:none}}
   .annot{margin-top:14px}
@@ -412,7 +433,7 @@
   @media(max-width:860px){.print-cta{align-items:flex-start;text-align:left}}
   .printbtn{font-family:inherit;cursor:pointer;background:var(--ink);color:var(--bone);border:2px solid var(--ink);
     box-shadow:5px 5px 0 var(--pink);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:11px 18px}
-  .printbtn:hover{background:var(--pink);border-color:var(--pink);box-shadow:5px 5px 0 var(--ink)}
+  .printbtn:hover{background:var(--pink);color:var(--ink);border-color:var(--pink);box-shadow:5px 5px 0 var(--ink)}
   .printbtn:active{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--ink)}
   .card.sheet{margin-top:30px}
   .sticker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
@@ -431,7 +452,7 @@
 
   /* secondary print action: print the whole issue (stickers is the primary) */
   .printbtn.ghost{background:var(--bone);color:var(--ink);box-shadow:5px 5px 0 var(--teal)}
-  .printbtn.ghost:hover{background:var(--teal);color:var(--bone);border-color:var(--teal);box-shadow:5px 5px 0 var(--ink)}
+  .printbtn.ghost:hover{background:var(--teal);color:var(--ink);border-color:var(--teal);box-shadow:5px 5px 0 var(--ink)}
 
   /* ---------- print / PDF ----------
      Default (Ctrl/⌘+P, or the "Print the whole issue" button): the entire paper,
@@ -494,9 +515,9 @@
   header.top .vswitch a[aria-current]{background:var(--bone);color:var(--ink);font-weight:700}
   header.top .vswitch a:hover{color:var(--pink)}
   header.top .vswitch a[aria-current]:hover{color:var(--ink)}
-  .fswitch{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8d857a;margin-top:2px}
+  .fswitch{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:2px}
   .fswitch a{color:var(--bone);text-decoration:underline;margin:0 2px}
-  .fswitch a[aria-current]{color:var(--pink);text-decoration:none;font-weight:700}
+  .fswitch a[aria-current]{color:var(--pink-t);text-decoration:none;font-weight:700}
 
   /* ---------- i18n chrome: language picker + MT notice ---------- */
   header.top .bar .langpick{position:relative;order:4;align-self:center;margin-inline-start:16px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
@@ -514,8 +535,8 @@
   .langmenu a:nth-child(even){border-right:none}
   .langmenu a[aria-current]{background:var(--ink);color:var(--bone);font-weight:700}
   .langmenu a:hover{background:var(--teal);color:var(--ink)}
-  .langmenu a .en{font-size:9px;opacity:.6;letter-spacing:.04em;text-transform:uppercase}
-  .langmenu a[aria-current] .en{opacity:.85}
+  .langmenu a .en{font-size:9px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+  .langmenu a[aria-current] .en,.langmenu a:hover .en{color:inherit;opacity:.85}
   .mtnote{background:var(--orange);color:var(--ink);font-size:11px;letter-spacing:.02em;
     text-align:center;padding:8px 16px;line-height:1.55;border-bottom:2px solid var(--ink)}
   .mtnote a{color:var(--ink);text-decoration:underline;font-weight:700}
@@ -589,7 +610,7 @@
   .v-lite .rail a,.v-eink .rail a{padding-block:9px}
 
   /* ---------- version switch (base look lives in style.css) ---------- */
-  .v-lite header.top .vswitch a:hover,.v-eink header.top .vswitch a:hover{color:var(--pink)}
+  .v-lite header.top .vswitch a:hover,.v-eink header.top .vswitch a:hover{color:var(--pink-t)}
   /* brand titleblock: the pink doc number would collapse to #000 on the dark
      e-ink bar (invisible); keep it and the interior rule at full paper contrast */
   .v-eink header.top .brand .doc{color:#fff!important}
@@ -606,6 +627,8 @@
   html.v-eink{
     --ink:#000; --bone:#fff; --panel:#fff; --paper2:#fff; --dark:#000; --muted:#444;
     --pink:#000; --teal:#000; --orange:#000;
+    --pink-deep:#000; --teal-deep:#000; --orange-deep:#000; --muted-paper:#444;
+    --pink-lift:#fff; --teal-lift:#fff; --orange-lift:#fff; --muted-ink:#fff;
     --checker:none; --checker-inv:none; --harlequin:none;
   }
   .v-eink body{font-size:17px}
@@ -653,7 +676,7 @@
 <header class="top">
   <div class="wrap bar">
     <a class="brand" href="/pl/eink/">
-      <span class="mark">Daily&nbsp;Bread</span>
+      <h1 class="mark">Daily&nbsp;Bread</h1>
       <span class="lock">
         <span class="lab">Queerowy magazyn dla Okanagan</span>
         <span class="doc">DB-001 &middot; N&ordm;1</span>
@@ -675,10 +698,10 @@
       <a href="#stickers">Naklejki</a>
     </nav>
     <nav class="vswitch" aria-label="Renderowanie"><a href="/pl/">Pełna</a><a href="/pl/lite/">Lekka</a><a href="/pl/eink/" aria-current="true">E-ink</a></nav>
-    <details class="langpick"><summary aria-label="Język"><span class="globe" aria-hidden="true">🌐</span> Polski <span class="car" aria-hidden="true">▾</span></summary><div class="langmenu"><a href="/eink/" hreflang="en" lang="en"><span class="endo">English</span><span class="en">English</span></a><a href="/fr/eink/" hreflang="fr" lang="fr"><span class="endo">Français</span><span class="en">French</span></a><a href="/es/eink/" hreflang="es" lang="es"><span class="endo">Español</span><span class="en">Spanish</span></a><a href="/it/eink/" hreflang="it" lang="it"><span class="endo">Italiano</span><span class="en">Italian</span></a><a href="/pl/eink/" hreflang="pl" lang="pl" aria-current="true"><span class="endo">Polski</span><span class="en">Polish</span></a><a href="/la/eink/" hreflang="la" lang="la"><span class="endo">Latina</span><span class="en">Latin</span></a><a href="/zh-hans/eink/" hreflang="zh-Hans" lang="zh-Hans"><span class="endo">简体中文</span><span class="en">Chinese (Simplified)</span></a><a href="/zh-hant/eink/" hreflang="zh-Hant" lang="zh-Hant"><span class="endo">繁體中文</span><span class="en">Chinese (Traditional)</span></a><a href="/pa/eink/" hreflang="pa" lang="pa"><span class="endo">ਪੰਜਾਬੀ</span><span class="en">Punjabi</span></a><a href="/ko/eink/" hreflang="ko" lang="ko"><span class="endo">한국어</span><span class="en">Korean</span></a><a href="/ja/eink/" hreflang="ja" lang="ja"><span class="endo">日本語</span><span class="en">Japanese</span></a><a href="/tl/eink/" hreflang="tl" lang="tl"><span class="endo">Tagalog</span><span class="en">Tagalog</span></a><a href="/vi/eink/" hreflang="vi" lang="vi"><span class="endo">Tiếng Việt</span><span class="en">Vietnamese</span></a><a href="/hi/eink/" hreflang="hi" lang="hi"><span class="endo">हिन्दी</span><span class="en">Hindi</span></a><a href="/ar/eink/" hreflang="ar" lang="ar" dir="rtl"><span class="endo">العربية</span><span class="en">Arabic</span></a><a href="/fa/eink/" hreflang="fa" lang="fa" dir="rtl"><span class="endo">فارسی</span><span class="en">Farsi</span></a></div></details>
+    <details class="langpick"><summary aria-label="Język: Polski"><span class="globe" aria-hidden="true">🌐</span> Polski <span class="car" aria-hidden="true">▾</span></summary><div class="langmenu"><a href="/eink/" hreflang="en" lang="en"><span class="endo">English</span><span class="en">English</span></a><a href="/fr/eink/" hreflang="fr" lang="fr"><span class="endo">Français</span><span class="en">French</span></a><a href="/es/eink/" hreflang="es" lang="es"><span class="endo">Español</span><span class="en">Spanish</span></a><a href="/it/eink/" hreflang="it" lang="it"><span class="endo">Italiano</span><span class="en">Italian</span></a><a href="/pl/eink/" hreflang="pl" lang="pl" aria-current="true"><span class="endo">Polski</span><span class="en">Polish</span></a><a href="/la/eink/" hreflang="la" lang="la"><span class="endo">Latina</span><span class="en">Latin</span></a><a href="/zh-hans/eink/" hreflang="zh-Hans" lang="zh-Hans"><span class="endo">简体中文</span><span class="en">Chinese (Simplified)</span></a><a href="/zh-hant/eink/" hreflang="zh-Hant" lang="zh-Hant"><span class="endo">繁體中文</span><span class="en">Chinese (Traditional)</span></a><a href="/pa/eink/" hreflang="pa" lang="pa"><span class="endo">ਪੰਜਾਬੀ</span><span class="en">Punjabi</span></a><a href="/ko/eink/" hreflang="ko" lang="ko"><span class="endo">한국어</span><span class="en">Korean</span></a><a href="/ja/eink/" hreflang="ja" lang="ja"><span class="endo">日本語</span><span class="en">Japanese</span></a><a href="/tl/eink/" hreflang="tl" lang="tl"><span class="endo">Tagalog</span><span class="en">Tagalog</span></a><a href="/vi/eink/" hreflang="vi" lang="vi"><span class="endo">Tiếng Việt</span><span class="en">Vietnamese</span></a><a href="/hi/eink/" hreflang="hi" lang="hi"><span class="endo">हिन्दी</span><span class="en">Hindi</span></a><a href="/ar/eink/" hreflang="ar" lang="ar" dir="rtl"><span class="endo">العربية</span><span class="en">Arabic</span></a><a href="/fa/eink/" hreflang="fa" lang="fa" dir="rtl"><span class="endo">فارسی</span><span class="en">Farsi</span></a></div></details>
   </div>
 </header>
-<div class="mtnote">To jest tłumaczenie maszynowe angielskiego oryginału. Przeczytaj <a href="/eink/">wydanie angielskie</a>.</div>
+<aside class="mtnote">To jest tłumaczenie maszynowe angielskiego oryginału. Przeczytaj <a href="/eink/">wydanie angielskie</a>.</aside>
 
 <main class="issue">
 <nav class="rail" aria-label="Spis treści">
@@ -779,7 +802,7 @@
     <p class="dek">Numer №1 stworzyło dwanaścioro współautorów: piszący w wieku 17–74 lat, dwoje fotografów, jeden rysownik, jeden bardzo cierpliwy korektor. Każdy podpis jest lokalny. Każde honorarium wypłacono, zanim zapłacono drukarni.</p>
     <div class="card" style="margin-top:30px">
       <div class="hd"><span>Manifest / 48 pp</span><span class="r">DB-TOC</span></div>
-      <div class="bd"><div class="toc-grid list" id="toc"><div class="li"><span class="pgchip" style="background:#1d1a17">01</span><span class="t">Nasz powszedni Lęk — list od redakcji</span><span class="end tagend">Redakcja</span></div><div class="li"><span class="pgchip" style="background:#f0477d">04</span><span class="t">Zanim powstał most — niegrzeczna historia</span><span class="end tagend">Historia</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">08</span><span class="t">Pustostan — esej fotograficzny, Bernard Ave</span><span class="end tagend">Foto</span></div><div class="li"><span class="pgchip" style="background:#12b795">11</span><span class="t">Młode głosy — trzy reportaże z terenu</span><span class="end tagend">Opinia</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">14</span><span class="t">Okruchy — odc.1, golem szuka mieszkania</span><span class="end tagend">Komiks</span></div><div class="li"><span class="pgchip" style="background:#f0477d">16</span><span class="t">Czterdzieści lat nerwu — Miss Demeanour</span><span class="end tagend">Wywiad</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">19</span><span class="t">Efekt jeziora / Żniwa — wiersze</span><span class="end tagend">Literatura</span></div><div class="li"><span class="pgchip" style="background:#12b795">20</span><span class="t">Ściana — rozkładówka do wyrwania</span><span class="end tagend">Sztuka</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">23</span><span class="t">Pokoloruj własny upadek</span><span class="end tagend">Satyra</span></div><div class="li"><span class="pgchip" style="background:#f0477d">24</span><span class="t">Odklej mnie — arkusz naklejek</span><span class="end tagend">Naklejki</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">25</span><span class="t">Lista oczekujących — reportaż o opiece zdrowotnej</span><span class="end tagend">Sprawy</span></div><div class="li"><span class="pgchip" style="background:#12b795">28</span><span class="t">Jezioro zabiera — proza cz.1</span><span class="end tagend">Literatura</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">30</span><span class="t">Z laboratorium — ujawnienie sponsora</span><span class="end tagend">Riposte</span></div><div class="li"><span class="pgchip" style="background:#f0477d">32</span><span class="t">Spytaj miejscowego geja / Recenzje / Kalendarz</span><span class="end tagend">Serwis</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d">36</span><span class="t">Odgryzienie — krytyka restauracji</span><span class="end tagend">Jedzenie</span></div><div class="li"><span class="pgchip" style="background:#f0477d">37</span><span class="t">Rotacja — czego słuchamy</span><span class="end tagend">Muzyka</span></div><div class="li"><span class="pgchip" style="background:#12b795">38</span><span class="t">Przewijanie + Kino w parku</span><span class="end tagend">Film</span></div><div class="li"><span class="pgchip" style="background:#12b795">40</span><span class="t">Informator + Poczta Okruchów</span><span class="end tagend">Pomoc</span></div><div class="li"><span class="pgchip" style="background:#1d1a17">44</span><span class="t">Kto to zrobił — zespół, w komplecie</span><span class="end tagend">Stopka</span></div></div></div>
+      <div class="bd"><div class="toc-grid list" id="toc"><div class="li"><span class="pgchip" style="background:#1d1a17;color:var(--bone)">01</span><span class="t">Nasz powszedni Lęk — list od redakcji</span><span class="end tagend">Redakcja</span></div><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink)">04</span><span class="t">Zanim powstał most — niegrzeczna historia</span><span class="end tagend">Historia</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;color:var(--ink)">08</span><span class="t">Pustostan — esej fotograficzny, Bernard Ave</span><span class="end tagend">Foto</span></div><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink)">11</span><span class="t">Młode głosy — trzy reportaże z terenu</span><span class="end tagend">Opinia</span></div><div class="li"><span class="pgchip" style="background:#1d1a17;color:var(--bone)">14</span><span class="t">Okruchy — odc.1, golem szuka mieszkania</span><span class="end tagend">Komiks</span></div><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink)">16</span><span class="t">Czterdzieści lat nerwu — Miss Demeanour</span><span class="end tagend">Wywiad</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;color:var(--ink)">19</span><span class="t">Efekt jeziora / Żniwa — wiersze</span><span class="end tagend">Literatura</span></div><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink)">20</span><span class="t">Ściana — rozkładówka do wyrwania</span><span class="end tagend">Sztuka</span></div><div class="li"><span class="pgchip" style="background:#1d1a17;color:var(--bone)">23</span><span class="t">Pokoloruj własny upadek</span><span class="end tagend">Satyra</span></div><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink)">24</span><span class="t">Odklej mnie — arkusz naklejek</span><span class="end tagend">Naklejki</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;color:var(--ink)">25</span><span class="t">Lista oczekujących — reportaż o opiece zdrowotnej</span><span class="end tagend">Sprawy</span></div><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink)">28</span><span class="t">Jezioro zabiera — proza cz.1</span><span class="end tagend">Literatura</span></div><div class="li"><span class="pgchip" style="background:#1d1a17;color:var(--bone)">30</span><span class="t">Z laboratorium — ujawnienie sponsora</span><span class="end tagend">Riposte</span></div><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink)">32</span><span class="t">Spytaj miejscowego geja / Recenzje / Kalendarz</span><span class="end tagend">Serwis</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;color:var(--ink)">36</span><span class="t">Odgryzienie — krytyka restauracji</span><span class="end tagend">Jedzenie</span></div><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink)">37</span><span class="t">Rotacja — czego słuchamy</span><span class="end tagend">Muzyka</span></div><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink)">38</span><span class="t">Przewijanie + Kino w parku</span><span class="end tagend">Film</span></div><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink)">40</span><span class="t">Informator + Poczta Okruchów</span><span class="end tagend">Pomoc</span></div><div class="li"><span class="pgchip" style="background:#1d1a17;color:var(--bone)">44</span><span class="t">Kto to zrobił — zespół, w komplecie</span><span class="end tagend">Stopka</span></div></div></div>
     </div>
   </div>
 </section>
@@ -804,9 +827,9 @@
         <span class="kicker">Rejestr / co i kiedy runęło</span>
         <div class="card" style="margin-top:16px">
           <div class="hd"><span>Wpis</span><span>Status</span></div>
-          <div class="bd list" id="ledger"><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1913</span><span class="t">ceny owoców runęły; zaczyna się gospodarka na bony</span><span class="end"><span class="statuschip" style="background:#f0477d">Krach</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1930s</span><span class="t">zwolnienia w pakowniach, w całej dolinie</span><span class="end"><span class="statuschip" style="background:#f0477d">Krach</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1958</span><span class="t">otwarcie mostu; pracownicy promu z dnia na dzień zbędni</span><span class="end"><span class="statuschip" style="background:#fe9a0d">Zwrot</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1973</span><span class="t">ALR zamraża spekulację sadami (na krótko)</span><span class="end"><span class="statuschip" style="background:#12b795">Parada</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1980s</span><span class="t">koniec ery tartaków; początek ery wina</span><span class="end"><span class="statuschip" style="background:#fe9a0d">Zwrot</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2003</span><span class="t">pożar; 239 domów, 30 tys. ewakuowanych</span><span class="end"><span class="statuschip" style="background:#f0477d">Pożar</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2017</span><span class="t">rok powodzi; jezioro zabiera promenadę</span><span class="end"><span class="statuschip" style="background:#f0477d">Powódź</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2021</span><span class="t">kopuła ciepła; najgorętsze miejsce w Kanadzie, znowu</span><span class="end"><span class="statuschip" style="background:#f0477d">Pożar</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2024</span><span class="t">zamyka się ostatni queerowy lokal</span><span class="end"><span class="statuschip" style="background:#f0477d">Krach</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2026</span><span class="t">ten magazyn. twój ruch, miasto.</span><span class="end"><span class="statuschip" style="background:#12b795">Riposte</span></span></div></div>
+          <div class="bd list" id="ledger"><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1913</span><span class="t">ceny owoców runęły; zaczyna się gospodarka na bony</span><span class="end"><span class="statuschip" style="background:#f0477d;color:var(--ink)">Krach</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1930s</span><span class="t">zwolnienia w pakowniach, w całej dolinie</span><span class="end"><span class="statuschip" style="background:#f0477d;color:var(--ink)">Krach</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1958</span><span class="t">otwarcie mostu; pracownicy promu z dnia na dzień zbędni</span><span class="end"><span class="statuschip" style="background:#fe9a0d;color:var(--ink)">Zwrot</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1973</span><span class="t">ALR zamraża spekulację sadami (na krótko)</span><span class="end"><span class="statuschip" style="background:#12b795;color:var(--ink)">Parada</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1980s</span><span class="t">koniec ery tartaków; początek ery wina</span><span class="end"><span class="statuschip" style="background:#fe9a0d;color:var(--ink)">Zwrot</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2003</span><span class="t">pożar; 239 domów, 30 tys. ewakuowanych</span><span class="end"><span class="statuschip" style="background:#f0477d;color:var(--ink)">Pożar</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2017</span><span class="t">rok powodzi; jezioro zabiera promenadę</span><span class="end"><span class="statuschip" style="background:#f0477d;color:var(--ink)">Powódź</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2021</span><span class="t">kopuła ciepła; najgorętsze miejsce w Kanadzie, znowu</span><span class="end"><span class="statuschip" style="background:#f0477d;color:var(--ink)">Pożar</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2024</span><span class="t">zamyka się ostatni queerowy lokal</span><span class="end"><span class="statuschip" style="background:#f0477d;color:var(--ink)">Krach</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2026</span><span class="t">ten magazyn. twój ruch, miasto.</span><span class="end"><span class="statuschip" style="background:#12b795;color:var(--ink)">Riposte</span></span></div></div>
         </div>
-        <p class="meta" style="margin-top:14px;line-height:1.7"><span style="color:var(--pink);font-weight:700">Metoda</span>: zestawione z miejskich archiwów, gazetowych archiwów i seniorów, którzy tam byli. Sprostowania mile widziane i oczekiwane.</p>
+        <p class="meta" style="margin-top:14px;line-height:1.7"><span style="color:var(--pink-t);font-weight:700">Metoda</span>: zestawione z miejskich archiwów, gazetowych archiwów i seniorów, którzy tam byli. Sprostowania mile widziane i oczekiwane.</p>
       </div>
     </div>
   </div>
@@ -833,7 +856,7 @@
         <div class="bd">
           <h3 style="--fit:25px">Ujawniony w pakowni</h3>
           <p>Zrobiłem coming out na leśnej imprezie w Glenmore i najgorsze, co się stało, to że koleś o imieniu Tyler powiedział "spoko" i spytał, czy podwiozę go do domu. Nie raj, nie piekło, po prostu małe miasto uczące się szybciej niż jego rada miejska.</p>
-          <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange);border:0;padding-left:0">geografia jest ostatnią szafą</div>
+          <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange-t);border:0;padding-left:0">geografia jest ostatnią szafą</div>
         </div>
       </div>
       <div class="card report"><div class="hd teal"><span>Reportaż 03</span><span>Wiek 17 · Sezon pożarów</span></div>
@@ -857,9 +880,9 @@
         <p class="dek">Próba znalezienia queerowo-kompetentnej opieki zdrowotnej w Central Okanagan to praca na pół etatu bez świadczeń. Zadzwoniliśmy do każdej przychodni, żebyś ty nie musiał; wszyscy, do których się dodzwoniliśmy, opisali ten sam trójkąt: telefoniczna gra w kotka i myszkę, otchłań skierowań i autostrada.</p>
       </div>
       <div class="stats">
-        <div class="stat"><div class="n" style="color:var(--pink)">14</div><div class="l">Miesięcy · śr. oczekiwanie do kliniki gender</div></div>
-        <div class="stat"><div class="n" style="color:var(--orange)">2</div><div class="l">Placówek przyjmujących nowych pacjentów</div></div>
-        <div class="stat"><div class="n" style="color:var(--teal)">400</div><div class="l">km do najbliższej alternatywy</div></div>
+        <div class="stat"><div class="n" style="color:var(--pink-t)">14</div><div class="l">Miesięcy · śr. oczekiwanie do kliniki gender</div></div>
+        <div class="stat"><div class="n" style="color:var(--orange-t)">2</div><div class="l">Placówek przyjmujących nowych pacjentów</div></div>
+        <div class="stat"><div class="n" style="color:var(--teal-t)">400</div><div class="l">km do najbliższej alternatywy</div></div>
       </div>
     </div>
   </div>
@@ -967,18 +990,18 @@
     <div class="sechead"><span class="no">Sec.14</span><span class="tag">// kalendarz · sie–paź 2026 · wytnij + na lodówkę</span></div>
     <div class="split">
       <div>
-        <h2 class="display" style="--fit:54px;--dl:1">Kalendarz<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:54px;--dl:1">Kalendarz<span class="dot" style="color:var(--teal-t)">.</span></h2>
         <p class="dek">Ogłoszenia są darmowe; wyślij mailem do 15. Opcje bez alkoholu i dla każdego wieku oznaczone ◦.</p>
         <div class="card" style="margin-top:24px">
           <div class="hd"><span>Sie — Paź 2026</span><span class="r">Wytnij + na lodówkę</span></div>
-          <div class="bd list" id="events"><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Aug 07</span><span class="t"><b>Pierwszy piątek w Laboratorium ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">hala Riposte — zwiedzanie, ławki, ziny</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Aug 14</span><span class="t"><b>Kino w parku №1 ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">City Park — Paris Is Burning</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Aug 15</span><span class="t"><b>Queerowe zgromadzenie na plaży ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Gyro Beach, północny kraniec — przynieś cień do podzielenia się</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Aug 22</span><span class="t"><b>Wieczór drag pod Żniwnym Księżycem</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">dom kultury — PWYC przy wejściu</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Sep 05</span><span class="t"><b>Robienie zinów + poradnia zgłoszeń ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">makerspace w bibliotece — przynieś swoją wściekłość</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Sep 15</span><span class="t"><b>termin zgłoszeń do №2</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">sztuka, opinia, wiersze</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Sep 19</span><span class="t"><b>Spacer po sadzie z seniorem ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">ławki East Kelowna — historia pod stopami</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Oct 03</span><span class="t"><b>Wieczór kaset: the Shoebox Fonds</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">miejsce do ustalenia — pod przewodnictwem Miss Demeanour</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Oct 17</span><span class="t"><b>Premiera numeru №2 + konkurs kolorowania</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">lokalizacja w №2. oczywiście</span></span></div></div>
+          <div class="bd list" id="events"><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink);min-width:60px">Aug 07</span><span class="t"><b>Pierwszy piątek w Laboratorium ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">hala Riposte — zwiedzanie, ławki, ziny</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;color:var(--ink);min-width:60px">Aug 14</span><span class="t"><b>Kino w parku №1 ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">City Park — Paris Is Burning</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink);min-width:60px">Aug 15</span><span class="t"><b>Queerowe zgromadzenie na plaży ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Gyro Beach, północny kraniec — przynieś cień do podzielenia się</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;color:var(--ink);min-width:60px">Aug 22</span><span class="t"><b>Wieczór drag pod Żniwnym Księżycem</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">dom kultury — PWYC przy wejściu</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink);min-width:60px">Sep 05</span><span class="t"><b>Robienie zinów + poradnia zgłoszeń ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">makerspace w bibliotece — przynieś swoją wściekłość</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink);min-width:60px">Sep 15</span><span class="t"><b>termin zgłoszeń do №2</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">sztuka, opinia, wiersze</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;color:var(--ink);min-width:60px">Sep 19</span><span class="t"><b>Spacer po sadzie z seniorem ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">ławki East Kelowna — historia pod stopami</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink);min-width:60px">Oct 03</span><span class="t"><b>Wieczór kaset: the Shoebox Fonds</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">miejsce do ustalenia — pod przewodnictwem Miss Demeanour</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink);min-width:60px">Oct 17</span><span class="t"><b>Premiera numeru №2 + konkurs kolorowania</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">lokalizacja w №2. oczywiście</span></span></div></div>
         </div>
       </div>
       <div>
         <span class="kicker teal">Kino w parku / gospodarzem Daily Bread</span>
         <div class="card" style="margin-top:16px">
           <div class="hd"><span>Letni repertuar / o zmierzchu</span><span class="r">Deszcz przenosi nas do Laboratorium</span></div>
-          <div class="bd list" id="screenings"><div class="li"><span class="pgchip" style="background:#f0477d;min-width:60px">Aug 14</span><span class="t"><b>Paris Is Burning (1990)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">City Park, o zmierzchu</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;min-width:60px">Sep 04</span><span class="t"><b>My Own Private Idaho (1991)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Ben Lee Park, o zmierzchu</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;min-width:60px">Sep 25</span><span class="t"><b>The Watermelon Woman (1996)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Rutland Centennial Park, o zmierzchu</span></span></div><div class="li"><span class="fine">Darmowe / PWYC · napisy włączone · projektor + zasilanie: odzyskane ogniwa, Project HEX</span></div></div>
+          <div class="bd list" id="screenings"><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink);min-width:60px">Aug 14</span><span class="t"><b>Paris Is Burning (1990)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">City Park, o zmierzchu</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;color:var(--ink);min-width:60px">Sep 04</span><span class="t"><b>My Own Private Idaho (1991)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Ben Lee Park, o zmierzchu</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink);min-width:60px">Sep 25</span><span class="t"><b>The Watermelon Woman (1996)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Rutland Centennial Park, o zmierzchu</span></span></div><div class="li"><span class="fine">Darmowe / PWYC · napisy włączone · projektor + zasilanie: odzyskane ogniwa, Project HEX</span></div></div>
         </div>
         <div class="card" style="margin-top:24px">
           <div class="hd pink"><span>Głosuj — październikowy pokaz</span></div>
@@ -1094,7 +1117,7 @@
         <span class="kicker">W tym kwartale / tablica statusu</span>
         <div class="card" style="margin-top:16px">
           <div class="hd"><span>Q3 · 2026</span><span class="r">Rev. A</span></div>
-          <div class="bd list" id="lab-board"><div class="li"><span class="t">Plastic Works — formy v2, ławki parkowe z kubłów #5</span><span class="end"><span class="statuschip" style="background:#12b795">Na żywo</span></span></div><div class="li"><span class="t">Project HEX — stanowisko do sortowania odzyskanych ogniw</span><span class="end"><span class="statuschip" style="background:#fe9a0d">W toku</span></span></div><div class="li"><span class="t">Esh — asystent warsztatowy, obecnie tablica</span><span class="end"><span class="statuschip" style="background:#f0477d">Rysowanie</span></span></div><div class="li"><span class="t">Daily Bread №2 — głosowanie na temat</span><span class="end"><span class="statuschip" style="background:#1d1a17">Otwarte</span></span></div><div class="li"><span class="t">Pierwszy piątek, otwarte drzwi — przynieś czyste plastiki</span><span class="end"><span class="statuschip" style="background:#12b795">Cykliczne</span></span></div></div>
+          <div class="bd list" id="lab-board"><div class="li"><span class="t">Plastic Works — formy v2, ławki parkowe z kubłów #5</span><span class="end"><span class="statuschip" style="background:#12b795;color:var(--ink)">Na żywo</span></span></div><div class="li"><span class="t">Project HEX — stanowisko do sortowania odzyskanych ogniw</span><span class="end"><span class="statuschip" style="background:#fe9a0d;color:var(--ink)">W toku</span></span></div><div class="li"><span class="t">Esh — asystent warsztatowy, obecnie tablica</span><span class="end"><span class="statuschip" style="background:#f0477d;color:var(--ink)">Rysowanie</span></span></div><div class="li"><span class="t">Daily Bread №2 — głosowanie na temat</span><span class="end"><span class="statuschip" style="background:#1d1a17;color:var(--bone)">Otwarte</span></span></div><div class="li"><span class="t">Pierwszy piątek, otwarte drzwi — przynieś czyste plastiki</span><span class="end"><span class="statuschip" style="background:#12b795;color:var(--ink)">Cykliczne</span></span></div></div>
         </div>
         <div class="card" style="margin-top:24px">
           <div class="hd orange"><span>Po co finansować magazyn?</span></div>
@@ -1163,7 +1186,7 @@
     <div class="sechead"><span class="no">Sec.24</span><span class="tag">// odklej mnie · arkusz naklejek · resztka tuszu poszła tu</span></div>
     <div class="split center">
       <div>
-        <h2 class="display" style="--fit:50px;--dl:1">Odklej mnie<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="--fit:50px;--dl:1">Odklej mnie<span class="dot" style="color:var(--teal-t)">.</span></h2>
         <p class="dek">Resztka tuszu poszła tutaj. Wydrukuj stronę, potnij wzdłuż kreseczek i przyklej dolinę na bidon. Dwanaście naklejek; żadne dwa upadki nie są takie same.</p>
       </div>
       <div class="print-cta">
@@ -1179,7 +1202,7 @@
     <path d="M26 51 q11 -8 21 0 M49 49 q11 -8 21 2 M72 53 q8 -6 15 2" fill="none" stroke-width="2.3"/>
     <circle cx="45" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><circle cx="72" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><path d="M49 79 q9 7 18 0" fill="none" stroke-width="2.6"/>
     <circle cx="58" cy="74" r="1.9" fill="#f0477d" stroke="none"/>
-  </g></g></svg></div><span class="lab" style="color:#f0477d">Okruchy</span></div><div class="sticker k-s" style="--rot:1.5deg"><span class="stampbadge" style="border-color:#f0477d;color:#f0477d">Nasyp na to okruchów</span></div><div class="sticker k-s" style="--rot:-1deg"><span class="stampbadge" style="border-color:#fe9a0d;color:#fe9a0d">Darmowe / PWYC</span></div><div class="sticker k-g" style="--rot:2.5deg"><div class="ic"><svg viewBox="0 0 100 80" role="presentation"><path d="M6 60 L34 22 L58 60 Z" fill="#2a2620"/><path d="M40 60 L66 30 L94 60 Z" fill="#1d1a17"/><circle cx="80" cy="24" r="10" fill="#f0477d"/><rect x="0" y="60" width="100" height="14" fill="#12b795"/></svg></div><span class="lab" style="color:#1d1a17">Kelowna</span></div><div class="sticker k-q" style="--rot:-2deg"><span class="quote" style="color:#12b795">Scena to nie adres</span></div><div class="sticker k-m" style="--rot:1deg"><span class="mono">DB</span><span class="lab">Daily Bread</span></div><div class="sticker k-g" style="--rot:-2.5deg"><div class="ic"><svg viewBox="0 0 96 96" role="presentation"><g fill="none" stroke="#12b795" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M48 20 L64 46 M64 46 L54 44 M64 46 L62 36"/><path d="M70 60 L40 60 M40 60 L48 66 M40 60 L48 54" transform="rotate(120 48 48)"/><path d="M70 60 L40 60 M40 60 L48 66 M40 60 L48 54" transform="rotate(240 48 48)"/></g></svg></div><span class="lab" style="color:#12b795">Parry · Riposte · Recycle</span></div><div class="sticker k-g" style="--rot:1.5deg"><div class="ic"><svg viewBox="0 0 80 96" role="presentation"><path d="M40 6 C40 6 70 46 70 66 A30 30 0 1 1 10 66 C10 46 40 6 40 6 Z" fill="#12b795" stroke="#1d1a17" stroke-width="3"/><path d="M28 62 a12 12 0 0 0 12 12" fill="none" stroke="#f6f1e7" stroke-width="3"/></svg></div><span class="lab" style="color:#12b795">Jezioro zabiera</span></div><div class="sticker k-s" style="--rot:-1deg"><span class="stampbadge" style="border-color:#1d1a17;color:#1d1a17">To ja jestem precedensem</span></div><div class="sticker k-s" style="--rot:2.5deg"><span class="stampbadge" style="border-color:#f0477d;color:#f0477d">Koniec z ciszą</span></div><div class="sticker k-s" style="--rot:-2deg"><span class="stampbadge" style="border-color:#fe9a0d;color:#fe9a0d">Wypiekane w Kelowna</span></div><div class="sticker k-q" style="--rot:1deg"><span class="quote" style="color:#1d1a17">syilx okanagan · z szacunkiem</span></div></div></div>
+  </g></g></svg></div><span class="lab" style="color:var(--pink-t)">Okruchy</span></div><div class="sticker k-s" style="--rot:1.5deg"><span class="stampbadge" style="border-color:var(--pink-t);color:var(--pink-t)">Nasyp na to okruchów</span></div><div class="sticker k-s" style="--rot:-1deg"><span class="stampbadge" style="border-color:var(--orange-t);color:var(--orange-t)">Darmowe / PWYC</span></div><div class="sticker k-g" style="--rot:2.5deg"><div class="ic"><svg viewBox="0 0 100 80" role="presentation"><path d="M6 60 L34 22 L58 60 Z" fill="#2a2620"/><path d="M40 60 L66 30 L94 60 Z" fill="#1d1a17"/><circle cx="80" cy="24" r="10" fill="#f0477d"/><rect x="0" y="60" width="100" height="14" fill="#12b795"/></svg></div><span class="lab" style="color:#1d1a17">Kelowna</span></div><div class="sticker k-q" style="--rot:-2deg"><span class="quote" style="color:var(--teal-t)">Scena to nie adres</span></div><div class="sticker k-m" style="--rot:1deg"><span class="mono">DB</span><span class="lab">Daily Bread</span></div><div class="sticker k-g" style="--rot:-2.5deg"><div class="ic"><svg viewBox="0 0 96 96" role="presentation"><g fill="none" stroke="#12b795" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M48 20 L64 46 M64 46 L54 44 M64 46 L62 36"/><path d="M70 60 L40 60 M40 60 L48 66 M40 60 L48 54" transform="rotate(120 48 48)"/><path d="M70 60 L40 60 M40 60 L48 66 M40 60 L48 54" transform="rotate(240 48 48)"/></g></svg></div><span class="lab" style="color:var(--teal-t)">Parry · Riposte · Recycle</span></div><div class="sticker k-g" style="--rot:1.5deg"><div class="ic"><svg viewBox="0 0 80 96" role="presentation"><path d="M40 6 C40 6 70 46 70 66 A30 30 0 1 1 10 66 C10 46 40 6 40 6 Z" fill="#12b795" stroke="#1d1a17" stroke-width="3"/><path d="M28 62 a12 12 0 0 0 12 12" fill="none" stroke="#f6f1e7" stroke-width="3"/></svg></div><span class="lab" style="color:var(--teal-t)">Jezioro zabiera</span></div><div class="sticker k-s" style="--rot:-1deg"><span class="stampbadge" style="border-color:#1d1a17;color:#1d1a17">To ja jestem precedensem</span></div><div class="sticker k-s" style="--rot:2.5deg"><span class="stampbadge" style="border-color:var(--pink-t);color:var(--pink-t)">Koniec z ciszą</span></div><div class="sticker k-s" style="--rot:-2deg"><span class="stampbadge" style="border-color:var(--orange-t);color:var(--orange-t)">Wypiekane w Kelowna</span></div><div class="sticker k-q" style="--rot:1deg"><span class="quote" style="color:#1d1a17">syilx okanagan · z szacunkiem</span></div></div></div>
     </div>
     <p class="meta" style="margin-top:18px;line-height:1.9">Drukowane techniką riso na ścinkach. Jeśli kolor się rozjeżdża, o to właśnie chodzi.</p>
   </div>

@@ -55,7 +55,7 @@
   "history.ledgerKicker": "帳本／何時崩了什麼",
   "history.entryHd": "條目",
   "history.statusHd": "狀態",
-  "history.method": "<span style=\"color:var(--pink);font-weight:700\">方法</span>：彙整自市檔案、報紙資料室，以及當年在場的長者。歡迎且預期會有更正。",
+  "history.method": "<span style=\"color:var(--pink-t);font-weight:700\">方法</span>：彙整自市檔案、報紙資料室，以及當年在場的長者。歡迎且預期會有更正。",
   "voices.tag": "// 青年之聲部門 · 未審。未編。正確。",
   "voices.h": "青年之聲",
   "voices.dek": "三份來自作者的現場報導：他們還不能投票，卻已經會算房租的帳。我們付了稿費；一個字都沒動。",

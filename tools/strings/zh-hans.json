@@ -55,7 +55,7 @@
   "history.ledgerKicker": "账本 / 何时崩了什么",
   "history.entryHd": "条目",
   "history.statusHd": "状态",
-  "history.method": "<span style=\"color:var(--pink);font-weight:700\">方法</span> — 汇编自城市档案、报纸旧闻库，以及当年在场的长者。欢迎更正，也预料到会有。",
+  "history.method": "<span style=\"color:var(--pink-t);font-weight:700\">方法</span> — 汇编自城市档案、报纸旧闻库，以及当年在场的长者。欢迎更正，也预料到会有。",
   "voices.tag": "// 青年之声专栏 · 未经审阅。未经编辑。绝对正确。",
   "voices.h": "青年之声",
   "voices.dek": "三份来自现场的报道，作者们还不能投票，却已经会算房租的账。我们付了他们稿酬；我们一个字都没动。",

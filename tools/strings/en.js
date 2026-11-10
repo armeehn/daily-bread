@@ -90,7 +90,7 @@ module.exports = {
   'history.ledgerKicker': 'Ledger / what collapsed when',
   'history.entryHd': 'Entry',
   'history.statusHd': 'Status',
-  'history.method': '<span style="color:var(--pink);font-weight:700">Method</span> — compiled from city archives, newspaper morgues, and elders who were there. Corrections welcome and expected.',
+  'history.method': '<span style="color:var(--pink-t);font-weight:700">Method</span> — compiled from city archives, newspaper morgues, and elders who were there. Corrections welcome and expected.',
 
   /* ---- Sec.03 · young voices ---- */
   'voices.tag': '// young voices desk · unreviewed. unedited. correct.',

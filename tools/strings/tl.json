@@ -55,7 +55,7 @@
   "history.ledgerKicker": "Ledger / ano ang gumuho kailan",
   "history.entryHd": "Entry",
   "history.statusHd": "Status",
-  "history.method": "<span style=\"color:var(--pink);font-weight:700\">Pamamaraan</span> — tinipon mula sa mga arkibo ng lungsod, mga morgue ng pahayagan, at mga matatanda na naroon. Malugod at inaasahang tinatanggap ang mga pagwawasto.",
+  "history.method": "<span style=\"color:var(--pink-t);font-weight:700\">Pamamaraan</span> — tinipon mula sa mga arkibo ng lungsod, mga morgue ng pahayagan, at mga matatanda na naroon. Malugod at inaasahang tinatanggap ang mga pagwawasto.",
   "voices.tag": "// desk ng batang tinig · hindi rinepaso. hindi ineedit. tama.",
   "voices.h": "Mga Batang Tinig",
   "voices.dek": "Tatlong field report mula sa mga manunulat na hindi pa makaboto ngunit marunong nang gawin ang matematika ng upa. Binayaran namin sila; hindi namin hinawakan ang isang salita.",
