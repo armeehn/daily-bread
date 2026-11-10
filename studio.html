@@ -11,7 +11,10 @@
 <style>
   :root{
     --ink:#1d1a17; --bone:#f6f1e7; --panel:#eae4d6; --paper2:#efe9db;
-    --muted:#8d857a; --pink:#f0477d; --teal:#12b795; --orange:#fe9a0d;
+    --muted:#5e574e; --pink:#f0477d; --teal:#12b795; --orange:#fe9a0d;
+    /* an accent that carries words on a light ground: 4.5:1 on bone (BRAND.md).
+       The bright inks are for edges, fills and the dark bar. */
+    --pink-deep:#d81150; --teal-deep:#0c7a63;
     --line:rgba(29,26,23,.22);
     --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',monospace;
     --frak:'UnifrakturMaguntia',serif;
@@ -20,19 +23,22 @@
   html,body{height:100%}
   body{font-family:var(--mono);background:var(--panel);color:var(--ink);font-size:13px;line-height:1.5;overflow:hidden}
   button,input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
-  a{color:var(--pink)}
+  a{color:var(--pink-deep)}
 
   /* ---- app shell ---- */
-  .app{display:grid;grid-template-rows:auto 1fr;height:100vh}
+  .app{display:grid;grid-template-rows:auto 1fr;height:100vh;height:100dvh}
   header.bar{display:flex;align-items:center;gap:14px;background:var(--ink);color:var(--bone);
-    padding:0 16px;min-height:52px;border-bottom:2px solid var(--bone);flex-wrap:wrap;z-index:5}
+    padding:5px 16px;min-height:52px;border-bottom:2px solid var(--bone);flex-wrap:wrap;z-index:5}
   header.bar .brand{font-family:var(--frak);font-size:26px;line-height:1}
-  header.bar .sub{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#b7ad9e}
+  header.bar .sub{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#b7ad9e}
+  /* the strapline is the first thing to go when the bar gets tight: the
+     controls stay on one row down to 1280px */
+  @media(max-width:1400px){header.bar .sub{display:none}}
   header.bar .spacer{flex:1}
-  header.bar .status{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);min-width:88px;text-align:right}
+  header.bar .status{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);min-width:88px;text-align:right}
   header.bar .status.saving{color:var(--orange)}
   .btn{background:transparent;border:2px solid var(--bone);color:var(--bone);padding:6px 11px;
-    font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
+    font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
   .btn:hover{background:var(--bone);color:var(--ink)}
   .btn.pink{border-color:var(--pink);color:var(--pink)}
   .btn.pink:hover{background:var(--pink);color:var(--bone)}
@@ -49,7 +55,7 @@
     background:var(--ink);border:2px solid var(--bone);display:flex;flex-direction:column}
   .edmenu.off{display:none}
   .edmenu button{background:transparent;border:0;color:var(--bone);text-align:left;cursor:pointer;
-    padding:9px 12px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+    padding:9px 12px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
   .edmenu button:hover{background:var(--bone);color:var(--ink)}
   .edmenu button.danger{color:var(--pink)}
   .edmenu button.danger:hover{background:var(--pink);color:var(--bone)}
@@ -57,33 +63,43 @@
   .edmenu button[disabled]:hover{background:transparent;color:var(--bone)}
   .edmenu.right{left:auto;right:0}
   .edmenu hr{border:0;border-top:1px solid #5a544b;margin:3px 0}
-  .edmenu button small{display:block;font-size:9.5px;font-weight:400;letter-spacing:.02em;text-transform:none;color:#b7ad9e;margin-top:2px}
+  .edmenu button small{display:block;font-size:11px;font-weight:400;letter-spacing:.02em;text-transform:none;color:#b7ad9e;margin-top:2px}
   .edmenu button:hover small{color:inherit}
   .menu-host{position:relative;display:flex}
   /* undo / redo: icons, because the mono face has no curved arrows */
   header.bar .hist{display:flex;gap:3px}
   .btn.ico{padding:4px 7px;line-height:0}
   .btn.ico svg{width:16px;height:16px}
-  .btn kbd{font:inherit;font-size:9px;font-weight:500;letter-spacing:.04em;opacity:.65;margin-left:6px}
+  .btn kbd{font:inherit;font-size:11px;font-weight:500;letter-spacing:.04em;opacity:.65;margin-left:6px}
   select.btn{-webkit-appearance:none;appearance:none;padding-right:22px;
     background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='6'><path d='M0 0l4 6 4-6z' fill='%23f6f1e7'/></svg>") right 8px center no-repeat}
 
   .main{display:grid;grid-template-columns:minmax(360px,468px) 1fr;min-height:0}
   @media(max-width:900px){.main{grid-template-columns:1fr}.pane.preview.hide,.pane.edit.hide{display:none}}
+  /* One pane at a time below 900px: the page, or the panel. The switch is a row
+     of its own: without a third track it took the 1fr row and filled the
+     screen, and its resting label was bone on bone. */
   .tabs{display:none}
-  @media(max-width:900px){.tabs{display:flex;gap:0}.tabs .btn{flex:1;border-width:0 0 2px 0;border-color:transparent}
-    .tabs .btn.on{border-color:var(--pink);color:var(--ink)}}
+  @media(max-width:900px){
+    .app{grid-template-rows:auto auto 1fr}
+    .tabs{display:flex;gap:0;background:var(--ink);padding:0 10px 8px}
+    .tabs .btn{flex:1;padding:9px 6px;font-size:12px}
+    .tabs .btn + .btn{border-left-width:0}
+    .tabs .btn.on{background:var(--bone);color:var(--ink)}
+    .pane.edit{border-right:0}
+  }
 
   .pane{min-height:0;overflow:auto}
   .pane.edit{background:var(--bone);border-right:2px solid var(--ink)}
-  .pane.preview{background:#c9c2b4;position:relative}
+  /* the page takes the height the pane has, under a bar of any number of rows */
+  .pane.preview{background:#c9c2b4;position:relative;display:flex;flex-direction:column;overflow:hidden}
 
   /* ---- editor accordion ---- */
   .sec{border-bottom:2px solid var(--ink)}
   .sec > .head{display:flex;align-items:center;gap:10px;width:100%;background:var(--panel);
     border:0;border-bottom:1px solid var(--line);padding:11px 15px;cursor:pointer;text-align:left}
   .sec > .head:hover{background:#e3dccc}
-  .sec > .head .no{font-size:9px;font-weight:700;letter-spacing:.14em;color:var(--muted)}
+  .sec > .head .no{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--muted)}
   .sec > .head .ttl{font-weight:700;font-size:13px;letter-spacing:.02em}
   .sec > .head .rename{margin-left:8px;border:1px solid transparent;background:transparent;color:var(--muted);cursor:pointer;font-size:12px;line-height:1;width:22px;height:22px;padding:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .12s,border-color .12s,color .12s}
   .sec > .head:hover .rename,.sec > .head:focus .rename{opacity:.7}
@@ -96,7 +112,7 @@
   .sec.open > .body{display:block}
 
   .field{margin-bottom:13px}
-  .field > label{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  .field > label{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
     color:var(--muted);margin-bottom:5px;font-weight:600}
   .field input[type=text],.field textarea,.field select{width:100%;background:#fff;border:1.5px solid var(--line);
     padding:7px 9px;line-height:1.5}
@@ -110,18 +126,18 @@
 
   .imgrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .imgrow img{width:56px;height:56px;object-fit:cover;border:2px solid var(--ink)}
-  .imgrow .btn2{border:1.5px solid var(--ink);padding:6px 10px;background:#fff;cursor:pointer;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+  .imgrow .btn2{border:1.5px solid var(--ink);padding:6px 10px;background:#fff;cursor:pointer;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
   .imgrow .btn2:hover{background:var(--ink);color:var(--bone)}
 
   /* ---- lists ---- */
   .list-wrap{margin-top:6px;margin-bottom:16px}
-  .list-wrap > .lab{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
+  .list-wrap > .lab{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
     color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:8px}
   .list-wrap > .lab .count{color:var(--muted);font-weight:400}
   .item{border:1.5px solid var(--ink);background:#fbf7ee;margin-bottom:9px}
   .item > .itophd{display:flex;align-items:center;gap:6px;background:var(--panel);
     border-bottom:1.5px solid var(--line);padding:5px 8px}
-  .item > .itophd .ix{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.1em}
+  .item > .itophd .ix{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.1em}
   .item > .itophd .name{font-size:11px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
   .item > .itophd .ctl{display:flex;gap:3px}
   .item .mini{border:1px solid var(--line);background:#fff;width:22px;height:22px;cursor:pointer;
@@ -138,22 +154,27 @@
   .item > .ibody > input[type=text]:focus,.item > .ibody > textarea:focus{outline:0;border-color:var(--pink)}
   .item > .ibody > textarea{resize:vertical;min-height:60px}
   .additem{border:1.5px dashed var(--ink);background:transparent;width:100%;padding:8px;
-    cursor:pointer;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink)}
+    cursor:pointer;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink)}
   .additem:hover{background:var(--ink);color:var(--bone)}
 
-  .hint{font-size:10.5px;color:var(--muted);line-height:1.5;margin:2px 0 12px}
+  .hint{font-size:11.5px;color:var(--muted);line-height:1.5;margin:2px 0 12px}
 
   /* ---- preview ---- */
   .pvbar{position:sticky;top:0;display:flex;align-items:center;gap:10px;background:var(--ink);
-    color:#b7ad9e;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;z-index:2}
+    color:#b7ad9e;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;z-index:2}
   .pvbar .spacer{flex:1}
-  .pvbar button{background:transparent;border:1px solid #5a544b;color:#cfc6b6;padding:3px 8px;cursor:pointer;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase}
+  @media(max-width:900px){
+    .pvbar{flex-wrap:wrap;row-gap:5px}
+    .pvbar > span:first-child,.pvbar [data-align]{display:none}
+    .pvbar button{padding:6px 10px}
+  }
+  .pvbar button{background:transparent;border:1px solid #5a544b;color:#cfc6b6;padding:3px 8px;cursor:pointer;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
   .pvbar button.on{background:var(--bone);color:var(--ink);border-color:var(--bone)}
-  .frame-wrap{padding:16px;display:flex;justify-content:safe center}
+  .frame-wrap{flex:1;min-height:0;overflow:auto;padding:16px;display:flex;justify-content:safe center}
   .frame-wrap.al-left{justify-content:safe flex-start}
   .frame-wrap.al-center{justify-content:safe center}
   .frame-wrap.al-right{justify-content:safe flex-end}
-  iframe#preview{width:100%;max-width:100%;height:calc(100vh - 52px - 33px - 32px);border:2px solid var(--ink);background:#fff;box-shadow:8px 8px 0 rgba(29,26,23,.35)}
+  iframe#preview{width:100%;max-width:100%;border:2px solid var(--ink);background:#fff;box-shadow:8px 8px 0 rgba(29,26,23,.35)}
   iframe#preview.w-phone{width:390px}
   iframe#preview.w-tab{width:760px}
 
@@ -163,7 +184,7 @@
   .toast.show{opacity:1}
   .toast.show.act{pointer-events:auto}
   .toast button{background:transparent;border:1.5px solid var(--teal);color:var(--teal);padding:3px 9px;cursor:pointer;
-    font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+    font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
   .toast button:hover{background:var(--teal);color:var(--ink)}
 
   /* ---- find: one box for every field, every line of copy and every command ---- */
@@ -174,24 +195,24 @@
   .pal input{border:0;border-bottom:2px solid var(--ink);background:#fff;padding:14px 16px;font-size:15px;width:100%}
   .pal input:focus{outline:0}
   .pal-list{overflow:auto;flex:1;min-height:0}
-  .pal-list .grp{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);padding:10px 16px 4px}
+  .pal-list .grp{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);padding:10px 16px 4px}
   .pal-list .opt{display:flex;align-items:baseline;gap:10px;padding:7px 16px;cursor:pointer;border-left:3px solid transparent}
   .pal-list .opt.on{background:var(--panel);border-left-color:var(--pink)}
   .pal-list .opt .k{flex:none;width:14px;text-align:center;color:var(--muted);font-size:11px}
   .pal-list .opt .m{flex:1;min-width:0}
   .pal-list .opt .l{font-weight:600;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .pal-list .opt .s{font-size:10.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .pal-list .opt .r{flex:none;font-size:9.5px;color:var(--muted);letter-spacing:.06em}
+  .pal-list .opt .s{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pal-list .opt .r{flex:none;font-size:11px;color:var(--muted);letter-spacing:.06em}
   .pal-list mark{background:rgba(240,71,125,.22);color:inherit}
   .pal-list .none{padding:22px 16px;color:var(--muted);font-size:11.5px}
-  .pal-foot{border-top:1px solid var(--line);padding:6px 16px;font-size:9.5px;letter-spacing:.08em;color:var(--muted);background:var(--panel)}
+  .pal-foot{border-top:1px solid var(--line);padding:6px 16px;font-size:11px;letter-spacing:.08em;color:var(--muted);background:var(--panel)}
 
   /* ---- keyboard shortcuts sheet ---- */
   .keys td{padding:6px 6px;border-bottom:1px solid var(--line);font-size:12px;vertical-align:top}
   .keys td:first-child{white-space:nowrap;width:1%}
   .keys kbd{display:inline-block;border:1.5px solid var(--ink);border-bottom-width:3px;background:#fff;padding:0 5px;
-    font:600 10.5px/1.6 var(--mono);margin:0 1px}
-  .keys h4{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:14px 0 4px}
+    font:600 11px/1.6 var(--mono);margin:0 1px}
+  .keys h4{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:14px 0 4px}
   .keys h4:first-child{margin-top:0}
 
   /* ---- a field that keeps <b>/<i>/<a> gets a formatting strip while you are in it ---- */
@@ -200,11 +221,11 @@
   .field.rich > .fmt{position:absolute;top:-4px;right:0}
   .field.rich:hover > .fmt,.field.rich:focus-within > .fmt,.item:hover .fmt,.item:focus-within .fmt{opacity:1}
   .fmt button{border:1px solid var(--line);background:#fff;min-width:22px;height:20px;padding:0 5px;cursor:pointer;
-    font-size:10.5px;line-height:1;color:var(--ink)}
+    font-size:11px;line-height:1;color:var(--ink)}
   .fmt button:hover{background:var(--ink);color:var(--bone);border-color:var(--ink)}
   .fmt .fb{font-weight:700} .fmt .fi{font-style:italic}
-  .sec > .head .wl{font-size:9.5px;font-weight:600;letter-spacing:.04em;color:var(--teal);border:1px solid var(--teal);padding:1px 5px;white-space:nowrap}
-  .sec > .head .wl.over{color:var(--pink);border-color:var(--pink)}
+  .sec > .head .wl{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--ink);border:1px solid var(--teal-deep);padding:1px 5px;white-space:nowrap}
+  .sec > .head .wl.over{background:var(--pink-deep);color:var(--bone);border-color:var(--pink-deep)}
   .wlnote{margin:0 0 12px}
   .imgrow .btn2[disabled]{opacity:.35;cursor:default;background:#fff;color:inherit}
 
@@ -224,15 +245,15 @@
   .ie-crop .tl{left:-8px;top:-8px;cursor:nwse-resize} .ie-crop .br{right:-8px;bottom:-8px;cursor:nwse-resize}
   .ie-crop .tr{right:-8px;top:-8px;cursor:nesw-resize} .ie-crop .bl{left:-8px;bottom:-8px;cursor:nesw-resize}
   .ie-side{display:flex;flex-direction:column;gap:14px;font-size:11px}
-  .ie-side h5{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .ie-side h5{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
   .ie-btns{display:flex;flex-wrap:wrap;gap:4px}
-  .ie-btns button{border:1.5px solid var(--ink);background:#fff;padding:4px 8px;cursor:pointer;font-size:10.5px;font-weight:600}
+  .ie-btns button{border:1.5px solid var(--ink);background:#fff;padding:4px 8px;cursor:pointer;font-size:11px;font-weight:600}
   .ie-btns button:hover{background:var(--ink);color:var(--bone)}
   .ie-btns button.on{background:var(--ink);color:var(--bone)}
   .ie-sl{display:grid;grid-template-columns:78px 1fr 34px;align-items:center;gap:6px;margin-bottom:4px}
   .ie-sl input{width:100%;accent-color:var(--pink)}
-  .ie-sl output{text-align:right;color:var(--muted);font-size:10px}
-  .ie-info{font-size:10.5px;color:var(--muted);line-height:1.5}
+  .ie-sl output{text-align:right;color:var(--muted);font-size:11px}
+  .ie-info{font-size:11px;color:var(--muted);line-height:1.5}
 
   /* the field you jumped to from Find, briefly */
   .field.flash,.item.flash{animation:flash 1.4s ease-out}
@@ -244,7 +265,7 @@
   .wiz{background:var(--bone);border:2px solid var(--ink);box-shadow:10px 10px 0 rgba(29,26,23,.4);width:min(580px,100%);max-height:92vh;display:flex;flex-direction:column}
   .wiz .wh{display:flex;align-items:center;gap:12px;background:var(--ink);color:var(--bone);padding:11px 16px}
   .wiz .wh .t{font-family:var(--frak);font-size:23px;line-height:1}
-  .wiz .wh .sub{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#b7ad9e;line-height:1.3}
+  .wiz .wh .sub{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#b7ad9e;line-height:1.3}
   .wiz .wh .x{margin-left:auto;background:transparent;border:1.5px solid var(--bone);color:var(--bone);width:27px;height:27px;cursor:pointer;font-size:14px;line-height:1}
   .wiz .wh .x:hover{background:var(--pink);border-color:var(--pink)}
   .wiz .dots{display:flex;gap:6px;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
@@ -256,20 +277,20 @@
   .swrow{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
   .swrow .smeta{flex:1;min-width:130px}
   .swrow .smeta .l{font-size:12px;font-weight:600}
-  .swrow .smeta .h{font-size:10px;color:var(--muted)}
+  .swrow .smeta .h{font-size:11px;color:var(--muted)}
   .swrow input[type=color]{width:38px;height:30px;border:1.5px solid var(--ink);background:#fff;padding:0;cursor:pointer;flex:none}
   .swrow input.hex{width:88px;flex:none;background:#fff;border:1.5px solid var(--line);padding:6px 8px;font-family:inherit}
   .swrow input.hex:focus{outline:0;border-color:var(--pink)}
-  .cbadge{font-size:10px;font-weight:700;letter-spacing:.03em;padding:3px 7px;border:1.5px solid;white-space:nowrap;flex:none}
-  .cbadge.pass{color:var(--teal);border-color:var(--teal)}
-  .cbadge.aaa{color:var(--teal);border-color:var(--teal);background:rgba(18,183,149,.12)}
-  .cbadge.failb{color:var(--pink);border-color:var(--pink);background:rgba(240,71,125,.08)}
-  .wfix{border:1.5px solid var(--ink);background:#fff;padding:5px 9px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;flex:none}
+  .cbadge{font-size:11px;font-weight:700;letter-spacing:.03em;padding:3px 7px;border:1.5px solid;white-space:nowrap;flex:none}
+  .cbadge.pass{color:var(--teal-deep);border-color:var(--teal-deep)}
+  .cbadge.aaa{color:var(--teal-deep);border-color:var(--teal-deep);background:rgba(18,183,149,.12)}
+  .cbadge.failb{color:var(--pink-deep);border-color:var(--pink-deep);background:rgba(240,71,125,.08)}
+  .wfix{border:1.5px solid var(--ink);background:#fff;padding:5px 9px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;flex:none}
   .wfix:hover{background:var(--ink);color:var(--bone)}
   .wfix[disabled]{opacity:.3;cursor:default;background:#fff;color:var(--ink)}
   .wtable{width:100%;border-collapse:collapse;font-size:12px}
   .wtable th,.wtable td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line)}
-  .wtable th{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .wtable th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
   .wsw{display:inline-block;width:13px;height:13px;border:1px solid var(--ink);vertical-align:middle;margin-right:3px}
   .wtoggle{display:flex;align-items:center;gap:8px;margin:6px 0 4px;font-size:12px;font-weight:600}
   .wname{width:100%;background:#fff;border:1.5px solid var(--line);padding:9px 10px;font-family:inherit;font-size:14px}
@@ -281,14 +302,14 @@
   .wf .grow{flex:1}
   .wbtn{border:2px solid var(--ink);background:transparent;color:var(--ink);padding:7px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;cursor:pointer}
   .wbtn:hover{background:var(--ink);color:var(--bone)}
-  .wbtn.teal{border-color:var(--teal);color:var(--teal)} .wbtn.teal:hover{background:var(--teal);color:var(--bone)}
+  .wbtn.teal{border-color:var(--teal-deep);color:var(--teal-deep)} .wbtn.teal:hover{background:var(--teal-deep);color:var(--bone)}
   .wbtn[disabled]{opacity:.4;cursor:default} .wbtn[disabled]:hover{background:transparent;color:var(--ink)}
 
   /* ---- design mode: the edit pane switches between the inspector and all fields ---- */
   .pane.edit{display:flex;flex-direction:column;overflow:hidden}
   .modebar{display:flex;background:var(--ink);flex:none}
   .modebar button{flex:1;background:transparent;border:0;border-bottom:3px solid transparent;
-    color:#b7ad9e;padding:9px 6px;font-size:10px;font-weight:700;letter-spacing:.12em;
+    color:#b7ad9e;padding:9px 6px;font-size:11px;font-weight:700;letter-spacing:.12em;
     text-transform:uppercase;cursor:pointer;font-family:inherit}
   .modebar button.on{color:var(--bone);border-bottom-color:var(--pink)}
   .scroller{flex:1;min-height:0;overflow:auto}
@@ -296,11 +317,11 @@
 
   /* the inspector: only the fields behind whatever is selected on the page */
   .insp{padding:14px 15px 26px}
-  .insp .crumb{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .insp .crumb{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
   .insp .what{font-weight:700;font-size:15px;line-height:1.3;margin:3px 0 12px}
   .insp .acts{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 15px}
   .insp .acts button{border:1.5px solid var(--ink);background:#fff;padding:5px 9px;cursor:pointer;
-    font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+    font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
   .insp .acts button:hover{background:var(--ink);color:var(--bone)}
   .insp .acts button.del:hover{background:var(--pink);border-color:var(--pink);color:var(--bone)}
 
@@ -308,13 +329,49 @@
   .blank{padding:30px 22px;text-align:center}
   .blank .big{font-size:38px;line-height:1;margin-bottom:14px}
   .blank h3{font-size:14px;margin-bottom:9px}
-  .blank p{font-size:11.5px;line-height:1.7;color:var(--muted);margin-bottom:9px}
+  .blank p{font-size:12.5px;line-height:1.7;color:var(--muted);margin-bottom:9px}
   .blank .sep{border-top:1px solid var(--line);margin:16px 0 12px}
-  .blank .lab{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .blank .lab{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
   .jump{display:flex;flex-wrap:wrap;gap:4px;justify-content:center}
   .jump button{border:1.5px solid var(--line);background:#fff;color:var(--ink);padding:4px 8px;
-    cursor:pointer;font-size:10px;letter-spacing:.04em;font-family:inherit}
+    cursor:pointer;font-size:11px;letter-spacing:.04em;font-family:inherit}
   .jump button:hover{border-color:var(--ink);background:var(--ink);color:var(--bone)}
+
+  /* on one pane the way back to the page is a button, not a guess */
+  .back{display:none}
+  @media(max-width:900px){
+    .back{display:block;width:100%;margin:0 0 14px;border:1.5px solid var(--ink);background:var(--ink);color:var(--bone);
+      padding:10px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+    .blank .back{margin-bottom:22px}
+    /* fingers; and iOS zooms into any field set under 16px */
+    .field input[type=text],.field textarea,.field select,
+    .item > .ibody > input[type=text],.item > .ibody > textarea,.pal input{font-size:16px}
+    .insp .acts button{padding:9px 12px}
+    .jump button{padding:8px 11px}
+  }
+
+  /* ---- a phone: the brand and the status on one row, the everyday controls on
+     the next, and the edition, theme, print and publish controls behind More ---- */
+  #moreBtn{display:none}
+  @media(max-width:560px){
+    header.bar{gap:5px 8px;padding:6px 10px;position:relative}
+    header.bar .sub,header.bar .spacer,.btn kbd{display:none}
+    /* row one is the brand and the status, whatever their widths: an empty
+       full-width item after them ends the line */
+    header.bar::before{content:"";order:-1;flex:0 0 100%;height:0}
+    header.bar .brand{order:-3;flex:1 1 auto;font-size:22px}
+    header.bar .status{order:-2;min-width:0}
+    #moreBtn{display:block}
+    header.bar:not(.more) > .eds,header.bar:not(.more) > #themeSel,
+    header.bar:not(.more) > .menu-host,header.bar:not(.more) > #publishBtn{display:none}
+    header.bar.more > .eds{flex:1 1 100%}
+    header.bar.more > .eds select.btn,header.bar.more > #themeSel{flex:1;max-width:none}
+    /* a menu opens under the whole bar, not off the side of its button */
+    header.bar .eds,header.bar .menu-host{position:static}
+    header.bar .edmenu,header.bar .edmenu.right{left:10px;right:10px;top:100%}
+    /* a phone is already the phone width: the width presets only crowd the row */
+    .pvbar [data-w]{display:none}
+  }
 
   /* drag-to-reorder inside the sidebar lists */
   .item > .itophd .grip{cursor:grab;color:var(--muted);font-size:12px;line-height:1;user-select:none}
@@ -336,6 +393,8 @@
       <button class="btn ico" id="redoBtn" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" disabled><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10.5 3.5l3 3-3 3"/><path d="M13.5 6.5h-7a4 4 0 0 0 0 8h3"/></svg></button>
     </div>
     <button class="btn" id="findBtn" title="Find any field, any line of copy, or a studio command">Find<kbd class="modk">Ctrl K</kbd></button>
+    <button class="btn sq" id="helpBtn" title="How the studio works, where your work is saved, and every shortcut" aria-label="Help">?</button>
+    <button class="btn" id="moreBtn" title="Editions, themes, print and publish" aria-expanded="false">More ▾</button>
     <div class="eds menu-host">
       <select class="btn" id="editionSel" title="Switch edition. Each edition keeps its own content, theme and arranged layout in this browser, so several issues can be prepped side by side."></select>
       <button class="btn sq" id="edMenuBtn" title="New, copy, rename, import, export, reset or delete an edition" aria-haspopup="true" aria-expanded="false">⋯</button>
@@ -364,12 +423,12 @@
       </div>
     </div>
     <button class="btn teal" id="publishBtn" title="Download index.html to commit">Publish → index.html</button>
-    <span class="status" id="status">Loaded</span>
+    <span class="status" id="status" title="Your work is saved in this browser as you type. ⋯ → Export JSON keeps a copy as a file.">Loaded</span>
   </header>
 
   <div class="tabs">
+    <button class="btn" id="tabPreview">Page</button>
     <button class="btn on" id="tabEdit">Edit</button>
-    <button class="btn" id="tabPreview">Preview</button>
   </div>
 
   <div class="main">
@@ -407,7 +466,7 @@
     <input id="palIn" type="text" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="true"
       aria-controls="palList" placeholder="Find a field, a line of copy, or a command…">
     <div class="pal-list" id="palList" role="listbox"></div>
-    <div class="pal-foot">↑ ↓ move · ↵ open · esc close · try “deadline”, “pink”, “publish”, “phone”</div>
+    <div class="pal-foot">↑ ↓ move · ↵ open · esc close · try “add event”, “cover”, “pink”, “print”</div>
   </div>
 </div>
 
@@ -1970,6 +2029,12 @@ $("#preview").addEventListener("load", ()=>{
   if(designOn) enterDesign();
   buildMap();                                   // re-applies the selection outline
   if(designOn && inspStale){ inspStale = false; renderInspector(); }
+  if(revealSel){
+    revealSel = false;
+    const el = selEl(), first = $("#designPane").querySelector("input[type=text], textarea");
+    if(el){ el.scrollIntoView({ block:"center" }); }
+    if(first){ first.focus({ preventScroll:true }); }
+  }
 });
 
 $("#arrangeBtn").addEventListener("click",()=>{
@@ -1993,7 +2058,7 @@ $("#clearArrangeBtn").addEventListener("click",()=>{
   toast("Layout reset", UNDO);
 });
 
-/* mobile tabs */
+/* One pane at a time below 900px (the stylesheet's rule): the page, or the panel. */
 $("#tabEdit").addEventListener("click",()=>swap("edit"));
 $("#tabPreview").addEventListener("click",()=>swap("preview"));
 function swap(which){
@@ -2002,6 +2067,37 @@ function swap(which){
   $("#tabEdit").classList.toggle("on", which==="edit");
   $("#tabPreview").classList.toggle("on", which==="preview");
 }
+const NARROW = window.matchMedia("(max-width:900px)");
+const TAP_SETTLE_MS = 350;       // a second tap inside this is a double tap: typing on the page
+let tapTimer = null;
+
+// only a narrow window has a pane to bring forward
+function showPane(which){
+  if(NARROW.matches){ swap(which); }
+}
+
+/* A tap on the page selects, and its field is on the other pane. Bring the
+   panel up, unless a second tap turns this one into typing on the page. */
+function showPickedSoon(){
+  clearTimeout(tapTimer);
+  if(!NARROW.matches || !sel){ return; }
+
+  tapTimer = setTimeout(()=>{
+    if(sel && !inlineEl && !arrangeOn){ swap("edit"); }
+  }, TAP_SETTLE_MS);
+}
+
+/* the way back to the page; only a narrow window shows it (see .back) */
+function backButton(){
+  const b = document.createElement("button"); b.className = "back"; b.textContent = "← Back to the page";
+  b.addEventListener("click", ()=> swap("preview"));
+  return b;
+}
+
+// a window dragged narrow starts where a phone does: on the page
+NARROW.addEventListener("change", e=>{
+  if(e.matches){ swap("preview"); }
+});
 
 
 /* ============================================================================
@@ -2091,6 +2187,7 @@ let sel = null;          /* selection survives re-renders as a path, not a node 
 let designOn = true;
 let inlineEl = null;     /* element currently being typed into on the page */
 let inspStale = false;   /* rebuild the panel after the next render (row order changed) */
+let revealSel = false;   /* …and bring the selection into view (a row was added from Find) */
 let fieldsDirty = false; /* the accordion is rebuilt lazily when you switch to it */
 
 /* ---------- probe render → path ↔ node map ---------- */
@@ -2378,6 +2475,7 @@ function drawDropLine(doc, d, to){
 
 /* ---------- type straight onto the page ---------- */
 function beginInline(el){
+  clearTimeout(tapTimer);          // this tap was half of a double tap: stay on the page
   const en = entryFor(el); if(!en || en.paths.length !== 1) { pick(el); return; }
   const path = en.paths[0], v = getPath(model, path);
   // Only plain text can round-trip through the page: anything the renderer
@@ -2445,6 +2543,7 @@ function pick(el){
   } else sel = null;
   applySelection(ifDoc());
   renderInspector();
+  showPickedSoon();
 }
 
 /* the model changed from the page side: re-render, re-map, mark the accordion stale */
@@ -2459,6 +2558,7 @@ function renderInspector(){
   if(!sel){ pane.appendChild(blankPanel()); return; }
 
   const box = document.createElement("div"); box.className = "insp";
+  box.appendChild(backButton());
   const first = sel.paths[0], it = itemOf(first);
   const info = fieldInfo(first) || (it ? {label:it.list.label, type:"text", sec:it.sec}
                                        : {label:first, type:"text"});
@@ -2513,6 +2613,7 @@ function addRowBelow(it){
 // no confirm: the toast offers Undo, which is quicker than a dialog and not a guess
 function deleteRow(it){
   rowArr(it).splice(it.idx, 1); sel = null; touched("panel");
+  showPane("preview");
   toast("Deleted " + it.list.label.replace(/\s*\(.*$/,"") + " · row " + (it.idx+1), UNDO);
 }
 function rowActions(it){
@@ -2539,6 +2640,7 @@ function blankPanel(){
     '<p>Looking for something? <b>'+MODK+' K</b> finds any field, any line of copy, or a command. '+
     '<b>'+MODK+' Z</b> undoes, and <b>?</b> lists every shortcut.</p>'+
     '<div class="sep"></div><div class="lab">Jump to</div>';
+  d.insertBefore(backButton(), d.firstChild);
   const jump = document.createElement("div"); jump.className = "jump";
   (model.nav||[]).forEach(n=>{
     if(!n.href || n.href.charAt(0) !== "#") return;
@@ -2546,6 +2648,7 @@ function blankPanel(){
     b.addEventListener("click", ()=>{
       const doc = ifDoc(), t = doc && doc.querySelector(n.href);
       if(t) t.scrollIntoView({behavior:"smooth", block:"start"});
+      showPane("preview");
     });
     jump.appendChild(b);
   });
@@ -2555,6 +2658,7 @@ function blankPanel(){
 /* open the accordion at the section behind the selection and scroll to it */
 function revealInFields(sec){
   showMode("fields");
+  showPane("edit");
   if(!sec) return;
   const el = $("#fieldsPane").querySelector('.sec[data-sec="'+CSS.escape(sec.id)+'"]');
   if(!el) return;
@@ -2564,6 +2668,7 @@ function revealInFields(sec){
 /* …and straight to one field in it: focused, and flashed so the eye finds it */
 function revealField(path, sec){
   showMode("fields");
+  showPane("edit");
   const it = itemOf(path);
   sec = sec || (it && it.sec) || (fieldInfo(path) || {}).sec;
   const box = sec && $("#fieldsPane").querySelector('.sec[data-sec="'+CSS.escape(sec.id)+'"]');
@@ -2960,6 +3065,26 @@ const PLAIN = s => String(s==null?"":s).replace(/<[^>]*>/g," ").replace(/\s+/g,"
 const FOLD = s => PLAIN(s).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
 const shortLabel = l => l.label.replace(/\s*\(.*$/,"");
 let palItems = [], palRes = [], palAct = 0, palPrev = null;
+// words people put round the thing they are after; dropped when the whole phrase finds nothing
+const FILLER = ["how","do","i","to","the","a","an","my","our","this","that","of","for","in","on","is","can","where",
+                "please","want","change","edit","set","update","modify","fix","make"];
+const PICTURE_WORDS = " image picture photo";       // what people call an image field
+
+/* "Add to Events": a new row at the end of a list, selected and in view, with
+   the cursor in its first field. */
+function addRowAtEnd(l){
+  const rows = getPath(model, l.path);
+  if(!Array.isArray(rows)){ return; }
+
+  if(arrangeOn){ $("#arrangeBtn").click(); }       // Arrange hides the map; step out of it
+  if(!designOn){ showMode("design"); }
+
+  rows.push(l.strings ? (l.def != null ? l.def : "") : DB.clone(l.def || {}));
+  sel = { paths:[l.path + "." + (rows.length - 1)] };
+  revealSel = true;
+  touched("panel");
+  showPane("edit");
+}
 
 function palCommands(){
   const c = (label, run, keys, words)=> ({ kind:"cmd", label, run, keys:keys||"", hay:FOLD(label+" "+(words||"")) });
@@ -2973,7 +3098,7 @@ function palCommands(){
     c("Web PDF — print what is on screen", ()=> $("#pdfBtn").click(), "", "print pdf"),
     c("Import JSON as a new edition…", ()=> $("#importBtn").click(), "", "open load file"),
     c("New edition…", ()=> $("#edNewBtn").click(), "", "issue add create"),
-    c("Keyboard shortcuts", showKeys, "?", "help keys hotkeys"),
+    c("Help — how the studio works, and every shortcut", showKeys, "?", "keyboard keys hotkeys how saved backup"),
     c("Duplicate this edition…", ()=> $("#edDupBtn").click(), "", "copy clone issue"),
     c("Rename this edition…", ()=> $("#edRenBtn").click(), "", "issue name title"),
     c("Create an accessible theme…", openThemeWizard, "", "colour color palette contrast wcag wizard"),
@@ -2985,6 +3110,10 @@ function palCommands(){
     c("Open the preview in a new tab", ()=> $("#openTab").click(), "", "window"),
     c("Reset this edition to the default…", ()=> $("#resetBtn").click(), "", "clear start over"),
   ];
+  // "add event", "new poem": one command a list, so adding does not begin with
+  // finding a row to add below
+  DB.SCHEMA.forEach(sec=> (sec.lists||[]).forEach(l=>
+    out.push(c("Add to "+shortLabel(l)+" · "+sectionLabel(sec), ()=> addRowAtEnd(l), "", "new create insert another row line"))));
   shelf.order.forEach(id=>{
     if(id !== shelf.current) out.push(c("Open edition: "+shelf.items[id].name, ()=> switchEdition(id), "", "switch issue"));
   });
@@ -2996,7 +3125,7 @@ function palCommands(){
 }
 function palFields(){
   const out = [];
-  const add = (label, sub, v, path, type)=> out.push({ kind:"field", label, sub, path,
+  const add = (label, sub, v, path, type)=> out.push({ kind:"field", label, sub, path, type,
     value: type==="image" ? (/^data:/.test(v||"") ? "(embedded image)" : PLAIN(v)) : PLAIN(v) });
   DB.SCHEMA.forEach(sec=>{
     const sl = sectionLabel(sec);
@@ -3011,7 +3140,7 @@ function palFields(){
       });
     });
   });
-  out.forEach(o=>{ if(o.kind==="field"){ o.hay = FOLD(o.label+" "+o.sub); o.vhay = FOLD(o.value); } });
+  out.forEach(o=>{ if(o.kind==="field"){ o.hay = FOLD(o.label+" "+o.sub+(o.type==="image" ? PICTURE_WORDS : "")); o.vhay = FOLD(o.value); } });
   return out;
 }
 
@@ -3032,7 +3161,12 @@ function closePalette(restore){
   palPrev = null;
 }
 function palFilter(){
-  const q = FOLD($("#palIn").value), toks = q ? q.split(" ") : [];
+  let q = FOLD($("#palIn").value), toks = q ? q.split(" ") : [];
+  // "change cover", "how do I add an event": when the phrase as typed finds
+  // nothing, look for what is left without the filler
+  const finds = words => palItems.some(o=> words.every(w=> (o.hay+" "+(o.vhay||"")).indexOf(w) >= 0));
+  const core = toks.filter(w=> FILLER.indexOf(w) < 0);
+  if(core.length && core.length < toks.length && !finds(toks)){ toks = core; q = core.join(" "); }
   const groups = [ { t:"Commands", max:8, a:[] }, { t:"Sections", max:8, a:[] },
                    { t:"Fields", max:30, a:[] }, { t:"In the copy", max:40, a:[] } ];
   if(!toks.length){
@@ -3074,7 +3208,7 @@ function palFilter(){
   });
   if(!palRes.length){
     const n = document.createElement("div"); n.className = "none";
-    n.textContent = "Nothing matches “"+$("#palIn").value+"”. Find looks through field names, section names and the copy itself.";
+    n.textContent = "Nothing matches “"+$("#palIn").value+"”. Try one word: “cover”, “deadline”, “add”, “print”, “pink”. Find looks through field names, section names, commands and the copy itself.";
     list.appendChild(n);
   }
   palSet(0);
@@ -3118,6 +3252,12 @@ $("#palIn").addEventListener("keydown", e=>{
 });
 $("#palBack").addEventListener("mousedown", e=>{ if(e.target === $("#palBack")) closePalette(true); });
 $("#findBtn").addEventListener("click", ()=> openPalette());
+$("#helpBtn").addEventListener("click", ()=> showKeys());
+/* a phone keeps the edition, theme, print and publish controls behind More */
+$("#moreBtn").addEventListener("click", ()=>{
+  const open = $("header.bar").classList.toggle("more");
+  $("#moreBtn").setAttribute("aria-expanded", open ? "true" : "false");
+});
 
 /* a field from Find: on the page if it prints there, otherwise in All fields */
 function goField(path){
@@ -3127,6 +3267,7 @@ function goField(path){
     const en = MAP.entries.find(e=> e.el === el && e.paths.indexOf(path) >= 0);
     sel = { paths: en ? en.paths.slice() : [path] };
     applySelection(ifDoc()); renderInspector();
+    showPane("edit");
     el.scrollIntoView({ block:"center" });
     const inp = $("#designPane").querySelector('[data-path="'+CSS.escape(path)+'"]');
     if(inp){ inp.focus({ preventScroll:true }); if(inp.select) inp.select(); flashEl(inp.closest(".field")); }
@@ -3136,11 +3277,11 @@ function goField(path){
 }
 function goSection(sec){
   const el = sectionEl(sec);
-  if(designOn && el && el.isConnected){ el.scrollIntoView({ block:"start" }); return; }
+  if(designOn && el && el.isConnected){ el.scrollIntoView({ block:"start" }); showPane("preview"); return; }
   revealInFields(sec);
   if(el && el.isConnected) el.scrollIntoView({ block:"start" });
 }
-function setWidth(w){ const b = document.querySelector('.pvbar button[data-w="'+w+'"]'); if(b) b.click(); }
+function setWidth(w){ const b = document.querySelector('.pvbar button[data-w="'+w+'"]'); if(b) b.click(); showPane("preview"); }
 
 /* ---------- keyboard ---------- */
 function showKeys(){
@@ -3148,6 +3289,15 @@ function showKeys(){
   closePalette(false);
   const k = s => s.split(" ").map(x=> "<kbd>"+esc(x)+"</kbd>").join(" ");
   const rows = [
+    ["On the page", [
+      ["Click", "Open it in the panel"],
+      ["Double-click", "Type straight onto the page"],
+      ["Drag a row", "Reorder it"],
+      ["Drop an image", "Replace the picture"]]],
+    ["Your work", [
+      ["Saved", "In this browser, as you type. Clearing the browser's site data erases it."],
+      ["Keep a copy", "⋯ → Export JSON saves this edition as a file"],
+      ["Another computer", "⋯ → Import JSON opens that file there"]]],
     ["Anywhere", [
       [k(MODK+" K"), "Find a field, a line of copy, or a command"],
       [k(MODK+" Z"), "Undo"],
@@ -3160,16 +3310,11 @@ function showKeys(){
       [k(MODK+" D"), "Duplicate it"],
       [k("Delete")+" "+k(MODK+" ⌫"), "Delete it — Undo brings it back"]]],
     ["In a field that takes formatting", [
-      [k(MODK+" B")+" "+k(MODK+" I"), "Bold, italic — or use the B / I / Link strip above the field"]]],
-    ["On the page", [
-      ["Click", "Open it in the panel"],
-      ["Double-click", "Type straight onto the page"],
-      ["Drag a row", "Reorder it"],
-      ["Drop an image", "Replace the picture"]]]
+      [k(MODK+" B")+" "+k(MODK+" I"), "Bold, italic — or use the B / I / Link strip above the field"]]]
   ];
   const back = document.createElement("div"); back.className = "wiz-back show"; back.id = "keysBack";
-  back.innerHTML = '<div class="wiz keys" role="dialog" aria-label="Keyboard shortcuts">'+
-    '<div class="wh"><span class="t">Keys</span><span class="sub">keyboard<br>shortcuts</span>'+
+  back.innerHTML = '<div class="wiz keys" role="dialog" aria-label="Help">'+
+    '<div class="wh"><span class="t">Help</span><span class="sub">how the studio works<br>and every shortcut</span>'+
     '<button class="x" title="Close">✕</button></div><div class="wb">'+
     rows.map(g=> '<h4>'+esc(g[0])+'</h4><table><tbody>'+
       g[1].map(r=> '<tr><td>'+r[0]+'</td><td>'+esc(r[1])+'</td></tr>').join("")+'</tbody></table>').join("")+
@@ -3225,7 +3370,10 @@ function wireKeys(doc){
 
 /* ---------- boot ---------- */
 document.querySelectorAll(".modk").forEach(n=> n.textContent = MODK+" K");
-swap("edit");     // narrow screens show one pane at a time; the tabs said Edit but both were showing
+// narrow screens show one pane at a time, and it starts on the page: that is
+// where "click anything" happens
+swap(NARROW.matches ? "preview" : "edit");
+if(NARROW.matches){ toast("Tap anything on the page to edit it"); }
 hist();
 populateEditionSelect();
 buildEditor();

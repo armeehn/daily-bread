@@ -72,7 +72,7 @@ node tools/press/render.js --publish        # re-publish press/<edition>/ after 
 ```
 
 Tests: `cd tools/press && npm test` (the press), `npm run audit` (the print design), and
-`node db-render/test-studio-{editor,design,editions,press,cutter}.mjs` (the studio, in
+`node db-render/test-studio-{editor,design,editions,press,cutter,ease}.mjs` (the studio, in
 a real browser). CI (`.gitea/workflows/`) rebuilds and reads back the site,
 checks the `.tex` round trip and the rebrand, and renders, tests and guards
 the press booklet.
@@ -90,9 +90,15 @@ it behind a login), or from the press server on your own machine.
   reorder for every list.
 - **Undo / Redo** (`Ctrl+Z` / `Ctrl+Shift+Z`) covers every edit, per edition.
 - **Find** (`Ctrl+K`) searches field names, sections, what each field says,
-  and the studio's commands.
+  and the studio's commands. It takes a task as typed: "add event" adds a row
+  to the calendar, "change cover" finds the cover image.
 - **Formatting** — fields that print `<b>`, `<i>` and `<a>` get a B / I / Link
-  strip. `?` lists the keyboard shortcuts.
+  strip.
+- **Help** (the `?` button, or the `?` key) says how the page and the panel
+  work, where the work is saved, and lists the keyboard shortcuts.
+- **A tablet or a phone** shows one pane at a time, the page first. Tap
+  something on the page and its field comes up; Back to the page returns. A
+  phone keeps the edition, theme, print and publish controls behind More.
 - **Pictures** open in the image editor (crop, turn, flip, brightness,
   contrast, saturation, black and white) before they go in. A picture that has
   not been uploaded yet shows as a labelled slot on the page.
