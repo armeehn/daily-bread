@@ -21,7 +21,9 @@ TimeoutStopSec=20
 # RAM-oversubscribed host; one job at a time is enforced in the server, and it yields.
 Nice=5
 MemoryMax=2G
-TasksMax=64
+# Chromium alone needs well over 64 threads: at 64 its forks fail, the render
+# hangs and press.hq answers 504 (measured 2026-11-10: 64 hangs, 512 takes 2 s).
+TasksMax=512
 
 # Sandbox: the press reads the checkout (tools/press/node_modules included) and
 # the Playwright browsers in ~/.cache, and writes only its own build/ (a temp dir
