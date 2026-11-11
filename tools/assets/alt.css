@@ -45,7 +45,7 @@
   .v-lite .rail a,.v-eink .rail a{padding-block:9px}
 
   /* ---------- version switch (base look lives in style.css) ---------- */
-  .v-lite header.top .vswitch a:hover,.v-eink header.top .vswitch a:hover{color:var(--pink)}
+  .v-lite header.top .vswitch a:hover,.v-eink header.top .vswitch a:hover{color:var(--pink-t)}
   /* brand titleblock: the pink doc number would collapse to #000 on the dark
      e-ink bar (invisible); keep it and the interior rule at full paper contrast */
   .v-eink header.top .brand .doc{color:#fff!important}
@@ -62,6 +62,8 @@
   html.v-eink{
     --ink:#000; --bone:#fff; --panel:#fff; --paper2:#fff; --dark:#000; --muted:#444;
     --pink:#000; --teal:#000; --orange:#000;
+    --pink-deep:#000; --teal-deep:#000; --orange-deep:#000; --muted-paper:#444;
+    --pink-lift:#fff; --teal-lift:#fff; --orange-lift:#fff; --muted-ink:#fff;
     --checker:none; --checker-inv:none; --harlequin:none;
   }
   .v-eink body{font-size:17px}

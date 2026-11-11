@@ -58,7 +58,8 @@ Even as a separate brand, these carry over because they are correctness, not tas
 - [ ] Add the funder colophon — "Funded by Riposte Laboratories Inc." with the Riposte
       wordmark at minimum size — to the web edition footer, matching the print edition.
       This is the *correct* place for Riposte branding in this project: a credit, not a skin.
-- [ ] Audit the web edition's accent-on-accent text against the contrast table.
+- [x] Audit the web edition's accent-on-accent text against the contrast table.
+      Done 2026-11-10: words take the deep inks on paper; `tools/check-a11y.js` guards it in CI.
 
 ---
 

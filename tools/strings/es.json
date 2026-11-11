@@ -55,7 +55,7 @@
   "history.ledgerKicker": "Libro mayor / qué colapsó y cuándo",
   "history.entryHd": "Entrada",
   "history.statusHd": "Estado",
-  "history.method": "<span style=\"color:var(--pink);font-weight:700\">Método</span>: recopilado de archivos municipales, hemerotecas y mayores que estuvieron allí. Correcciones bienvenidas y esperadas.",
+  "history.method": "<span style=\"color:var(--pink-t);font-weight:700\">Método</span>: recopilado de archivos municipales, hemerotecas y mayores que estuvieron allí. Correcciones bienvenidas y esperadas.",
   "voices.tag": "// mesa de voces jóvenes · sin revisar. sin editar. correctas.",
   "voices.h": "Voces Jóvenes",
   "voices.dek": "Tres crónicas de campo de escritores que aún no pueden votar pero ya saben hacer las cuentas del alquiler. Les pagamos; no tocamos ni una palabra.",

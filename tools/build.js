@@ -241,17 +241,30 @@ function fitH3(t, key, {w, base=25, maxLines=3}){
 }
 
 /* ---- server-rendered list blocks (byte-identical to the old inline JS) ---- */
+// A chip's words by its ground: ink on a bright accent (bone on pink is 3.2:1,
+// on teal 2.3:1, on orange 1.9:1), bone on ink.
+const BRIGHT_GROUNDS = ['#f0477d', '#12b795', '#fe9a0d'];
+function chip(ground){
+  const words = BRIGHT_GROUNDS.includes(ground) ? 'var(--ink)' : 'var(--bone)';
+
+  return `background:${ground};color:${words}`;
+}
+// A sticker's words in an accent: the type token, deep on paper, not the fill.
+const TYPE_INKS = {'#f0477d':'var(--pink-t)', '#12b795':'var(--teal-t)', '#fe9a0d':'var(--orange-t)'};
+function typeInk(colour){
+  return TYPE_INKS[colour] || colour;
+}
 function tocRows(t){
-  return TOC.map((r,i)=>`<div class="li"><span class="pgchip" style="background:${r.c}">${r.pg}</span><span class="t">${esc(t['toc.'+i+'.t'])}</span><span class="end tagend">${esc(t['toc.'+i+'.k'])}</span></div>`).join('');
+  return TOC.map((r,i)=>`<div class="li"><span class="pgchip" style="${chip(r.c)}">${r.pg}</span><span class="t">${esc(t['toc.'+i+'.t'])}</span><span class="end tagend">${esc(t['toc.'+i+'.k'])}</span></div>`).join('');
 }
 function ledgerRows(t){
-  return LEDGER.map((l,i)=>`<div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">${l.y}</span><span class="t">${esc(t['ledger.'+i+'.e'])}</span><span class="end"><span class="statuschip" style="background:${l.sc}">${esc(t['ledger.'+i+'.s'])}</span></span></div>`).join('');
+  return LEDGER.map((l,i)=>`<div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">${l.y}</span><span class="t">${esc(t['ledger.'+i+'.e'])}</span><span class="end"><span class="statuschip" style="${chip(l.sc)}">${esc(t['ledger.'+i+'.s'])}</span></span></div>`).join('');
 }
 function eventRows(t){
-  return EVENTS.map((e,i)=>`<div class="li"><span class="pgchip" style="background:${e.c};min-width:60px">${e.d}</span><span class="t"><b>${esc(t['events.'+i+'.t'])}</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">${esc(t['events.'+i+'.w'])}</span></span></div>`).join('');
+  return EVENTS.map((e,i)=>`<div class="li"><span class="pgchip" style="${chip(e.c)};min-width:60px">${e.d}</span><span class="t"><b>${esc(t['events.'+i+'.t'])}</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">${esc(t['events.'+i+'.w'])}</span></span></div>`).join('');
 }
 function screeningRows(t){
-  return SCREENINGS.map((s,i)=>`<div class="li"><span class="pgchip" style="background:${s.c};min-width:60px">${s.d}</span><span class="t"><b>${esc(t['screenings.'+i+'.f'])}</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">${esc(t['screenings.'+i+'.p'])}</span></span></div>`).join('')
+  return SCREENINGS.map((s,i)=>`<div class="li"><span class="pgchip" style="${chip(s.c)};min-width:60px">${s.d}</span><span class="t"><b>${esc(t['screenings.'+i+'.f'])}</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">${esc(t['screenings.'+i+'.p'])}</span></span></div>`).join('')
     + `<div class="li"><span class="fine">${esc(t['calendar.scFine'])}</span></div>`;
 }
 function dirRows(t){
@@ -280,7 +293,7 @@ function shopCards(t, variant){
 }
 
 function labRows(t){
-  return LABBOARD.map((j,i)=>`<div class="li"><span class="t">${esc(t['lab.'+i+'.t'])}</span><span class="end"><span class="statuschip" style="background:${j.c}">${esc(t['lab.'+i+'.s'])}</span></span></div>`).join('');
+  return LABBOARD.map((j,i)=>`<div class="li"><span class="t">${esc(t['lab.'+i+'.t'])}</span><span class="end"><span class="statuschip" style="${chip(j.c)}">${esc(t['lab.'+i+'.s'])}</span></span></div>`).join('');
 }
 
 /* ============================================================================
@@ -423,10 +436,10 @@ function stickerSheet(t){
   const cell = (d,i)=>{
     const rot = ['-2.5deg','1.5deg','-1deg','2.5deg','-2deg','1deg'][i%6];
     let inner;
-    if(d.k==='g') inner = `<div class="ic">${d.svg}</div><span class="lab" style="color:${d.c}">${esc(t[d.key])}</span>`;
+    if(d.k==='g') inner = `<div class="ic">${d.svg}</div><span class="lab" style="color:${typeInk(d.c)}">${esc(t[d.key])}</span>`;
     else if(d.k==='m') inner = `<span class="mono">DB</span><span class="lab">${esc(t[d.key])}</span>`;
-    else if(d.k==='q') inner = `<span class="quote" style="color:${d.c}">${esc(t[d.key])}</span>`;
-    else inner = `<span class="stampbadge" style="border-color:${d.c};color:${d.c}">${esc(t[d.key])}</span>`;
+    else if(d.k==='q') inner = `<span class="quote" style="color:${typeInk(d.c)}">${esc(t[d.key])}</span>`;
+    else inner = `<span class="stampbadge" style="border-color:${typeInk(d.c)};color:${typeInk(d.c)}">${esc(t[d.key])}</span>`;
     return `<div class="sticker k-${d.k}" style="--rot:${rot}">${inner}</div>`;
   };
   return S.map(cell).join('');
@@ -445,7 +458,7 @@ function langpick(t, code, variant){
     const c = l.code===code ? ' aria-current="true"' : '';
     return `<a href="${url(l.code, variant)}" hreflang="${l.hreflang}" lang="${l.hreflang}"${l.dir==='rtl'?' dir="rtl"':''}${c}><span class="endo">${l.endo}</span><span class="en">${l.en}</span></a>`;
   }).join('');
-  return `<details class="langpick"><summary aria-label="${esc(t['chrome.language'])}"><span class="globe" aria-hidden="true">\u{1F310}</span> ${cur.endo} <span class="car" aria-hidden="true">▾</span></summary><div class="langmenu">${items}</div></details>`;
+  return `<details class="langpick"><summary aria-label="${esc(t['chrome.language'])}: ${esc(cur.endo)}"><span class="globe" aria-hidden="true">\u{1F310}</span> ${cur.endo} <span class="car" aria-hidden="true">▾</span></summary><div class="langmenu">${items}</div></details>`;
 }
 /* rendering switch — same language, hop between full / lite / e-ink */
 /* The contents rail: a plain in-page <nav>, sticky beside (or above) the pane
@@ -501,7 +514,7 @@ function mtnote(t, code, variant){
   if(code==='en') return '';
   /* point the "read the English edition" link at the same rendering */
   const note = t['chrome.mtnote'].replace('href="/"', `href="${url('en', variant)}"`);
-  return `<div class="mtnote">${note}</div>`;
+  return `<aside class="mtnote">${note}</aside>`;
 }
 /* The loud half of the verification story.
 
@@ -610,7 +623,7 @@ ${verifyAlert(t, code, variant)}
 <header class="top">
   <div class="wrap bar">
     <a class="brand" href="${url(code, variant)}">
-      <span class="mark">Daily&nbsp;Bread</span>
+      <h1 class="mark">Daily&nbsp;Bread</h1>
       <span class="lock">
         <span class="lab">${esc(t['hero.tagline'])}</span>
         <span class="doc">DB-001 &middot; N&ordm;1</span>
@@ -759,7 +772,7 @@ ${rail(t)}
         <div class="bd">
           <h3 style="${fitH3(t,'voices.r2h',{w:216})}">${t['voices.r2h']}</h3>
           <p>${t['voices.r2p']}</p>
-          <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange);border:0;padding-left:0">${t['voices.r2pull']}</div>
+          <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange-t);border:0;padding-left:0">${t['voices.r2pull']}</div>
         </div>
       </div>
       <div class="card report"><div class="hd teal"><span>${t['voices.r3tag']}</span><span>${t['voices.r3meta']}</span></div>
@@ -783,9 +796,9 @@ ${rail(t)}
         <p class="dek">${t['waitlist.dek']}</p>
       </div>
       <div class="stats">
-        <div class="stat"><div class="n" style="color:var(--pink)">14</div><div class="l">${t['waitlist.s1']}</div></div>
-        <div class="stat"><div class="n" style="color:var(--orange)">2</div><div class="l">${t['waitlist.s2']}</div></div>
-        <div class="stat"><div class="n" style="color:var(--teal)">400</div><div class="l">${t['waitlist.s3']}</div></div>
+        <div class="stat"><div class="n" style="color:var(--pink-t)">14</div><div class="l">${t['waitlist.s1']}</div></div>
+        <div class="stat"><div class="n" style="color:var(--orange-t)">2</div><div class="l">${t['waitlist.s2']}</div></div>
+        <div class="stat"><div class="n" style="color:var(--teal-t)">400</div><div class="l">${t['waitlist.s3']}</div></div>
       </div>
     </div>
   </div>
@@ -863,7 +876,7 @@ ${rail(t)}
     <div class="sechead"><span class="no">Sec.14</span><span class="tag">${t['calendar.tag']}</span></div>
     <div class="split">
       <div>
-        <h2 class="display" style="${fitDisplay(t,'calendar.h',{w:384,pad:1.5})}">${t['calendar.h']}<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="${fitDisplay(t,'calendar.h',{w:384,pad:1.5})}">${t['calendar.h']}<span class="dot" style="color:var(--teal-t)">.</span></h2>
         <p class="dek">${t['calendar.dek']}</p>
         <div class="card" style="margin-top:24px">
           <div class="hd"><span>${t['calendar.evHd']}</span><span class="r">${t['calendar.evHd2']}</span></div>
@@ -1030,7 +1043,7 @@ ${rail(t)}
     <div class="sechead"><span class="no">Sec.24</span><span class="tag">${t['stickers.tag']}</span></div>
     <div class="split center">
       <div>
-        <h2 class="display" style="${fitDisplay(t,'stickers.h',{w:384,pad:1.5})}">${t['stickers.h']}<span class="dot" style="color:var(--teal)">.</span></h2>
+        <h2 class="display" style="${fitDisplay(t,'stickers.h',{w:384,pad:1.5})}">${t['stickers.h']}<span class="dot" style="color:var(--teal-t)">.</span></h2>
         <p class="dek">${t['stickers.dek']}</p>
       </div>
       <div class="print-cta">

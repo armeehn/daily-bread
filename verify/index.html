@@ -13,7 +13,9 @@
 <style>
   :root{
     --ink:#1d1a17; --bone:#f6f1e7; --panel:#eae4d6; --paper2:#efe9db;
-    --muted:#8d857a; --pink:#f0477d; --teal:#12b795; --orange:#fe9a0d;
+    --muted:#5e574e; --pink:#f0477d; --teal:#12b795; --orange:#fe9a0d;
+    /* accents that carry words: 4.5:1 on bone (BRAND.md); the bright inks are dots */
+    --pink-deep:#d81150; --teal-deep:#0c7a63;
     --maxw:940px;
     --checker:repeating-conic-gradient(var(--ink) 0% 25%,var(--bone) 0% 50%) 0 0/16px 16px;
   }
@@ -67,7 +69,7 @@
   .spec{border:2px solid var(--ink);margin:18px 0}
   .spec .sh{display:flex;justify-content:space-between;border-bottom:2px solid var(--ink);
     padding:8px 12px;font-size:11px;letter-spacing:.18em;text-transform:uppercase}
-  .spec .sh .rl{color:var(--pink);font-weight:700}
+  .spec .sh .rl{color:var(--pink-deep);font-weight:700}
   .spec dl{display:grid;grid-template-columns:auto 1fr;gap:0;margin:0}
   .spec dt{padding:8px 12px;border-bottom:1px dashed rgba(29,26,23,.28);font-size:11px;
     letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--paper2)}
@@ -100,14 +102,13 @@
   ul.checks li.fail:before{content:"FAIL";color:#c31d4c;font-weight:700;margin-right:8px;font-size:11px}
   ul.checks .detail{color:var(--muted)}
   .ed-body .links{font-size:12px;margin-top:8px}
-  .ed-body .links a{color:var(--teal)}
 
   /* prose blocks */
   section.blk{padding:8px 0 4px}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:8px}
   @media(max-width:720px){.grid2{grid-template-columns:1fr}}
-  .col h3{font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 6px}
-  .col.def h3{color:var(--teal)} .col.undef h3{color:var(--pink)}
+  .col h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 6px}
+  .col.def h2{color:var(--teal-deep)} .col.undef h2{color:var(--pink-deep)}
   .col ul{margin:0;padding-left:18px} .col li{margin:4px 0;font-size:13.5px;color:#3a352e}
   pre{background:var(--ink);color:var(--bone);padding:14px 16px;overflow:auto;font-size:12.5px;
     line-height:1.7;border:2px solid var(--ink)}
@@ -117,7 +118,7 @@
   footer{border-top:2px solid var(--ink);margin-top:26px}
   footer .inner{padding:22px 0;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
     font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-  footer a{color:var(--teal);text-decoration:none}
+  footer a{color:var(--teal-deep);text-decoration:none}
 </style>
 </head>
 <body>
@@ -179,7 +180,7 @@
   <div class="sechead"><span class="no">SEC.02</span><span class="tag">// what this proves, and what it does not</span></div>
   <div class="grid2">
     <div class="col def">
-      <h3>Defended</h3>
+      <h2>Defended</h2>
       <ul>
         <li>Tampering by anyone who is not the publisher — a hacked host, a bad CDN edge, a poisoned cache, an intercepting proxy. None hold the publisher key.</li>
         <li>Silent revision by the publisher: a corrected edition supersedes the old one, but the old one stays in the log forever.</li>
@@ -187,7 +188,7 @@
       </ul>
     </div>
     <div class="col undef">
-      <h3>Not defended</h3>
+      <h2>Not defended</h2>
       <ul>
         <li>A publisher who lies from the start. A signed fabrication is still a fabrication; signing attests authorship, not accuracy.</li>
         <li>This badge, against the publisher. It ships from the same site as the magazine. The real check is the offline verifier below.</li>
@@ -200,7 +201,7 @@
   <p class="lede">The honest check is one you run with a verifier you did not get from
   us, against a fingerprint you obtained elsewhere. It needs only Python 3 — no
   packages to install.</p>
-  <pre>curl -O https://db.ripostelabs.xyz/verify/verify_standalone.py
+  <pre tabindex="0">curl -O https://db.ripostelabs.xyz/verify/verify_standalone.py
 curl -O https://db.ripostelabs.xyz/.well-known/newsproof/publisher-key.json
 curl -O https://db.ripostelabs.xyz/.well-known/newsproof/log-key.json
 curl -O https://db.ripostelabs.xyz/.well-known/newsproof/anchors.jsonl

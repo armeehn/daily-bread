@@ -55,7 +55,7 @@
   "history.ledgerKicker": "Tabulae / quid quando corruit",
   "history.entryHd": "Eventum",
   "history.statusHd": "Status",
-  "history.method": "<span style=\"color:var(--pink);font-weight:700\">Ratio</span> — ex urbis tabulariis, ephemeridum archivis, et senibus qui aderant collecta. Correctiones gratae et exspectatae.",
+  "history.method": "<span style=\"color:var(--pink-t);font-weight:700\">Ratio</span> — ex urbis tabulariis, ephemeridum archivis, et senibus qui aderant collecta. Correctiones gratae et exspectatae.",
   "voices.tag": "// sedes vocum iuvenum · non recognita. non emendata. recta.",
   "voices.h": "Voces Iuvenum",
   "voices.dek": "Tres relationes ex agro a scriptoribus qui suffragium ferre nondum possunt sed calculum mercedis iam facere possunt. Eos remuneravimus; verbum non tetigimus.",

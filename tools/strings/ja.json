@@ -55,7 +55,7 @@
   "history.ledgerKicker": "台帳 / いつ何が崩れたか",
   "history.entryHd": "項目",
   "history.statusHd": "状態",
-  "history.method": "<span style=\"color:var(--pink);font-weight:700\">Method</span> — 市の公文書、新聞の縮刷保管庫、そして現場にいた年長者たちから編纂しました。訂正は歓迎、というより織り込み済みです。",
+  "history.method": "<span style=\"color:var(--pink-t);font-weight:700\">Method</span> — 市の公文書、新聞の縮刷保管庫、そして現場にいた年長者たちから編纂しました。訂正は歓迎、というより織り込み済みです。",
   "voices.tag": "// ヤング・ヴォイセズ編集室 · 未査読。未編集。正確。",
   "voices.h": "ヤング・ヴォイセズ",
   "voices.dek": "まだ投票はできないけれど、家賃の計算はもうできる書き手たちからの、三本の現場報告。私たちは彼らに原稿料を払い、一言たりとも手を加えませんでした。",

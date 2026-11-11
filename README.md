@@ -176,6 +176,8 @@ decoration) and **e-ink** (monochrome, high contrast). `hreflang`, a JS-free
 language picker, `dir="rtl"` for Arabic and Farsi and a `sitemap.xml` come
 with it. The issue reads one section at a time from a contents rail, done with
 CSS `:target` and no runtime JS; printing still gives the whole issue.
+`node tools/check-a11y.js` (after `cd tools/press && npm ci`) sweeps the built
+pages with axe-core: contrast, names, landmarks, headings; CI runs it.
 `node tools/check-site.js` reads every built page back and fails on dead
 links, missing assets, bad `hreflang` and the like.
 

@@ -55,7 +55,7 @@
   "history.ledgerKicker": "Grand livre / ce qui s'est effondré, et quand",
   "history.entryHd": "Entrée",
   "history.statusHd": "Statut",
-  "history.method": "<span style=\"color:var(--pink);font-weight:700\">Méthode</span> : compilé à partir des archives municipales, des morgues de journaux et des aînés qui étaient là. Corrections bienvenues et attendues.",
+  "history.method": "<span style=\"color:var(--pink-t);font-weight:700\">Méthode</span> : compilé à partir des archives municipales, des morgues de journaux et des aînés qui étaient là. Corrections bienvenues et attendues.",
   "voices.tag": "// pupitre des jeunes voix · non relu. non corrigé. juste.",
   "voices.h": "Jeunes voix",
   "voices.dek": "Trois reportages de plumes qui ne peuvent pas encore voter mais savent déjà faire l'arithmétique du loyer. Nous les avons payées ; nous n'avons pas touché un mot.",

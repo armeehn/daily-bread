@@ -115,6 +115,25 @@ jobs:
       - name: Read the built site back
         run: node tools/check-site.js
 
+  # The committed pages as a reader's browser paints them: axe-core on every
+  # pane of English full / lite / e-ink, Arabic and the verify page, at a
+  # desktop and a phone width. check-site.js reads markup; this reads text
+  # against its real ground, names, landmarks and headings.
+  a11y:
+    name: built pages pass the accessibility sweep
+    runs-on: ubuntu-latest
+    # the browsers and their system libraries, at the version tools/press pins
+    container: mcr.microsoft.com/playwright:v1.56.1-noble
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the browser driver and axe-core
+        working-directory: tools/press
+        run: npm ci --no-audit --no-fund
+
+      - name: Sweep the built pages
+        run: node tools/check-a11y.js
+
   # 4. THE .tex MUST STILL PRODUCE THE COMMITTED WEB INPUT
   # content/issue-01.tex is the source of truth; content/issue-01.js is emitted
   # from it and is what tools/build.js reads. Parse the .tex, require it to equal

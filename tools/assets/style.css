@@ -1,12 +1,31 @@
   :root{
     --ink:#1d1a17; --bone:#f6f1e7; --panel:#eae4d6; --paper2:#efe9db;
-    --dark:#2a2723; --muted:#8d857a;
+    --dark:#2a2723;
     --pink:#f0477d; --teal:#12b795; --orange:#fe9a0d;
+    /* Words need 4.5:1 on their ground, and the bright inks do not give it on
+       paper: pink 3.2, teal 2.3, orange 1.9. So the bright inks stay fills,
+       edges and art, and an accent that carries words changes ink:
+         -deep  on paper (BRAND.md's contrast table), and under bone words
+         -lift  on ink; only pink needs letting down, for the charcoal panels
+       A bright ground takes ink words. Muted is the press's grey, 6:1. */
+    --pink-deep:#d81150; --teal-deep:#0c7a63; --orange-deep:#a15e01;
+    --pink-lift:#f77aa1; --teal-lift:var(--teal); --orange-lift:var(--orange);
+    --muted-paper:#5e574e; --muted-ink:#b9b0a3;
+    /* the ink in use here: paper unless a rule below says the ground is ink */
+    --pink-t:var(--pink-deep); --teal-t:var(--teal-deep); --orange-t:var(--orange-deep);
+    --muted:var(--muted-paper);
     --maxw:1080px; --topbar:56px;
     --checker:repeating-conic-gradient(var(--ink) 0% 25%,var(--bone) 0% 50%) 0 0/18px 18px;
     --checker-inv:repeating-conic-gradient(var(--bone) 0% 25%,var(--ink) 0% 50%) 0 0/18px 18px;
     --harlequin:repeating-conic-gradient(from 45deg,var(--pink) 0% 25%,var(--teal) 0% 50%) 0 0/26px 26px;
   }
+  /* ink grounds, then the paper laid on them */
+  .field-ink,.field-ink .card,.hero,.backcover,.plate,header.top,.rail,footer.slim{
+    --pink-t:var(--pink-lift); --teal-t:var(--teal-lift); --orange-t:var(--orange-lift);
+    --muted:var(--muted-ink)}
+  .card,.stat,.panel,.sticker,.shop-card,.langmenu,.cover-wrap .free{
+    --pink-t:var(--pink-deep); --teal-t:var(--teal-deep); --orange-t:var(--orange-deep);
+    --muted:var(--muted-paper)}
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{
@@ -14,8 +33,8 @@
     background:var(--bone); color:var(--ink);
     -webkit-font-smoothing:antialiased; line-height:1.7; font-size:16px;
   }
-  a{color:var(--pink);text-decoration:none;transition:color .15s}
-  a:hover{color:var(--teal)}
+  a{color:var(--pink-t);text-decoration:none;transition:color .15s}
+  a:hover{color:var(--teal-t)}
   img{max-width:100%;display:block}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
   section{scroll-margin-top:52px}
@@ -23,8 +42,8 @@
   /* ---------- shared type ---------- */
   .kicker{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.18em;
     text-transform:uppercase;padding:5px 12px;background:var(--ink);color:var(--bone)}
-  .kicker.pink{background:var(--pink);color:var(--bone)}
-  .kicker.teal{background:var(--teal);color:var(--bone)}
+  .kicker.pink{background:var(--pink);color:var(--ink)}
+  .kicker.teal{background:var(--teal);color:var(--ink)}
   .kicker.orange{background:var(--orange);color:var(--ink)}
   /* .display headings are fitted per language at build time: --fit caps the
      font so the translated headline holds the same line count as English, and
@@ -34,21 +53,23 @@
   .display{font-size:min(clamp(32px,5.4vw,54px),var(--fit,999px));line-height:.96;font-weight:800;
     text-transform:uppercase;letter-spacing:-.015em;text-wrap:balance;overflow-wrap:break-word;
     min-height:calc(var(--dl,1) * .96 * clamp(32px,5.4vw,54px))}
-  .display .dot{color:var(--pink)}
+  .display .dot{color:var(--pink-t)}
   .frak{font-family:'UnifrakturMaguntia',serif;font-weight:400;line-height:.9}
   .dek{font-size:15.5px;line-height:1.7;max-width:62ch;color:#3a352e;margin-top:14px}
   .prose{font-size:15.5px;line-height:1.78;max-width:64ch}
   .prose p{margin:0 0 15px} .prose p:last-child{margin-bottom:0}
   .justify{text-align:justify;hyphens:auto}
   .meta{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-  .stamp{display:inline-block;border:2px solid var(--orange);color:var(--orange);
+  /* a link in a muted line is told by its underline, not by a second colour */
+  .meta a{color:inherit;text-decoration:underline}
+  .stamp{display:inline-block;border:2px solid var(--orange-t);color:var(--orange-t);
     font-size:11px;font-weight:700;letter-spacing:.16em;padding:7px 13px;
     transform:rotate(-2.5deg);text-transform:uppercase;white-space:nowrap;background:transparent}
-  .stamp.pink{border-color:var(--pink);color:var(--pink)}
-  .stamp.teal{border-color:var(--teal);color:var(--teal)}
-  .scribble{font-family:'Caveat',cursive;font-size:26px;line-height:1.1;color:var(--pink);
+  .stamp.pink{border-color:var(--pink-t);color:var(--pink-t)}
+  .stamp.teal{border-color:var(--teal-t);color:var(--teal-t)}
+  .scribble{font-family:'Caveat',cursive;font-size:26px;line-height:1.1;color:var(--pink-t);
     transform:rotate(-2.5deg);display:inline-block}
-  .scribble.teal{color:var(--teal)} .scribble.orange{color:var(--orange)}
+  .scribble.teal{color:var(--teal-t)} .scribble.orange{color:var(--orange-t)}
 
   /* ---------- section headers ---------- */
   .sec{padding:84px 0}
@@ -65,8 +86,8 @@
   .card > .hd{display:flex;justify-content:space-between;gap:12px;align-items:center;
     padding:10px 15px;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
     border-bottom:2px solid var(--ink);background:var(--panel)}
-  .card > .hd.pink{background:var(--pink);color:var(--bone)}
-  .card > .hd.teal{background:var(--teal);color:var(--bone)}
+  .card > .hd.pink{background:var(--pink);color:var(--ink)}
+  .card > .hd.teal{background:var(--teal);color:var(--ink)}
   .card > .hd.orange{background:var(--orange);color:var(--ink)}
   .card > .hd .r{opacity:.85}
   .card > .bd{padding:16px 18px}
@@ -88,7 +109,7 @@
 
   /* ---------- full-bleed fields ---------- */
   .field-ink{background:var(--ink);color:var(--bone)}
-  .field-ink a{color:var(--pink)} .field-ink .rule{color:var(--bone)}
+  .field-ink a{color:var(--pink-t)} .field-ink .rule{color:var(--bone)}
   .field-ink .card{background:#26221e;border-color:var(--bone);box-shadow:6px 6px 0 rgba(246,241,231,.85);color:var(--bone)}
   .field-ink .card>.hd{background:#332e28;color:var(--bone);border-color:var(--bone)}
   .field-ink .sechead .no{background:var(--bone);color:var(--ink)}
@@ -103,7 +124,7 @@
   header.top .brand{order:1;display:flex;align-items:center;text-decoration:none;color:var(--bone);
     padding:7px 0;margin-inline-end:22px}
   header.top .brand:hover{color:var(--bone)}
-  header.top .brand .mark{font-family:'UnifrakturMaguntia',serif;font-size:30px;line-height:.9;
+  header.top .brand .mark{font-family:'UnifrakturMaguntia',serif;font-size:30px;font-weight:400;line-height:.9;
     white-space:nowrap;padding-inline-end:15px}
   header.top .brand .lock{display:flex;flex-direction:column;justify-content:center;gap:4px;
     padding-inline-start:15px;border-inline-start:1px dashed rgba(246,241,231,.5)}
@@ -158,7 +179,7 @@
       justify-content:space-between;gap:10px;padding:11px 16px;
       font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
       background:#332e28;border-bottom:1px dashed rgba(246,241,231,.4)}
-    .rail-hd .r{color:var(--pink);direction:ltr;unicode-bidi:isolate}
+    .rail-hd .r{color:var(--pink-t);direction:ltr;unicode-bidi:isolate}
     .rail-list{display:flex;flex-direction:column;padding-bottom:20px}
     .rail a{--edge:transparent;--no:#b7ad9e;
       display:flex;align-items:baseline;gap:11px;padding:11px 16px;color:var(--bone);
@@ -185,7 +206,7 @@
     body:has(#shop:target) .rail a[href="#shop"],
     body:has(#stickers:target) .rail a[href="#stickers"],
     body:not(:has(.pane:target)) .rail a[href="#letter"]{
-      --edge:var(--pink);--no:var(--muted);
+      --edge:var(--pink);--no:var(--muted-paper);
       background:var(--bone);color:var(--ink);font-weight:700}
 
     /* ---- the panes ---- */
@@ -236,10 +257,10 @@
     .cover-wrap{max-width:420px}.cover-frame{box-shadow:9px 9px 0 rgba(240,71,125,.85)}}
 
   /* ---------- editor letter ---------- */
-  .letter .prose .drop{font-weight:700;background:var(--pink);color:var(--bone);padding:0 6px}
+  .letter .prose .drop{font-weight:700;background:var(--pink-deep);color:var(--bone);padding:0 6px}
   .dropcap::first-letter{font-family:'UnifrakturMaguntia',serif;font-size:4.6em;float:left;
     line-height:.66;padding:6px 12px 0 0;color:var(--ink)}
-  .signoff{font-family:'Caveat',cursive;font-size:34px;color:var(--teal);transform:rotate(-2deg);margin-top:18px}
+  .signoff{font-family:'Caveat',cursive;font-size:34px;color:var(--teal-t);transform:rotate(-2deg);margin-top:18px}
   .masthead-list .li .lab{color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
   .masthead-list .li .val{margin-left:auto;font-weight:700;text-align:right;font-size:13.5px}
 
@@ -315,7 +336,7 @@
   footer.slim{background:var(--ink);color:var(--bone);border-top:2px solid var(--bone)}
   footer.slim .finner{padding-block:13px;display:flex;align-items:center;justify-content:space-between;
     flex-wrap:wrap;gap:8px 26px}
-  footer.slim .tg{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#8d857a}
+  footer.slim .tg{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
   footer.slim .verify-note{margin-top:0;justify-content:flex-start}
   footer.slim .fswitch{margin-top:0;margin-inline-start:auto}
   /* narrow: the strip wraps to three rows, so the reserve above it grows too */
@@ -325,7 +346,7 @@
 
   .verify-note{font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-top:2px;
     display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
-  .verify-note a{color:var(--teal);text-decoration:none;border-bottom:1px dotted rgba(18,183,149,.5);padding-bottom:1px}
+  .verify-note a{color:var(--teal-t);text-decoration:none;border-bottom:1px dotted rgba(18,183,149,.5);padding-bottom:1px}
   .verify-note a:hover{color:var(--bone);border-bottom-color:var(--bone)}
   /* live self-verification badge: a coloured status dot + message, added by the
      inline verifier the full editions carry (see tools/build.js verifyNote). */
@@ -335,9 +356,9 @@
   .verify-note.np-ok   .np-dot{background:var(--teal)}
   .verify-note.np-warn .np-dot{background:var(--orange)}
   .verify-note.np-bad  .np-dot{background:var(--pink)}
-  .verify-note.np-ok   .np-msg{color:var(--teal)}
-  .verify-note.np-warn .np-msg{color:var(--orange)}
-  .verify-note.np-bad  .np-msg{color:var(--pink)}
+  .verify-note.np-ok   .np-msg{color:var(--teal-t)}
+  .verify-note.np-warn .np-msg{color:var(--orange-t)}
+  .verify-note.np-bad  .np-msg{color:var(--pink-t)}
   @keyframes npPulse{50%{opacity:.35}}
   @media (prefers-reduced-motion:reduce){.verify-note.np-checking .np-dot{animation:none}}
   .annot{margin-top:14px}
@@ -379,7 +400,7 @@
   @media(max-width:860px){.print-cta{align-items:flex-start;text-align:left}}
   .printbtn{font-family:inherit;cursor:pointer;background:var(--ink);color:var(--bone);border:2px solid var(--ink);
     box-shadow:5px 5px 0 var(--pink);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:11px 18px}
-  .printbtn:hover{background:var(--pink);border-color:var(--pink);box-shadow:5px 5px 0 var(--ink)}
+  .printbtn:hover{background:var(--pink);color:var(--ink);border-color:var(--pink);box-shadow:5px 5px 0 var(--ink)}
   .printbtn:active{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--ink)}
   .card.sheet{margin-top:30px}
   .sticker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
@@ -398,7 +419,7 @@
 
   /* secondary print action: print the whole issue (stickers is the primary) */
   .printbtn.ghost{background:var(--bone);color:var(--ink);box-shadow:5px 5px 0 var(--teal)}
-  .printbtn.ghost:hover{background:var(--teal);color:var(--bone);border-color:var(--teal);box-shadow:5px 5px 0 var(--ink)}
+  .printbtn.ghost:hover{background:var(--teal);color:var(--ink);border-color:var(--teal);box-shadow:5px 5px 0 var(--ink)}
 
   /* ---------- print / PDF ----------
      Default (Ctrl/⌘+P, or the "Print the whole issue" button): the entire paper,
@@ -461,9 +482,9 @@
   header.top .vswitch a[aria-current]{background:var(--bone);color:var(--ink);font-weight:700}
   header.top .vswitch a:hover{color:var(--pink)}
   header.top .vswitch a[aria-current]:hover{color:var(--ink)}
-  .fswitch{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8d857a;margin-top:2px}
+  .fswitch{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:2px}
   .fswitch a{color:var(--bone);text-decoration:underline;margin:0 2px}
-  .fswitch a[aria-current]{color:var(--pink);text-decoration:none;font-weight:700}
+  .fswitch a[aria-current]{color:var(--pink-t);text-decoration:none;font-weight:700}
 
   /* ---------- i18n chrome: language picker + MT notice ---------- */
   header.top .bar .langpick{position:relative;order:4;align-self:center;margin-inline-start:16px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
@@ -481,8 +502,8 @@
   .langmenu a:nth-child(even){border-right:none}
   .langmenu a[aria-current]{background:var(--ink);color:var(--bone);font-weight:700}
   .langmenu a:hover{background:var(--teal);color:var(--ink)}
-  .langmenu a .en{font-size:9px;opacity:.6;letter-spacing:.04em;text-transform:uppercase}
-  .langmenu a[aria-current] .en{opacity:.85}
+  .langmenu a .en{font-size:9px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+  .langmenu a[aria-current] .en,.langmenu a:hover .en{color:inherit;opacity:.85}
   .mtnote{background:var(--orange);color:var(--ink);font-size:11px;letter-spacing:.02em;
     text-align:center;padding:8px 16px;line-height:1.55;border-bottom:2px solid var(--ink)}
   .mtnote a{color:var(--ink);text-decoration:underline;font-weight:700}
