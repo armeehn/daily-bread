@@ -113,7 +113,7 @@
     var note = doc.createElement("p"); note.className = "pp-appx-note";
     var nx = MARK.inset + MARK.len + 5;
     note.style.cssText = "left:" + mm(nx) + ";top:" + mm(T.h - CUT_REGION.bottom + 6) + ";width:" + mm(T.w - nx - CUT_REGION.side);
-    note.textContent = "Cut from a copy printed at 100 % (Printer PDF, or Web PDF at actual size), not the booklet, which prints smaller. " +
+    note.textContent = "Cut from a copy printed at 100 % (Printer pages, or Web PDF at actual size), not the booklet, which prints smaller. " +
       "A Cricut uses the sticker page itself: the studio's Stickers for a cutter PNG, through Design Space.";
     trim.appendChild(hd); trim.appendChild(note);
     P.islands.forEach(function(s, i){

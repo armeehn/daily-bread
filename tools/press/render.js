@@ -3,7 +3,7 @@
  * render.js — the press. One renderer for every output.
  *
  *   node tools/press/render.js [--model <edition.json> | --model -] [--out <dir>]
- *                              [--only sheets,print,booklet,printer]
+ *                              [--only sheets,print,booklet,printer,printer-pages]
  *   node tools/press/render.js --publish [--model …]
  *                              (press/<edition>/booklet.pdf + booklet.json + limits.json)
  *   node tools/press/render.js --limits [--model …] [--out <file>]
@@ -21,10 +21,15 @@
  *                Byte for byte what the Web PDF would be.
  *   print.pdf    the same pages cut to the trim (MediaBox = TrimBox), one-up in
  *                reading order: the proof.
- *   printer.pdf  for a print shop: each sheet on trim + bleed + slug, crop marks in
- *                the slug, /TrimBox and /BleedBox set. The bleed is real: a
- *                section's ground runs into it because the sheet is laid out that
- *                size.
+ *   printer.pdf  for a print shop: printer's spreads. Two pages to a sheet in
+ *                saddle-stitch order (48|1, 2|47, …), meeting at the fold, on
+ *                the spread's trim + bleed + slug, with crop marks and a fold
+ *                mark in the slug and /TrimBox and /BleedBox on the spread. The
+ *                shop prints the sheets two-sided, folds, nests and staples.
+ *   printer-pages.pdf  the same pages one to a sheet, in reading order, marked
+ *                the same way: for a shop that imposes them itself. The bleed is
+ *                real in both: a section's ground runs into it because the
+ *                sheet is laid out that size.
  *   booklet.pdf  for a desktop duplex printer: the trimmed pages imposed two to a
  *                Letter-landscape side in saddle-stitch order (padded with blank
  *                pages to a multiple of four), clear of the band a laser cannot
@@ -54,6 +59,7 @@ function pt(len) {
 
 const SLUG_PT = 5 * PT_PER.mm;          // room for crop marks, outside the bleed
 const MARK_PT = 0.25;
+const FOLD_DASH = [2, 2];               // a fold mark is dashed; a crop mark is solid
 // Letter landscape: the paper in a desktop printer; a laser leaves ~4.2 mm bare
 const SHEET_PT = [792, 612], BAND_PT = 5 * PT_PER.mm;
 const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css",
@@ -131,7 +137,71 @@ function stamp(doc) {
   doc.setProducer("Daily Bread press (tools/press/render.js)"); doc.setCreator("DB.render + db-print.js, Chromium, pdf-lib");
 }
 
-/** sheets.pdf -> the trimmed pages, the printer's pages and the booklet. */
+/** The page numbers on each side of a saddle-stitched book of N pages, left
+ *  then right: side k holds pages k and N-k+1, the even one on the left.
+ *  N = 8: [[8, 1], [2, 7], [6, 3], [4, 5]]. */
+function sideOrder(N) {
+  const sides = [];
+
+  for (let k = 1; k <= N / 2; k++) {
+    const near = k, far = N - k + 1;
+    sides.push(k % 2 ? [far, near] : [near, far]);
+  }
+
+  return sides;
+}
+
+/** Printer's spreads: two trimmed pages to a sheet, meeting at the fold.
+ *
+ *     slug ┆ bleed ┆ left page  ║ right page ┆ bleed ┆ slug
+ *          ┆       ┆   (trim)   ║   (trim)   ┆       ┆
+ *                           fold mark
+ *
+ *  Each page keeps its bleed on the three outer edges; at the fold it is cut
+ *  to the trim, so neither page's bleed prints over the other. */
+async function spreads(src, order, geom, title) {
+  const { tw, th, b } = geom;
+  const s = SLUG_PT, o = s + b;
+  const W = 2 * tw + 2 * b + 2 * s, H = th + 2 * b + 2 * s;
+  const d = await PDFDocument.create(); stamp(d); d.setTitle(title + " — printer's spreads");
+
+  // the left page without its right bleed, the right page without its left
+  const pages = src.getPages();
+  const lefts = await Promise.all(pages.map(p => d.embedPage(p, { left: 0, bottom: 0, right: b + tw, top: th + 2 * b })));
+  const rights = await Promise.all(pages.map(p => d.embedPage(p, { left: b, bottom: 0, right: tw + 2 * b, top: th + 2 * b })));
+  const at = i => order[i - 1];   // a printed page number -> its sheet, or null for a spare
+  const ink = rgb(0, 0, 0);
+
+  for (const [L, R] of sideOrder(order.length)) {
+    const pg = d.addPage([W, H]);
+
+    if (at(L) !== null) { pg.drawPage(lefts[at(L)], { x: s, y: s, width: b + tw, height: th + 2 * b }); }
+    if (at(R) !== null) { pg.drawPage(rights[at(R)], { x: o + tw, y: s, width: tw + b, height: th + 2 * b }); }
+
+    // crop marks: from the sheet's edge to the bleed, in line with the spread's trim
+    for (const x of [o, o + 2 * tw]) {
+      pg.drawLine({ start: { x, y: 0 }, end: { x, y: s }, thickness: MARK_PT, color: ink });
+      pg.drawLine({ start: { x, y: H - s }, end: { x, y: H }, thickness: MARK_PT, color: ink });
+    }
+
+    for (const y of [o, o + th]) {
+      pg.drawLine({ start: { x: 0, y }, end: { x: s, y }, thickness: MARK_PT, color: ink });
+      pg.drawLine({ start: { x: W - s, y }, end: { x: W, y }, thickness: MARK_PT, color: ink });
+    }
+
+    // the fold: dashed, so it is not cut
+    const fold = o + tw;
+    pg.drawLine({ start: { x: fold, y: 0 }, end: { x: fold, y: s }, thickness: MARK_PT, color: ink, dashArray: FOLD_DASH });
+    pg.drawLine({ start: { x: fold, y: H - s }, end: { x: fold, y: H }, thickness: MARK_PT, color: ink, dashArray: FOLD_DASH });
+
+    pg.setTrimBox(o, o, 2 * tw, th);
+    pg.setBleedBox(s, s, 2 * tw + 2 * b, th + 2 * b);
+  }
+
+  return d.save();
+}
+
+/** sheets.pdf -> the trimmed pages, the printer's spreads and pages, and the booklet. */
 async function products(sheetsPdf, geom, title, only) {
   const out = {};
   const src = await PDFDocument.load(sheetsPdf);
@@ -151,8 +221,12 @@ async function products(sheetsPdf, geom, title, only) {
     out.print = await d.save();
   }
   if (only.has("printer")) {
+    out.printer = await spreads(src, order, geom, title);
+    out.printerSides = sideOrder(order.length);
+  }
+  if (only.has("printer-pages")) {
     const s = SLUG_PT, W = W0 + 2 * s, H = H0 + 2 * s, o = s + b;
-    const d = await PDFDocument.create(); stamp(d); d.setTitle(title + " — for the printer");
+    const d = await PDFDocument.create(); stamp(d); d.setTitle(title + " — pages for the printer");
     const emb = await Promise.all(src.getPages().map(p => d.embedPage(p)));
     const ink = rgb(0, 0, 0);
     order.forEach(i => {
@@ -170,7 +244,7 @@ async function products(sheetsPdf, geom, title, only) {
       pg.setTrimBox(o, o, tw, th);
       pg.setBleedBox(s, s, W0, H0);
     });
-    out.printer = await d.save();
+    out["printer-pages"] = await d.save();
   }
   if (only.has("booklet")) {
     const d = await PDFDocument.create(); stamp(d); d.setTitle(title + " — booklet");
@@ -182,9 +256,7 @@ async function products(sheetsPdf, geom, title, only) {
       const k = Math.min(cellW / tw, cellH / th), w = tw * k, h = th * k, y = (SH - h) / 2;
       const pages = order.map(i => (i === null ? null : emb[i]));   // spare pages before the back cover
       const N = pages.length;
-      for (let side = 1; side <= N / 2; side++) {
-        const near = side, far = N - side + 1;
-        const [L, R] = side % 2 ? [far, near] : [near, far];
+      for (const [L, R] of sideOrder(N)) {
         const pg = d.addPage([SW, SH]);
         if (pages[L - 1]) pg.drawPage(pages[L - 1], { x: SW / 2 - w, y, width: w, height: h });   // flush at the fold
         if (pages[R - 1]) pg.drawPage(pages[R - 1], { x: SW / 2, y, width: w, height: h });
@@ -208,7 +280,7 @@ async function products(sheetsPdf, geom, title, only) {
 
 /** model -> { pages, sheets, files: { name: path }, ... } in outDir */
 async function press(model, outDir, opts = {}) {
-  const only = new Set(opts.only || ["sheets", "print", "printer", "booklet"]);
+  const only = new Set(opts.only || ["sheets", "print", "printer", "printer-pages", "booklet"]);
   const t0 = Date.now();
   const r = await renderSheets(model, opts);
   const geom = geometry(r.model);
@@ -222,7 +294,7 @@ async function press(model, outDir, opts = {}) {
     const d = await PDFDocument.load(r.pdf); stamp(d); d.setTitle(title + " — sheets");
     write("sheets", await d.save());
   }
-  for (const k of ["print", "printer", "booklet"]) if (made[k]) write(k, made[k]);
+  for (const k of ["print", "printer", "printer-pages", "booklet"]) if (made[k]) write(k, made[k]);
   const declared = [model.fonts && model.fonts.displayFont, model.fonts && model.fonts.monoFont,
     model.fonts && model.fonts.scriptFont].filter(Boolean);
   return {
@@ -231,6 +303,8 @@ async function press(model, outDir, opts = {}) {
     // the printed page order: sheet indices, null for a spare page before the back cover
     printedPages: made.order ? made.order.length : r.sheets.length, spare: made.order ? made.order.filter(i => i === null).length : 0,
     booklet: made.bookletLayout || null,
+    // printer.pdf's sheets: the printed page numbers on each, left then right
+    printerSides: made.printerSides || null,
     shrunk: r.sheets.filter(s => s.scale < 0.999).map(s => ({ label: s.label, scale: s.scale })),
     fontsMissing: declared.filter(f => !r.fonts.includes(f)),
     seconds: +((Date.now() - t0) / 1000).toFixed(1),

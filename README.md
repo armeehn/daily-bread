@@ -126,10 +126,15 @@ The **Print ▾** menu:
   pages to a multiple of four (spares go before the back cover) and clear of
   the band a laser cannot ink. Print two-sided, short-edge flip, actual size;
   fold and staple.
-- **Printer PDF** — for a print shop: the same pages one per PDF page in
-  reading order, each on trim + bleed + a 5 mm slug with crop marks, with
-  `/TrimBox` and `/BleedBox` set. The bleed is real: each section's ground is
-  laid out into it. The PDF is RGB; ask the shop whether they convert to CMYK.
+- **Printer PDF** — for a print shop: the booklet as printer's spreads, two
+  pages to a sheet in saddle-stitch order (back and front covers on the first
+  sheet, then 2|47, 46|3 …). Each spread sits on its trim + bleed + a 5 mm slug
+  with crop marks and a dashed fold mark, `/TrimBox` and `/BleedBox` set. The
+  shop prints the sheets two-sided, folds, nests and staples. The bleed is real:
+  each section's ground is laid out into it. The PDF is RGB; ask the shop
+  whether they convert to CMYK.
+- **Printer pages** — the same pages one per PDF page in reading order, each on
+  its own trim + bleed + slug with crop marks: for a shop that imposes itself.
 - **Stickers for a cutter** — a transparent PNG of the sticker sheet at 300 dpi
   for Cricut Print Then Cut (6.75 × 9.25 in). In Design Space: *Upload*, *Print
   Then Cut image*, width 6.75 in, *Make It*.
@@ -141,7 +146,7 @@ The **Print ▾** menu:
   its scanner), A3 crosshairs (a target 10 mm in from three corners). This
   button saves each page's cut file (`.svg` in mm, `.dxf` in inches), measured
   from the trim with the numbers the pages print with. Cut a page from a copy
-  printed at 100 % (Printer PDF, or Web PDF at actual size), not the booklet.
+  printed at 100 % (Printer pages, or Web PDF at actual size), not the booklet.
 
 The Magazine and Printer PDFs come from the press, which needs a headless
 Chromium a web page cannot drive. The studio uses a press on this machine

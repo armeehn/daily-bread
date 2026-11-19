@@ -10,7 +10,8 @@
  * press unreachable it says how to start one and, only when the person agrees,
  * downloads press/<edition>/booklet.pdf, saying the edits are not in it;
  * (3) an edition maps to its .tex by issue number; (4) Printer PDF asks the
- * press for the printer's output; (5) the press is looked for on this machine
+ * press for the printer's spreads, and Printer pages for the pages one to a
+ * sheet; (5) the press is looked for on this machine
  * before press.hq.
  * Needs the press's Playwright (cd tools/press && npm install). The press itself
  * is proven by tools/press/test-press.js.
@@ -129,7 +130,18 @@ async function pressButton(page) {
   check("Printer PDF asks the press for the printer's output", posted && posted.output === "printer", posted && posted.output);
   check("…and names the file for it", dl2.suggestedFilename() === `daily-bread-${EDITION}-printer.pdf`, dl2.suggestedFilename());
   const t2 = await toastText(page);
-  check("…and says what it is", /for the printer — 48 pages with bleed and crop marks/.test(t2), t2);
+  check("…and says what it is", /for the printer — 48 pages as printer's spreads, with bleed and crop marks/.test(t2), t2);
+
+  // (4b) Printer pages: the same pages one to a sheet, for a shop that imposes
+  posted = null;
+  const [dl3] = await Promise.all([
+    page.waitForEvent("download", { timeout: 20000 }),
+    page.click("#pdfMenuBtn").then(() => page.click("#printerPagesBtn")),
+  ]);
+  check("Printer pages asks the press for the pages one to a sheet", posted && posted.output === "printer-pages", posted && posted.output);
+  check("…and names the file for it", dl3.suggestedFilename() === `daily-bread-${EDITION}-printer-pages.pdf`, dl3.suggestedFilename());
+  const t3 = await toastText(page);
+  check("…and says what it is", /for the printer — 48 single pages with bleed and crop marks/.test(t3), t3);
 
   // (5) with no press set, this machine's first, then press.hq
   const urls = await page.evaluate(() => { delete window.DB_PRESS_URL; return pressUrls(); });
