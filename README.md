@@ -124,13 +124,16 @@ The **Print ▾** menu:
 - **Magazine PDF** — the booklet for a desktop duplex printer: the same pages,
   two to a Letter-landscape side in saddle-stitch order, padded with blank
   pages to a multiple of four (spares go before the back cover) and clear of
-  the band a laser cannot ink. Print two-sided, short-edge flip, actual size;
-  fold and staple.
+  the band a laser cannot ink, with the same creep. Print two-sided, short-edge
+  flip, actual size; fold and staple.
 - **Printer PDF** — for a print shop: the booklet as printer's spreads, two
   pages to a sheet in saddle-stitch order (back and front covers on the first
   sheet, then 2|47, 46|3 …). Each spread sits on its trim + bleed + a 5 mm slug
   with crop marks and a dashed fold mark, `/TrimBox` and `/BleedBox` set. The
-  shop prints the sheets two-sided, folds, nests and staples. The bleed is real:
+  shop prints the sheets two-sided, folds, nests and staples. Creep is built in:
+  each sheet's pages sit *Paper thickness* (Print & bleed, 0.1 mm by default)
+  nearer the spine than the sheet outside it, so the centre spread of 12 sheets
+  moves 1.1 mm and the fore-edge trim cuts every page alike. The bleed is real:
   each section's ground is laid out into it. The PDF is RGB; ask the shop
   whether they convert to CMYK.
 - **Printer pages** — the same pages one per PDF page in reading order, each on
