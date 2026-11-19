@@ -260,6 +260,12 @@
   @keyframes flash{0%,40%{box-shadow:0 0 0 3px var(--teal)}100%{box-shadow:0 0 0 3px transparent}}
 
   /* ---- accessible theme wizard ---- */
+  /* ---- spreads: the printed pages as facing pairs ---- */
+  .spreads{position:fixed;inset:0;z-index:58;background:#c9c2b4;display:flex;flex-direction:column}
+  .spreads-hd{display:flex;align-items:center;gap:14px;padding:8px 14px;background:var(--ink);color:var(--bone);
+    font-family:var(--mono);font-size:12px;letter-spacing:.08em}
+  .spreads-hd .spacer{flex:1}
+  .spreads-frame{position:fixed;z-index:59;border:0;background:#c9c2b4}
   .wiz-back{position:fixed;inset:0;background:rgba(29,26,23,.55);z-index:50;display:none;align-items:center;justify-content:center;padding:20px}
   .wiz-back.show{display:flex}
   .wiz{background:var(--bone);border:2px solid var(--ink);box-shadow:10px 10px 0 rgba(29,26,23,.4);width:min(580px,100%);max-height:92vh;display:flex;flex-direction:column}
@@ -415,6 +421,7 @@
       <button class="btn" id="pdfMenuBtn" title="Print outputs: the web PDF, the press booklet, the sticker sheet for a cutter" aria-haspopup="true" aria-expanded="false">Print ▾</button>
       <div class="edmenu right off" id="pdfMenu">
         <button id="pdfBtn" title="The edition on screen, laid out on sheets of the trim set under Print, through your browser's print dialog: choose 'Save as PDF', Margins None, Background graphics ON. These are the same pages the press prints (db-print.js lays out both); long sections run on to a second sheet and long pieces to a Continued sheet.">Web PDF<small>the magazine's pages, through the print dialog</small></button>
+        <button id="spreadsBtn" title="The magazine's pages as the folded booklet shows them: the cover alone on the right, each pair of facing pages meeting at the fold, the back cover alone on the left. The spare pages the press adds to make a multiple of four show before the back cover. Escape closes it.">Spreads<small>facing pages, as the booklet folds</small></button>
         <button id="magPdfBtn" title="The edition on screen as a booklet for a desktop duplex printer: the Web PDF's pages, two to a Letter-landscape side in saddle-stitch order, so the folded, stapled stack reads in order. Print two-sided, short-edge flip, actual size. Made by the press in about two seconds: a press on this machine first (python3 tools/press-server.py), then press.hq; with neither, it offers the booklet last published in press/, which does not have your edits.">Magazine PDF ⤓<small>the booklet, for a home printer</small></button>
         <button id="printerPdfBtn" title="The edition on screen for a print shop: the same pages, one per PDF page in reading order (the shop imposes them), with the bleed set under Print (3 mm by default) and crop marks in the slug outside it. TrimBox and BleedBox are set, so the shop's software knows where to cut. Made by the press (python3 tools/press-server.py on this machine, or press.hq).">Printer PDF ⤓<small>pages with bleed and crop marks, for a print shop</small></button>
         <hr>
@@ -1374,6 +1381,107 @@ $("#pdfBtn").addEventListener("click", async ()=>{
   w.focus(); w.print();
   setTimeout(()=> job.frame.remove(), 60000);
 });
+/* ---------- spreads: the pages as the folded booklet shows them ----------
+   A saddle-stitched booklet opens on the cover alone, a right-hand page, then
+   facing pairs, and closes on the back cover alone, a left-hand page:
+
+              [ 1 ]
+        [ 2 | 3 ]        each sheet cut to its trim, so facing
+        [ 4 | 5 ]        pages meet at the fold as they will on paper
+          ...
+        [ N ]
+
+   The sheets are the Web PDF's (buildPrintFrame). Spare pages go in just before
+   the back cover, where the press puts them (tools/press/render.js). */
+const SPREAD_SIGNATURE = 4;      // a saddle-stitched booklet has a multiple of four pages
+const SPREAD_GAP_PX = 40;        // between one spread and the next
+const SPREAD_PAD_PX = 32;        // round the spreads, in the frame
+const SPREAD_GROUND = "#c9c2b4"; // the preview pane's ground
+$("#spreadsBtn").addEventListener("click", openSpreads);
+async function openSpreads(){
+  openMenu(null);
+  const btn = $("#pdfMenuBtn"), label = btn.innerHTML;
+  btn.textContent = "Laying out…";
+  let job;
+  try{ job = await buildPrintFrame(); }
+  catch(e){ console.error(e); toast("Could not lay out the spreads: " + e.message); btn.innerHTML = label; return; }
+  btn.innerHTML = label;
+
+  // the bar first: the frame sits under it, sized to what is left
+  const box = document.createElement("div");
+  box.className = "spreads"; box.setAttribute("role", "dialog"); box.setAttribute("aria-label", "Spreads");
+  box.innerHTML = '<div class="spreads-hd"><span class="spreads-n"></span><span class="spacer"></span><button class="btn" type="button">Close</button></div>';
+  document.body.appendChild(box);
+  const fr = job.frame, bar = box.firstChild;
+  // Escape from either document: the frame has the focus once it is up
+  const close = ()=>{ box.remove(); fr.remove(); document.removeEventListener("keydown", onKey, true); };
+  const onKey = e=>{ if(e.key === "Escape"){ e.preventDefault(); e.stopPropagation(); close(); } };
+  bar.querySelector("button").addEventListener("click", close);
+  document.addEventListener("keydown", onKey, true);
+  fr.contentDocument.addEventListener("keydown", onKey, true);
+
+  const spare = laySpreads(fr, bar.offsetHeight);
+  const pages = job.sheets.length + spare;
+  bar.querySelector(".spreads-n").textContent = "Spreads · " + pages + " pages" +
+    (spare ? " · " + spare + " blank before the back cover, to make a multiple of " + SPREAD_SIGNATURE : "");
+  fr.focus();
+}
+// Turn the print frame's one-sheet-a-page document into facing pairs, in view.
+// Returns the number of spare pages added.
+function laySpreads(fr, top){
+  const doc = fr.contentDocument, win = fr.contentWindow, book = doc.querySelector(".pp-book");
+  const sheets = Array.from(book.children);
+  const S = { w: sheets[0].offsetWidth, h: sheets[0].offsetHeight };
+
+  // The pages were laid out in a frame one sheet in size. Its width stays (the
+  // site's width rules would reflow every page) and the frame is scaled up
+  // instead. Its height grows, and a print rule sizes a section by 100vh: pin
+  // every such height in pixels first, so each page keeps what it held.
+  book.querySelectorAll("*").forEach(e=>{
+    if(win.getComputedStyle(e).minHeight === S.h + "px"){ e.style.minHeight = S.h + "px"; }
+  });
+  sheets.forEach(s=>{ const f = s.querySelector(".pp-fit"); if(f){ s.dataset.h = String(f.offsetHeight); } });
+
+  // spare pages, just before the back cover
+  let spare = 0;
+  while((sheets.length + spare) % SPREAD_SIGNATURE){
+    const b = doc.createElement("div"); b.className = "pp-sheet pp-spare";
+    book.insertBefore(b, sheets[sheets.length - 1]); spare++;
+  }
+
+  // the trim inside a sheet: the sheet less its bleed and slug on each side.
+  // Measured in the book: the print rules hide everything else in the body.
+  const g = DB.printGeom(model), probe = doc.createElement("div");
+  probe.style.cssText = "position:absolute;visibility:hidden;width:" + g.tw + ";height:" + g.th;
+  book.appendChild(probe);
+  const T = { w: probe.offsetWidth, h: probe.offsetHeight }; probe.remove();
+  const cx = (S.w - T.w) / 2, cy = (S.h - T.h) / 2;
+
+  fr.className = "print-frame spreads-frame"; fr.removeAttribute("aria-hidden"); fr.tabIndex = 0;
+  fr.title = "Spreads";
+  // Two trims side by side fit the sheet-wide frame at `fit`; the frame is then
+  // scaled by `k` to the window: its width, or less, so a whole spread fits
+  // its height. Both are transforms: CSS zoom would re-break the lines and
+  // change what a page holds.
+  const W = 2 * T.w + 2 * SPREAD_PAD_PX, fit = S.w / W, room = window.innerHeight - top;
+  const k = Math.min(window.innerWidth / S.w, (room - 2 * SPREAD_PAD_PX * fit) / (T.h * fit));
+  fr.style.cssText = "top:" + top + "px;left:" + ((window.innerWidth - S.w * k) / 2) + "px;width:" + S.w + "px;height:" + (room / k) + "px;" +
+    "transform:scale(" + k + ");transform-origin:0 0";
+
+  const st = doc.createElement("style");
+  st.textContent =
+    "html,body{ background:" + SPREAD_GROUND + " !important }\n" +
+    "html,body{ overflow-x:hidden }\n" +
+    ".pp-book{ display:grid; grid-template-columns:repeat(2," + T.w + "px); width:" + W + "px; box-sizing:border-box; " +
+      "row-gap:" + SPREAD_GAP_PX + "px; padding:" + SPREAD_PAD_PX + "px; transform:scale(" + fit + "); transform-origin:0 0 }\n" +
+    ".pp-sheet{ margin:" + (-cy) + "px " + (-cx) + "px; clip-path:inset(" + cy + "px " + cx + "px) }\n" +
+    ".pp-sheet:first-child{ grid-column:2 }\n" +
+    ".pp-spare{ width:" + S.w + "px; height:" + S.h + "px; background:#fff }";
+  doc.head.appendChild(st);
+  book.dataset.scale = String(fit);
+  fr.dataset.laid = "1";
+  return spare;
+}
 /* An edition's folder under press/ is its issue number: "№1" → issue-01.
    Anything without a number has no press booklet. */
 function pressEdition(m){
