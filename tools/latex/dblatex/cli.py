@@ -18,6 +18,7 @@ from .writer import write_tex
 REPO = Path(__file__).resolve().parents[3]
 DEFAULT_EDITION = "issue-01"
 EPS_PT = 0.01
+SPREAD_LAG = 1   # a spread's right page keeps the left page's doc number
 
 
 def paths(slug):
@@ -57,6 +58,10 @@ def cmd_check(args):
     if again:
         failures.append("tex -> issue -> tex is not stable:\n  " + "\n  ".join(again[:20]))
 
+    # 1b. Every numbered page prints its own number. p22 once carried p19's
+    #     folio and doc number (copied chrome), and nothing measured it.
+    failures += folio_failures(issue)
+
     if args.web:
         # 2. Structural diff against the committed .js (the web input).
         diff = web.diff_paths(issue, web.load_js(REPO, js))
@@ -81,6 +86,27 @@ def cmd_check(args):
         print("FAIL:", f)
     print("OK" if not failures else f"{len(failures)} failure(s)")
     return 1 if failures else 0
+
+
+def folio_failures(issue):
+    """Folio must equal the page number; the doc number must end in it, or in
+    the page before it on a spread. Example: p22 -> folio 22, DB-022-A."""
+    failures = []
+    for page in issue["pages"]:
+        num = page["id"][1:]
+        chrome = page.get("chrome", {})
+        folio = chrome.get("folio", "")
+        if not (page["id"].startswith("p") and num.isdigit() and folio.isdigit()):
+            continue
+
+        n = int(num)
+        if int(folio) != n:
+            failures.append(f"{page['id']}: folio {folio}, want {n}")
+
+        digits = "".join(c for c in chrome.get("docNo", "") if c.isdigit())
+        if digits and int(digits) % 100 not in (n, n - SPREAD_LAG):
+            failures.append(f"{page['id']}: doc number {chrome['docNo']} is not page {n}'s")
+    return failures
 
 
 def check_print(issue, tex, build):
