@@ -118,6 +118,9 @@ The **Print ▾** menu:
 - **Web PDF** — the magazine's pages through your browser's print dialog
   (Save as PDF, Margins None, Background graphics on), at the trim set under
   Print & bleed (A5 by default). No crop marks: the copy you print yourself.
+- **Spreads** — the same pages as the folded booklet shows them: the cover
+  alone on the right, facing pairs meeting at the fold, the back cover alone
+  on the left, spares before it. Check what faces what before you print.
 - **Magazine PDF** — the booklet for a desktop duplex printer: the same pages,
   two to a Letter-landscape side in saddle-stitch order, padded with blank
   pages to a multiple of four (spares go before the back cover) and clear of
