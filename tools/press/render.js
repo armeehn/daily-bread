@@ -128,7 +128,7 @@ function DB_PRINT_LONG(m) {
 
 function geometry(m) {
   const g = DB.printGeom(m);
-  return { tw: pt(g.tw), th: pt(g.th), b: pt(g.bleed) };
+  return { tw: pt(g.tw), th: pt(g.th), b: pt(g.bleed), creep: pt(g.paper) };
 }
 function stamp(doc) {
   const epoch = process.env.SOURCE_DATE_EPOCH;
@@ -140,6 +140,12 @@ function stamp(doc) {
 /** The page numbers on each side of a saddle-stitched book of N pages, left
  *  then right: side k holds pages k and N-k+1, the even one on the left.
  *  N = 8: [[8, 1], [2, 7], [6, 3], [4, 5]]. */
+/** Which folded sheet a side is on, from the outside: sides 0 and 1 are the
+ *  cover's sheet (0), sides 2 and 3 the next (1), and so on. */
+function sheetOf(side) {
+  return Math.floor(side / 2);
+}
+
 function sideOrder(N) {
   const sides = [];
 
@@ -158,25 +164,38 @@ function sideOrder(N) {
  *                           fold mark
  *
  *  Each page keeps its bleed on the three outer edges; at the fold it is cut
- *  to the trim, so neither page's bleed prints over the other. */
+ *  to the trim, so neither page's bleed prints over the other.
+ *
+ *  Creep: nested sheets push the inner ones out at the fore-edge, and the trim
+ *  then cuts more off them. Sheet i from the outside (0 = the cover's) moves
+ *  its pages i × the paper's thickness toward the spine and loses that much
+ *  more at the fold: on 12 sheets of 0.1 mm the centre spread moves 1.1 mm. */
 async function spreads(src, order, geom, title) {
-  const { tw, th, b } = geom;
+  const { tw, th, b, creep } = geom;
   const s = SLUG_PT, o = s + b;
   const W = 2 * tw + 2 * b + 2 * s, H = th + 2 * b + 2 * s;
   const d = await PDFDocument.create(); stamp(d); d.setTitle(title + " — printer's spreads");
 
-  // the left page without its right bleed, the right page without its left
   const pages = src.getPages();
-  const lefts = await Promise.all(pages.map(p => d.embedPage(p, { left: 0, bottom: 0, right: b + tw, top: th + 2 * b })));
-  const rights = await Promise.all(pages.map(p => d.embedPage(p, { left: b, bottom: 0, right: tw + 2 * b, top: th + 2 * b })));
   const at = i => order[i - 1];   // a printed page number -> its sheet, or null for a spare
   const ink = rgb(0, 0, 0);
+  const sides = sideOrder(order.length);
 
-  for (const [L, R] of sideOrder(order.length)) {
+  for (const [k, [L, R]] of sides.entries()) {
     const pg = d.addPage([W, H]);
+    const shift = sheetOf(k) * creep;
 
-    if (at(L) !== null) { pg.drawPage(lefts[at(L)], { x: s, y: s, width: b + tw, height: th + 2 * b }); }
-    if (at(R) !== null) { pg.drawPage(rights[at(R)], { x: o + tw, y: s, width: tw + b, height: th + 2 * b }); }
+    // the left page without its right bleed, the right page without its left,
+    // each moved `shift` toward the fold and cut that much more there
+    if (at(L) !== null) {
+      const left = await d.embedPage(pages[at(L)], { left: 0, bottom: 0, right: b + tw - shift, top: th + 2 * b });
+      pg.drawPage(left, { x: s + shift, y: s, width: b + tw - shift, height: th + 2 * b });
+    }
+
+    if (at(R) !== null) {
+      const right = await d.embedPage(pages[at(R)], { left: b + shift, bottom: 0, right: tw + 2 * b, top: th + 2 * b });
+      pg.drawPage(right, { x: o + tw, y: s, width: tw + b - shift, height: th + 2 * b });
+    }
 
     // crop marks: from the sheet's edge to the bleed, in line with the spread's trim
     for (const x of [o, o + 2 * tw]) {
@@ -248,23 +267,32 @@ async function products(sheetsPdf, geom, title, only) {
   }
   if (only.has("booklet")) {
     const d = await PDFDocument.create(); stamp(d); d.setTitle(title + " — booklet");
-    const emb = await Promise.all(src.getPages().map(p => d.embedPage(p, trimBox)));
+    const srcPages = src.getPages();
     const [SW, SH] = SHEET_PT;
     const cellW = SW / 2 - BAND_PT, cellH = SH - 2 * BAND_PT;
     const twoUp = Math.min(cellW / tw, cellH / th) >= 0.6;   // a portrait trim: two to a side
     if (twoUp) {
       const k = Math.min(cellW / tw, cellH / th), w = tw * k, h = th * k, y = (SH - h) / 2;
-      const pages = order.map(i => (i === null ? null : emb[i]));   // spare pages before the back cover
+      const pages = order.map(i => (i === null ? null : srcPages[i]));   // spare pages before the back cover
       const N = pages.length;
-      for (const [L, R] of sideOrder(N)) {
+      // flush at the fold, with the same creep as the printer's spreads (spreads())
+      for (const [side, [L, R]] of sideOrder(N).entries()) {
         const pg = d.addPage([SW, SH]);
-        if (pages[L - 1]) pg.drawPage(pages[L - 1], { x: SW / 2 - w, y, width: w, height: h });   // flush at the fold
-        if (pages[R - 1]) pg.drawPage(pages[R - 1], { x: SW / 2, y, width: w, height: h });
+        const c = sheetOf(side) * geom.creep, cw = (tw - c) * k;
+        if (pages[L - 1]) {
+          const left = await d.embedPage(pages[L - 1], { left: b, bottom: b, right: b + tw - c, top: b + th });
+          pg.drawPage(left, { x: SW / 2 - cw, y, width: cw, height: h });
+        }
+        if (pages[R - 1]) {
+          const right = await d.embedPage(pages[R - 1], { left: b + c, bottom: b, right: b + tw, top: b + th });
+          pg.drawPage(right, { x: SW / 2, y, width: cw, height: h });
+        }
       }
       d.catalog.set(d.context.obj("ViewerPreferences"), d.context.obj({ Duplex: "DuplexFlipShortEdge", PickTrayByPDFSize: true }));
       out.bookletLayout = { perSide: 2, sides: N / 2, blank: N - n, scale: +k.toFixed(4) };
     } else {
-      for (const e of emb) {
+      for (const sp of srcPages) {
+        const e = await d.embedPage(sp, trimBox);
         const land = tw > th, [PW, PH] = land ? SHEET_PT : [SHEET_PT[1], SHEET_PT[0]];
         const k = Math.min((PW - 2 * BAND_PT) / tw, (PH - 2 * BAND_PT) / th);
         const pg = d.addPage([PW, PH]);

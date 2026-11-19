@@ -1,7 +1,7 @@
 {
   "edition": "issue-01",
   "source": "db.js DEFAULT_MODEL",
-  "modelSha256": "c75267d8d72c49be838eca3c8b9bffe37c8ec7cb0467b6e9e9199124d7aa18d7",
+  "modelSha256": "9365edf85d434129f7f6813dfa2ee0d85140b8f69da06c10baf67a6f5789dc7d",
   "pages": 48,
   "sides": 24,
   "blankPages": 0,
@@ -9,8 +9,8 @@
   "pageHeightPt": 595.28,
   "sheetWidthPt": 792,
   "sheetHeightPt": 612,
-  "pdfSha256": "e29e368d1f60a435ee9884235b6a0c4707a7593c368582eb56440a89b5b9f408",
-  "pdfBytes": 3057009,
+  "pdfSha256": "ee1999ae5f6d46192d4e8ffdc964aba923de649c533cd999f0931c8a05797c02",
+  "pdfBytes": 3059454,
   "sourceDateEpoch": null,
   "engine": "Chromium 141.0.7390.37 (playwright 1.56.1), pdf-lib 1.17.1",
   "press": "tools/press/render.js (DB.render + db-print.js; saddle-stitch on Letter)"

@@ -28,6 +28,8 @@ const { TEXT_SCALE, NO_FLOW } = require(path.join(ROOT, "db-print.js"));   // th
 const ok = [], bad = [];
 const check = (name, cond, extra) => (cond ? ok : bad).push(name + (extra != null ? " — " + extra : ""));
 const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
+const CREEP_TOL_PT = 0.05;       // finer than one sheet's creep (0.1 mm = 0.28 pt)
+const DEFAULT_PAPER_MM = 0.1;    // db.js print.paper: 100 gsm uncoated
 
 (async () => {
   process.env.SOURCE_DATE_EPOCH = "0";
@@ -155,8 +157,10 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
     // stream is the same bytes in printer-pages.pdf, where page j is printed
     // page j. So a form's fingerprint names its page. Its BBox says which edge
     // lost its bleed, and the cm before its Do says where it sits:
-    //   left  page: BBox [0 0 b+tw …], drawn at x = slug
-    //   right page: BBox [b 0 …],      drawn at x = slug + b + tw
+    //   left  page: BBox [0 0 b+tw-d …], drawn at x = slug + d
+    //   right page: BBox [b+d 0 …],      drawn at x = slug + b + tw
+    // d is the creep: sheet i from the outside (0 = the cover's) moves its
+    // pages i × the paper's thickness toward the spine, cut at the fold.
     const crypto = require("crypto");
     const zlib = require("zlib");
     const fp = st => crypto.createHash("sha1").update(Buffer.from(st.getContents())).digest("hex");
@@ -184,17 +188,22 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
       const text = ops(printer, pp[k]);
       for (const f of formsOf(printer, pp[k])) {
         const box = f.st.dict.lookup(PDFName.of("BBox")).asArray().map(v => v.asNumber());
-        const isLeft = near(box[0], 0) && near(box[2], g.b + g.tw);
-        const isRight = near(box[0], g.b) && near(box[2], g.tw + 2 * g.b);
+        const d = Math.floor(k / 2) * g.creep, fine = (a, c) => near(a, c, CREEP_TOL_PT);
+        const isLeft = fine(box[0], 0) && fine(box[2], g.b + g.tw - d);
+        const isRight = fine(box[0], g.b + d) && fine(box[2], g.tw + 2 * g.b);
         const want = isLeft ? L : isRight ? R : null;
-        const x = xAt(text, f.name), wantX = isLeft ? slug : slug + g.b + g.tw;
-        if (want === null || pageOf.get(fp(f.st)) !== want || !near(x, wantX)) {
+        const x = xAt(text, f.name), wantX = isLeft ? slug + d : slug + g.b + g.tw;
+        if (want === null || pageOf.get(fp(f.st)) !== want || !fine(x, wantX)) {
           wrong.push(`sheet ${k + 1}: page ${pageOf.get(fp(f.st))} as ${isLeft ? "left" : isRight ? "right" : "?"} at x ${x.toFixed(1)}, want ${want} at ${wantX.toFixed(1)}`);
         }
       }
     });
     check("…each sheet draws its two pages, left and right, cut at the fold", pageOf.size === n && !wrong.length,
       wrong.slice(0, 3).join("; ") || `${ps.length} sheets`);
+    const MM = 72 / 25.4, folded = spreads / 2;
+    check("…with creep: the centre spread sits (sheets - 1) × the paper's thickness nearer the spine",
+      near(g.creep, DEFAULT_PAPER_MM * MM, CREEP_TOL_PT) && !wrong.length,
+      `${(g.creep / MM).toFixed(2)} mm paper, centre moved ${((folded - 1) * g.creep / MM).toFixed(2)} mm over ${folded} sheets`);
 
     // printer-pages.pdf: the same pages one to a sheet, for a shop that imposes them itself
     const sp = singles.getPages();
@@ -206,6 +215,16 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
     check("booklet.pdf: two pages to a Letter-landscape side, a multiple of four pages",
       booklet.getPageCount() === sides && booklet.getPages().every(p => near(p.getWidth(), 792) && near(p.getHeight(), 612)),
       `${booklet.getPageCount()} sides for ${n} pages`);
+
+    // the home booklet nests too: side j's pages are cut (j's sheet) × the
+    // paper's thickness shorter at the fold, as on the printer's spreads
+    const bookletOff = booklet.getPages().map((p, j) => {
+      const want = g.b + g.tw - Math.floor(j / 2) * g.creep;
+      const lefts = formsOf(booklet, p).map(f => f.st.dict.lookup(PDFName.of("BBox")).asArray().map(v => v.asNumber()))
+        .filter(box => near(box[0], g.b, CREEP_TOL_PT));
+      return lefts.every(box => near(box[2], want, CREEP_TOL_PT)) ? null : `side ${j + 1}`;
+    }).filter(Boolean);
+    check("booklet.pdf: the same creep, sheet by sheet", !bookletOff.length, bookletOff.slice(0, 3).join(", ") || `${booklet.getPageCount()} sides`);
 
     // the back cover is the last page, as a saddle-stitched magazine has it
     const lastIsBack = info.sheets[n - 1].key === "footer" && info.printedPages === printed &&
