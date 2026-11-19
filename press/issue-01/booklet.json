@@ -9,9 +9,9 @@
   "pageHeightPt": 595.28,
   "sheetWidthPt": 792,
   "sheetHeightPt": 612,
-  "pdfSha256": "4cefd5b82908b0d7f0357822ea96bb496076e1ae3e758e2fc35008ebaabc2f0c",
-  "pdfBytes": 3064427,
-  "sourceDateEpoch": 0,
+  "pdfSha256": "e13ada9967d638f0da570f2dca51072cf143f9a19f9fee0d3a794ef4c505bd70",
+  "pdfBytes": 3056997,
+  "sourceDateEpoch": null,
   "engine": "Chromium 141.0.7390.37 (playwright 1.56.1), pdf-lib 1.17.1",
   "press": "tools/press/render.js (DB.render + db-print.js; saddle-stitch on Letter)"
 }
