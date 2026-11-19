@@ -599,11 +599,18 @@ const BODY_WORDS = 40;           // a block this long is running text
 // same way, one level down (a two-column grid gives up its last column first,
 // a list its last items). A block that moved whole but would half fit comes back
 // and gives up only its tail, so each sheet goes as full as it can.
+// A row of cells on one line (a list row: "1958 · bridge opens… · PIVOT") is
+// one block: divided, its year printed on one page and its words on the next.
 function splitFlow(unit, ok){
   const kids = E=> Array.from(E.children).filter(k=>{
     const cs = k.ownerDocument.defaultView.getComputedStyle(k);
     return cs.display !== "none" && cs.position !== "absolute" && cs.position !== "fixed";
   });
+  const oneLine = E=>{
+    const cs = E.ownerDocument.defaultView.getComputedStyle(E);
+    return /flex$/.test(cs.display) && /^row/.test(cs.flexDirection) && cs.flexWrap === "nowrap";
+  };
+  const whole = E=> !E || kids(E).length < 2 || oneLine(E);
   const shell = E=>{ const c = E.cloneNode(false); c.removeAttribute("id"); return c; };
   function tail(E, into){
     const ks = kids(E);
@@ -611,12 +618,13 @@ function splitFlow(unit, ok){
     let k;
     if(ok()){
       k = into.firstElementChild;                    // the last block to move: can part of it stay?
-      if(!k || kids(k).length < 2) return;
-      E.appendChild(k);
+      if(!k) return;
+      E.appendChild(k);                                // back on the sheet first: a detached block has no style to read
+      if(whole(k)){ into.insertBefore(k, into.firstChild); return; }
       if(ok()) return;                                 // it fits after all (the layout changed)
     } else {
       k = ks[0];
-      if(!k || kids(k).length < 2) return;             // one block, indivisible: the sheet will shrink it
+      if(whole(k)) return;                             // one block, indivisible: the sheet will shrink it
     }
     const kc = shell(k);
     into.insertBefore(kc, into.firstChild);
