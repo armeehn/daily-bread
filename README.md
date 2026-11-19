@@ -74,7 +74,7 @@ node tools/press/render.js --publish        # re-publish press/<edition>/ after 
 Tests: `cd tools/press && npm test` (the press), `npm run audit` (the print design), and
 `node db-render/test-studio-{editor,design,editions,press,cutter,ease}.mjs` (the studio, in
 a real browser). CI (`.gitea/workflows/`) rebuilds and reads back the site,
-checks the `.tex` round trip and the rebrand, and renders, tests and guards
+runs the studio tests, checks the `.tex` round trip and the rebrand, and renders, tests and guards
 the press booklet.
 
 ## The studio

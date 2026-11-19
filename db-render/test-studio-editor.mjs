@@ -23,6 +23,8 @@ const { chromium } = createRequire(new URL("../tools/press/package.json", import
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(HERE, "..");
+const SCROLL_POLL_MS = 200;         // ms: how often to look whether a smooth scroll has stopped
+const SCROLL_MAX_MS = 6000;         // ms: give up waiting for it after this
 const SETTLE = 700;                  // ms: past studio.html's 160ms save/render debounce and a reload
 const TYPES = { ".html": "text/html", ".js": "text/javascript", ".json": "application/json",
                 ".css": "text/css", ".png": "image/png", ".jpg": "image/jpeg", ".svg": "image/svg+xml" };
@@ -216,17 +218,20 @@ const themed = await page.evaluate(async ms => {
 }, SETTLE);
 check("a preset can be undone", themed.applied !== themed.was && themed.back === themed.was, JSON.stringify(themed));
 const shelfH = await page.evaluate(async ms => {
-  const first = shelf.current;
+  // Own one undoable step here: what earlier sections leave on the stack
+  // depends on keystroke timing (COALESCE_MS), so it can be empty.
+  redo();
+  const first = shelf.current, before = hist().undo.length;
   window.__prompt = "Second";
   document.querySelector("#edNewBtn").click();
   await new Promise(r => setTimeout(r, ms));
   const fresh = document.querySelector("#undoBtn").disabled;
   switchEdition(first);
   await new Promise(r => setTimeout(r, ms));
-  return { fresh, resumed: !document.querySelector("#undoBtn").disabled };
+  return { before, fresh, resumed: !document.querySelector("#undoBtn").disabled };
 }, SETTLE);
 check("a new edition starts with nothing to undo", shelfH.fresh);
-check("switching back resumes that edition's history", shelfH.resumed);
+check("switching back resumes that edition's history", shelfH.before > 0 && shelfH.resumed, JSON.stringify(shelfH));
 
 /* ---- 7. cancelling the theme wizard restores the model exactly ----
    Two accents set to one colour used to collapse on the way back: re-tinting
@@ -307,17 +312,28 @@ await page.evaluate(() => setWidth("full"));
 /* ---- 9. All fields: focus a field and the page shows where it goes ---- */
 await page.evaluate(() => showMode("fields"));
 await page.waitForTimeout(200);
-const loc = await page.evaluate(async () => {
+const loc = await page.evaluate(async ([SCROLL_POLL_MS, SCROLL_MAX_MS]) => {
   const w = document.querySelector("#preview").contentWindow;
   w.scrollTo({ top: 0, behavior: "instant" });
   const inp = document.querySelector('#fieldsPane [data-path="calendar.title"]');
   inp.closest(".sec").classList.add("open");
   inp.focus();
-  await new Promise(r => setTimeout(r, 900));        // a smooth scroll
-  const el = elForPath("calendar.title"), r = el.getBoundingClientRect();
-  return { y: w.scrollY, flashed: el.classList.contains("dz-flash"),
+  const el = elForPath("calendar.title"), sleep = ms => new Promise(r => setTimeout(r, ms));
+
+  // The flash is brief: read it early. The smooth scroll runs ~14,000 px and
+  // outlasts any fixed wait on a loaded box, so wait for it to stop instead.
+  await sleep(SCROLL_POLL_MS);
+  const flashed = el.classList.contains("dz-flash");
+  let last = -1;
+  for (let t = 0; t < SCROLL_MAX_MS && w.scrollY !== last; t += SCROLL_POLL_MS) {
+    last = w.scrollY;
+    await sleep(SCROLL_POLL_MS);
+  }
+
+  const r = el.getBoundingClientRect();
+  return { y: w.scrollY, flashed,
            inView: r.top >= 0 && r.bottom <= document.querySelector("#preview").clientHeight };
-});
+}, [SCROLL_POLL_MS, SCROLL_MAX_MS]);
 check("focusing a field scrolls the page to it", loc.y > 1000 && loc.inView, JSON.stringify(loc));
 check("…and flashes it there", loc.flashed);
 

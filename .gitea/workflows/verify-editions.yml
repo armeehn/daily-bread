@@ -134,6 +134,32 @@ jobs:
       - name: Sweep the built pages
         run: node tools/check-a11y.js
 
+  # 3b. THE STUDIO STILL DOES WHAT ITS TESTS SAY
+  # The six db-render/test-studio-*.mjs files ran only by hand. One failed on
+  # every run for weeks and nobody saw it. Run them all, report every file,
+  # fail if any failed. (The press's own tests run in press-booklet.yml.)
+  studio:
+    name: studio tests pass
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.56.1-noble
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the browser driver
+        working-directory: tools/press
+        run: npm ci --no-audit --no-fund
+
+      - name: Studio
+        run: |
+          failed=""
+          for f in db-render/test-studio-*.mjs; do
+            node "$f" || failed="$failed $f"
+          done
+          if [ -n "$failed" ]; then
+            echo "failed:$failed"
+            exit 1
+          fi
+
   # 4. THE .tex MUST STILL PRODUCE THE COMMITTED WEB INPUT
   # content/issue-01.tex is the source of truth; content/issue-01.js is emitted
   # from it and is what tools/build.js reads. Parse the .tex, require it to equal
