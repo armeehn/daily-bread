@@ -15,9 +15,11 @@ same pages in the same fonts. About two seconds.
     POST /press      {"edition": "issue-01", "model": {…}, "output": …}  -> application/pdf
                      "output": "booklet" (the default: two pages to a Letter-
                      landscape side in saddle-stitch order, for a desktop duplex
-                     printer), "printer" (pages in order with bleed and crop
-                     marks and TrimBox/BleedBox, for a print shop) or "print"
-                     (the pages cut to the trim, in order: the proof).
+                     printer), "printer" (printer's spreads in saddle-stitch
+                     order with bleed, crop and fold marks and TrimBox/BleedBox,
+                     for a print shop), "printer-pages" (the same pages one to a
+                     sheet, for a shop that imposes them) or "print" (the pages
+                     cut to the trim, in order: the proof).
                      X-Press-Pages / -Sides / -Sheets / -Seconds say what it is.
     GET  /health     {"ok": true, "engine": "...", ...}
     GET  /           a status page for a person who opened the press in a browser
@@ -50,7 +52,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 RENDER = REPO / "tools" / "press" / "render.js"
 RENDER_TIMEOUT_S = int(os.environ.get("PRESS_TIMEOUT", "120"))
-OUTPUTS = ("booklet", "printer", "print")
+OUTPUTS = ("booklet", "printer", "printer-pages", "print")
 
 PORT = int(os.environ.get("PRESS_PORT", "8091"))
 # Origins the studio is served from. A browser elsewhere gets no CORS header and
@@ -239,12 +241,15 @@ class Handler(BaseHTTPRequestHandler):
         sys.stderr.write("press %s %s %s ok %.1fs (waited %.1fs) %d pages %d bytes\n" % (
             self.address_string(), edition, output, time.monotonic() - started, waited, info["pages"], len(pdf)))
 
+        # sides of paper: the booklet's, the printer's spreads, or one a page
         name = f"daily-bread-{edition}-{output}.pdf"
+        sides = ((info.get("booklet") or {}).get("sides")
+                 or len(info.get("printerSides") or []) or info.get("printedPages") or info["pages"])
         self.reply(HTTPStatus.OK, pdf, "application/pdf", {
             "Content-Disposition": f'attachment; filename="{name}"',
             "X-Press-Pages": str(info["pages"]),
-            "X-Press-Sides": str((info.get("booklet") or {}).get("sides", info["pages"])),
-            "X-Press-Sheets": str(-(-(info.get("booklet") or {}).get("sides", info["pages"]) // 2)),
+            "X-Press-Sides": str(sides),
+            "X-Press-Sheets": str(-(-sides // 2)),
             "X-Press-Seconds": "%.1f" % (time.monotonic() - started),
         })
 

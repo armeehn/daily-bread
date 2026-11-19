@@ -6,9 +6,11 @@
  *
  * (1) The studio's Web PDF and the press lay the default edition out on the same
  *     sheets: same order, same sections, same scale. One renderer, no drift.
- * (2) print.pdf is those pages cut to the trim; printer.pdf puts each on trim +
- *     bleed + slug with /TrimBox and /BleedBox where the trim and bleed are;
- *     booklet.pdf imposes them two to a Letter side in saddle-stitch order.
+ * (2) print.pdf is those pages cut to the trim; printer.pdf imposes them as
+ *     printer's spreads (two to a sheet, saddle-stitch order) on trim + bleed +
+ *     slug with /TrimBox and /BleedBox on the spread; printer-pages.pdf puts each
+ *     page on its own sheet the same way; booklet.pdf imposes them two to a
+ *     Letter side in saddle-stitch order.
  * (3) Every face the magazine declares is loaded, from assets/fonts/.
  * (4) Two renders with SOURCE_DATE_EPOCH set are byte-identical.
  */
@@ -17,7 +19,7 @@ const http = require("http");
 const os = require("os");
 const path = require("path");
 const { chromium } = require("playwright");
-const { PDFDocument } = require("pdf-lib");
+const { PDFDocument, PDFName } = require("pdf-lib");
 const { press, geometry } = require("./render.js");
 
 const ROOT = path.resolve(__dirname, "..", "..");
@@ -124,19 +126,82 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
     const g = geometry(model), n = info.pages;
     const load = async f => PDFDocument.load(fs.readFileSync(info.files[f]));
     const sheets = await load("sheets"), print = await load("print"), printer = await load("printer"), booklet = await load("booklet");
+    const singles = await load("printer-pages");
     const [sw, sh] = sheets.getPage(0).getSize().width !== undefined ? [sheets.getPage(0).getWidth(), sheets.getPage(0).getHeight()] : [0, 0];
     check("the sheets are the trim plus bleed", near(sw, g.tw + 2 * g.b) && near(sh, g.th + 2 * g.b), `${sw.toFixed(1)} x ${sh.toFixed(1)} pt`);
     const printed = Math.ceil(n / 4) * 4;
     check("print.pdf is every sheet cut to the trim, padded to a multiple of four before the back cover", print.getPageCount() === printed &&
       print.getPages().every(p => near(p.getWidth(), g.tw) && near(p.getHeight(), g.th)), `${print.getPageCount()} pages`);
     const slug = 5 * 72 / 25.4;
-    const pp = printer.getPages();
-    const trimOk = pp.every(p => { const t = p.getTrimBox(); return near(t.x, slug + g.b) && near(t.width, g.tw) && near(t.height, g.th); });
-    const bleedOk = pp.every(p => { const b = p.getBleedBox(); return near(b.x, slug) && near(b.width, g.tw + 2 * g.b); });
-    check("printer.pdf: every page on trim + bleed + slug", printer.getPageCount() === printed &&
-      pp.every(p => near(p.getWidth(), g.tw + 2 * (g.b + slug))), `${pp[0].getWidth().toFixed(1)} pt wide`);
-    check("…with its TrimBox on the trim", trimOk);
-    check("…and its BleedBox on the bleed", bleedOk);
+
+    // printer.pdf: printer's spreads. Side k of a saddle-stitched book of N
+    // pages holds pages k and N-k+1, the even one on the left: 48|1, 2|47, …
+    const pp = printer.getPages(), spreads = printed / 2;
+    check("printer.pdf: printer's spreads, two pages to a sheet on trim + bleed + slug", printer.getPageCount() === spreads &&
+      pp.every(p => near(p.getWidth(), 2 * g.tw + 2 * (g.b + slug)) && near(p.getHeight(), g.th + 2 * (g.b + slug))),
+      `${printer.getPageCount()} sheets, ${pp[0].getWidth().toFixed(1)} pt wide`);
+    check("…with its TrimBox on the spread's trim", pp.every(p => { const t = p.getTrimBox();
+      return near(t.x, slug + g.b) && near(t.y, slug + g.b) && near(t.width, 2 * g.tw) && near(t.height, g.th); }));
+    check("…and its BleedBox on the spread's bleed", pp.every(p => { const b = p.getBleedBox();
+      return near(b.x, slug) && near(b.width, 2 * g.tw + 2 * g.b) && near(b.height, g.th + 2 * g.b); }));
+    const ps = info.printerSides || [];
+    check("…in saddle-stitch order: the back and front covers share the first sheet", ps.length === spreads &&
+      ps[0][0] === printed && ps[0][1] === 1 && ps.every(([l, r]) => l + r === printed + 1 && l % 2 === 0),
+      ps.slice(0, 3).map(s => s.join("|")).join(" "));
+    const drawn = pp.reduce((sum, p) => sum + p.node.Resources().lookup(PDFName.of("XObject")).keys().length, 0);
+    check("…every page drawn once, the spares left blank", drawn === n, `${drawn} of ${n} pages`);
+
+    // What each sheet really draws. A page is a form XObject; its content
+    // stream is the same bytes in printer-pages.pdf, where page j is printed
+    // page j. So a form's fingerprint names its page. Its BBox says which edge
+    // lost its bleed, and the cm before its Do says where it sits:
+    //   left  page: BBox [0 0 b+tw …], drawn at x = slug
+    //   right page: BBox [b 0 …],      drawn at x = slug + b + tw
+    const crypto = require("crypto");
+    const zlib = require("zlib");
+    const fp = st => crypto.createHash("sha1").update(Buffer.from(st.getContents())).digest("hex");
+    const formsOf = (doc, p) => {
+      const xo = p.node.Resources().lookup(PDFName.of("XObject"));
+      return xo ? xo.keys().map(k => ({ name: k.decodeText ? k.decodeText() : k.toString().slice(1), st: doc.context.lookup(xo.get(k)) })) : [];
+    };
+    const ops = (doc, p) => {
+      const c = p.node.Contents(), parts = c.asArray ? c.asArray().map(r => doc.context.lookup(r)) : [c];
+      return parts.map(st => {
+        const raw = Buffer.from(st.getContents());
+        return st.dict.get(PDFName.of("Filter")) ? zlib.inflateSync(raw).toString("latin1") : raw.toString("latin1");
+      }).join("\n");
+    };
+    // pdf-lib draws a page as  q  1 0 0 1 x y cm  …  /Name Do  Q : the first cm of its block places it
+    const xAt = (text, name) => {
+      const block = text.split(/\bQ\b/).find(b => b.includes("/" + name + " Do"));
+      const cm = block && block.match(/1 0 0 1 ([-\d.]+) ([-\d.]+) cm/);
+      return cm ? +cm[1] : NaN;
+    };
+    const pageOf = new Map();
+    singles.getPages().forEach((p, j) => formsOf(singles, p).forEach(f => pageOf.set(fp(f.st), j + 1)));
+    const wrong = [];
+    ps.forEach(([L, R], k) => {
+      const text = ops(printer, pp[k]);
+      for (const f of formsOf(printer, pp[k])) {
+        const box = f.st.dict.lookup(PDFName.of("BBox")).asArray().map(v => v.asNumber());
+        const isLeft = near(box[0], 0) && near(box[2], g.b + g.tw);
+        const isRight = near(box[0], g.b) && near(box[2], g.tw + 2 * g.b);
+        const want = isLeft ? L : isRight ? R : null;
+        const x = xAt(text, f.name), wantX = isLeft ? slug : slug + g.b + g.tw;
+        if (want === null || pageOf.get(fp(f.st)) !== want || !near(x, wantX)) {
+          wrong.push(`sheet ${k + 1}: page ${pageOf.get(fp(f.st))} as ${isLeft ? "left" : isRight ? "right" : "?"} at x ${x.toFixed(1)}, want ${want} at ${wantX.toFixed(1)}`);
+        }
+      }
+    });
+    check("…each sheet draws its two pages, left and right, cut at the fold", pageOf.size === n && !wrong.length,
+      wrong.slice(0, 3).join("; ") || `${ps.length} sheets`);
+
+    // printer-pages.pdf: the same pages one to a sheet, for a shop that imposes them itself
+    const sp = singles.getPages();
+    check("printer-pages.pdf: every page on trim + bleed + slug", singles.getPageCount() === printed &&
+      sp.every(p => near(p.getWidth(), g.tw + 2 * (g.b + slug))), `${sp[0].getWidth().toFixed(1)} pt wide`);
+    check("…with its TrimBox on the trim", sp.every(p => { const t = p.getTrimBox(); return near(t.x, slug + g.b) && near(t.width, g.tw) && near(t.height, g.th); }));
+    check("…and its BleedBox on the bleed", sp.every(p => { const b = p.getBleedBox(); return near(b.x, slug) && near(b.width, g.tw + 2 * g.b); }));
     const sides = Math.ceil(n / 4) * 2;
     check("booklet.pdf: two pages to a Letter-landscape side, a multiple of four pages",
       booklet.getPageCount() === sides && booklet.getPages().every(p => near(p.getWidth(), 792) && near(p.getHeight(), 612)),
@@ -149,7 +214,7 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
 
     /* ---- (3) fonts ---- */
     check("every face the magazine declares is loaded", !info.fontsMissing.length, info.fontsMissing.join(", ") || "all");
-    const { PDFName, PDFDict } = require("pdf-lib");
+    const { PDFDict } = require("pdf-lib");
     const faces = new Set();
     for (const [, obj] of sheets.context.enumerateIndirectObjects()) {
       if (obj instanceof PDFDict && obj.get(PDFName.of("Type")) === PDFName.of("Font")) {
@@ -162,9 +227,10 @@ const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
 
     /* ---- (4) determinism ---- */
     const again = await press(model, path.join(tmp, "again"), { browser });
-    const same = ["sheets", "print", "printer", "booklet"].filter(k =>
+    const kinds = ["sheets", "print", "printer", "printer-pages", "booklet"];
+    const same = kinds.filter(k =>
       Buffer.compare(fs.readFileSync(info.files[k]), fs.readFileSync(again.files[k])) === 0);
-    check("two renders are byte-identical", same.length === 4, same.join(", "));
+    check("two renders are byte-identical", same.length === kinds.length, same.join(", "));
   } finally {
     await browser.close();
     fs.rmSync(tmp, { recursive: true, force: true });
