@@ -126,9 +126,27 @@ function DB_PRINT_LONG(m) {
   return require(path.join(ROOT, "db-print.js")).longPieces(m).filter(p => getPath(m, p) != null);
 }
 
+// The Paper thickness as typed: "0.1mm", "0.1", "0,1 mm", "0.004in". A bare
+// number is millimetres. What cannot be read means no creep: an optional
+// refinement never stops the press.
+function paperPt(v) {
+  const s = String(v).trim().replace(",", ".");
+
+  if (/^[\d.]+$/.test(s)) {
+    return parseFloat(s) * PT_PER.mm;
+  }
+
+  try {
+    return Math.max(0, pt(s));
+  } catch (e) {
+    process.stderr.write(`press: Paper thickness ${JSON.stringify(v)} is not a length; no creep\n`);
+    return 0;
+  }
+}
+
 function geometry(m) {
   const g = DB.printGeom(m);
-  return { tw: pt(g.tw), th: pt(g.th), b: pt(g.bleed), creep: pt(g.paper) };
+  return { tw: pt(g.tw), th: pt(g.th), b: pt(g.bleed), creep: paperPt(g.paper) };
 }
 function stamp(doc) {
   const epoch = process.env.SOURCE_DATE_EPOCH;
@@ -278,7 +296,8 @@ async function products(sheetsPdf, geom, title, only) {
       // flush at the fold, with the same creep as the printer's spreads (spreads())
       for (const [side, [L, R]] of sideOrder(N).entries()) {
         const pg = d.addPage([SW, SH]);
-        const c = sheetOf(side) * geom.creep, cw = (tw - c) * k;
+        // the creep is the paper's, in millimetres on the sheet: c / k in page units
+        const c = sheetOf(side) * geom.creep / k, cw = (tw - c) * k;
         if (pages[L - 1]) {
           const left = await d.embedPage(pages[L - 1], { left: b, bottom: b, right: b + tw - c, top: b + th });
           pg.drawPage(left, { x: SW / 2 - cw, y, width: cw, height: h });

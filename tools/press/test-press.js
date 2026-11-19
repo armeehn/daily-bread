@@ -216,15 +216,31 @@ const DEFAULT_PAPER_MM = 0.1;    // db.js print.paper: 100 gsm uncoated
       booklet.getPageCount() === sides && booklet.getPages().every(p => near(p.getWidth(), 792) && near(p.getHeight(), 612)),
       `${booklet.getPageCount()} sides for ${n} pages`);
 
-    // the home booklet nests too: side j's pages are cut (j's sheet) × the
-    // paper's thickness shorter at the fold, as on the printer's spreads
+    // the home booklet nests too. Side j's left page is cut at the fold (its
+    // right edge) and its right page at the fold (its left edge) by the
+    // sheet's creep in paper millimetres: the sheet prints at scale k, so the
+    // cut in page units is creep / k. Each page sits flush at the fold.
+    const kB = info.booklet.scale, foldX = 792 / 2;
     const bookletOff = booklet.getPages().map((p, j) => {
-      const want = g.b + g.tw - Math.floor(j / 2) * g.creep;
-      const lefts = formsOf(booklet, p).map(f => f.st.dict.lookup(PDFName.of("BBox")).asArray().map(v => v.asNumber()))
-        .filter(box => near(box[0], g.b, CREEP_TOL_PT));
-      return lefts.every(box => near(box[2], want, CREEP_TOL_PT)) ? null : `side ${j + 1}`;
+      const c = Math.floor(j / 2) * g.creep / kB, text = ops(booklet, p), fine = (a, v) => near(a, v, CREEP_TOL_PT);
+      const [L, R] = ps[j];
+      const forms = formsOf(booklet, p).map(f => ({ box: f.st.dict.lookup(PDFName.of("BBox")).asArray().map(v => v.asNumber()), x: xAt(text, f.name) }));
+      const left = forms.find(f => f.x < foldX), right = forms.find(f => f.x >= foldX);
+      const okL = !!left && fine(left.box[0], g.b) && fine(left.box[2], g.b + g.tw - c) && fine(left.x, foldX - (g.tw - c) * kB);
+      const okR = !!right && fine(right.box[0], g.b + c) && fine(right.box[2], g.b + g.tw) && fine(right.x, foldX);
+      const spare = P => P >= n && P < printed;   // the spares sit just before the back cover
+      const good = forms.length === 2 - spare(L) - spare(R) && (spare(L) || okL) && (spare(R) || okR);
+      return good ? null : `side ${j + 1} (${forms.length} pages)`;
     }).filter(Boolean);
-    check("booklet.pdf: the same creep, sheet by sheet", !bookletOff.length, bookletOff.slice(0, 3).join(", ") || `${booklet.getPageCount()} sides`);
+    check("booklet.pdf: the same creep, each page cut at the fold, sheet by sheet", !bookletOff.length,
+      bookletOff.slice(0, 3).join(", ") || `${booklet.getPageCount()} sides`);
+
+    // a Paper thickness a person might type: bare numbers are millimetres, a
+    // comma is a decimal point, and anything else means no creep, never a failed press
+    const paper = v => geometry({ ...model, print: { ...model.print, paper: v } }).creep / MM;
+    const typed = [["0", 0], ["0.1", 0.1], ["0,1mm", 0.1], ["0.004in", 0.1016], ["thin", 0], ["", 0.1]];
+    const misread = typed.filter(([v, want]) => { try { return !near(paper(v), want, 0.001); } catch (e) { return true; } });
+    check("a typed Paper thickness never stops the press", !misread.length, misread.map(([v]) => JSON.stringify(v)).join(", ") || typed.length + " forms");
 
     // the back cover is the last page, as a saddle-stitched magazine has it
     const lastIsBack = info.sheets[n - 1].key === "footer" && info.printedPages === printed &&
