@@ -147,7 +147,15 @@ def cmd_press(args):
               "the booklet would ship in the shim's faces")
         return 1
 
+    # Issue 01's booklet is the press's (render.js): never typeset over another source's
     tex, _, build = paths(args.edition)
+    manifest = PRESS_DIR / args.edition / BOOKLET_MANIFEST
+    if manifest.exists():
+        source = json.loads(manifest.read_text()).get("source")
+        if source != str(tex.relative_to(REPO)):
+            print(f"FAIL: {manifest.relative_to(REPO)} is published from {source}, not {tex.name}")
+            return 1
+
     issue = read_tex(tex.read_text())
     failures = folio_failures(issue) + check_print(issue, tex, build)
     for f in failures:
