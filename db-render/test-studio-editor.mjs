@@ -88,6 +88,10 @@ await page.waitForTimeout(1500);
 const settle = () => page.waitForTimeout(SETTLE);
 const frame = () => page.frames().find(f => f !== page.mainFrame());
 
+// A re-render swaps the preview document: wait for the element, a fixed SETTLE loses under load
+const waitPreview = css => page.waitForFunction(
+  s => document.querySelector("#preview").contentDocument?.querySelector(s), css);
+
 /* ---- 1. boot: nothing to undo, and the rich-field probe found its fields ---- */
 const boot = await page.evaluate(() => ({
   undoOff: document.querySelector("#undoBtn").disabled,
@@ -156,6 +160,7 @@ await settle();
 check("Ctrl+Shift+Z redoes it", await page.evaluate(() => model.letter.signoff) === "ABC");
 
 /* ---- 4. delete a row from the page: no dialog, and Undo in the toast ---- */
+await waitPreview('[data-dbi^="contents.toc#"]');
 const del = await page.evaluate(async ms => {
   let asked = false; const c = window.confirm; window.confirm = () => { asked = true; return true; };
   const d = document.querySelector("#preview").contentDocument;
@@ -179,6 +184,7 @@ check("the toast offers Undo", del.offered);
 check("Undo in the toast brings the row back where it was", del.n2 === del.n0 && del.back, JSON.stringify(del));
 
 /* ---- 5. the keyboard works a selected row ---- */
+await waitPreview('[data-dbi="contents.toc#1"]');
 const keys0 = await page.evaluate(async () => {
   const d = document.querySelector("#preview").contentDocument;
   const row = d.querySelector('[data-dbi="contents.toc#1"]');
