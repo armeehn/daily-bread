@@ -1,4 +1,4 @@
-"""python3 tools/db-latex.py {import,build,check} --edition <slug>
+"""python3 tools/db-latex.py {import,build,check,press} --edition <slug>
 
 The .tex issues feed the website's shared strings (content/<slug>.js, read by
 tools/strings/from-issue.js) and can still be typeset as proofs (build --print).
@@ -19,6 +19,14 @@ REPO = Path(__file__).resolve().parents[3]
 DEFAULT_EDITION = "issue-01"
 EPS_PT = 0.01
 SPREAD_LAG = 1   # a spread's right page keeps the left page's doc number
+
+# Where the studio's "Magazine PDF" button falls back to with no press running:
+# press/<edition>/. Issue №1's booklet there comes from tools/press/render.js;
+# an issue still kept as .tex publishes its own with `db-latex.py press`.
+PRESS_DIR = REPO / "press"
+BOOKLET_PDF = "booklet.pdf"
+BOOKLET_MANIFEST = "booklet.json"
+PRESS_NAME = "tools/db-latex.py press (lualatex + dailybread.cls; saddle-stitch on Letter)"
 
 
 def paths(slug):
@@ -61,6 +69,10 @@ def cmd_check(args):
     # 1b. Every numbered page prints its own number. p22 once carried p19's
     #     folio and doc number (copied chrome), and nothing measured it.
     failures += folio_failures(issue)
+
+    # 1c. A booklet published from this .tex was typeset from it as it is now.
+    #     93b1d24 fixed issue 02's folios and the studio kept offering the old ones.
+    failures += booklet_failures(args.edition, tex)
 
     if args.web:
         # 2. Structural diff against the committed .js (the web input).
@@ -109,6 +121,66 @@ def folio_failures(issue):
     return failures
 
 
+def booklet_failures(edition, tex):
+    """press/<edition>/booklet.json, when it names this .tex, must carry its hash.
+    A booklet from another source (issue 01's, from the press) is not ours to judge."""
+    manifest = PRESS_DIR / edition / BOOKLET_MANIFEST
+    if not manifest.exists():
+        return []
+
+    info = json.loads(manifest.read_text())
+    if info.get("source") != str(tex.relative_to(REPO)):
+        return []
+
+    if info.get("sourceSha256") != hashlib.sha256(tex.read_bytes()).hexdigest():
+        return [f"{manifest.relative_to(REPO)}: the booklet predates {tex.name}; "
+                f"run `python3 tools/db-latex.py press --edition {edition}`"]
+    return []
+
+
+def cmd_press(args):
+    """Typeset the edition and publish its saddle-stitched booklet, with a manifest
+    naming the source and the bytes, to press/<edition>/: what the studio downloads
+    when no press is running. Needs riposte-latex, or the shim's faces would ship."""
+    if press.riposte_dir(REPO) is None:
+        print("FAIL: riposte-latex not found ($RIPOSTE_LATEX or ../riposte-latex); "
+              "the booklet would ship in the shim's faces")
+        return 1
+
+    tex, _, build = paths(args.edition)
+    issue = read_tex(tex.read_text())
+    failures = folio_failures(issue) + check_print(issue, tex, build)
+    for f in failures:
+        print("FAIL:", f)
+    if failures:
+        return 1
+
+    # Copy the booklet over the published one and describe it beside it
+    out = PRESS_DIR / args.edition
+    out.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(build / BOOKLET_PDF, out / BOOKLET_PDF)
+    pdf = (out / BOOKLET_PDF).read_bytes()
+    sides, sheet_w, sheet_h = press.pdf_geometry(out / BOOKLET_PDF)
+    n = len(issue["pages"])
+    manifest = {
+        "edition": args.edition,
+        "source": str(tex.relative_to(REPO)),
+        "sourceSha256": hashlib.sha256(tex.read_bytes()).hexdigest(),
+        "pages": n, "sides": sides, "sheets": sides // 2,
+        "pageWidthPt": press.A5_PT[0], "pageHeightPt": press.A5_PT[1],
+        "sheetWidthPt": round(sheet_w, 2), "sheetHeightPt": round(sheet_h, 2),
+        "order": ["%d|%d" % lr for lr in press.saddle_stitch(n)],
+        "pdfSha256": hashlib.sha256(pdf).hexdigest(), "pdfBytes": len(pdf),
+        "sourceDateEpoch": int(press.source_date_epoch()),
+        "engine": press.engine_version(REPO),
+        "press": PRESS_NAME,
+    }
+    (out / BOOKLET_MANIFEST).write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
+    print("press: %s  %d pages on %d sides  sha256 %s" % (
+        (out / BOOKLET_PDF).relative_to(REPO), n, sides, manifest["pdfSha256"][:12]))
+    return 0
+
+
 def check_print(issue, tex, build):
     """Typeset both print outputs; each must have the page count and geometry the
     issue implies. Returns the failures, printing what was measured."""
@@ -135,7 +207,8 @@ def check_print(issue, tex, build):
 def main(argv=None):
     p = argparse.ArgumentParser(prog="db-latex", description=__doc__)
     sub = p.add_subparsers(dest="cmd", required=True)
-    for name, fn in (("import", cmd_import), ("build", cmd_build), ("check", cmd_check)):
+    for name, fn in (("import", cmd_import), ("build", cmd_build), ("check", cmd_check),
+                     ("press", cmd_press)):
         s = sub.add_parser(name)
         s.add_argument("--edition", default=DEFAULT_EDITION)
         if name in ("build", "check"):
