@@ -36,6 +36,7 @@ the issue as LaTeX, from before that, for two jobs:
 python3 tools/db-latex.py build --edition issue-01          # web + print proof
 python3 tools/db-latex.py build --edition issue-01 --web    # only content/<edition>.js and the site
 python3 tools/db-latex.py build --edition issue-02 --print  # only the proof PDFs
+python3 tools/db-latex.py press --edition issue-02          # republish press/issue-02/booklet.pdf after a .tex change
 python3 tools/db-latex.py check --edition issue-01          # the round trip (CI)
 python3 tools/db-latex.py import --edition issue-01         # old .js -> .tex, once
 ```
