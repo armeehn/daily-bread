@@ -132,8 +132,10 @@ function DB_PRINT_LONG(m) {
 function paperPt(v) {
   const s = String(v).trim().replace(",", ".");
 
+  // "." and ".." pass the pattern and parse to NaN: no number, no creep
   if (/^[\d.]+$/.test(s)) {
-    return parseFloat(s) * PT_PER.mm;
+    const mm = parseFloat(s);
+    return Number.isFinite(mm) ? mm * PT_PER.mm : 0;
   }
 
   try {
@@ -155,15 +157,15 @@ function stamp(doc) {
   doc.setProducer("Daily Bread press (tools/press/render.js)"); doc.setCreator("DB.render + db-print.js, Chromium, pdf-lib");
 }
 
-/** The page numbers on each side of a saddle-stitched book of N pages, left
- *  then right: side k holds pages k and N-k+1, the even one on the left.
- *  N = 8: [[8, 1], [2, 7], [6, 3], [4, 5]]. */
 /** Which folded sheet a side is on, from the outside: sides 0 and 1 are the
  *  cover's sheet (0), sides 2 and 3 the next (1), and so on. */
 function sheetOf(side) {
   return Math.floor(side / 2);
 }
 
+/** The page numbers on each side of a saddle-stitched book of N pages, left
+ *  then right: side k holds pages k and N-k+1, the even one on the left.
+ *  N = 8: [[8, 1], [2, 7], [6, 3], [4, 5]]. */
 function sideOrder(N) {
   const sides = [];
 

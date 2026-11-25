@@ -1415,33 +1415,39 @@ async function openSpreads(){
   document.body.appendChild(box);
   const fr = job.frame, bar = box.firstChild;
   // Escape from either document: the frame has the focus once it is up
-  const close = ()=>{ box.remove(); fr.remove(); document.removeEventListener("keydown", onKey, true); };
+  const close = ()=>{
+    box.remove(); fr.remove();
+    document.removeEventListener("keydown", onKey, true);
+    window.removeEventListener("resize", onResize);
+  };
   const onKey = e=>{ if(e.key === "Escape"){ e.preventDefault(); e.stopPropagation(); close(); } };
   bar.querySelector("button").addEventListener("click", close);
   document.addEventListener("keydown", onKey, true);
   fr.contentDocument.addEventListener("keydown", onKey, true);
 
-  const spare = laySpreads(fr, bar.offsetHeight);
+  const { spare, refit } = laySpreads(fr, bar.offsetHeight);
+  // the window can change while the view is up: fit it again, as it opened
+  const onResize = ()=> refit(bar.offsetHeight);
+  window.addEventListener("resize", onResize);
   const pages = job.sheets.length + spare;
   bar.querySelector(".spreads-n").textContent = "Spreads · " + pages + " pages" +
     (spare ? " · " + spare + " blank before the back cover, to make a multiple of " + SPREAD_SIGNATURE : "");
   fr.focus();
 }
 // Turn the print frame's one-sheet-a-page document into facing pairs, in view.
-// Returns the number of spare pages added.
+// Returns the number of spare pages added, and refit(top) to size the view to
+// the window again.
 function laySpreads(fr, top){
-  const doc = fr.contentDocument, win = fr.contentWindow, book = doc.querySelector(".pp-book");
+  const doc = fr.contentDocument, book = doc.querySelector(".pp-book");
   const sheets = Array.from(book.children);
   const S = { w: sheets[0].offsetWidth, h: sheets[0].offsetHeight };
 
   // The pages were laid out in a frame one sheet in size. Its width stays (the
   // site's width rules would reflow every page) and the frame is scaled up
-  // instead. Its height grows, and a print rule sizes a section by 100vh: pin
-  // every such height in pixels first, so each page keeps what it held.
-  book.querySelectorAll("*").forEach(e=>{
-    if(win.getComputedStyle(e).minHeight === S.h + "px"){ e.style.minHeight = S.h + "px"; }
-  });
-  sheets.forEach(s=>{ const f = s.querySelector(".pp-fit"); if(f){ s.dataset.h = String(f.offsetHeight); } });
+  // instead. Its height grows, which changes nothing a page holds: the back
+  // cover's 100vh is fixed in pixels by db-print.js. What each page holds is
+  // noted here, so the test can prove that.
+  sheets.forEach(s=>{ const f = s.querySelector(".pp-fit") || s.firstElementChild; if(f){ s.dataset.h = String(f.offsetHeight); } });
 
   // spare pages, just before the back cover
   let spare = 0;
@@ -1464,10 +1470,14 @@ function laySpreads(fr, top){
   // scaled by `k` to the window: its width, or less, so a whole spread fits
   // its height. Both are transforms: CSS zoom would re-break the lines and
   // change what a page holds.
-  const W = 2 * T.w + 2 * SPREAD_PAD_PX, fit = S.w / W, room = window.innerHeight - top;
-  const k = Math.min(window.innerWidth / S.w, (room - 2 * SPREAD_PAD_PX * fit) / (T.h * fit));
-  fr.style.cssText = "top:" + top + "px;left:" + ((window.innerWidth - S.w * k) / 2) + "px;width:" + S.w + "px;height:" + (room / k) + "px;" +
-    "transform:scale(" + k + ");transform-origin:0 0";
+  const W = 2 * T.w + 2 * SPREAD_PAD_PX, fit = S.w / W;
+  const refit = bar=>{
+    const room = window.innerHeight - bar;
+    const k = Math.min(window.innerWidth / S.w, (room - 2 * SPREAD_PAD_PX * fit) / (T.h * fit));
+    fr.style.cssText = "top:" + bar + "px;left:" + ((window.innerWidth - S.w * k) / 2) + "px;width:" + S.w + "px;height:" + (room / k) + "px;" +
+      "transform:scale(" + k + ");transform-origin:0 0";
+  };
+  refit(top);
 
   const st = doc.createElement("style");
   st.textContent =
@@ -1481,7 +1491,7 @@ function laySpreads(fr, top){
   doc.head.appendChild(st);
   book.dataset.scale = String(fit);
   fr.dataset.laid = "1";
-  return spare;
+  return { spare, refit };
 }
 /* An edition's folder under press/ is its issue number: "№1" → issue-01.
    Anything without a number has no press booklet. */

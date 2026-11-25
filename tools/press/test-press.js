@@ -20,7 +20,7 @@ const os = require("os");
 const path = require("path");
 const { chromium } = require("playwright");
 const { PDFDocument, PDFName } = require("pdf-lib");
-const { press, geometry } = require("./render.js");
+const { press, products, geometry } = require("./render.js");
 
 const ROOT = path.resolve(__dirname, "..", "..");
 const DB = require(path.join(ROOT, "db.js"));
@@ -30,6 +30,7 @@ const check = (name, cond, extra) => (cond ? ok : bad).push(name + (extra != nul
 const near = (a, b, t = 0.6) => Math.abs(a - b) <= t;
 const CREEP_TOL_PT = 0.05;       // finer than one sheet's creep (0.1 mm = 0.28 pt)
 const DEFAULT_PAPER_MM = 0.1;    // db.js print.paper: 100 gsm uncoated
+const ODD_PAGES = 46;            // a book two pages short of a multiple of four
 
 (async () => {
   process.env.SOURCE_DATE_EPOCH = "0";
@@ -146,10 +147,15 @@ const DEFAULT_PAPER_MM = 0.1;    // db.js print.paper: 100 gsm uncoated
       return near(t.x, slug + g.b) && near(t.y, slug + g.b) && near(t.width, 2 * g.tw) && near(t.height, g.th); }));
     check("…and its BleedBox on the spread's bleed", pp.every(p => { const b = p.getBleedBox();
       return near(b.x, slug) && near(b.width, 2 * g.tw + 2 * g.b) && near(b.height, g.th + 2 * g.b); }));
-    const ps = info.printerSides || [];
-    check("…in saddle-stitch order: the back and front covers share the first sheet", ps.length === spreads &&
-      ps[0][0] === printed && ps[0][1] === 1 && ps.every(([l, r]) => l + r === printed + 1 && l % 2 === 0),
-      ps.slice(0, 3).map(s => s.join("|")).join(" "));
+    // The book as it folds, worked out here and not taken from the press:
+    // sheet s from the outside carries pages 2s+1, 2s+2 and their mirrors.
+    // Its outer side is N-2s | 2s+1, its inner side 2s+2 | N-2s-1.
+    const ps = info.printerSides || [], book = [];
+    for (let s = 0; s < printed / 4; s++) {
+      book.push([printed - 2 * s, 2 * s + 1], [2 * s + 2, printed - 2 * s - 1]);
+    }
+    check("…in saddle-stitch order: each folded sheet nests inside the one before", ps.length === spreads &&
+      JSON.stringify(ps) === JSON.stringify(book), ps.slice(0, 3).map(s => s.join("|")).join(" "));
     const drawn = pp.reduce((sum, p) => sum + p.node.Resources().lookup(PDFName.of("XObject")).keys().length, 0);
     check("…every page drawn once, the spares left blank", drawn === n, `${drawn} of ${n} pages`);
 
@@ -238,7 +244,7 @@ const DEFAULT_PAPER_MM = 0.1;    // db.js print.paper: 100 gsm uncoated
     // a Paper thickness a person might type: bare numbers are millimetres, a
     // comma is a decimal point, and anything else means no creep, never a failed press
     const paper = v => geometry({ ...model, print: { ...model.print, paper: v } }).creep / MM;
-    const typed = [["0", 0], ["0.1", 0.1], ["0,1mm", 0.1], ["0.004in", 0.1016], ["thin", 0], ["", 0.1]];
+    const typed = [["0", 0], ["0.1", 0.1], ["0,1mm", 0.1], ["0.004in", 0.1016], ["thin", 0], ["", 0.1], [".", 0], ["..", 0]];
     const misread = typed.filter(([v, want]) => { try { return !near(paper(v), want, 0.001); } catch (e) { return true; } });
     check("a typed Paper thickness never stops the press", !misread.length, misread.map(([v]) => JSON.stringify(v)).join(", ") || typed.length + " forms");
 
@@ -246,6 +252,39 @@ const DEFAULT_PAPER_MM = 0.1;    // db.js print.paper: 100 gsm uncoated
     const lastIsBack = info.sheets[n - 1].key === "footer" && info.printedPages === printed &&
       (await PDFDocument.load(fs.readFileSync(info.files.print))).getPage(printed - 1).node.Contents() != null;
     check("the back cover is the last printed page; spare pages go before it", lastIsBack, `${info.spare} spare of ${printed}`);
+
+    // Spare pages, on a book that needs them: the edition above has none. Each
+    // made-up page draws a mark, so a blank page in the output is a spare.
+    // 46 pages: spares are printed pages 46 and 47, the back cover is 48.
+    const odd = await PDFDocument.create();
+    for (let i = 0; i < ODD_PAGES; i++) {
+      odd.addPage([g.tw + 2 * g.b, g.th + 2 * g.b]).drawRectangle({ x: g.b, y: g.b, width: i + 1, height: 1 });
+    }
+    const made = await products(await odd.save(), g, "spares", new Set(["print", "printer", "booklet"]));
+    const formsOn = p => {
+      const xo = p.node.Resources() && p.node.Resources().lookup(PDFName.of("XObject"));
+      return xo ? xo.keys().length : 0;
+    };
+    const oddPrint = await PDFDocument.load(made.print);
+    const blank = oddPrint.getPages().map((p, i) => formsOn(p) ? -1 : i).filter(i => i >= 0);
+    check(`a ${ODD_PAGES}-page book gets two spare pages, just before the back cover`,
+      oddPrint.getPageCount() === ODD_PAGES + 2 && JSON.stringify(blank) === JSON.stringify([ODD_PAGES - 1, ODD_PAGES]),
+      `blank: ${blank.map(i => i + 1).join(", ")} of ${oddPrint.getPageCount()}`);
+
+    // The sides that carry them are 2|47 and 46|3. Each draws one page, and on
+    // the right half: page 2 on the left of its side, page 3 on the right.
+    // (Spares at 2 and 3 would draw one page on those sides too, on the wrong half.)
+    const halfOf = (doc, p) => {
+      const f = formsOf(doc, p);
+      return f.length === 1 ? (xAt(ops(doc, p), f[0].name) < p.getWidth() / 2 ? "left" : "right") : "";
+    };
+    for (const [what, bytes] of [["printer's spreads", made.printer], ["booklet", made.booklet]]) {
+      const doc = await PDFDocument.load(bytes), sides = doc.getPages(), forms = sides.map(formsOn);
+      const halves = [halfOf(doc, sides[1]), halfOf(doc, sides[2])];
+      check(`…and the ${what} leave those two pages blank`, forms.length === (ODD_PAGES + 2) / 2 &&
+        forms.reduce((a, b) => a + b, 0) === ODD_PAGES && halves.join() === "left,right",
+        `${forms.length} sides; 2|47 draws ${halves[0] || "?"}, 46|3 draws ${halves[1] || "?"}`);
+    }
 
     /* ---- (3) fonts ---- */
     check("every face the magazine declares is loaded", !info.fontsMissing.length, info.fontsMissing.join(", ") || "all");
