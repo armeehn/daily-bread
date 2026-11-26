@@ -41,7 +41,7 @@ const LIST = process.argv.includes('--list');
 const ORIGIN = 'https://db.ripostelabs.xyz';
 const LANGS = ['en','fr','es','it','pl','la','zh-hans','zh-hant','pa','ko','ja','tl','vi','hi','ar','fa'];
 const RTL = ['ar','fa'];
-const VARIANTS = ['', 'lite', 'eink'];
+const VARIANTS = ['', 'lite', 'eink', 'plain'];
 
 /* The generated editions, as build.js lays them out. Anything else in the repo
    (studio.html, verify/) is a tool, not an edition, and is checked for markup
