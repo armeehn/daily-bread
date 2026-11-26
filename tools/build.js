@@ -39,8 +39,7 @@ const VERIFYJS = fs.readFileSync(path.join(__dirname, 'assets', 'verify-badge.js
    lite  = same content, no web fonts, decoration stripped, colour kept
    eink  = lite + monochrome, high-contrast, motion-free (for e-readers)
    plain = content first: ink on bone, one mono face, art in grey — the
-           ripostelabs.xyz look. Unsigned like lite / eink, and left out of
-           the full page's switches so the 16 signed editions keep their bytes. */
+           ripostelabs.xyz look. Unsigned like lite / eink. */
 const VARIANTS = [
   {id:'full', cls:'',        seg:''},
   {id:'lite', cls:'v-lite',  seg:'lite'},
@@ -48,11 +47,6 @@ const VARIANTS = [
   {id:'plain', cls:'v-plain', seg:'plain'},
 ];
 const VER_KEY = {full:'chrome.verFull', lite:'chrome.verLite', eink:'chrome.verEink', plain:'chrome.verPlain'};
-
-/* the variants a page's switches list: the full page keeps its signed set */
-function switchable(variant){
-  return VARIANTS.filter(v => v.id !== 'plain' || variant !== 'full');
-}
 
 /* ---- languages (code = dir name; hreflang = BCP-47; dir = ltr|rtl) ---- */
 const LANGS = [
@@ -502,14 +496,14 @@ function mainnav(t){
   return `<nav class="mainnav" aria-label="${attr(t['chrome.sections'])}">\n${items}\n    </nav>`;
 }
 function vswitch(t, code, variant){
-  const items = switchable(variant).map(v=>{
+  const items = VARIANTS.map(v=>{
     const cur = v.id===variant ? ' aria-current="true"' : '';
     return `<a href="${url(code, v.id)}"${cur}>${esc(t[VER_KEY[v.id]])}</a>`;
   }).join('');
   return `<nav class="vswitch" aria-label="${esc(t['chrome.rendering'])}">${items}</nav>`;
 }
 function fswitch(t, code, variant){
-  const items = switchable(variant).map(v=>{
+  const items = VARIANTS.map(v=>{
     const cur = v.id===variant ? ' aria-current="true"' : '';
     return `<a href="${url(code, v.id)}"${cur}>${esc(t[VER_KEY[v.id]])}</a>`;
   }).join(' · ');
