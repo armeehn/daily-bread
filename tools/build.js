@@ -27,6 +27,8 @@ const crypto = require('crypto');
 const ROOT = path.resolve(__dirname, '..');
 const STYLE = fs.readFileSync(path.join(__dirname, 'assets', 'style.css'), 'utf8');
 const ALT = fs.readFileSync(path.join(__dirname, 'assets', 'alt.css'), 'utf8');
+/* the plain rendering: content first, two inks, the ripostelabs.xyz look */
+const PLAIN = fs.readFileSync(path.join(__dirname, 'assets', 'plain.css'), 'utf8');
 /* full-variant-only: see the header of verify-alert.css */
 const ALERTCSS = fs.readFileSync(path.join(__dirname, 'assets', 'verify-alert.css'), 'utf8');
 /* the reader-facing self-verification badge, inlined into the full editions */
@@ -35,12 +37,22 @@ const VERIFYJS = fs.readFileSync(path.join(__dirname, 'assets', 'verify-badge.js
 /* ---- renderings: the full page + two lightweight variants ----
    full  = the rich, web-font, colour edition (served at the page root)
    lite  = same content, no web fonts, decoration stripped, colour kept
-   eink  = lite + monochrome, high-contrast, motion-free (for e-readers)     */
+   eink  = lite + monochrome, high-contrast, motion-free (for e-readers)
+   plain = content first: ink on bone, one mono face, art in grey — the
+           ripostelabs.xyz look. Unsigned like lite / eink, and left out of
+           the full page's switches so the 16 signed editions keep their bytes. */
 const VARIANTS = [
   {id:'full', cls:'',        seg:''},
   {id:'lite', cls:'v-lite',  seg:'lite'},
   {id:'eink', cls:'v-eink',  seg:'eink'},
+  {id:'plain', cls:'v-plain', seg:'plain'},
 ];
+const VER_KEY = {full:'chrome.verFull', lite:'chrome.verLite', eink:'chrome.verEink', plain:'chrome.verPlain'};
+
+/* the variants a page's switches list: the full page keeps its signed set */
+function switchable(variant){
+  return VARIANTS.filter(v => v.id !== 'plain' || variant !== 'full');
+}
 
 /* ---- languages (code = dir name; hreflang = BCP-47; dir = ltr|rtl) ---- */
 const LANGS = [
@@ -490,18 +502,16 @@ function mainnav(t){
   return `<nav class="mainnav" aria-label="${attr(t['chrome.sections'])}">\n${items}\n    </nav>`;
 }
 function vswitch(t, code, variant){
-  const key = {full:'chrome.verFull', lite:'chrome.verLite', eink:'chrome.verEink'};
-  const items = VARIANTS.map(v=>{
+  const items = switchable(variant).map(v=>{
     const cur = v.id===variant ? ' aria-current="true"' : '';
-    return `<a href="${url(code, v.id)}"${cur}>${esc(t[key[v.id]])}</a>`;
+    return `<a href="${url(code, v.id)}"${cur}>${esc(t[VER_KEY[v.id]])}</a>`;
   }).join('');
   return `<nav class="vswitch" aria-label="${esc(t['chrome.rendering'])}">${items}</nav>`;
 }
 function fswitch(t, code, variant){
-  const key = {full:'chrome.verFull', lite:'chrome.verLite', eink:'chrome.verEink'};
-  const items = VARIANTS.map(v=>{
+  const items = switchable(variant).map(v=>{
     const cur = v.id===variant ? ' aria-current="true"' : '';
-    return `<a href="${url(code, v.id)}"${cur}>${esc(t[key[v.id]])}</a>`;
+    return `<a href="${url(code, v.id)}"${cur}>${esc(t[VER_KEY[v.id]])}</a>`;
   }).join(' · ');
   return `<div class="fswitch">${esc(t['chrome.altVersions'])}: ${items}</div>`;
 }
@@ -586,7 +596,9 @@ function page(code, variant){
      the nameplate, brand mark, drop caps and the DB monogram all fall back to a plain
      serif without it. A single small display face is worth the one request even under
      the lightweight budget; font-display:swap still paints on serif until it arrives. */
-  const fonts = variant==='full'
+  /* plain sets everything in the self-hosted JetBrains Mono (plain.css): no requests out */
+  const fonts = variant==='plain' ? ''
+    : variant==='full'
     ? `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">`
@@ -598,7 +610,9 @@ function page(code, variant){
     ? `<link rel="alternate" media="(prefers-reduced-data: reduce)" href="${url(code,'lite')}">
 <link rel="alternate" media="(monochrome)" href="${url(code,'eink')}">`
     : '';
-  const css = variant==='full' ? STYLE + '\n' + ALERTCSS : STYLE + '\n' + ALT;
+  const css = variant==='full' ? STYLE + '\n' + ALERTCSS
+    : variant==='plain' ? STYLE + '\n' + PLAIN
+    : STYLE + '\n' + ALT;
   return `<!DOCTYPE html>
 <html lang="${L.hreflang}"${rtl?' dir="rtl"':''}${htmlCls}>
 <head>

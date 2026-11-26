@@ -28,7 +28,7 @@ const pressRequire = createRequire(path.join(__dirname, "press", "package.json")
 const { chromium } = pressRequire("playwright");
 const AXE_SOURCE = fs.readFileSync(pressRequire.resolve("axe-core/axe.min.js"), "utf8");
 
-const DEFAULT_PAGES = ["/", "/lite/", "/eink/", "/ar/", "/verify/"];
+const DEFAULT_PAGES = ["/", "/lite/", "/eink/", "/plain/", "/ar/", "/verify/"];
 const WIDTHS = [1280, 390];                 // the desktop grid, and a phone
 const VIEWPORT_HEIGHT = 844;
 const TAB_LINKS = '.rail a[href^="#"]';     // the contents rail: one link a pane

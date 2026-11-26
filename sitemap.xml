@@ -960,4 +960,324 @@
     <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/eink/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/eink/"/>
   </url>
+  <url>
+    <loc>https://db.ripostelabs.xyz/plain/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/"/>
+  </url>
+  <url>
+    <loc>https://db.ripostelabs.xyz/fr/plain/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/"/>
+  </url>
+  <url>
+    <loc>https://db.ripostelabs.xyz/es/plain/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/"/>
+  </url>
+  <url>
+    <loc>https://db.ripostelabs.xyz/it/plain/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/"/>
+  </url>
+  <url>
+    <loc>https://db.ripostelabs.xyz/pl/plain/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/"/>
+  </url>
+  <url>
+    <loc>https://db.ripostelabs.xyz/la/plain/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/"/>
+  </url>
+  <url>
+    <loc>https://db.ripostelabs.xyz/zh-hans/plain/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/"/>
+  </url>
+  <url>
+    <loc>https://db.ripostelabs.xyz/zh-hant/plain/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/"/>
+  </url>
+  <url>
+    <loc>https://db.ripostelabs.xyz/pa/plain/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/"/>
+  </url>
+  <url>
+    <loc>https://db.ripostelabs.xyz/ko/plain/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/"/>
+  </url>
+  <url>
+    <loc>https://db.ripostelabs.xyz/ja/plain/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/"/>
+  </url>
+  <url>
+    <loc>https://db.ripostelabs.xyz/tl/plain/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/"/>
+  </url>
+  <url>
+    <loc>https://db.ripostelabs.xyz/vi/plain/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/"/>
+  </url>
+  <url>
+    <loc>https://db.ripostelabs.xyz/hi/plain/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/"/>
+  </url>
+  <url>
+    <loc>https://db.ripostelabs.xyz/ar/plain/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/"/>
+  </url>
+  <url>
+    <loc>https://db.ripostelabs.xyz/fa/plain/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/"/>
+    <xhtml:link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/"/>
+    <xhtml:link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/"/>
+  </url>
 </urlset>

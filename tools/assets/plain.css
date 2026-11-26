@@ -1,0 +1,4 @@
+  /* Daily Bread · plain rendering (stub, replaced by the design pass) */
+  @font-face{font-family:"JetBrains Mono";font-style:normal;font-display:swap;font-weight:100 800;
+    src:url("/assets/fonts/jetbrains/jetbrains-mono-latin.b058178d.woff2") format("woff2")}
+  html.v-plain{--pink:var(--ink);--teal:var(--ink);--orange:var(--ink)}

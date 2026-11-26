@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="ja" class="v-plain">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Bread №1 · ケロウナの崩壊 · オカナガンのためのクィア・マガジン</title>
+<meta name="description" content="Daily Bread は、BC州ケロウナで季刊ごとに焼き上げる、オカナガンのためのクィア・マガジンです。第№1号「ケロウナの崩壊」。見つけた場所では無料、払えない人はそのままで、払える人は払えるだけ。Riposte Laboratories の出資による刊行。">
+<meta property="og:title" content="Daily Bread №1：ケロウナの崩壊">
+<meta property="og:description" content="オカナガンのためのクィア・マガジン。無料 / PWYC。第№1号、2026年夏。">
+<meta property="og:image" content="/assets/cover.jpg">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://db.ripostelabs.xyz/ja/plain/">
+<link rel="alternate" hreflang="en" href="https://db.ripostelabs.xyz/plain/">
+<link rel="alternate" hreflang="fr" href="https://db.ripostelabs.xyz/fr/plain/">
+<link rel="alternate" hreflang="es" href="https://db.ripostelabs.xyz/es/plain/">
+<link rel="alternate" hreflang="it" href="https://db.ripostelabs.xyz/it/plain/">
+<link rel="alternate" hreflang="pl" href="https://db.ripostelabs.xyz/pl/plain/">
+<link rel="alternate" hreflang="la" href="https://db.ripostelabs.xyz/la/plain/">
+<link rel="alternate" hreflang="zh-Hans" href="https://db.ripostelabs.xyz/zh-hans/plain/">
+<link rel="alternate" hreflang="zh-Hant" href="https://db.ripostelabs.xyz/zh-hant/plain/">
+<link rel="alternate" hreflang="pa" href="https://db.ripostelabs.xyz/pa/plain/">
+<link rel="alternate" hreflang="ko" href="https://db.ripostelabs.xyz/ko/plain/">
+<link rel="alternate" hreflang="ja" href="https://db.ripostelabs.xyz/ja/plain/">
+<link rel="alternate" hreflang="tl" href="https://db.ripostelabs.xyz/tl/plain/">
+<link rel="alternate" hreflang="vi" href="https://db.ripostelabs.xyz/vi/plain/">
+<link rel="alternate" hreflang="hi" href="https://db.ripostelabs.xyz/hi/plain/">
+<link rel="alternate" hreflang="ar" href="https://db.ripostelabs.xyz/ar/plain/">
+<link rel="alternate" hreflang="fa" href="https://db.ripostelabs.xyz/fa/plain/">
+<link rel="alternate" hreflang="x-default" href="https://db.ripostelabs.xyz/plain/">
+
+<style>
+  :root{
+    --ink:#1d1a17; --bone:#f6f1e7; --panel:#eae4d6; --paper2:#efe9db;
+    --dark:#2a2723;
+    --pink:#f0477d; --teal:#12b795; --orange:#fe9a0d;
+    /* Words need 4.5:1 on their ground, and the bright inks do not give it on
+       paper: pink 3.2, teal 2.3, orange 1.9. So the bright inks stay fills,
+       edges and art, and an accent that carries words changes ink:
+         -deep  on paper (BRAND.md's contrast table), and under bone words
+         -lift  on ink; only pink needs letting down, for the charcoal panels
+       A bright ground takes ink words. Muted is the press's grey, 6:1. */
+    --pink-deep:#d81150; --teal-deep:#0c7a63; --orange-deep:#a15e01;
+    --pink-lift:#f77aa1; --teal-lift:var(--teal); --orange-lift:var(--orange);
+    --muted-paper:#5e574e; --muted-ink:#b9b0a3;
+    /* the ink in use here: paper unless a rule below says the ground is ink */
+    --pink-t:var(--pink-deep); --teal-t:var(--teal-deep); --orange-t:var(--orange-deep);
+    --muted:var(--muted-paper);
+    --maxw:1080px; --topbar:56px;
+    --checker:repeating-conic-gradient(var(--ink) 0% 25%,var(--bone) 0% 50%) 0 0/18px 18px;
+    --checker-inv:repeating-conic-gradient(var(--bone) 0% 25%,var(--ink) 0% 50%) 0 0/18px 18px;
+    --harlequin:repeating-conic-gradient(from 45deg,var(--pink) 0% 25%,var(--teal) 0% 50%) 0 0/26px 26px;
+  }
+  /* ink grounds, then the paper laid on them */
+  .field-ink,.field-ink .card,.hero,.backcover,.plate,header.top,.rail,footer.slim{
+    --pink-t:var(--pink-lift); --teal-t:var(--teal-lift); --orange-t:var(--orange-lift);
+    --muted:var(--muted-ink)}
+  .card,.stat,.panel,.sticker,.shop-card,.langmenu,.cover-wrap .free{
+    --pink-t:var(--pink-deep); --teal-t:var(--teal-deep); --orange-t:var(--orange-deep);
+    --muted:var(--muted-paper)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'IBM Plex Mono',ui-monospace,'SFMono-Regular',monospace;
+    background:var(--bone); color:var(--ink);
+    -webkit-font-smoothing:antialiased; line-height:1.7; font-size:16px;
+  }
+  a{color:var(--pink-t);text-decoration:none;transition:color .15s}
+  a:hover{color:var(--teal-t)}
+  img{max-width:100%;display:block}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
+  section{scroll-margin-top:52px}
+
+  /* ---------- shared type ---------- */
+  .kicker{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;padding:5px 12px;background:var(--ink);color:var(--bone)}
+  .kicker.pink{background:var(--pink);color:var(--ink)}
+  .kicker.teal{background:var(--teal);color:var(--ink)}
+  .kicker.orange{background:var(--orange);color:var(--ink)}
+  /* .display headings are fitted per language at build time: --fit caps the
+     font so the translated headline holds the same line count as English, and
+     --dl reserves that many lines (viewport-driven, so identical across
+     languages) — the block below every headline lands at the same place.
+     Both fall back gracefully when unset (English full-width headings). */
+  .display{font-size:min(clamp(32px,5.4vw,54px),var(--fit,999px));line-height:.96;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.015em;text-wrap:balance;overflow-wrap:break-word;
+    min-height:calc(var(--dl,1) * .96 * clamp(32px,5.4vw,54px))}
+  .display .dot{color:var(--pink-t)}
+  .frak{font-family:'UnifrakturMaguntia',serif;font-weight:400;line-height:.9}
+  .dek{font-size:15.5px;line-height:1.7;max-width:62ch;color:#3a352e;margin-top:14px}
+  .prose{font-size:15.5px;line-height:1.78;max-width:64ch}
+  .prose p{margin:0 0 15px} .prose p:last-child{margin-bottom:0}
+  .justify{text-align:justify;hyphens:auto}
+  .meta{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  /* a link in a muted line is told by its underline, not by a second colour */
+  .meta a{color:inherit;text-decoration:underline}
+  .stamp{display:inline-block;border:2px solid var(--orange-t);color:var(--orange-t);
+    font-size:11px;font-weight:700;letter-spacing:.16em;padding:7px 13px;
+    transform:rotate(-2.5deg);text-transform:uppercase;white-space:nowrap;background:transparent}
+  .stamp.pink{border-color:var(--pink-t);color:var(--pink-t)}
+  .stamp.teal{border-color:var(--teal-t);color:var(--teal-t)}
+  .scribble{font-family:'Caveat',cursive;font-size:26px;line-height:1.1;color:var(--pink-t);
+    transform:rotate(-2.5deg);display:inline-block}
+  .scribble.teal{color:var(--teal-t)} .scribble.orange{color:var(--orange-t)}
+
+  /* ---------- section headers ---------- */
+  .sec{padding:84px 0}
+  .sec.tight{padding:64px 0}
+  .sechead{display:flex;align-items:baseline;gap:16px;margin-bottom:30px;flex-wrap:wrap}
+  .sechead .no{font-size:12px;font-weight:700;letter-spacing:.14em;background:var(--ink);
+    color:var(--bone);padding:5px 11px;white-space:nowrap}
+  .sechead .tag{font-size:12px;letter-spacing:.08em;color:var(--muted)}
+  .rule{height:6px;border-top:2px solid currentColor;border-bottom:1px dashed currentColor;
+    color:var(--ink);opacity:.9;margin:0}
+
+  /* ---------- cards / boxes with hard shadow ---------- */
+  .card{border:2px solid var(--ink);background:var(--bone);box-shadow:6px 6px 0 var(--ink)}
+  .card > .hd{display:flex;justify-content:space-between;gap:12px;align-items:center;
+    padding:10px 15px;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    border-bottom:2px solid var(--ink);background:var(--panel)}
+  .card > .hd.pink{background:var(--pink);color:var(--ink)}
+  .card > .hd.teal{background:var(--teal);color:var(--ink)}
+  .card > .hd.orange{background:var(--orange);color:var(--ink)}
+  .card > .hd .r{opacity:.85}
+  .card > .bd{padding:16px 18px}
+  .list .li{display:flex;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px dashed rgba(29,26,23,.45)}
+  .list .li:last-child{border-bottom:0}
+  .list .li .t{font-size:14px;line-height:1.45}
+  .list .li .end{margin-left:auto;flex:none;text-align:right}
+  .pgchip{font-weight:700;color:var(--bone);background:var(--ink);font-size:12px;
+    padding:2px 8px;flex:none;min-width:34px;text-align:center}
+  .tagend{font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+  .statuschip{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--bone);padding:2px 9px;text-transform:uppercase}
+
+  /* ---------- grids ---------- */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start}
+  .split.center{align-items:center}
+  .thirds{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 44px}
+  @media(max-width:860px){.split,.thirds,.toc-grid{grid-template-columns:1fr;gap:30px}}
+
+  /* ---------- full-bleed fields ---------- */
+  .field-ink{background:var(--ink);color:var(--bone)}
+  .field-ink a{color:var(--pink-t)} .field-ink .rule{color:var(--bone)}
+  .field-ink .card{background:#26221e;border-color:var(--bone);box-shadow:6px 6px 0 rgba(246,241,231,.85);color:var(--bone)}
+  .field-ink .card>.hd{background:#332e28;color:var(--bone);border-color:var(--bone)}
+  .field-ink .sechead .no{background:var(--bone);color:var(--ink)}
+  .band{height:26px;background:var(--checker)}
+  .band.harl{height:34px;background:var(--harlequin)}
+  .band.br{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+
+  /* ---------- top bar ---------- */
+  header.top{position:sticky;top:0;z-index:60;background:var(--ink);color:var(--bone);border-bottom:2px solid var(--bone)}
+  header.top .bar{display:flex;align-items:stretch;flex-wrap:wrap;gap:0;min-height:54px}
+  /* brand lockup: blackletter mark + dashed interior rule + spec-sheet titleblock */
+  header.top .brand{order:1;display:flex;align-items:center;text-decoration:none;color:var(--bone);
+    padding:7px 0;margin-inline-end:22px}
+  header.top .brand:hover{color:var(--bone)}
+  header.top .brand .mark{font-family:'UnifrakturMaguntia',serif;font-size:30px;font-weight:400;line-height:.9;
+    white-space:nowrap;padding-inline-end:15px}
+  header.top .brand .lock{display:flex;flex-direction:column;justify-content:center;gap:4px;
+    padding-inline-start:15px;border-inline-start:1px dashed rgba(246,241,231,.5)}
+  header.top .brand .lab{font-size:9px;letter-spacing:.17em;text-transform:uppercase;line-height:1.2;
+    color:#cfc6b6;max-width:24ch}
+  header.top .brand .doc{font-size:9px;letter-spacing:.16em;text-transform:uppercase;line-height:1;
+    color:var(--pink);direction:ltr;unicode-bidi:isolate}
+  header.top .brand:hover .doc{color:var(--teal)}
+  /* dashed form-rule bridging the brand block and the switch (spec-sheet motif) */
+  header.top .toprule{order:2;flex:1 1 auto;align-self:stretch;position:relative;min-width:24px}
+  header.top .toprule::before{content:"";position:absolute;left:2px;right:2px;top:50%;
+    border-top:2px dashed rgba(246,241,231,.26)}
+  header.top nav.mainnav{order:5;flex-basis:100%;display:flex;gap:10px 18px;flex-wrap:wrap;
+    padding:9px 0 3px;margin-top:4px;border-top:1px dashed rgba(246,241,231,.26)}
+  header.top nav.mainnav a{color:var(--bone);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  header.top nav.mainnav a:hover{color:var(--pink)}
+  @media(max-width:760px){header.top nav.mainnav{display:none}
+    header.top .toprule{display:none}
+    header.top .brand{margin-inline-end:auto}}
+
+
+  /* ---------- tabbed reading: contents rail + one pane at a time -------------
+     The issue is still ONE document with the same markup and the same anchors —
+     the rail is a plain <nav> of in-page links, and each tab is a .pane wrapper
+     revealed by :target. No runtime JS, so it survives with scripting off.
+
+     The whole thing is gated behind `@supports selector(:has(*))` for one
+     reason: the landing state (nothing targeted yet) can only be expressed as
+     `body:not(:has(.pane:target))`. Without :has() the rules never apply, every
+     .pane stays visible, and the page degrades to exactly the continuous scroll
+     it was before — never to a blank page. Do not lift these rules out of the
+     @supports block.
+
+     The `a[href="#id"]` list below must name every entry in TABS in
+     tools/build.js; checkTabs() fails the build if one goes missing. */
+  .issue{display:block}
+  .rail{display:none}
+
+  @supports selector(:has(*)){
+    /* the rail replaces the header's section list — keeping both is duplicate
+       navigation, and the header row stays a single line at every width */
+    header.top nav.mainnav{display:none}
+
+    .issue{display:grid;grid-template-columns:minmax(206px,254px) minmax(0,1fr);
+      align-items:start;max-width:1560px;margin:0 auto}
+
+    /* ---- the contents rail (left column, its own scrollbar) ---- */
+    .rail{display:block;align-self:stretch;z-index:40;background:var(--ink);color:var(--bone)}
+    .rail-in{position:sticky;top:var(--topbar);
+      max-height:calc(100vh - var(--topbar));overflow-y:auto;overscroll-behavior:contain}
+    .rail-hd{position:sticky;top:0;z-index:2;display:flex;align-items:center;
+      justify-content:space-between;gap:10px;padding:11px 16px;
+      font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+      background:#332e28;border-bottom:1px dashed rgba(246,241,231,.4)}
+    .rail-hd .r{color:var(--pink-t);direction:ltr;unicode-bidi:isolate}
+    .rail-list{display:flex;flex-direction:column;padding-bottom:20px}
+    .rail a{--edge:transparent;--no:#b7ad9e;
+      display:flex;align-items:baseline;gap:11px;padding:11px 16px;color:var(--bone);
+      font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;line-height:1.35;
+      border-bottom:1px dashed rgba(246,241,231,.22);
+      border-inline-start:4px solid var(--edge)}
+    .rail a .no{flex:none;font-size:9.5px;letter-spacing:.1em;color:var(--no);
+      font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+    .rail a:hover{--edge:var(--teal);--no:var(--ink);background:var(--teal);color:var(--ink)}
+    .rail a:focus-visible{outline:2px solid var(--orange);outline-offset:-3px}
+
+    /* current tab. The last selector is the landing state: no pane targeted
+       yet, so the first tab is the one on screen. */
+    body:has(#letter:target) .rail a[href="#letter"],
+    body:has(#contents:target) .rail a[href="#contents"],
+    body:has(#history:target) .rail a[href="#history"],
+    body:has(#voices:target) .rail a[href="#voices"],
+    body:has(#comics:target) .rail a[href="#comics"],
+    body:has(#art:target) .rail a[href="#art"],
+    body:has(#calendar:target) .rail a[href="#calendar"],
+    body:has(#directory:target) .rail a[href="#directory"],
+    body:has(#submit:target) .rail a[href="#submit"],
+    body:has(#lab:target) .rail a[href="#lab"],
+    body:has(#shop:target) .rail a[href="#shop"],
+    body:has(#stickers:target) .rail a[href="#stickers"],
+    body:not(:has(.pane:target)) .rail a[href="#letter"]{
+      --edge:var(--pink);--no:var(--muted-paper);
+      background:var(--bone);color:var(--ink);font-weight:700}
+
+    /* ---- the panes ---- */
+    .panes{min-width:0}
+    .pane{display:none;scroll-margin-top:var(--topbar)}
+    .pane:target{display:block}
+    body:not(:has(.pane:target)) #letter{display:block}
+
+    /* ---- narrow: the rail becomes a scrollable strip across the top ---- */
+    @media(max-width:1040px){
+      .issue{display:block}
+      .rail{position:sticky;top:var(--topbar);border-bottom:2px solid var(--bone)}
+      .rail-in{position:static;max-height:none;overflow:visible}
+      .rail-hd{display:none}
+      .rail-list{flex-direction:row;padding:0;overflow-x:auto;scrollbar-width:thin;
+        -webkit-overflow-scrolling:touch}
+      .rail a{white-space:nowrap;padding:11px 15px;border-bottom:0;
+        border-inline-start:0;border-inline-end:1px dashed rgba(246,241,231,.22);
+        border-block-end:4px solid var(--edge)}
+      .pane{scroll-margin-top:calc(var(--topbar) + 46px)}
+    }
+  }
+
+  /* ---------- hero ---------- */
+  .hero{background:var(--ink);color:var(--bone);position:relative;overflow:hidden}
+  .hero .glow{position:absolute;inset:0;background:
+     radial-gradient(60% 50% at 78% 30%,rgba(240,71,125,.18),transparent 70%),
+     radial-gradient(50% 45% at 20% 80%,rgba(18,183,149,.15),transparent 70%);pointer-events:none}
+  .hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:start;padding:64px 0 82px}
+  .hero .mast{font-family:'UnifrakturMaguntia',serif;font-size:clamp(70px,13vw,158px);line-height:.82}
+  .hero .tagline{font-size:13px;letter-spacing:.34em;text-transform:uppercase;margin-top:22px;color:#e7ddcd}
+  .hero .issueline{font-size:11px;letter-spacing:.22em;text-transform:uppercase;margin-top:24px;line-height:2;color:#b7ad9e}
+  .hero p.intro{font-size:16px;line-height:1.75;margin-top:22px;max-width:46ch;color:#efe7d9}
+  .hero .badges{display:flex;gap:16px;flex-wrap:wrap;margin-top:30px;align-items:center}
+  .cover-wrap{position:relative}
+  /* z-index keeps the tab above the cover art: e-ink puts a grayscale() filter
+     on the img, which spawns a stacking context that would otherwise paint the
+     image over this absolutely-positioned sibling. */
+  .cover-wrap .tab{position:absolute;top:-14px;left:14px;z-index:2;background:var(--ink);
+    border:2px solid var(--bone);border-bottom:0;font-size:9.5px;letter-spacing:.16em;
+    text-transform:uppercase;padding:4px 10px;color:#cfc6b6}
+  .cover-frame{border:3px solid var(--bone);box-shadow:14px 14px 0 rgba(240,71,125,.85)}
+  .cover-frame img{width:100%;height:auto;display:block}
+  .cover-frame .cap{display:flex;justify-content:space-between;gap:8px;background:var(--bone);color:var(--ink);
+    font-size:9px;letter-spacing:.11em;padding:7px 10px;text-transform:uppercase;border-top:3px solid var(--bone);font-weight:600}
+  .cover-wrap .free{position:absolute;bottom:-30px;right:-14px;z-index:2;background:var(--bone);transform:rotate(4deg)}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;gap:40px;padding:52px 0 70px}
+    .cover-wrap{max-width:420px}.cover-frame{box-shadow:9px 9px 0 rgba(240,71,125,.85)}}
+
+  /* ---------- editor letter ---------- */
+  .letter .prose .drop{font-weight:700;background:var(--pink-deep);color:var(--bone);padding:0 6px}
+  .dropcap::first-letter{font-family:'UnifrakturMaguntia',serif;font-size:4.6em;float:left;
+    line-height:.66;padding:6px 12px 0 0;color:var(--ink)}
+  .signoff{font-family:'Caveat',cursive;font-size:34px;color:var(--teal-t);transform:rotate(-2deg);margin-top:18px}
+  .masthead-list .li .lab{color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+  .masthead-list .li .val{margin-left:auto;font-weight:700;text-align:right;font-size:13.5px}
+
+  /* ---------- reports ---------- */
+  .report{display:flex;flex-direction:column;height:100%}
+  .report .bd{display:flex;flex-direction:column;flex:1}
+  .report h3{font-size:min(clamp(20px,2.5vw,25px),var(--fit,999px));line-height:1.06;font-weight:800;
+    text-transform:uppercase;margin:0 0 12px;text-wrap:balance;overflow-wrap:break-word}
+  .report p{font-size:14px;line-height:1.62;margin:0}
+  .pull{border-left:6px solid var(--pink);padding:8px 0 8px 15px;font-size:17px;line-height:1.34;
+    font-weight:600;font-style:italic;margin-top:auto;padding-top:16px}
+  .pull.orange{border-color:var(--orange)} .pull.teal{border-color:var(--teal)}
+
+  /* ---------- stats ---------- */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .stat{border:2px solid var(--ink);background:var(--bone);box-shadow:6px 6px 0 var(--ink);padding:22px 14px;text-align:center}
+  .stat .n{font-size:clamp(44px,7vw,66px);font-weight:800;line-height:.9}
+  .stat .l{font-size:10px;letter-spacing:.1em;margin-top:12px;text-transform:uppercase;line-height:1.5;color:#3a352e}
+  @media(max-width:560px){.stats{grid-template-columns:1fr}}
+
+  /* ---------- quote band ---------- */
+  .bigquote{font-size:clamp(26px,4.6vw,46px);line-height:1.16;font-weight:600;font-style:italic;
+    max-width:22ch;text-wrap:balance;overflow-wrap:break-word}
+  .bigquote .mk{color:var(--pink);font-style:normal}
+  .attrib{font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:22px;color:#b7ad9e}
+
+  /* ---------- checkline / vote ---------- */
+  .checkline{padding:8px 0;border-bottom:1px dashed rgba(29,26,23,.4);font-size:14px;line-height:1.5}
+  .checkline:last-child{border-bottom:0}
+  .field-ink .checkline{border-color:rgba(246,241,231,.28)}
+  .fine{font-size:10px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+
+  /* ---------- back cover ----------
+     The magazine's back cover: logo lockup, imprint, barcode, sign-off and
+     colophon. It is NOT the site footer — it lives at the end of the last pane
+     (see tools/build.js), so it is a page you arrive at, not 680px of furniture
+     repeated under every tab. Styles stay keyed to .backcover, never to the
+     element, so moving it again does not take the design with it. */
+  .backcover{background:var(--ink);color:var(--bone)}
+  .backcover .inner{padding-block:60px;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
+  .backcover img.logo{width:min(300px,72%);filter:invert(1)}
+  .backcover .tg{font-size:11px;letter-spacing:.45em;text-transform:uppercase}
+  .backcover p.blurb{font-size:14px;line-height:1.75;max-width:42ch;color:#e7ddcd}
+  .barcode{width:130px;height:38px;background:repeating-linear-gradient(90deg,var(--bone) 0 3px,var(--ink) 3px 5px,var(--bone) 5px 6px,var(--ink) 6px 10px)}
+  .backcover .fmeta{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap}
+  .backcover .colophon{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#8d857a;
+    border-top:1px solid rgba(246,241,231,.22);padding-top:20px;margin-top:8px;max-width:74ch;line-height:1.9}
+
+  /* paper-only twin of the strip's verify line — see @media print below */
+  .verify-print{display:none}
+
+  /* ---------- site footer (slim strip under every pane) ----------
+     One row: imprint line at the start, rendering switch and verification badge
+     at the end, wrapping to two rows only when the line will not fit. */
+  /* Panes are short now that the back cover has moved off every one of them, so
+     the strip has to be held to the bottom edge or it floats with bare page
+     under it (DIRECTORY and SUBMIT both end above the fold at 1440x900).
+     Screen only: paper has no viewport, and body{display:flex} would fight the
+     page breaks the printed issue depends on. */
+  /* Hold the pane column open to the fold. Screen only; paper has no viewport.
+     Two tempting one-liners are both wrong here, and were both measured:
+       body{display:flex;flex-direction:column} — main becomes a flex item and
+         stretches to the contents rail's max-content, which at <=1040px is a
+         horizontal strip 1244px wide: 1244px of horizontal overflow on a 390px
+         phone. min-width:0 does not stop it.
+       footer{position:sticky;top:100vh} — sticky cannot move a box past its
+         containing block, and body is only as tall as its content, so the strip
+         never reaches the bottom edge. */
+  @media screen{
+    main.issue{min-height:calc(100vh - var(--topbar) - var(--footbar))}
+  }
+  :root{--footbar:47px}
+  footer.slim{background:var(--ink);color:var(--bone);border-top:2px solid var(--bone)}
+  footer.slim .finner{padding-block:13px;display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:8px 26px}
+  footer.slim .tg{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+  footer.slim .verify-note{margin-top:0;justify-content:flex-start}
+  footer.slim .fswitch{margin-top:0;margin-inline-start:auto}
+  /* narrow: the strip wraps to three rows, so the reserve above it grows too */
+  @media(max-width:700px){:root{--footbar:97px}
+    footer.slim .finner{justify-content:flex-start}
+    footer.slim .fswitch{margin-inline-start:0}}
+
+  .verify-note{font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-top:2px;
+    display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
+  .verify-note a{color:var(--teal-t);text-decoration:none;border-bottom:1px dotted rgba(18,183,149,.5);padding-bottom:1px}
+  .verify-note a:hover{color:var(--bone);border-bottom-color:var(--bone)}
+  /* live self-verification badge: a coloured status dot + message, added by the
+     inline verifier the full editions carry (see tools/build.js verifyNote). */
+  .verify-note .np-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}
+  .verify-note .np-msg{color:#b7ad9e}
+  .verify-note.np-checking .np-dot{background:var(--orange);animation:npPulse 1.4s infinite}
+  .verify-note.np-ok   .np-dot{background:var(--teal)}
+  .verify-note.np-warn .np-dot{background:var(--orange)}
+  .verify-note.np-bad  .np-dot{background:var(--pink)}
+  .verify-note.np-ok   .np-msg{color:var(--teal-t)}
+  .verify-note.np-warn .np-msg{color:var(--orange-t)}
+  .verify-note.np-bad  .np-msg{color:var(--pink-t)}
+  @keyframes npPulse{50%{opacity:.35}}
+  @media (prefers-reduced-motion:reduce){.verify-note.np-checking .np-dot{animation:none}}
+  .annot{margin-top:14px}
+  .annot.right{text-align:right}
+
+  /* ---------- Sec.08 · comic "Crumbs" ---------- */
+  .comic-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:30px}
+  @media(max-width:860px){.comic-strip{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.comic-strip{grid-template-columns:1fr}}
+  .panel{position:relative;border:2px solid var(--ink);background:var(--bone);
+    box-shadow:6px 6px 0 var(--ink);display:flex;flex-direction:column}
+  .panel .pn{position:absolute;top:-2px;left:-2px;z-index:2;background:var(--ink);color:var(--bone);
+    font-size:10px;font-weight:700;letter-spacing:.12em;padding:3px 7px}
+  .panel .art{border-bottom:2px solid var(--ink);background:var(--bone);aspect-ratio:220/150;overflow:hidden}
+  .panel .art.night{background:#241f1a}
+  .panel .art svg{width:100%;height:100%;display:block}
+  .panel figcaption{padding:12px 14px;font-size:13px;line-height:1.5;flex:1}
+
+  /* ---------- Sec.11 · art "The Wall" (centrefold) ---------- */
+  .centrefold{margin-top:26px}
+  .centrefold .tearstrip{display:block;text-align:center;font-size:9.5px;letter-spacing:.3em;
+    text-transform:uppercase;color:#b7ad9e;padding:8px 0;border-top:2px dashed rgba(246,241,231,.45);position:relative}
+  .centrefold .tearstrip::before{content:"\2702";position:absolute;left:2px;top:1px;font-size:14px;color:#b7ad9e}
+  .centrefold .poster-svg{width:100%;height:auto;display:block;border:3px solid var(--bone);
+    box-shadow:12px 12px 0 rgba(240,71,125,.85)}
+  @media(max-width:860px){.centrefold .poster-svg{box-shadow:8px 8px 0 rgba(240,71,125,.85)}}
+  .plate-row{display:grid;grid-template-columns:1fr;gap:16px;margin-top:16px}
+  .plate{border:2px solid var(--bone);background:#26221e;box-shadow:6px 6px 0 rgba(246,241,231,.85);
+    display:flex;align-items:center;gap:14px;padding:10px}
+  .plate svg{width:104px;height:78px;flex:none;border:2px solid var(--bone)}
+  .plate figcaption b{display:block;text-transform:uppercase;letter-spacing:.02em;font-size:14px;line-height:1.2}
+  .plate figcaption span{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#b7ad9e;margin-top:4px}
+  .colour-card .colour-h{font-size:21px;font-weight:800;text-transform:uppercase;line-height:1.05;margin-bottom:12px}
+  .colour-svg{width:100%;height:auto;display:block;border:2px solid var(--ink);background:var(--bone)}
+
+  /* ---------- Sec.24 · sticker sheet "Peel Me" ---------- */
+  .stickers-sec{background:var(--bone)}
+  .print-cta{display:flex;flex-direction:column;align-items:flex-end;gap:9px;text-align:right}
+  @media(max-width:860px){.print-cta{align-items:flex-start;text-align:left}}
+  .printbtn{font-family:inherit;cursor:pointer;background:var(--ink);color:var(--bone);border:2px solid var(--ink);
+    box-shadow:5px 5px 0 var(--pink);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:11px 18px}
+  .printbtn:hover{background:var(--pink);color:var(--ink);border-color:var(--pink);box-shadow:5px 5px 0 var(--ink)}
+  .printbtn:active{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--ink)}
+  .card.sheet{margin-top:30px}
+  .sticker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  @media(max-width:760px){.sticker-grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:480px){.sticker-grid{grid-template-columns:repeat(2,1fr)}}
+  .sticker{aspect-ratio:1/1;border:2px dashed rgba(29,26,23,.5);margin:-1px;background:var(--bone);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:12px;position:relative}
+  .sticker>*{transform:rotate(var(--rot))}
+  .sticker .ic{width:66px;height:62px;display:flex;align-items:center;justify-content:center}
+  .sticker .ic svg{width:100%;height:100%}
+  .sticker .lab{font-size:10.5px;font-weight:700;letter-spacing:.04em;line-height:1.15;text-transform:uppercase;color:var(--ink)}
+  .sticker .mono{font-family:'UnifrakturMaguntia',serif;font-size:46px;line-height:.78;color:var(--ink)}
+  .sticker .quote{font-size:15px;font-weight:700;font-style:italic;line-height:1.14}
+  .sticker .stampbadge{border:2.5px solid var(--ink);padding:8px 10px;font-size:11px;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;line-height:1.18}
+
+  /* secondary print action: print the whole issue (stickers is the primary) */
+  .printbtn.ghost{background:var(--bone);color:var(--ink);box-shadow:5px 5px 0 var(--teal)}
+  .printbtn.ghost:hover{background:var(--teal);color:var(--ink);border-color:var(--teal);box-shadow:5px 5px 0 var(--ink)}
+
+  /* ---------- print / PDF ----------
+     Default (Ctrl/⌘+P, or the "Print the whole issue" button): the entire paper,
+     A4, full-bleed — colour fields and bands run to the paper edge; text stays
+     inset via .wrap's own padding. The "Print this sheet" button adds
+     body.print-stickers, which collapses the document to just the sticker sheet,
+     laid out exactly as it appears on screen (4 columns, titled, on one page). */
+  @media print{
+    @page{size:A4;margin:0}
+    html,body{background:#fff}
+    /* honour the design's colour — browsers strip backgrounds in print by default,
+       which would drop every full-bleed field, band and stamp. */
+    *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
+
+    /* drop screen-only chrome so the PDF is just the paper */
+    header.top,.mtnote,.print-cta,.fswitch,.rail,footer.slim{display:none !important}
+    /* ...which takes the live badge off paper with it, so the back cover shows
+       the static line instead and the printed issue reads as it always did */
+    .verify-print{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+      color:#8d857a;margin-top:6px}
+    /* paper has no tabs: the whole issue prints, in document order */
+    .issue{display:block !important}
+    .pane{display:block !important}
+    .hero .glow{opacity:.85}
+
+    /* tighten the generous on-screen section rhythm for paper */
+    .sec{padding:34px 0}
+    .sec.tight{padding:26px 0}
+
+    /* keep atomic blocks whole; don't strand section headings or mastheads */
+    .card,.panel,figure,.plate,.colour-card,.sticker,.stampbadge,
+    .centrefold .poster-svg,.hero .cover-frame{break-inside:avoid}
+    .sechead,h1,h2,h3,.display,.mast{break-after:avoid}
+    section,.hero,.backcover{break-inside:auto}
+    a{color:inherit;text-decoration:none}
+
+    /* ---- "Print this sheet": the sticker sheet only, WYSIWYG ---- */
+    body.print-stickers > *{display:none !important}
+    body.print-stickers main.issue{display:block !important}
+    body.print-stickers .pane{display:none !important}
+    body.print-stickers #stickers{display:block !important}
+    body.print-stickers .stickers-sec{display:block !important;padding:0 !important}
+    body.print-stickers .stickers-sec .wrap{padding:12mm !important;max-width:none}
+    body.print-stickers .backcover{display:none !important}
+    body.print-stickers .stickers-sec .sechead,
+    body.print-stickers .stickers-sec .split,
+    body.print-stickers .stickers-sec > .wrap > .meta{display:none !important}
+    body.print-stickers .card.sheet{border:2px solid #000 !important;box-shadow:none !important;margin:0 !important;break-inside:avoid}
+    body.print-stickers .card.sheet > .hd{display:flex !important}
+    body.print-stickers .card.sheet > .bd{padding:0 !important}
+    body.print-stickers .sticker-grid{grid-template-columns:repeat(4,1fr) !important}
+    body.print-stickers .sticker{aspect-ratio:1/1;border:1px dashed #888 !important;box-shadow:none !important;break-inside:avoid}
+  }
+
+  /* ---------- rendering switch (Full / Lite / E-ink) ---------- */
+  header.top .vswitch{order:3;align-self:center;display:flex;border:2px solid var(--bone);font-size:10px;
+    letter-spacing:.12em;text-transform:uppercase}
+  header.top .vswitch a{color:var(--bone);padding:5px 9px;border-inline-start:1px dashed var(--bone);white-space:nowrap}
+  header.top .vswitch a:first-child{border-inline-start:0}
+  header.top .vswitch a[aria-current]{background:var(--bone);color:var(--ink);font-weight:700}
+  header.top .vswitch a:hover{color:var(--pink)}
+  header.top .vswitch a[aria-current]:hover{color:var(--ink)}
+  .fswitch{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+  .fswitch a{color:var(--bone);text-decoration:underline;margin:0 2px}
+  .fswitch a[aria-current]{color:var(--pink-t);text-decoration:none;font-weight:700}
+
+  /* ---------- i18n chrome: language picker + MT notice ---------- */
+  header.top .bar .langpick{position:relative;order:4;align-self:center;margin-inline-start:16px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  .langpick>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;color:var(--bone);padding:4px 2px}
+  .langpick>summary::-webkit-details-marker{display:none}
+  .langpick>summary .globe{font-size:13px}
+  .langpick>summary .car{font-size:9px;opacity:.6;transition:transform .15s}
+  .langpick[open]>summary .car{transform:rotate(180deg)}
+  .langmenu{position:absolute;top:100%;inset-inline-end:0;margin-top:6px;z-index:90;
+    background:var(--bone);border:2px solid var(--bone);box-shadow:6px 6px 0 rgba(0,0,0,.4);
+    display:grid;grid-template-columns:1fr 1fr;min-width:288px;max-height:min(72vh,420px);overflow:auto}
+  .langmenu a{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:8px 11px;
+    color:var(--ink);border-bottom:1px dashed rgba(29,26,23,.4);border-right:1px dashed rgba(29,26,23,.4);
+    font-size:12.5px;letter-spacing:.02em;text-transform:none;line-height:1.25}
+  .langmenu a:nth-child(even){border-right:none}
+  .langmenu a[aria-current]{background:var(--ink);color:var(--bone);font-weight:700}
+  .langmenu a:hover{background:var(--teal);color:var(--ink)}
+  .langmenu a .en{font-size:9px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+  .langmenu a[aria-current] .en,.langmenu a:hover .en{color:inherit;opacity:.85}
+  .mtnote{background:var(--orange);color:var(--ink);font-size:11px;letter-spacing:.02em;
+    text-align:center;padding:8px 16px;line-height:1.55;border-bottom:2px solid var(--ink)}
+  .mtnote a{color:var(--ink);text-decoration:underline;font-weight:700}
+  /* RTL adjustments for machine-translated Arabic / Farsi */
+  [dir="rtl"] .dropcap::first-letter{float:right;padding:6px 0 0 12px}
+  [dir="rtl"] .pull{border-left:0;border-right:6px solid var(--pink);padding-left:0;padding-right:15px}
+  [dir="rtl"] .pull.orange{border-right-color:var(--orange)}
+  [dir="rtl"] .pull.teal{border-right-color:var(--teal)}
+  [dir="rtl"] .list .li .end{margin-left:0;margin-right:auto}
+  [dir="rtl"] .masthead-list .li .val{margin-left:0;margin-right:auto}
+
+  /* ---- the shop (Sec.17): cards on the paper, hard ink offset like .card ---- */
+  .shop-col{margin-top:26px}
+  .shop-col .hd{display:flex;justify-content:space-between;gap:12px;align-items:center;
+    border-bottom:2px solid var(--ink);padding-bottom:8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+  .shop-col .hd .r a{font-weight:700}
+  .shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:18px;margin-top:16px}
+  .shop-card{display:block;border:2px solid var(--ink);background:var(--bone);color:var(--ink);text-decoration:none;
+    box-shadow:6px 6px 0 var(--pink);padding:0 0 12px}
+  .shop-card:hover{box-shadow:6px 6px 0 var(--teal)}
+  .shop-card img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border-bottom:2px solid var(--ink);background:var(--panel);margin-bottom:10px}
+  .shop-card > span{display:block;padding:0 12px}
+  .shop-name{font-weight:700;font-size:13px;line-height:1.35;margin-top:10px}
+  .shop-type{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+  .shop-price{font-size:12px;margin-top:8px}
+
+  /* Daily Bread · plain rendering (stub, replaced by the design pass) */
+  @font-face{font-family:"JetBrains Mono";font-style:normal;font-display:swap;font-weight:100 800;
+    src:url("/assets/fonts/jetbrains/jetbrains-mono-latin.b058178d.woff2") format("woff2")}
+  html.v-plain{--pink:var(--ink);--teal:var(--ink);--orange:var(--ink)}
+
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR ============ -->
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="/ja/plain/">
+      <h1 class="mark">Daily&nbsp;Bread</h1>
+      <span class="lock">
+        <span class="lab">オカナガンのためのクィア・マガジン</span>
+        <span class="doc">DB-001 &middot; N&ordm;1</span>
+      </span>
+    </a>
+    <span class="toprule" aria-hidden="true"></span>
+    <nav class="mainnav" aria-label="セクション">
+      <a href="#letter">巻頭言</a>
+      <a href="#contents">目次</a>
+      <a href="#history">歴史</a>
+      <a href="#voices">声</a>
+      <a href="#comics">漫画</a>
+      <a href="#art">アート</a>
+      <a href="#calendar">カレンダー</a>
+      <a href="#directory">ディレクトリ</a>
+      <a href="#submit">投稿</a>
+      <a href="#lab">ラボより</a>
+      <a href="#shop">ショップ</a>
+      <a href="#stickers">ステッカー</a>
+    </nav>
+    <nav class="vswitch" aria-label="表示形式"><a href="/ja/">フル</a><a href="/ja/lite/">ライト</a><a href="/ja/eink/">E-ink</a><a href="/ja/plain/" aria-current="true">Plain</a></nav>
+    <details class="langpick"><summary aria-label="言語: 日本語"><span class="globe" aria-hidden="true">🌐</span> 日本語 <span class="car" aria-hidden="true">▾</span></summary><div class="langmenu"><a href="/plain/" hreflang="en" lang="en"><span class="endo">English</span><span class="en">English</span></a><a href="/fr/plain/" hreflang="fr" lang="fr"><span class="endo">Français</span><span class="en">French</span></a><a href="/es/plain/" hreflang="es" lang="es"><span class="endo">Español</span><span class="en">Spanish</span></a><a href="/it/plain/" hreflang="it" lang="it"><span class="endo">Italiano</span><span class="en">Italian</span></a><a href="/pl/plain/" hreflang="pl" lang="pl"><span class="endo">Polski</span><span class="en">Polish</span></a><a href="/la/plain/" hreflang="la" lang="la"><span class="endo">Latina</span><span class="en">Latin</span></a><a href="/zh-hans/plain/" hreflang="zh-Hans" lang="zh-Hans"><span class="endo">简体中文</span><span class="en">Chinese (Simplified)</span></a><a href="/zh-hant/plain/" hreflang="zh-Hant" lang="zh-Hant"><span class="endo">繁體中文</span><span class="en">Chinese (Traditional)</span></a><a href="/pa/plain/" hreflang="pa" lang="pa"><span class="endo">ਪੰਜਾਬੀ</span><span class="en">Punjabi</span></a><a href="/ko/plain/" hreflang="ko" lang="ko"><span class="endo">한국어</span><span class="en">Korean</span></a><a href="/ja/plain/" hreflang="ja" lang="ja" aria-current="true"><span class="endo">日本語</span><span class="en">Japanese</span></a><a href="/tl/plain/" hreflang="tl" lang="tl"><span class="endo">Tagalog</span><span class="en">Tagalog</span></a><a href="/vi/plain/" hreflang="vi" lang="vi"><span class="endo">Tiếng Việt</span><span class="en">Vietnamese</span></a><a href="/hi/plain/" hreflang="hi" lang="hi"><span class="endo">हिन्दी</span><span class="en">Hindi</span></a><a href="/ar/plain/" hreflang="ar" lang="ar" dir="rtl"><span class="endo">العربية</span><span class="en">Arabic</span></a><a href="/fa/plain/" hreflang="fa" lang="fa" dir="rtl"><span class="endo">فارسی</span><span class="en">Farsi</span></a></div></details>
+  </div>
+</header>
+<aside class="mtnote">これは英語の原文の機械翻訳です。<a href="/plain/">英語版</a>をお読みください。</aside>
+
+<main class="issue">
+<nav class="rail" aria-label="目次">
+  <div class="rail-in">
+    <div class="rail-hd"><span>目次</span><span class="r">DB-001</span></div>
+    <div class="rail-list">
+      <a href="#letter"><span class="no">00</span><span class="lb">巻頭言</span></a>
+      <a href="#contents"><span class="no">01</span><span class="lb">目次</span></a>
+      <a href="#history"><span class="no">02</span><span class="lb">歴史</span></a>
+      <a href="#voices"><span class="no">03</span><span class="lb">声</span></a>
+      <a href="#comics"><span class="no">08</span><span class="lb">漫画</span></a>
+      <a href="#art"><span class="no">11</span><span class="lb">アート</span></a>
+      <a href="#calendar"><span class="no">14</span><span class="lb">カレンダー</span></a>
+      <a href="#directory"><span class="no">18</span><span class="lb">ディレクトリ</span></a>
+      <a href="#submit"><span class="no">19</span><span class="lb">投稿</span></a>
+      <a href="#lab"><span class="no">16</span><span class="lb">ラボより</span></a>
+      <a href="#shop"><span class="no">17</span><span class="lb">ショップ</span></a>
+      <a href="#stickers"><span class="no">24</span><span class="lb">ステッカー</span></a>
+    </div>
+  </div>
+</nav>
+<div class="panes">
+
+<div class="pane" id="letter">
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="mast">Daily<br>Bread</div>
+        <div class="tagline">オカナガンのためのクィア・マガジン</div>
+        <p class="intro">あなたは、そんなものは存在しないと言い続けてくる街で、クィア・マガジンの創刊号を見つけました。ケロウナにはクィアの歴史があり、クィアの子どもたちがいて、クィアの年長者がいて、クィアのパン職人も役人もいる。なかったのは、それを声に出して言う紙だけです。</p>
+        <div class="issueline">第№1号 · 2026年夏<br>ケロウナの崩壊 · 48 pp · 印刷部数 500</div>
+        <div class="badges">
+          <span class="stamp">バッチ №1 · 焼きたて</span>
+          <a href="#contents" class="stamp pink" style="cursor:pointer">本号を読む ↓</a>
+        </div>
+      </div>
+      <div class="cover-wrap">
+        <span class="tab">シート 00 · 表紙</span>
+        <div class="cover-frame">
+          <img src="/assets/cover.jpg" alt="Daily Bread №1 の表紙。宝石をちりばめた舌の上に、滴る歯を持つ開いた口、そこにブラックレターのワードマークを重ねたもの" width="1000" height="1500">
+          <div class="cap"><span>№1：ケロウナの崩壊</span><span>Riposte Laboratories</span></div>
+        </div>
+        <span class="stamp free">無料 / PWYC</span>
+      </div>
+    </div>
+  </div>
+  <div class="band"></div>
+</div>
+
+<!-- ============ EDITOR'S LETTER ============ -->
+<section class="sec letter">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.00</span><span class="tag">// 編集後記</span></div>
+    <div class="rule" style="margin-bottom:34px"></div>
+    <div class="split">
+      <div>
+        <h2 class="display" style="--fit:44px;--dl:2">私たちの日々の<br>おそれ</h2>
+        <div class="prose justify" style="margin-top:22px">
+          <p><span class="drop">HI.</span> あなたは、そんなものは存在しないと言い続けてくる街で、クィア・マガジンの創刊号を見つけました。ケロウナにはクィアの歴史があり、クィアの子どもたちがいて、クィアの年長者がいて、クィアのパン職人も役人もいる。なかったのは、それを声に出して言う紙だけです。</p>
+          <p>この号のテーマは崩壊です。果樹園、会場、家賃の計算、橋の渋滞。私たちが破滅論者だからではなく、ここでは物事が予定どおりに崩れ落ちていくからで、その予定表に名前をつけることが、修復の最初の一手だからです。</p>
+          <p>ポスターを破り取ってください。漫画に色を塗ってください。あなたの怒りとレシピを送ってください。これは、あなたがパン屑をこぼしてくれてはじめて成り立つものです。</p>
+        </div>
+        <div class="signoff">— 編集部 ✕</div>
+      </div>
+      <div>
+        <div class="card masthead-list">
+          <div class="hd"><span>奥付 / №1 · 2026年夏</span><span class="r">DB-000</span></div>
+          <div class="bd list">
+            <div class="li"><span class="lab">編集</span><span class="val">Sasha Zero</span></div>
+            <div class="li"><span class="lab">アート + 漫画</span><span class="val">公募中</span></div>
+            <div class="li"><span class="lab">ヤング・ヴォイセズ編集室</span><span class="val">書き手三人、17–24歳</span></div>
+            <div class="li"><span class="lab">印刷地</span><span class="val">割譲されていない syilx の土地</span></div>
+          </div>
+        </div>
+        <p class="prose justify" style="margin-top:24px">Daily Bread は、syilx オカナガン民族の割譲されていない、祖先伝来の土地の上で刊行されています。私たちは家主に家賃を払い、ネイションに敬意を払っています。そして、そのどちらか一方だけが本来支払われるべきものだと分かっています。</p>
+        <div style="margin-top:22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:160px">
+          <div class="meta" style="line-height:1.8">Riposte<br>Laboratories Inc. の出資による</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="band harl br"></div>
+
+</div><!-- /pane -->
+
+<div class="pane" id="contents">
+<!-- ============ CONTENTS ============ -->
+<section class="sec" style="background:var(--paper2)">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.01</span><span class="tag">// 目次 · 積荷目録 / 48 pp</span></div>
+    <h2 class="display" style="--fit:54px;--dl:1">目次<span class="dot">.</span></h2>
+    <p class="dek">№1 は十二人の寄稿者が作りました。17–74歳の書き手たち、写真家二人、漫画家一人、そしてとても辛抱強い校正者一人。すべての署名は地元のもの。すべての原稿料は、印刷所への支払いより先に払われました。</p>
+    <div class="card" style="margin-top:30px">
+      <div class="hd"><span>積荷目録 / 48 pp</span><span class="r">DB-TOC</span></div>
+      <div class="bd"><div class="toc-grid list" id="toc"><div class="li"><span class="pgchip" style="background:#1d1a17;color:var(--bone)">01</span><span class="t">私たちの日々のおそれ — 編集後記</span><span class="end tagend">House</span></div><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink)">04</span><span class="t">橋がかかる前 — 無礼な歴史</span><span class="end tagend">History</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;color:var(--ink)">08</span><span class="t">空室 — フォトエッセイ、Bernard Ave</span><span class="end tagend">Photo</span></div><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink)">11</span><span class="t">ヤング・ヴォイセズ — 三本の現場報告</span><span class="end tagend">Opinion</span></div><div class="li"><span class="pgchip" style="background:#1d1a17;color:var(--bone)">14</span><span class="t">パン屑 — ep.1、住まいを探すゴーレム</span><span class="end tagend">Comic</span></div><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink)">16</span><span class="t">度胸の四十年 — Miss Demeanour</span><span class="end tagend">Interview</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;color:var(--ink)">19</span><span class="t">レイク・エフェクト / 収穫 — 詩</span><span class="end tagend">Lit</span></div><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink)">20</span><span class="t">壁 — 破り取れる見開き</span><span class="end tagend">Art</span></div><div class="li"><span class="pgchip" style="background:#1d1a17;color:var(--bone)">23</span><span class="t">あなただけの崩壊を塗ろう</span><span class="end tagend">Satire</span></div><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink)">24</span><span class="t">剥がして — ステッカーシート</span><span class="end tagend">Stickers</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;color:var(--ink)">25</span><span class="t">順番待ちリスト — 医療特集</span><span class="end tagend">Issues</span></div><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink)">28</span><span class="t">湖が奪う — 小説 pt.1</span><span class="end tagend">Lit</span></div><div class="li"><span class="pgchip" style="background:#1d1a17;color:var(--bone)">30</span><span class="t">ラボより — 出資者開示</span><span class="end tagend">Riposte</span></div><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink)">32</span><span class="t">地元のゲイに訊け / レビュー / カレンダー</span><span class="end tagend">Service</span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;color:var(--ink)">36</span><span class="t">噛み返す — レストラン批評</span><span class="end tagend">Food</span></div><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink)">37</span><span class="t">ローテーション — いま聴いているもの</span><span class="end tagend">Music</span></div><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink)">38</span><span class="t">巻き戻し + 公園で映画</span><span class="end tagend">Film</span></div><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink)">40</span><span class="t">ディレクトリ + パン屑便り</span><span class="end tagend">Aid</span></div><div class="li"><span class="pgchip" style="background:#1d1a17;color:var(--bone)">44</span><span class="t">これを作った人々 — スタッフ、勢揃い</span><span class="end tagend">Colophon</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /pane -->
+
+<div class="pane" id="history">
+<!-- ============ HISTORY + LEDGER ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.02</span><span class="tag">// 歴史 · 橋がかかる前</span></div>
+    <div class="split">
+      <div>
+        <h2 class="display" style="--fit:54px;--dl:2">無礼な<br>歴史</h2>
+        <div class="prose justify" style="margin-top:22px">
+          <p>この谷は自らを二度売りました。まずはエデンとして、次は資産として。果樹農家はあまりに頻繁に破産したので、選果場は独自の代用貨幣を刷ったほど。果樹が死ぬと、売り文句は引退後の陽光になった。引退者が摘み手たちを締め出す家賃をつけると、売り文句は湖畔のロフトになった。どの幕も同じ結末で終わる。働いた人々が、水からますます遠い場所に住むことになるのです。</p>
+          <p>クィアの歴史は、そのすべてに編み込まれています。非公式の夜を持つダンスホール、住宅リストを兼ねた友人のネットワーク、役に立ち静かでいることで生き延び、そうする必要がなくなるまで続いたシーン。</p>
+        </div>
+        <div class="annot"><span class="scribble orange">「そうする必要がなくなるまで静かに」— シャツにしよう</span></div>
+      </div>
+      <div>
+        <span class="kicker">台帳 / いつ何が崩れたか</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>項目</span><span>状態</span></div>
+          <div class="bd list" id="ledger"><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1913</span><span class="t">果樹価格が暴落。代用貨幣経済が始まる</span><span class="end"><span class="statuschip" style="background:#f0477d;color:var(--ink)">Bust</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1930s</span><span class="t">選果場の解雇、谷全域で</span><span class="end"><span class="statuschip" style="background:#f0477d;color:var(--ink)">Bust</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1958</span><span class="t">橋が開通。フェリー労働者が一夜で不要に</span><span class="end"><span class="statuschip" style="background:#fe9a0d;color:var(--ink)">Pivot</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1973</span><span class="t">ALR が果樹園投機を凍結(しばし)</span><span class="end"><span class="statuschip" style="background:#12b795;color:var(--ink)">Parry</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">1980s</span><span class="t">製材の時代が終わり、ワインの時代が始まる</span><span class="end"><span class="statuschip" style="background:#fe9a0d;color:var(--ink)">Pivot</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2003</span><span class="t">大火。239戸、3万人が避難</span><span class="end"><span class="statuschip" style="background:#f0477d;color:var(--ink)">Burn</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2017</span><span class="t">洪水の年。湖が遊歩道を奪う</span><span class="end"><span class="statuschip" style="background:#f0477d;color:var(--ink)">Flood</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2021</span><span class="t">ヒートドーム。またしてもカナダで一番暑い場所</span><span class="end"><span class="statuschip" style="background:#f0477d;color:var(--ink)">Burn</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2024</span><span class="t">最後の専用クィア会場が閉店</span><span class="end"><span class="statuschip" style="background:#f0477d;color:var(--ink)">Bust</span></span></div><div class="li"><span class="pgchip" style="background:var(--ink);min-width:52px">2026</span><span class="t">このマガジン。次はあんたの番だ、街よ。</span><span class="end"><span class="statuschip" style="background:#12b795;color:var(--ink)">Riposte</span></span></div></div>
+        </div>
+        <p class="meta" style="margin-top:14px;line-height:1.7"><span style="color:var(--pink-t);font-weight:700">Method</span> — 市の公文書、新聞の縮刷保管庫、そして現場にいた年長者たちから編纂しました。訂正は歓迎、というより織り込み済みです。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /pane -->
+
+<div class="pane" id="voices">
+<!-- ============ YOUNG VOICES ============ -->
+<section class="sec field-ink">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.03</span><span class="tag" style="color:#b7ad9e">// ヤング・ヴォイセズ編集室 · 未査読。未編集。正確。</span></div>
+    <h2 class="display" style="--fit:54px;--dl:1">ヤング・ヴォイセズ</h2>
+    <p class="dek" style="color:#cfc6b6">まだ投票はできないけれど、家賃の計算はもうできる書き手たちからの、三本の現場報告。私たちは彼らに原稿料を払い、一言たりとも手を加えませんでした。</p>
+    <div class="thirds" style="margin-top:34px">
+      <div class="card report"><div class="hd pink"><span>報告 01</span><span>19歳 · 住宅</span></div>
+        <div class="bd">
+          <h3 style="--fit:25px">同世代の誰もここに留まる余裕がない</h3>
+          <p>私は仕事を二つ掛け持ちして、三人と2ベッドルームを分け合っていて、それでも成功例のほうです。私のグループチャットは、スローモーションのお別れ会。ヴァーノン、カルガリー、サレーの実家の地下室へと。</p>
+          <div class="pull">「どの内見も四十人待ちで、そのうち一人はいつも泣いている。」</div>
+        </div>
+      </div>
+      <div class="card report"><div class="hd orange"><span>報告 02</span><span>22歳 · カミングアウト</span></div>
+        <div class="bd">
+          <h3 style="--fit:25px">選果場でのカミングアウト</h3>
+          <p>私はグレンモアの野外パーティーでカミングアウトして、起きた最悪のことは、タイラーという名の男が「いいね」と言って、家まで送ってくれないかと頼んできたことでした。楽園でも地獄でもなく、ただ市議会よりも速く学んでいる小さな街。</p>
+          <div class="pull orange" style="font-family:'Caveat',cursive;font-style:normal;font-size:26px;color:var(--orange-t);border:0;padding-left:0">地理こそ最後のクローゼット</div>
+        </div>
+      </div>
+      <div class="card report"><div class="hd teal"><span>報告 03</span><span>17歳 · 火災シーズン</span></div>
+        <div class="bd">
+          <h3 style="--fit:25px">私は二度避難した、そしてまだ投票できない</h3>
+          <p>私の子ども時代の写真は、煙の年ごとに整理されています。2021年に車に荷物を積み、2023年にもまた積んだ。どちらのときも、ラジオの中の大人たちはそれを前例がないと呼びました。前例はあります。</p>
+          <div class="pull teal">「私がその前例です。」</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WAITLIST STATS ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="split center">
+      <div>
+        <span class="kicker pink">10 · いま抱えている問題</span>
+        <h2 class="display" style="--fit:44px;--dl:1;margin-top:16px">順番待ちリスト</h2>
+        <p class="dek">セントラル・オカナガンでクィアに理解のある医療を探すのは、手当のつかないパートタイムの仕事です。あなたが電話せずに済むよう、私たちがすべての診療所に電話しました。連絡がついた誰もが、同じ三角形について語りました。電話のたらい回し、紹介の宙ぶらりん、そして一本のハイウェイ。</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="n" style="color:var(--pink-t)">14</div><div class="l">か月 · ジェンダー・クリニック平均待機</div></div>
+        <div class="stat"><div class="n" style="color:var(--orange-t)">2</div><div class="l">新規患者を受け入れている提供者</div></div>
+        <div class="stat"><div class="n" style="color:var(--teal-t)">400</div><div class="l">km · 最も近い代替先まで</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INTERVIEW QUOTE ============ -->
+<div class="field-ink sec tight">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.05</span><span class="tag" style="color:#b7ad9e">// インタビュー · 度胸の四十年</span></div>
+    <div class="bigquote"><span class="mk">"</span>私たちにバーなんてなかったのよ、あなた。あったのは地下室と、度胸だけ。<span class="mk">"</span></div>
+    <div class="attrib">Miss Demeanour · 1986年からオカナガンで公演</div>
+    <p class="prose" style="margin-top:26px;color:#e7ddcd;max-width:66ch">「観客は若くなり、家賃は意地悪になった。'86年には危険は人だった。今の危険は家主。会場が閉まったとき、みんなどこへ行ったのかって?どこへも行っちゃいないのよ、いとしい人。それが秘密なの。私たちはみんな今もここにいて、ただ体育館や果樹園やお互いの台所で集まっているだけ。シーンっていうのは、住所のことじゃないの。」</p>
+  </div>
+</div>
+
+</div><!-- /pane -->
+
+<div class="pane" id="comics">
+<!-- ============ COMICS · CRUMBS ============ -->
+<section class="sec" style="background:var(--paper2)">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.08</span><span class="tag">// パン屑 · ep.1 · 住まいを探すゴーレム</span></div>
+    <h2 class="display" style="--fit:54px;--dl:1">パン屑<span class="dot">.</span></h2>
+    <p class="dek">ゲスト連載枠です。六コマ、ひと塊のパン、空室ゼロ。枠は募集中、原稿料あり、依頼はただ一つ。笑えないことで私たちを笑わせて。</p>
+    <div style="margin-top:16px"><span class="kicker orange">Ep.1 · 鉛筆、インク、パン屑は公募</span></div>
+    <div class="comic-strip"><figure class="panel"><span class="pn">01</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><path d="M50 116 L170 116 L158 140 L62 140 Z" fill="#cdb491" stroke="#1d1a17" stroke-width="3" stroke-linejoin="round"/><line x1="50" y1="116" x2="170" y2="116" stroke="#1d1a17" stroke-width="3"/><g transform="translate(52,22)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 78 Q14 39 58 39 Q102 39 102 78 Q102 93 58 93 Q14 93 14 78 Z" fill="#e4bd79"/>
+    <path d="M26 51 q11 -8 21 0 M49 49 q11 -8 21 2 M72 53 q8 -6 15 2" fill="none" stroke-width="2.3"/>
+    <circle cx="45" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><circle cx="72" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><path d="M49 79 q9 7 18 0" fill="none" stroke-width="2.6"/>
+    <circle cx="58" cy="74" r="1.9" fill="#f0477d" stroke="none"/>
+  </g></g><text x="150" y="44" font-size="24" fill="#fe9a0d">✦</text><text x="178" y="74" font-size="15" fill="#f0477d">✦</text></svg></div><figcaption>三日目、サワードウが目を覚ました。</figcaption></figure><figure class="panel"><span class="pn">02</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><g transform="translate(4,30)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 78 Q14 39 58 39 Q102 39 102 78 Q102 93 58 93 Q14 93 14 78 Z" fill="#e4bd79"/>
+    <path d="M26 51 q11 -8 21 0 M49 49 q11 -8 21 2 M72 53 q8 -6 15 2" fill="none" stroke-width="2.3"/>
+    <circle cx="45" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><circle cx="72" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><ellipse cx="58" cy="80" rx="7" ry="5" fill="#1d1a17" stroke="none"/>
+    <circle cx="58" cy="74" r="1.9" fill="#f0477d" stroke="none"/>
+  </g></g><g transform="rotate(-7 150 82)"><rect x="120" y="34" width="76" height="94" fill="#f6f1e7" stroke="#1d1a17" stroke-width="3"/><text x="158" y="62" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-weight="700" font-size="17" fill="#f0477d">$2,100</text><line x1="131" y1="76" x2="185" y2="76" stroke="#1d1a17" stroke-width="2"/><line x1="131" y1="90" x2="185" y2="90" stroke="#1d1a17" stroke-width="2"/><line x1="131" y1="104" x2="171" y2="104" stroke="#1d1a17" stroke-width="2"/><text x="158" y="122" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#1d1a17">“cozy”</text></g></svg></div><figcaption>月2,100ドル。“こぢんまり。” イースト四体と相部屋。</figcaption></figure><figure class="panel"><span class="pn">03</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><circle cx="20" cy="44" r="7" fill="#1d1a17"/><path d="M12 66 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="45" cy="44" r="7" fill="#1d1a17"/><path d="M37 66 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="70" cy="44" r="7" fill="#1d1a17"/><path d="M62 66 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="95" cy="44" r="7" fill="#1d1a17"/><path d="M87 66 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="120" cy="44" r="7" fill="#1d1a17"/><path d="M112 66 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="145" cy="44" r="7" fill="#1d1a17"/><path d="M137 66 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="170" cy="44" r="7" fill="#1d1a17"/><path d="M162 66 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="195" cy="44" r="7" fill="#1d1a17"/><path d="M187 66 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="20" cy="70" r="7" fill="#1d1a17"/><path d="M12 92 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="45" cy="70" r="7" fill="#1d1a17"/><path d="M37 92 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="70" cy="70" r="7" fill="#1d1a17"/><path d="M62 92 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="95" cy="70" r="7" fill="#1d1a17"/><path d="M87 92 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="120" cy="70" r="7" fill="#1d1a17"/><path d="M112 92 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="145" cy="70" r="7" fill="#1d1a17"/><path d="M137 92 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="170" cy="70" r="7" fill="#1d1a17"/><path d="M162 92 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="195" cy="70" r="7" fill="#1d1a17"/><path d="M187 92 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="20" cy="96" r="7" fill="#1d1a17"/><path d="M12 118 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="45" cy="96" r="7" fill="#1d1a17"/><path d="M37 118 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="70" cy="96" r="7" fill="#1d1a17"/><path d="M62 118 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="95" cy="96" r="7" fill="#1d1a17"/><path d="M87 118 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="120" cy="96" r="7" fill="#1d1a17"/><path d="M112 118 q8 -13 16 0 Z" fill="#1d1a17"/><g transform="translate(123,76) scale(0.42)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 78 Q14 39 58 39 Q102 39 102 78 Q102 93 58 93 Q14 93 14 78 Z" fill="#e4bd79"/>
+    <path d="M26 51 q11 -8 21 0 M49 49 q11 -8 21 2 M72 53 q8 -6 15 2" fill="none" stroke-width="2.3"/>
+    <circle cx="45" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><circle cx="72" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><path d="M49 79 q9 7 18 0" fill="none" stroke-width="2.6"/>
+    <circle cx="58" cy="74" r="1.9" fill="#f0477d" stroke="none"/>
+  </g></g><circle cx="170" cy="96" r="7" fill="#1d1a17"/><path d="M162 118 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="195" cy="96" r="7" fill="#1d1a17"/><path d="M187 118 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="20" cy="122" r="7" fill="#1d1a17"/><path d="M12 144 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="45" cy="122" r="7" fill="#1d1a17"/><path d="M37 144 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="70" cy="122" r="7" fill="#1d1a17"/><path d="M62 144 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="95" cy="122" r="7" fill="#1d1a17"/><path d="M87 144 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="120" cy="122" r="7" fill="#1d1a17"/><path d="M112 144 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="145" cy="122" r="7" fill="#1d1a17"/><path d="M137 144 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="170" cy="122" r="7" fill="#1d1a17"/><path d="M162 144 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="195" cy="122" r="7" fill="#1d1a17"/><path d="M187 144 q8 -13 16 0 Z" fill="#1d1a17"/><circle cx="145" cy="70" r="15" fill="none" stroke="#f0477d" stroke-width="2.5"/></svg></div><figcaption>内見は四十人待ち。もう一人の応募者もパンだった。</figcaption></figure><figure class="panel"><span class="pn">04</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><g transform="translate(120,20)"><rect x="20" y="34" width="46" height="70" rx="6" fill="#1d1a17"/><circle cx="43" cy="24" r="16" fill="#1d1a17"/><path d="M20 60 L2 44" stroke="#1d1a17" stroke-width="8" stroke-linecap="round"/><circle cx="0" cy="42" r="5" fill="#1d1a17"/></g><g transform="translate(-6,54) scale(0.7)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 78 Q14 39 58 39 Q102 39 102 78 Q102 93 58 93 Q14 93 14 78 Z" fill="#e4bd79"/>
+    <path d="M26 51 q11 -8 21 0 M49 49 q11 -8 21 2 M72 53 q8 -6 15 2" fill="none" stroke-width="2.3"/>
+    <circle cx="45" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><circle cx="72" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><ellipse cx="58" cy="80" rx="7" ry="5" fill="#1d1a17" stroke="none"/>
+    <circle cx="58" cy="74" r="1.9" fill="#f0477d" stroke="none"/>
+  </g></g><g><rect x="60" y="16" width="148" height="27" rx="13.5" fill="#f6f1e7" stroke="#1d1a17" stroke-width="2.5"/><path d="M78 41 l4 13 l11 -11 Z" fill="#f6f1e7" stroke="#1d1a17" stroke-width="2.5"/><text x="134" y="34" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#1d1a17">でも、膨らむのが取り柄なんだ</text></g></svg></div><figcaption>“ペット不可、植物不可、発酵不可、” と家主は言った。</figcaption></figure><figure class="panel"><span class="pn">05</span><div class="art night"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><rect x="0" y="0" width="220" height="150" fill="#241f1a"/><circle cx="176" cy="40" r="20" fill="#f6f1e7"/><circle cx="168" cy="36" r="20" fill="#241f1a"/><rect x="44" y="70" width="10" height="54" fill="#5a4a34"/><ellipse cx="49" cy="66" rx="38" ry="27" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2.5"/><circle cx="36" cy="60" r="4" fill="#f0477d"/><circle cx="62" cy="72" r="4" fill="#f0477d"/><g transform="translate(96,58) rotate(90 50 60)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 78 Q14 39 58 39 Q102 39 102 78 Q102 93 58 93 Q14 93 14 78 Z" fill="#e4bd79"/>
+    <path d="M26 51 q11 -8 21 0 M49 49 q11 -8 21 2 M72 53 q8 -6 15 2" fill="none" stroke-width="2.3"/>
+    <path d="M39 65 h11 M66 65 h11" fill="none"/><path d="M49 79 q9 7 18 0" fill="none" stroke-width="2.6"/>
+    <circle cx="58" cy="74" r="1.9" fill="#f0477d" stroke="none"/>
+  </g></g><text x="150" y="120" font-family="'Caveat',cursive" font-size="22" fill="#f6f1e7">zzz</text></svg></div><figcaption>果樹園は信用調査なんてしない。</figcaption></figure><figure class="panel"><span class="pn">06</span><div class="art"><svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" role="presentation"><g transform="translate(2,26)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 78 Q14 39 58 39 Q102 39 102 78 Q102 93 58 93 Q14 93 14 78 Z" fill="#e4bd79"/>
+    <path d="M26 51 q11 -8 21 0 M49 49 q11 -8 21 2 M72 53 q8 -6 15 2" fill="none" stroke-width="2.3"/>
+    <circle cx="45" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><circle cx="72" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><path d="M49 79 q9 7 18 0" fill="none" stroke-width="2.6"/>
+    <circle cx="58" cy="74" r="1.9" fill="#f0477d" stroke="none"/>
+  </g></g><g transform="rotate(6 150 84)"><rect x="120" y="40" width="74" height="92" fill="#1d1a17"/><text x="157" y="96" text-anchor="middle" font-family="'UnifrakturMaguntia',serif" font-size="42" fill="#f0477d">DB</text></g><text x="120" y="34" font-size="19" fill="#f0477d">♥</text><text x="196" y="60" font-size="14" fill="#12b795">♥</text></svg></div><figcaption>マガジンに住まいを見つけた。家賃は、パン屑をこぼすこと。</figcaption></figure></div>
+    <p class="meta" style="margin-top:24px;line-height:1.9">№2「雪解け」に続く。ゲスト枠に興味あり?六コマを <a href="mailto:hello@dailybread.example?subject=CRUMBS">hello@dailybread.example</a> まで。</p>
+  </div>
+</section>
+
+<div class="band harl br"></div>
+
+</div><!-- /pane -->
+
+<div class="pane" id="art">
+<!-- ============ ART · THE WALL (rip-out centrefold) ============ -->
+<section class="sec field-ink">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.11</span><span class="tag" style="color:#b7ad9e">// 壁 · 破り取れる見開き · そっと引いて</span></div>
+    <div class="split center">
+      <div>
+        <h2 class="display" style="--fit:54px;--dl:1">壁</h2>
+        <p class="dek" style="color:#cfc6b6">見開きはポスターです。ノド(綴じ目)に沿って破り取り、家主の目につくところに貼ってください。この号の壁は、住所であることを拒むシーンのものです。</p>
+        <div class="annot"><span class="scribble teal">そう、本当に破いていい</span></div>
+      </div>
+      <div style="text-align:right"><span class="kicker pink">見開き №1 · 破り取りポスター</span></div>
+    </div>
+    <figure class="centrefold">
+      <span class="tearstrip" aria-hidden="true">ここで破る</span>
+      <svg class="poster-svg" viewBox="0 0 680 400" role="img" aria-label="シーンは 住所じゃない"><rect width="680" height="400" fill="#1d1a17"/><g><rect x="0" y="-13" width="26" height="26" transform="rotate(45 13 0)" fill="#f0477d"/><rect x="62" y="-13" width="26" height="26" transform="rotate(45 75 0)" fill="#12b795"/><rect x="124" y="-13" width="26" height="26" transform="rotate(45 137 0)" fill="#fe9a0d"/><rect x="186" y="-13" width="26" height="26" transform="rotate(45 199 0)" fill="#f0477d"/><rect x="248" y="-13" width="26" height="26" transform="rotate(45 261 0)" fill="#12b795"/><rect x="310" y="-13" width="26" height="26" transform="rotate(45 323 0)" fill="#fe9a0d"/><rect x="372" y="-13" width="26" height="26" transform="rotate(45 385 0)" fill="#f0477d"/><rect x="434" y="-13" width="26" height="26" transform="rotate(45 447 0)" fill="#12b795"/><rect x="496" y="-13" width="26" height="26" transform="rotate(45 509 0)" fill="#fe9a0d"/><rect x="558" y="-13" width="26" height="26" transform="rotate(45 571 0)" fill="#f0477d"/><rect x="620" y="-13" width="26" height="26" transform="rotate(45 633 0)" fill="#12b795"/></g><circle cx="566" cy="128" r="58" fill="#f0477d"/><circle cx="546" cy="112" r="58" fill="#1d1a17"/><path d="M0 306 L150 176 L300 306 Z" fill="#2a2620" stroke="#f6f1e7" stroke-width="2"/><path d="M210 306 L400 156 L590 306 Z" fill="#211d18" stroke="#f6f1e7" stroke-width="2"/><rect x="0" y="306" width="680" height="94" fill="#12b795"/><path d="M0 330 q40 -10 80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0" fill="none" stroke="#f6f1e7" stroke-width="2" opacity="0.5"/><g><rect x="37" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="40" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/><rect x="109" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="112" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/><rect x="181" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="184" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/><rect x="253" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="256" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/><rect x="325" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="328" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/><rect x="397" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="400" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/><rect x="469" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="472" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/><rect x="541" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="544" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/><rect x="613" y="286" width="6" height="20" fill="#3a2f22"/><circle cx="616" cy="284" r="15" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2"/></g><text x="46" y="150" font-family="'IBM Plex Mono',monospace" font-weight="800" font-size="62" letter-spacing="-2" fill="#f6f1e7">シーンは</text><text x="46" y="224" font-family="'IBM Plex Mono',monospace" font-weight="800" font-size="62" letter-spacing="-2" fill="#f0477d">住所じゃない</text><text x="46" y="360" font-family="'IBM Plex Mono',monospace" font-size="13" letter-spacing="3" fill="#1d1a17" font-weight="700">DAILY BREAD №1 · ノドに沿って引く · SYILX オカナガン</text></svg>
+    </figure>
+    <div class="split" style="margin-top:46px">
+      <div>
+        <span class="kicker">壁にはこんなものも / 図版室</span>
+        <div class="plate-row"><figure class="plate"><svg viewBox="0 0 200 150" role="presentation"><rect width="200" height="150" fill="#f6f1e7"/><rect x="30" y="26" width="140" height="112" fill="#2a2620" stroke="#1d1a17" stroke-width="3"/><rect x="44" y="36" width="30" height="30" fill="#4a423a" stroke="#1d1a17" stroke-width="2"/><rect x="90" y="36" width="30" height="30" fill="#4a423a" stroke="#1d1a17" stroke-width="2"/><rect x="136" y="36" width="30" height="30" fill="#4a423a" stroke="#1d1a17" stroke-width="2"/><rect x="44" y="86" width="30" height="30" fill="#4a423a" stroke="#1d1a17" stroke-width="2"/><rect x="90" y="86" width="30" height="30" fill="#f0477d" stroke="#1d1a17" stroke-width="2"/><rect x="136" y="86" width="30" height="30" fill="#4a423a" stroke="#1d1a17" stroke-width="2"/><rect x="44" y="136" width="30" height="30" fill="#4a423a" stroke="#1d1a17" stroke-width="2"/><rect x="90" y="136" width="30" height="30" fill="#4a423a" stroke="#1d1a17" stroke-width="2"/><rect x="136" y="136" width="30" height="30" fill="#4a423a" stroke="#1d1a17" stroke-width="2"/><rect x="70" y="118" width="60" height="16" fill="#fe9a0d" transform="rotate(-4 100 126)"/></svg><figcaption><b>空室</b><span>フォトエッセイ · Bernard Ave</span></figcaption></figure><figure class="plate"><svg viewBox="0 0 200 150" role="presentation"><rect width="200" height="150" fill="#f6f1e7"/><rect x="24" y="52" width="120" height="10" fill="#5a4a34"/><rect x="30" y="62" width="8" height="30" fill="#5a4a34"/><rect x="128" y="62" width="8" height="30" fill="#5a4a34"/><path d="M0 86 q25 -9 50 0 t50 0 t50 0 t50 0" fill="none" stroke="#12b795" stroke-width="4"/><path d="M0 102 q25 -9 50 0 t50 0 t50 0 t50 0" fill="none" stroke="#12b795" stroke-width="4"/><path d="M0 118 q25 -9 50 0 t50 0 t50 0 t50 0" fill="none" stroke="#12b795" stroke-width="4"/><path d="M0 134 q25 -9 50 0 t50 0 t50 0 t50 0" fill="none" stroke="#12b795" stroke-width="4"/><rect x="0" y="120" width="200" height="30" fill="#12b795" opacity="0.9"/></svg><figcaption><b>湖が奪う</b><span>拾った紙にインク</span></figcaption></figure><figure class="plate"><svg viewBox="0 0 200 150" role="presentation"><rect width="200" height="150" fill="#f6f1e7"/><rect x="27" y="70" width="6" height="52" fill="#3a2f22"/><path d="M16 78 l14 -20 l14 20 Z" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="67" y="70" width="6" height="52" fill="#3a2f22"/><circle cx="70" cy="66" r="18" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2.5"/><rect x="107" y="70" width="6" height="52" fill="#3a2f22"/><path d="M96 78 l14 -20 l14 20 Z" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="147" y="70" width="6" height="52" fill="#3a2f22"/><circle cx="150" cy="66" r="18" fill="#fe9a0d" stroke="#1d1a17" stroke-width="2.5"/><line x1="10" y1="122" x2="190" y2="122" stroke="#1d1a17" stroke-width="3"/></svg><figcaption><b>果樹園、その後</b><span>リソ · 二色</span></figcaption></figure></div>
+      </div>
+      <div class="card colour-card">
+        <div class="hd pink"><span>塗り絵のページ · 切り取り可</span></div>
+        <div class="bd">
+          <h3 class="colour-h">あなただけの崩壊を塗ろう</h3>
+          <svg class="colour-svg" viewBox="0 0 640 240" role="img" aria-label="Colouring page: an orchard under a sun, drawn in outline to colour in"><rect width="640" height="240" fill="#f6f1e7"/><circle cx="560" cy="60" r="34" fill="none" stroke="#1d1a17" stroke-width="2.5"/><line x1="602" y1="60" x2="612" y2="60" stroke="#1d1a17" stroke-width="2.5"/><line x1="589.698484809835" y1="89.698484809835" x2="596.7695526217004" y2="96.76955262170047" stroke="#1d1a17" stroke-width="2.5"/><line x1="560" y1="102" x2="560" y2="112" stroke="#1d1a17" stroke-width="2.5"/><line x1="530.301515190165" y1="89.698484809835" x2="523.2304473782996" y2="96.76955262170048" stroke="#1d1a17" stroke-width="2.5"/><line x1="518" y1="60.00000000000001" x2="508" y2="60.00000000000001" stroke="#1d1a17" stroke-width="2.5"/><line x1="530.301515190165" y1="30.301515190165006" x2="523.2304473782996" y2="23.23044737829953" stroke="#1d1a17" stroke-width="2.5"/><line x1="560" y1="18" x2="560" y2="8" stroke="#1d1a17" stroke-width="2.5"/><line x1="589.698484809835" y1="30.301515190165" x2="596.7695526217004" y2="23.230447378299523" stroke="#1d1a17" stroke-width="2.5"/><path d="M0 190 q160 -34 320 0 t320 0" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="66" y="150" width="8" height="40" fill="none" stroke="#1d1a17" stroke-width="2.5"/><circle cx="70" cy="140" r="26" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="161" y="150" width="8" height="40" fill="none" stroke="#1d1a17" stroke-width="2.5"/><circle cx="165" cy="140" r="26" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="256" y="150" width="8" height="40" fill="none" stroke="#1d1a17" stroke-width="2.5"/><circle cx="260" cy="140" r="26" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="351" y="150" width="8" height="40" fill="none" stroke="#1d1a17" stroke-width="2.5"/><circle cx="355" cy="140" r="26" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="446" y="150" width="8" height="40" fill="none" stroke="#1d1a17" stroke-width="2.5"/><circle cx="450" cy="140" r="26" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="541" y="150" width="8" height="40" fill="none" stroke="#1d1a17" stroke-width="2.5"/><circle cx="545" cy="140" r="26" fill="none" stroke="#1d1a17" stroke-width="2.5"/><rect x="250" y="150" width="80" height="60" fill="none" stroke="#1d1a17" stroke-width="2.5"/><path d="M250 150 l40 -30 l40 30" fill="none" stroke="#1d1a17" stroke-width="2.5"/><text x="268" y="188" font-family="'IBM Plex Mono',monospace" font-size="11" fill="#1d1a17">FOR LEASE</text><text x="24" y="34" font-family="'Caveat',cursive" font-size="26" fill="#1d1a17">colour me →</text><line x1="0" y1="220" x2="640" y2="220" stroke="#1d1a17" stroke-width="1.5" stroke-dasharray="8 6"/></svg>
+          <p style="font-size:14px;line-height:1.7;margin-top:14px">線画のページはあなたのものです。果樹園にクレヨンを、家賃に赤ペンを、下に署名を。撮影して送り返してください。最優秀作は №2 の壁を飾ります。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /pane -->
+
+<div class="pane" id="calendar">
+<!-- ============ CALENDAR ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.14</span><span class="tag">// カレンダー · 2026年8月–10月 · 切り取って冷蔵庫へ</span></div>
+    <div class="split">
+      <div>
+        <h2 class="display" style="--fit:54px;--dl:1">カレンダー<span class="dot" style="color:var(--teal-t)">.</span></h2>
+        <p class="dek">掲載は無料。15日までにメールを。しらふ向け・全年齢向けの選択肢は ◦ で表示。</p>
+        <div class="card" style="margin-top:24px">
+          <div class="hd"><span>2026年8月 — 10月</span><span class="r">切り取って冷蔵庫へ</span></div>
+          <div class="bd list" id="events"><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink);min-width:60px">Aug 07</span><span class="t"><b>ラボで第一金曜 ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Riposte の工房フロア — 見学、ベンチ、ジン</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;color:var(--ink);min-width:60px">Aug 14</span><span class="t"><b>公園で映画 №1 ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">City Park — Paris Is Burning</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink);min-width:60px">Aug 15</span><span class="t"><b>クィア・ビーチ集会 ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Gyro Beach 北端 — 分け合える日陰を持って</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;color:var(--ink);min-width:60px">Aug 22</span><span class="t"><b>ハーベスト・ムーン ドラァグ・ナイト</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">コミュニティ・ホール — 入口で PWYC</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink);min-width:60px">Sep 05</span><span class="t"><b>ジン作り + 投稿相談会 ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">図書館のメイカースペース — あなたの怒りを持って</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink);min-width:60px">Sep 15</span><span class="t"><b>№2 投稿締切</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">アート、オピニオン、詩</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;color:var(--ink);min-width:60px">Sep 19</span><span class="t"><b>年長者と歩く果樹園 ◦</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">East Kelowna のベンチ — 足下に歴史</span></span></div><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink);min-width:60px">Oct 03</span><span class="t"><b>カセットの夜：シューボックス文庫</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">会場は追って — Miss Demeanour が仕切ります</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink);min-width:60px">Oct 17</span><span class="t"><b>第№2号の発売 + 塗り絵コンテスト</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">場所は №2 で。当然。</span></span></div></div>
+        </div>
+      </div>
+      <div>
+        <span class="kicker teal">公園で映画 / Daily Bread 主催</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>夏の演目 / 日暮れに</span><span class="r">雨天時はラボへ移動</span></div>
+          <div class="bd list" id="screenings"><div class="li"><span class="pgchip" style="background:#f0477d;color:var(--ink);min-width:60px">Aug 14</span><span class="t"><b>Paris Is Burning (1990)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">City Park、日暮れに</span></span></div><div class="li"><span class="pgchip" style="background:#fe9a0d;color:var(--ink);min-width:60px">Sep 04</span><span class="t"><b>My Own Private Idaho (1991)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Ben Lee Park、日暮れに</span></span></div><div class="li"><span class="pgchip" style="background:#12b795;color:var(--ink);min-width:60px">Sep 25</span><span class="t"><b>The Watermelon Woman (1996)</b><br><span class="tagend" style="text-transform:none;letter-spacing:.02em;font-size:12px">Rutland Centennial Park、日暮れに</span></span></div><div class="li"><span class="fine">無料 / PWYC · 字幕あり · プロジェクター + 電源：再生セル使用、Project HEX</span></div></div>
+        </div>
+        <div class="card" style="margin-top:24px">
+          <div class="hd pink"><span>投票 — 10月の上映</span></div>
+          <div class="bd">
+            <div class="checkline">☐ Portrait of a Lady on Fire (2019)</div>
+            <div class="checkline">☐ Hedwig and the Angry Inch (2001)</div>
+            <div class="checkline">☐ Bound (1996)</div>
+            <div class="checkline fine">一つに印を · 撮影して · 送信。映画の民主主義。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /pane -->
+
+<div class="pane" id="directory">
+<!-- ============ DIRECTORY ============ -->
+<section class="sec" style="background:var(--paper2)">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.18</span><span class="tag">// 相互扶助 · このページは保存を · 四半期ごとに検証済み</span></div>
+    <div class="split">
+      <div>
+        <span class="kicker teal">このページは保存を / ディレクトリ</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>四半期ごとに検証済み · 切り取り可</span></div>
+          <div class="bd list" id="dir-list"><div class="li"><span class="t" style="font-weight:700">危機ホットライン(24/7、トランスに理解あり)</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">プレースホルダー — 印刷前に確認を</span></div><div class="li"><span class="t" style="font-weight:700">インフォームド・コンセントの診療所リスト</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">四半期ごとに更新 · このページ</span></div><div class="li"><span class="t" style="font-weight:700">ユース立ち寄り所(14–24) ◦</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">水 + 土 · ダウンタウン</span></div><div class="li"><span class="t" style="font-weight:700">相互扶助のパントリー</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">rutland · 詮索なし</span></div><div class="li"><span class="t" style="font-weight:700">法律支援 — 借家人の防衛</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">第一月曜 · 図書館</span></div><div class="li"><span class="t" style="font-weight:700">年長クィアの交流(55+) ◦</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">木曜 · 湖畔</span></div><div class="li"><span class="t" style="font-weight:700">しらふの集い ◦</span><span class="end tagend" style="text-transform:none;letter-spacing:.02em">カレンダー参照、◦ 印</span></div></div>
+        </div>
+        <p class="meta" style="margin-top:14px;line-height:1.7">載っていない資源がある?番号が間違っている?教えてください — このページこそが、すべての目的です。</p>
+      </div>
+      <div>
+        <span class="kicker">本当に役に立つこと / チェックリスト</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>現場で実証済み</span></div>
+          <div class="bd">
+            <div class="checkline">☐ インフォームド・コンセントの診療所リスト — 四半期ごとに更新</div>
+            <div class="checkline">☐ 薬剤師は思ったより多くを更新できる — 直接尋ねて</div>
+            <div class="checkline">☐ 遠隔医療も有効。回線が悪くても、400 km よりは近い</div>
+            <div class="checkline">☐ 診察には友人を連れて。お役所仕事は証人を尊重する</div>
+          </div>
+        </div>
+        <div class="annot"><span class="scribble">デブに感謝、まじで</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="band harl br"></div>
+
+</div><!-- /pane -->
+
+<div class="pane" id="submit">
+<!-- ============ SUBMIT ============ -->
+<section class="sec field-ink">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.19</span><span class="tag" style="color:#b7ad9e">// 投稿 · №2 —「雪解け」</span></div>
+    <div class="split">
+      <div>
+        <h2 class="display" style="--fit:54px;--dl:2">パン屑を<br>こぼして<span class="dot">.</span></h2>
+        <p class="dek" style="color:#cfc6b6">連載小説、開かれた見開き、ヤング・ヴォイセズ編集室、最新であり続けるディレクトリ。№1 は、自らの存在を主張するシーンの最初の草稿です。№2 は「雪解け」— 戻ってくるもの。あなたの怒りとレシピを送ってください。</p>
+        <div style="margin-top:26px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+          <a href="mailto:hello@dailybread.example?subject=WALL" class="stamp pink">hello@dailybread.example</a>
+          <span class="stamp">締切 · 9月15日</span>
+        </div>
+        <div class="annot"><span class="scribble teal">詩を送って。変なものほど歓迎。</span></div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="hd orange"><span>受け付けているもの</span></div>
+          <div class="bd">
+            <div class="checkline">▸ <b>見開きページのためのアート</b> — A4 横、300dpi、画材は自由。原稿料を払います。権利はあなたのまま。</div>
+            <div class="checkline">▸ <b>オピニオン(25歳未満)</b> — 500 語の正しい怒り。</div>
+            <div class="checkline">▸ <b>詩 &amp; 小説</b> — すべて二度読みます。</div>
+            <div class="checkline">▸ <b>漫画</b> — ゲスト枠に六コマを売り込んで。</div>
+            <div class="checkline">▸ <b>掲載情報 &amp; 訂正</b> — 無料、いつでも。</div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:24px">
+          <div class="hd pink"><span>投票 — №2 のテーマ</span></div>
+          <div class="bd">
+            <div class="checkline">☐ 雪解け(戻ってくるもの)</div>
+            <div class="checkline">☐ 水の権利と不当(Water Rights &amp; Wrongs)</div>
+            <div class="checkline">☐ 夜勤(午前2時のケロウナを回すのは誰か)</div>
+            <div class="checkline fine">一つに印を · 撮影して · 送信。民主主義。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /pane -->
+
+<div class="pane" id="lab">
+<!-- ============ FROM THE LAB ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.16</span><span class="tag">// ラボより · 出資者開示、大きく刷る</span></div>
+    <div class="split">
+      <div>
+        <img src="/assets/riposte-logo.svg" alt="Riposte Laboratories" style="width:min(280px,80%)">
+        <div class="meta" style="letter-spacing:.45em;margin-top:10px">Laboratories Inc.</div>
+        <h2 class="display" style="--fit:54px;--dl:1;margin-top:22px">ラボより</h2>
+        <div class="prose justify" style="margin-top:18px">
+          <p>包み隠さず、大きく刷ります。このマガジンは Riposte Laboratories の出資によるものです。ケロウナの一団で、再生プラスチックの射出成形と再生セルによるモジュール電源で無駄に反撃しています。私たちがここで作っているものを、同じ誌面で、他の誰とも同じ音量で共有します。</p>
+          <p>書面での取り決めはこうです。ラボが印刷代を払い、二ページを得る。編集部は出資者ではなく読者に対して責任を負う。もしそれが変わることがあれば、塗り絵のページがお知らせします。</p>
+        </div>
+        <div style="margin-top:22px"><span class="stamp">出資者開示 · 署名済み</span></div>
+        <div class="signoff" style="margin-top:20px">parry. riposte. recycle.</div>
+      </div>
+      <div>
+        <span class="kicker">今期 / ステータスボード</span>
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><span>Q3 · 2026</span><span class="r">Rev. A</span></div>
+          <div class="bd list" id="lab-board"><div class="li"><span class="t">Plastic Works — 金型 v2、#5 のバケツから公園のベンチ</span><span class="end"><span class="statuschip" style="background:#12b795;color:var(--ink)">Live</span></span></div><div class="li"><span class="t">Project HEX — 再生セルの選別装置</span><span class="end"><span class="statuschip" style="background:#fe9a0d;color:var(--ink)">WIP</span></span></div><div class="li"><span class="t">Esh — 工房アシスタント、現在はホワイトボード</span><span class="end"><span class="statuschip" style="background:#f0477d;color:var(--ink)">Drawing</span></span></div><div class="li"><span class="t">Daily Bread №2 — テーマ投票</span><span class="end"><span class="statuschip" style="background:#1d1a17;color:var(--bone)">Open</span></span></div><div class="li"><span class="t">第一金曜の開放 — きれいなプラスチックを持って</span><span class="end"><span class="statuschip" style="background:#12b795;color:var(--ink)">Recurring</span></span></div></div>
+        </div>
+        <div class="card" style="margin-top:24px">
+          <div class="hd orange"><span>なぜマガジンに出資するのか?</span></div>
+          <div class="bd" style="font-size:14px;line-height:1.7">文化的な素材を失いつつある町で、素材の無駄を直すラボが、それをしなければ仕事は半分だから。紙はインフラだ。ドラァグの夜もそうだ。予算項目、承認。</div>
+        </div>
+        <p class="meta" style="margin-top:14px;line-height:1.7">工房を見学：毎月第一金曜は開放 · きれいな #2 + #5 のプラスチックを持って。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="band harl br"></div>
+
+</div><!-- /pane -->
+
+<div class="pane" id="shop">
+<!-- ============ SHOP ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.17</span><span class="tag">// ショップ · 全号、綿と紙に</span></div>
+    <span class="kicker">グッズ / 号別</span>
+    <h2 class="display" style="margin-top:14px">この号を着る。</h2>
+    <p class="dek" style="max-width:62ch">各号はモノになります。表紙はTシャツとトートに、中央見開きはポスターに、ステッカーシートは切り離して、引用は声に出して。その号のデータそのものから作り、受注生産で印刷します。</p>
+    
+      <div class="shop-col">
+        <div class="hd"><span>Daily Bread · Merch</span><span class="r"><a href="https://h23y0x-fd.myshopify.com/collections/daily-bread-apparel" rel="noopener">すべて →</a></span></div>
+        <div class="shop-grid">
+          <a class="shop-card" href="https://shop.ripostelabs.xyz/products/db-collective" rel="noopener">
+            
+            <span class="shop-name">Collective.</span>
+            <span class="shop-type">Merch</span>
+            <span class="shop-price">from $18 CAD</span>
+          </a>
+          <a class="shop-card" href="https://shop.ripostelabs.xyz/products/db-cover-01" rel="noopener">
+            
+            <span class="shop-name">Daily Bread №1 Cover · Glitch</span>
+            <span class="shop-type">Merch</span>
+            <span class="shop-price">from $28 CAD</span>
+          </a>
+          <a class="shop-card" href="https://shop.ripostelabs.xyz/products/db-01" rel="noopener">
+            
+            <span class="shop-name">Daily Bread №1 — Kelowna's Collapse</span>
+            <span class="shop-type">Merch</span>
+            <span class="shop-price">from $18 CAD</span>
+          </a>
+          <a class="shop-card" href="https://shop.ripostelabs.xyz/products/db-02" rel="noopener">
+            
+            <span class="shop-name">Daily Bread №2 — The Thaw</span>
+            <span class="shop-type">Merch</span>
+            <span class="shop-price">from $18 CAD</span>
+          </a>
+        </div>
+      </div>
+    <p class="meta" style="margin-top:22px;line-height:1.7">価格はCAD · 受注生産 · ショップはRIPOSTEのストアで運営。雑誌は雑誌のまま。</p>
+  </div>
+</section>
+
+<div class="band harl br"></div>
+
+</div><!-- /pane -->
+
+<div class="pane" id="stickers">
+<!-- ============ STICKERS · PEEL ME (printable sheet) ============ -->
+<section class="sec stickers-sec">
+  <div class="wrap">
+    <div class="sechead"><span class="no">Sec.24</span><span class="tag">// 剥がして · ステッカーシート · 余ったインクの行き先</span></div>
+    <div class="split center">
+      <div>
+        <h2 class="display" style="--fit:54px;--dl:1">剥がして<span class="dot" style="color:var(--teal-t)">.</span></h2>
+        <p class="dek">余ったインクの行き先はここ。ページを印刷して、破線に沿って切り、この谷を水筒に貼ってください。ステッカー十二枚、同じ崩壊は二つとありません。</p>
+      </div>
+      <div class="print-cta">
+        <button type="button" class="printbtn" onclick="document.body.classList.add('print-stickers');window.print()">このシートを印刷 ⎙</button>
+        <button type="button" class="printbtn ghost" onclick="document.body.classList.remove('print-stickers');window.print()">この号全体を印刷 ⎙</button>
+        <span class="fine">または Ctrl / ⌘ + P を押す · 破線に沿って切る</span>
+      </div>
+    </div>
+    <div class="card sheet">
+      <div class="hd"><span>ステッカーシート №1 · 端材にリソ印刷</span><span class="r">破線に沿って切る</span></div>
+      <div class="bd"><div class="sticker-grid"><div class="sticker k-g" style="--rot:-2.5deg"><div class="ic"><svg viewBox="0 0 116 108" role="presentation"><g transform="translate(4,4)"><g stroke="#1d1a17" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 78 Q14 39 58 39 Q102 39 102 78 Q102 93 58 93 Q14 93 14 78 Z" fill="#e4bd79"/>
+    <path d="M26 51 q11 -8 21 0 M49 49 q11 -8 21 2 M72 53 q8 -6 15 2" fill="none" stroke-width="2.3"/>
+    <circle cx="45" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><circle cx="72" cy="65" r="4.6" fill="#1d1a17" stroke="none"/><path d="M49 79 q9 7 18 0" fill="none" stroke-width="2.6"/>
+    <circle cx="58" cy="74" r="1.9" fill="#f0477d" stroke="none"/>
+  </g></g></svg></div><span class="lab" style="color:var(--pink-t)">パン屑</span></div><div class="sticker k-s" style="--rot:1.5deg"><span class="stampbadge" style="border-color:var(--pink-t);color:var(--pink-t)">パン屑をこぼせ</span></div><div class="sticker k-s" style="--rot:-1deg"><span class="stampbadge" style="border-color:var(--orange-t);color:var(--orange-t)">無料 / PWYC</span></div><div class="sticker k-g" style="--rot:2.5deg"><div class="ic"><svg viewBox="0 0 100 80" role="presentation"><path d="M6 60 L34 22 L58 60 Z" fill="#2a2620"/><path d="M40 60 L66 30 L94 60 Z" fill="#1d1a17"/><circle cx="80" cy="24" r="10" fill="#f0477d"/><rect x="0" y="60" width="100" height="14" fill="#12b795"/></svg></div><span class="lab" style="color:#1d1a17">ケロウナ</span></div><div class="sticker k-q" style="--rot:-2deg"><span class="quote" style="color:var(--teal-t)">シーンは住所じゃない</span></div><div class="sticker k-m" style="--rot:1deg"><span class="mono">DB</span><span class="lab">Daily Bread</span></div><div class="sticker k-g" style="--rot:-2.5deg"><div class="ic"><svg viewBox="0 0 96 96" role="presentation"><g fill="none" stroke="#12b795" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M48 20 L64 46 M64 46 L54 44 M64 46 L62 36"/><path d="M70 60 L40 60 M40 60 L48 66 M40 60 L48 54" transform="rotate(120 48 48)"/><path d="M70 60 L40 60 M40 60 L48 66 M40 60 L48 54" transform="rotate(240 48 48)"/></g></svg></div><span class="lab" style="color:var(--teal-t)">Parry · Riposte · Recycle</span></div><div class="sticker k-g" style="--rot:1.5deg"><div class="ic"><svg viewBox="0 0 80 96" role="presentation"><path d="M40 6 C40 6 70 46 70 66 A30 30 0 1 1 10 66 C10 46 40 6 40 6 Z" fill="#12b795" stroke="#1d1a17" stroke-width="3"/><path d="M28 62 a12 12 0 0 0 12 12" fill="none" stroke="#f6f1e7" stroke-width="3"/></svg></div><span class="lab" style="color:var(--teal-t)">湖が奪う</span></div><div class="sticker k-s" style="--rot:-1deg"><span class="stampbadge" style="border-color:#1d1a17;color:#1d1a17">私がその前例だ</span></div><div class="sticker k-s" style="--rot:2.5deg"><span class="stampbadge" style="border-color:var(--pink-t);color:var(--pink-t)">もう静かにしない</span></div><div class="sticker k-s" style="--rot:-2deg"><span class="stampbadge" style="border-color:var(--orange-t);color:var(--orange-t)">ケロウナ焼き上げ</span></div><div class="sticker k-q" style="--rot:1deg"><span class="quote" style="color:#1d1a17">syilx okanagan · 敬意を込めて</span></div></div></div>
+    </div>
+    <p class="meta" style="margin-top:18px;line-height:1.9">端材にリソ印刷。色がずれていたら、それがねらいです。</p>
+  </div>
+</section>
+
+<!-- ============ BACK COVER ============
+     The back cover is the last page of the issue, not a block repeated under
+     every tab: it rides at the end of the final pane (Sec.24), so it is reached
+     by reading to the end and it keeps its printed position exactly. What every
+     pane still carries is the slim <footer> strip below. -->
+<section class="backcover">
+  <div class="band harl" style="border-top:2px solid var(--bone)"></div>
+  <div class="wrap inner">
+    <img class="logo" src="/assets/riposte-logo.svg" alt="Riposte Laboratories">
+    <div class="tg">Riposte Laboratories Inc.</div>
+    <p class="blurb">Daily Bread は、BC州ケロウナで季刊ごとに焼き上げています。見つけた場所では無料。払えない人はそのままで、払える人は払えるだけ。</p>
+    <div class="fmeta">
+      <div class="barcode"></div>
+      <div class="meta" style="line-height:1.7;text-align:left">ISSN 申請中<br>№1 · 2026年夏</div>
+    </div>
+    <div class="signoff" style="color:var(--pink);margin-top:4px">雪解けで会いましょう ✕</div>
+    <div class="colophon">割譲されていない syilx オカナガンの土地の上で、500 部刷りました。書体は IBM Plex Mono と UnifrakturMaguntia。誤りは私たちのもの、訂正はあなたのもの、余ったインクはステッカーになりました。 · Parry. Riposte.</div>
+    <!-- paper only. The live badge in the slim strip is screen chrome (that
+         strip is display:none in print), so without this line the printed issue
+         would carry no verification text at all — which is where it sat before
+         the back cover moved. Same string, so it costs no translation. -->
+    <div class="verify-print">検証済みの出版 ✓ この版が改変されていないことを確認</div>
+  </div>
+  <div class="band" style="border-top:2px solid var(--bone)"></div>
+</section>
+
+</div><!-- /pane -->
+
+</div><!-- /panes -->
+</main>
+
+<!-- ============ SITE FOOTER (slim strip, on every pane) ============
+     One row of standing chrome only — imprint line, the rendering switch and
+     the verification badge. It must stay a DIRECT CHILD of <body>: the sticker
+     print mode collapses the page with a body.print-stickers > * rule. -->
+<footer class="slim">
+  <div class="wrap finner">
+    <div class="tg">Riposte Laboratories Inc. &middot; DB-001</div>
+    <div class="fswitch">軽量版: <a href="/ja/">フル</a> · <a href="/ja/lite/">ライト</a> · <a href="/ja/eink/">E-ink</a> · <a href="/ja/plain/" aria-current="true">Plain</a></div>
+    <div class="verify-note"><a href="/verify/">検証済みの出版 ✓ この版が改変されていないことを確認</a></div>
+  </div>
+</footer>
+
+<!-- reset the sticker-sheet print mode after printing so Ctrl/⌘+P always yields the whole issue -->
+<script>addEventListener('afterprint',function(){document.body.classList.remove('print-stickers')});</script>
+
+</body>
+</html>

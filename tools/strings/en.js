@@ -217,6 +217,7 @@ module.exports = {
   'chrome.verFull': 'Full',
   'chrome.verLite': 'Lite',
   'chrome.verEink': 'E-ink',
+  'chrome.verPlain': 'Plain',
   'chrome.altVersions': 'Lightweight versions',
 
   /* ---- Sec.01 data · table of contents (18 rows) ---- */
