@@ -561,10 +561,324 @@
   .shop-type{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:4px}
   .shop-price{font-size:12px;margin-top:8px}
 
-  /* Daily Bread · plain rendering (stub, replaced by the design pass) */
-  @font-face{font-family:"JetBrains Mono";font-style:normal;font-display:swap;font-weight:100 800;
-    src:url("/assets/fonts/jetbrains/jetbrains-mono-latin.b058178d.woff2") format("woff2")}
-  html.v-plain{--pink:var(--ink);--teal:var(--ink);--orange:var(--ink)}
+/* Daily Bread · plain rendering. The ripostelabs.xyz look, transplanted:
+   two inks (--ink on --bone), no dark sections, no hue. One family,
+   JetBrains Mono. Hierarchy comes from weight, size and opacity, never
+   colour. 2px solid rules for structure, 1px dashed rules inside. One 10px
+   checker band tops each section; one rotated stamp on the whole page.
+   Inlined after style.css, so every rule is scoped to html.v-plain.
+
+     +-----------------------------------------------+  header.top: bone, 2px rule
+     | rail  | ::: checker band :::::::::::::::::::: |
+     | 00 ## | 01 LABEL // tag                       |  .sechead: chip + label
+     | 01    | Heading, 800, mixed case              |
+     | 02    | body text, 68ch measure ...           |
+     +-----------------------------------------------+  footer.slim: bone, 2px rule */
+
+/* self-hosted JetBrains Mono (OFL 1.1), the same two subsets as the site */
+@font-face{
+  font-family:"JetBrains Mono";font-style:normal;font-display:swap;font-weight:100 800;
+  src:url("/assets/fonts/jetbrains/jetbrains-mono-latin.b058178d.woff2") format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:"JetBrains Mono";font-style:normal;font-display:swap;font-weight:100 800;
+  src:url("/assets/fonts/jetbrains/jetbrains-mono-latin-ext.e36841ed.woff2") format("woff2");
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+/* ---------- tokens: every ink collapses to ink, every ground to bone ----------
+   --muted is ink at 70% over bone (about 6:1), the site's .7 opacity as a
+   colour, so muted words keep 4.5:1 without stacking opacities. */
+html.v-plain{
+  --ink:#1d1a17; --bone:#f6f1e7;
+  --panel:var(--bone); --paper2:var(--bone); --dark:var(--ink);
+  --pink:var(--ink); --teal:var(--ink); --orange:var(--ink);
+  --pink-deep:var(--ink); --teal-deep:var(--ink); --orange-deep:var(--ink);
+  --pink-lift:var(--ink); --teal-lift:var(--ink); --orange-lift:var(--ink);
+  --pink-t:var(--ink); --teal-t:var(--ink); --orange-t:var(--ink);
+  --muted-paper:#5f5a53; --muted-ink:#5f5a53; --muted:#5f5a53;
+  --checker:repeating-conic-gradient(currentColor 0 25%,transparent 0 50%) 0 0/20px 20px;
+  --checker-inv:var(--checker); --harlequin:none;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --measure:68ch;
+  --body:clamp(15px,1.4vw,19px);
+  background:var(--bone);
+}
+/* the ink-ground scopes in style.css re-point the -t inks; pin them back */
+html.v-plain .field-ink,html.v-plain .hero,html.v-plain .backcover,html.v-plain .plate,
+html.v-plain header.top,html.v-plain .rail,html.v-plain footer.slim,
+html.v-plain .card,html.v-plain .stat,html.v-plain .panel,html.v-plain .sticker,
+html.v-plain .shop-card,html.v-plain .langmenu{
+  --pink-t:var(--ink); --teal-t:var(--ink); --orange-t:var(--ink); --muted:#5f5a53}
+
+/* ---------- one face, no effects ----------
+   SVG art keeps its own type: it is drawn, not set. */
+html.v-plain body,html.v-plain body *:not(svg):not(svg *){font-family:var(--mono)!important}
+html.v-plain *,html.v-plain *::before,html.v-plain *::after{box-shadow:none!important;text-shadow:none!important}
+html.v-plain body{background:var(--bone);color:var(--ink);font-size:var(--body);line-height:1.6}
+html.v-plain ::selection{background:var(--ink);color:var(--bone)}
+html.v-plain :focus-visible{outline:3px solid currentColor;outline-offset:3px}
+
+/* ---------- links: inherit the ink, carry an underline ---------- */
+html.v-plain a{color:inherit;text-decoration:underline;text-underline-offset:.18em;text-decoration-thickness:1px}
+html.v-plain a:hover{color:inherit;text-decoration-thickness:2px}
+
+/* ---------- hand-coded hexes in the markup: no colour reaches the page ----------
+   inline grounds become the inverted ink chip, inline light greys (written
+   for the old ink grounds) become muted ink, inline hues become ink. */
+html.v-plain [style*="background:#"]{background:var(--ink)!important;color:var(--bone)!important}
+html.v-plain [style*="background:var(--paper2)"],html.v-plain [style*="background:var(--panel)"]{background:var(--bone)!important}
+html.v-plain [style*="color:#b7ad9e"],html.v-plain [style*="color:#cfc6b6"],
+html.v-plain [style*="color:#8d857a"],html.v-plain [style*="color:#e7ddcd"]{color:var(--ink)!important}
+html.v-plain .tag[style*="color:#"],html.v-plain .meta[style*="color:#"],
+html.v-plain .attrib[style*="color:#"],html.v-plain .fine[style*="color:#"]{color:var(--muted)!important}
+html.v-plain [style*="color:var(--pink)"],html.v-plain [style*="color:#f0477d"],
+html.v-plain [style*="color:#12b795"],html.v-plain [style*="color:#fe9a0d"]{color:var(--ink)!important}
+html.v-plain [style*="border-top:2px solid var(--bone)"]{border-top-color:var(--ink)!important}
+/* a scribble written inline in a script face: small dim mono instead */
+html.v-plain [style*="Caveat"]{font-size:13px!important;letter-spacing:.06em!important;
+  color:var(--muted)!important;font-weight:400!important;line-height:1.5!important}
+html.v-plain [style*="Caveat"]::before{content:"// "}
+
+/* art and photographs in grey */
+html.v-plain svg,html.v-plain .cover-frame img,html.v-plain .shop-card img{filter:grayscale(1)}
+
+/* ---------- shared type ---------- */
+/* kickers: the inverted ink chip, like the Sec.NN chips, so section starts scan alike */
+html.v-plain .kicker,html.v-plain .kicker.pink,html.v-plain .kicker.teal,html.v-plain .kicker.orange{
+  display:inline-block;background:var(--ink);color:var(--bone);padding:3px 9px;
+  font-size:12px;font-weight:400;letter-spacing:.12em;opacity:1}
+html.v-plain .display{font-size:min(clamp(28px,5.5vw,64px),var(--fit,999px));line-height:1.05;
+  font-weight:800;text-transform:none;letter-spacing:-.01em;
+  min-height:calc(var(--dl,1) * 1.05 * min(clamp(28px,5.5vw,64px),var(--fit,999px)))}
+html.v-plain .display .dot{color:inherit!important}
+html.v-plain .frak{font-weight:800;line-height:1.05}
+html.v-plain .dek{font-size:var(--body);line-height:1.6;max-width:var(--measure);color:var(--ink)!important;opacity:1;margin-top:16px}
+html.v-plain .prose,html.v-plain .prose p{font-size:var(--body);line-height:1.6;max-width:var(--measure)}
+html.v-plain .prose p{margin:0 0 16px}
+/* justified mono opens rivers: ragged edge instead */
+html.v-plain .justify{text-align:start;hyphens:manual}
+html.v-plain .meta,html.v-plain .fine,html.v-plain .tagend{font-size:11px;letter-spacing:.12em;color:var(--muted)}
+
+/* stamps lie flat: an outlined label, like the site's .pill */
+html.v-plain .stamp,html.v-plain .stamp.pink,html.v-plain .stamp.teal{border:2px solid currentColor;
+  color:var(--ink)!important;border-color:currentColor!important;background:var(--bone);transform:none;
+  font-size:11px;font-weight:400;letter-spacing:.14em;padding:7px 12px}
+html.v-plain a.stamp{text-decoration:none}
+html.v-plain a.stamp:hover{background:var(--ink);color:var(--bone)!important}
+/* ...except the one stamp the page is allowed, under the cover lockup */
+html.v-plain .hero .badges .stamp:first-child{transform:rotate(-1.4deg)}
+
+/* scribbles are asides: small dim mono, set as a code comment */
+html.v-plain .scribble,html.v-plain .scribble.teal,html.v-plain .scribble.orange{font-size:12px;line-height:1.5;
+  color:var(--muted);transform:none;letter-spacing:.06em;font-weight:400}
+html.v-plain .scribble::before{content:"// "}
+html.v-plain .signoff{font-size:13px;letter-spacing:.1em;text-transform:uppercase;transform:none;
+  color:var(--muted)!important;margin-top:20px}
+
+/* ---------- sections: bone, a 2px rule under each, a checker band on top ---------- */
+html.v-plain .sec,html.v-plain .field-ink,html.v-plain .stickers-sec{background:var(--bone);color:var(--ink);
+  position:relative;border-bottom:2px solid var(--ink);padding:clamp(40px,4.4vw,56px) 0}
+html.v-plain .sec::before,html.v-plain .hero::before{content:"";position:absolute;top:0;left:0;right:0;height:10px;
+  background:var(--checker);color:var(--ink);opacity:.9}
+html.v-plain .band,html.v-plain .band.harl{display:none}
+/* a pane's last section leaves the closing rule to the footer, so no rule
+   floats over the blank page held open above it */
+html.v-plain .pane>.sec:last-child{border-bottom:0}
+html.v-plain .field-ink a{color:inherit}
+html.v-plain .field-ink .rule{color:var(--ink)}
+html.v-plain .field-ink .sechead .no{background:var(--ink);color:var(--bone)}
+
+html.v-plain .sechead{gap:12px;align-items:center;margin-bottom:18px}
+html.v-plain .sechead .no{font-size:12px;font-weight:400;letter-spacing:.1em;padding:3px 9px}
+html.v-plain .sechead .tag{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+html.v-plain .rule{height:0;border-top:1px dashed currentColor;border-bottom:0;opacity:1;margin:0}
+
+/* ---------- boxes: the site's spec box (2px frame, ink header strip) ---------- */
+html.v-plain .card,html.v-plain .field-ink .card{border:2px solid var(--ink);background:var(--bone);color:var(--ink)}
+html.v-plain .card>.hd,html.v-plain .card>.hd.pink,html.v-plain .card>.hd.teal,html.v-plain .card>.hd.orange,
+html.v-plain .field-ink .card>.hd{background:var(--ink);color:var(--bone);border-bottom:0;
+  font-size:11px;font-weight:400;letter-spacing:.08em;padding:11px 18px}
+html.v-plain .card>.hd .r{opacity:1}
+html.v-plain .card>.bd{padding:16px 18px}
+html.v-plain .list .li,html.v-plain .checkline,html.v-plain .field-ink .checkline{border-bottom:1px dashed var(--ink)}
+html.v-plain .list .li:last-child,html.v-plain .checkline:last-child{border-bottom:0}
+html.v-plain .list .li .t{font-size:15px;font-weight:700;line-height:1.5}
+html.v-plain .checkline{font-size:14px;line-height:1.5}
+html.v-plain .list .li .end,html.v-plain .masthead-list .li .val{margin-left:0;margin-right:0;margin-inline-start:auto;text-align:end}
+html.v-plain .pgchip,html.v-plain .statuschip{background:var(--ink);color:var(--bone);font-weight:400;letter-spacing:.1em}
+html.v-plain .masthead-list .li .lab{color:var(--muted)}
+html.v-plain .masthead-list .li .val{font-weight:800;white-space:nowrap}
+
+/* stat: the site's stat card, numbers flush to the start */
+html.v-plain .stat{border:2px solid var(--ink);background:var(--bone);text-align:start;padding:20px 18px}
+html.v-plain .stat .n{font-size:clamp(26px,4vw,44px);font-weight:800;line-height:1;letter-spacing:-.02em}
+html.v-plain .stat .l{font-size:12px;letter-spacing:.06em;color:var(--ink);opacity:.8}
+
+/* ---------- reports, pull quotes, the big quote ---------- */
+html.v-plain .report h3{text-transform:none;font-weight:800;letter-spacing:-.01em}
+html.v-plain .report p{font-size:15px;line-height:1.6}
+html.v-plain .pull,html.v-plain .pull.orange,html.v-plain .pull.teal{border:0;border-inline-start:4px solid var(--ink);
+  padding:6px 0;padding-inline-start:12px;font-style:normal;font-weight:700;font-size:15px;line-height:1.45;color:var(--ink)}
+html.v-plain .bigquote{font-style:normal;font-weight:800;font-size:clamp(22px,3.4vw,38px);line-height:1.2;max-width:28ch}
+html.v-plain .bigquote .mk{color:inherit}
+html.v-plain .attrib{color:var(--muted);font-size:12px;letter-spacing:.16em}
+
+/* ---------- top bar: bone, a 2px rule under it, 11px uppercase ---------- */
+html.v-plain header.top{background:var(--bone);color:var(--ink);border-bottom:2px solid var(--ink)}
+html.v-plain header.top .brand,html.v-plain header.top .brand:hover{color:var(--ink);text-decoration:none}
+html.v-plain header.top .brand .mark{font-size:18px;font-weight:800;line-height:1;letter-spacing:-.01em}
+html.v-plain header.top .brand .lock{border-inline-start:1px dashed currentColor}
+html.v-plain header.top .brand .lab{color:var(--muted)}
+html.v-plain header.top .brand .doc,html.v-plain header.top .brand:hover .doc{color:var(--ink)}
+html.v-plain header.top .toprule::before{border-top:1px dashed var(--ink);opacity:.5}
+html.v-plain header.top .vswitch{border:2px solid var(--ink);font-size:11px;letter-spacing:.1em}
+html.v-plain header.top .vswitch a{color:var(--ink);text-decoration:none;border-inline-start:1px dashed var(--ink)}
+html.v-plain header.top .vswitch a:first-child{border-inline-start:0}
+html.v-plain header.top .vswitch a:hover{color:var(--ink);text-decoration:underline}
+html.v-plain header.top .vswitch a[aria-current]{background:var(--ink);color:var(--bone);font-weight:400}
+html.v-plain .langpick>summary{color:var(--ink)}
+/* the globe is an emoji: decorative, and tofu where no emoji face exists */
+html.v-plain .langpick>summary .globe{display:none}
+html.v-plain .langmenu{background:var(--bone);border:2px solid var(--ink)}
+html.v-plain .langmenu a{color:var(--ink);text-decoration:none;border-color:var(--ink)}
+html.v-plain .langmenu a:hover,html.v-plain .langmenu a[aria-current]{background:var(--ink);color:var(--bone)}
+html.v-plain .langmenu a .en{color:var(--muted)}
+html.v-plain .langmenu a[aria-current] .en,html.v-plain .langmenu a:hover .en{color:inherit}
+html.v-plain .mtnote{background:var(--bone);color:var(--ink);border-bottom:2px solid var(--ink)}
+
+/* ---------- contents rail: bone, a 2px rule at its inner edge ---------- */
+html.v-plain .rail{background:var(--bone);color:var(--ink);border-inline-end:2px solid var(--ink)}
+html.v-plain .rail-hd{background:var(--bone);color:var(--ink);border-bottom:2px solid var(--ink);font-weight:400;font-size:11px;letter-spacing:.08em}
+html.v-plain .rail-hd .r{color:var(--muted)}
+html.v-plain .rail a{--edge:transparent;--no:var(--muted);color:var(--ink);text-decoration:none;
+  border-bottom:1px dashed var(--ink);border-inline-start:2px solid var(--edge);font-size:12px;letter-spacing:.1em}
+html.v-plain .rail a .no{font-size:11px}
+html.v-plain .rail a:hover{--edge:var(--ink);--no:var(--ink);background:transparent;color:var(--ink);text-decoration:none}
+html.v-plain .rail a:focus-visible{outline:3px solid var(--ink)}
+/* current tab: full ink, 800, a 2px edge; the content column keeps the eye */
+@supports selector(:has(*)){
+  html.v-plain body:has(#letter:target) .rail a[href="#letter"],
+  html.v-plain body:has(#contents:target) .rail a[href="#contents"],
+  html.v-plain body:has(#history:target) .rail a[href="#history"],
+  html.v-plain body:has(#voices:target) .rail a[href="#voices"],
+  html.v-plain body:has(#comics:target) .rail a[href="#comics"],
+  html.v-plain body:has(#art:target) .rail a[href="#art"],
+  html.v-plain body:has(#calendar:target) .rail a[href="#calendar"],
+  html.v-plain body:has(#directory:target) .rail a[href="#directory"],
+  html.v-plain body:has(#submit:target) .rail a[href="#submit"],
+  html.v-plain body:has(#lab:target) .rail a[href="#lab"],
+  html.v-plain body:has(#shop:target) .rail a[href="#shop"],
+  html.v-plain body:has(#stickers:target) .rail a[href="#stickers"],
+  html.v-plain body:not(:has(.pane:target)) .rail a[href="#letter"]{
+    --edge:var(--ink);--no:var(--ink);background:transparent;color:var(--ink);font-weight:800;
+    scroll-initial-target:nearest}
+  @media(max-width:1040px){
+    html.v-plain .rail{border-inline-end:0;border-bottom:2px solid var(--ink)}
+    html.v-plain .rail a{border-bottom:0;border-inline-start:0;border-inline-end:1px dashed var(--ink);
+      border-block-end:2px solid var(--edge)}
+  }
+}
+
+/* ---------- hero: the cover lockup in ink on bone ---------- */
+html.v-plain .hero{background:var(--bone);color:var(--ink);border-bottom:2px solid var(--ink)}
+html.v-plain .hero .glow{display:none}
+html.v-plain .hero-grid{padding:clamp(40px,5vw,72px) 0;gap:clamp(24px,4vw,56px)}
+html.v-plain .hero .mast{font-size:clamp(48px,9vw,112px);font-weight:800;line-height:.95;letter-spacing:-.04em}
+html.v-plain .hero .tagline{color:var(--ink);font-size:12px;letter-spacing:.16em;opacity:.85}
+html.v-plain .hero p.intro{color:var(--ink);font-size:clamp(17px,2vw,24px);line-height:1.5;max-width:var(--measure)}
+html.v-plain .hero .issueline{color:var(--muted);font-size:12px;letter-spacing:.12em}
+html.v-plain .cover-wrap{max-width:300px}
+@media(min-width:861px){html.v-plain .cover-wrap{max-width:240px}}
+html.v-plain .cover-wrap .tab{background:var(--ink);color:var(--bone);border:0;font-size:11px;letter-spacing:.1em;padding:3px 9px}
+html.v-plain .cover-frame{border:2px solid var(--ink)}
+html.v-plain .cover-frame .cap{background:var(--bone);color:var(--ink);border-top:2px solid var(--ink);font-weight:400;font-size:11px}
+html.v-plain .cover-wrap .free{position:static;display:inline-block;margin-top:12px}
+
+/* ---------- editor's letter ---------- */
+html.v-plain .letter .prose .drop{background:var(--ink);color:var(--bone);font-weight:400;padding:0 6px}
+html.v-plain .dropcap::first-letter{font-weight:800;color:var(--ink)}
+
+/* ---------- comics, art, plates ---------- */
+html.v-plain .panel{border:2px solid var(--ink);background:var(--bone)}
+html.v-plain .panel .art{border-bottom:2px solid var(--ink)}
+html.v-plain .panel figcaption{font-size:14px}
+html.v-plain .centrefold .tearstrip{color:var(--muted);border-top:1px dashed var(--ink)}
+html.v-plain .centrefold .tearstrip::before{color:var(--muted)}
+/* the poster is a night scene: in grey it read as a solid dark block, so it
+   is shown as a negative. The filter inverts the border too, so it is set in bone. */
+html.v-plain .centrefold .poster-svg{border:2px solid var(--bone);filter:grayscale(1) invert(.93)}
+html.v-plain .plate{background:var(--bone);border:2px solid var(--ink);color:var(--ink)}
+html.v-plain .plate svg{border:2px solid var(--ink)}
+html.v-plain .plate figcaption span{color:var(--muted)}
+html.v-plain .colour-card .colour-h{text-transform:none}
+html.v-plain .colour-svg{border:2px solid var(--ink)}
+
+/* ---------- stickers: flat, the sheet as a spec box ---------- */
+html.v-plain .sticker{border:1px dashed var(--ink);margin:0;background:var(--bone)}
+html.v-plain .sticker>*{transform:none}
+html.v-plain .sticker .mono{font-size:36px;font-weight:800;line-height:1}
+html.v-plain .sticker .quote{font-style:normal}
+html.v-plain .sticker .stampbadge{border:2px solid var(--ink)}
+html.v-plain .printbtn{background:var(--ink);color:var(--bone);border:2px solid var(--ink);font-weight:400}
+html.v-plain .printbtn:hover,html.v-plain .printbtn.ghost{background:var(--bone);color:var(--ink);border-color:var(--ink)}
+html.v-plain .printbtn.ghost:hover{background:var(--ink);color:var(--bone)}
+html.v-plain .printbtn:active{transform:none}
+/* the ⎙ after "Print this sheet" is in no face here and drew as tofu:
+   a 568-byte face maps U+2399 to an empty zero-width glyph, so it drops out */
+@font-face{font-family:"DB Plain Blank";src:url(data:font/woff;base64,d09GRgABAAAAAAI4AAoAAAAAAngAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABWAAAACUAAABgZQ9i3WNtYXAAAAGIAAAAKgAAADQADCPsZ2x5ZgAAAbwAAAABAAAAAQAAAABoZWFkAAAA9AAAADYAAAA2LXJxpmhoZWEAAAEsAAAAFwAAACQDIf86aG10eAAAAYAAAAAGAAAABgAAAABsb2NhAAABtAAAAAYAAAAGAAAAAG1heHAAAAFEAAAAEwAAACAAAwACbmFtZQAAAcAAAABfAAAAdX98yyJwb3N0AAACIAAAABgAAAAuqKg5qAABAAAAAQAAKeikA18PPPUAAwPoAAAAAOcuGGMAAAAA5y4YYwAAAAAAAAAAAAAAAwACAAAAAAAAeJxjYGRgYFb4b8GAAIwMqIARACjTAV4AeJxjYGRgYGBigAEECwoAAJcABgB4nGNgZmBgnMDAysDCQBxogDHsgYCBQXmm8kycahUYGACgRgOyAAAAAAAAAAAAAAB4nGNgYGBiYGBgBmIRIMkIplkYFIA0CxAC+coz//+HkHcywPIMAFzRBxgAAAAAAAAAAAAAAAAAAHicLYixCYAwFAUvURAbOzuLrGDjAJ8MIG6QIgQxpBCyvz/BKx53Dxg5MDQMS9+GZdIaMOOsz8b6u9V39+LOHO7iJIfyXDHVHF48guMkE7gp6tK98HARSdTe7wdmSw/gAHicY2BiwA+A8oxM7KV5mUbGlpYACtYCMg==) format("woff");unicode-range:U+2399}
+html.v-plain .printbtn{font-family:"DB Plain Blank",var(--mono)!important}
+
+/* ---------- shop ---------- */
+html.v-plain .shop-col .hd{border-bottom:2px solid var(--ink)}
+html.v-plain .shop-card{border:2px solid var(--ink);text-decoration:none}
+html.v-plain .shop-card:hover .shop-name{text-decoration:underline}
+html.v-plain .shop-card img{background:var(--bone)}
+html.v-plain .shop-name{font-weight:800;text-decoration:none;text-underline-offset:.18em}
+html.v-plain .shop-type{color:var(--muted)}
+
+/* ---------- back cover and the slim footer: bone, 2px rule above ---------- */
+html.v-plain .backcover{background:var(--bone);color:var(--ink);position:relative;border-top:2px solid var(--ink)}
+html.v-plain .backcover::before{content:"";position:absolute;top:0;left:0;right:0;height:10px;background:var(--checker);opacity:.9}
+html.v-plain .backcover img.logo{filter:none}
+html.v-plain .backcover .tg{letter-spacing:.16em;font-size:12px}
+html.v-plain .backcover p.blurb{color:var(--ink);font-size:var(--body);line-height:1.6}
+html.v-plain .backcover .colophon{color:var(--muted);border-top:1px dashed var(--ink);font-size:11px}
+html.v-plain footer.slim{background:var(--bone);color:var(--ink);border-top:2px solid var(--ink)}
+html.v-plain footer.slim .tg,html.v-plain .fswitch{color:var(--muted);font-size:11px;letter-spacing:.1em}
+html.v-plain .fswitch a{color:var(--ink);white-space:nowrap}
+html.v-plain .fswitch a[aria-current]{color:var(--ink);font-weight:800;text-decoration:none}
+html.v-plain .verify-note a{color:var(--ink);border-bottom:0;text-decoration:none}
+html.v-plain .verify-note a:hover{color:var(--ink);text-decoration:underline}
+html.v-plain .verify-note .np-msg,html.v-plain .verify-note.np-ok .np-msg,
+html.v-plain .verify-note.np-warn .np-msg,html.v-plain .verify-note.np-bad .np-msg{color:var(--ink)}
+html.v-plain .verify-note .np-dot{background:var(--ink)}
+html.v-plain .verify-note.np-checking .np-dot,html.v-plain .verify-note.np-warn .np-dot,
+html.v-plain .verify-note.np-bad .np-dot{background:transparent;border:2px solid var(--ink)}
+
+/* ---------- phone: the header scrolls away, the contents strip stays ----------
+   At 760px the header wraps to two rows (about 82px), taller than the
+   56px --topbar the rail sticks under, so the strip slid beneath it.
+   Content first: only the strip is sticky on a phone. */
+@media(max-width:760px){
+  html.v-plain{--topbar:0px}
+  html.v-plain header.top{position:static}
+  /* the language menu hangs from the bar, not the picker: in Arabic the
+     picker sat 285px in and its menu ran 183px off the right edge */
+  html.v-plain header.top .bar{position:relative}
+  html.v-plain header.top .bar .langpick{position:static}
+}
+
+/* ---------- phone: a row's trailing note drops whole under its text ----------
+   e.g. "Contributors / three writers, 17-24" instead of "17-" / "24" */
+@media(max-width:600px){
+  html.v-plain .list .li{flex-wrap:wrap;row-gap:2px}
+  /* the title keeps its line beside the chip; only the trailing note wraps */
+  html.v-plain .list .li .t{flex:1 1 0;min-width:0}
+  html.v-plain .list .li .end,html.v-plain .list .li .end.tagend,
+  html.v-plain .masthead-list .li .val{flex-basis:100%;margin-inline-start:0;text-align:start}
+}
 
 </style>
 </head>
@@ -595,7 +909,7 @@
       <a href="#shop">Sklep</a>
       <a href="#stickers">Naklejki</a>
     </nav>
-    <nav class="vswitch" aria-label="Renderowanie"><a href="/pl/">Pełna</a><a href="/pl/lite/">Lekka</a><a href="/pl/eink/">E-ink</a><a href="/pl/plain/" aria-current="true">Plain</a></nav>
+    <nav class="vswitch" aria-label="Renderowanie"><a href="/pl/">Pełna</a><a href="/pl/lite/">Lekka</a><a href="/pl/eink/">E-ink</a><a href="/pl/plain/" aria-current="true">Prosta</a></nav>
     <details class="langpick"><summary aria-label="Język: Polski"><span class="globe" aria-hidden="true">🌐</span> Polski <span class="car" aria-hidden="true">▾</span></summary><div class="langmenu"><a href="/plain/" hreflang="en" lang="en"><span class="endo">English</span><span class="en">English</span></a><a href="/fr/plain/" hreflang="fr" lang="fr"><span class="endo">Français</span><span class="en">French</span></a><a href="/es/plain/" hreflang="es" lang="es"><span class="endo">Español</span><span class="en">Spanish</span></a><a href="/it/plain/" hreflang="it" lang="it"><span class="endo">Italiano</span><span class="en">Italian</span></a><a href="/pl/plain/" hreflang="pl" lang="pl" aria-current="true"><span class="endo">Polski</span><span class="en">Polish</span></a><a href="/la/plain/" hreflang="la" lang="la"><span class="endo">Latina</span><span class="en">Latin</span></a><a href="/zh-hans/plain/" hreflang="zh-Hans" lang="zh-Hans"><span class="endo">简体中文</span><span class="en">Chinese (Simplified)</span></a><a href="/zh-hant/plain/" hreflang="zh-Hant" lang="zh-Hant"><span class="endo">繁體中文</span><span class="en">Chinese (Traditional)</span></a><a href="/pa/plain/" hreflang="pa" lang="pa"><span class="endo">ਪੰਜਾਬੀ</span><span class="en">Punjabi</span></a><a href="/ko/plain/" hreflang="ko" lang="ko"><span class="endo">한국어</span><span class="en">Korean</span></a><a href="/ja/plain/" hreflang="ja" lang="ja"><span class="endo">日本語</span><span class="en">Japanese</span></a><a href="/tl/plain/" hreflang="tl" lang="tl"><span class="endo">Tagalog</span><span class="en">Tagalog</span></a><a href="/vi/plain/" hreflang="vi" lang="vi"><span class="endo">Tiếng Việt</span><span class="en">Vietnamese</span></a><a href="/hi/plain/" hreflang="hi" lang="hi"><span class="endo">हिन्दी</span><span class="en">Hindi</span></a><a href="/ar/plain/" hreflang="ar" lang="ar" dir="rtl"><span class="endo">العربية</span><span class="en">Arabic</span></a><a href="/fa/plain/" hreflang="fa" lang="fa" dir="rtl"><span class="endo">فارسی</span><span class="en">Farsi</span></a></div></details>
   </div>
 </header>
@@ -1122,7 +1436,7 @@
       <div class="meta" style="line-height:1.7;text-align:left">ISSN w toku<br>№1 · Lato 2026</div>
     </div>
     <div class="signoff" style="color:var(--pink);margin-top:4px">do zobaczenia na odwilży ✕</div>
-    <div class="colophon">Drukowane na nieoddanym terytorium syilx Okanagan w nakładzie 500. Złożone krojami IBM Plex Mono i UnifrakturMaguntia. Błędy są nasze; sprostowania są wasze; resztka tuszu poszła na naklejki. · Parry. Riposte.</div>
+    <div class="colophon">Drukowane na nieoddanym terytorium syilx Okanagan w nakładzie 500. Złożone krojami JetBrains Mono. Błędy są nasze; sprostowania są wasze; resztka tuszu poszła na naklejki. · Parry. Riposte.</div>
     <!-- paper only. The live badge in the slim strip is screen chrome (that
          strip is display:none in print), so without this line the printed issue
          would carry no verification text at all — which is where it sat before
@@ -1144,7 +1458,7 @@
 <footer class="slim">
   <div class="wrap finner">
     <div class="tg">Riposte Laboratories Inc. &middot; DB-001</div>
-    <div class="fswitch">Lekkie wersje: <a href="/pl/">Pełna</a> · <a href="/pl/lite/">Lekka</a> · <a href="/pl/eink/">E-ink</a> · <a href="/pl/plain/" aria-current="true">Plain</a></div>
+    <div class="fswitch">Lekkie wersje: <a href="/pl/">Pełna</a> · <a href="/pl/lite/">Lekka</a> · <a href="/pl/eink/">E-ink</a> · <a href="/pl/plain/" aria-current="true">Prosta</a></div>
     <div class="verify-note"><a href="/verify/">Zweryfikowana publikacja ✓ potwierdź, że tej edycji nie zmieniono</a></div>
   </div>
 </footer>

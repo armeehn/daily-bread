@@ -515,6 +515,12 @@ function fswitch(t, code, variant){
   }).join(' · ');
   return `<div class="fswitch">${esc(t['chrome.altVersions'])}: ${items}</div>`;
 }
+/* plain is set in one face: "IBM Plex Mono and UnifrakturMaguntia" (in any
+   language's own "and") becomes "JetBrains Mono" */
+const COLOPHON_FACES = /IBM Plex Mono.{0,12}UnifrakturMaguntia/;
+function plainColophon(s){
+  return s.replace(COLOPHON_FACES, 'JetBrains Mono');
+}
 function hreflangs(variant){
   const links = LANGS.map(l=>`<link rel="alternate" hreflang="${l.hreflang}" href="${ORIGIN}${url(l.code, variant)}">`);
   links.push(`<link rel="alternate" hreflang="x-default" href="${ORIGIN}${url('en', variant)}">`);
@@ -1090,7 +1096,7 @@ ${rail(t)}
       <div class="meta" style="line-height:1.7;text-align:left">${t['footer.issn']}</div>
     </div>
     <div class="signoff" style="color:var(--pink);margin-top:4px">${t['footer.signoff']}</div>
-    <div class="colophon">${t['footer.colophon']}</div>
+    <div class="colophon">${variant==='plain' ? plainColophon(t['footer.colophon']) : t['footer.colophon']}</div>
     <!-- paper only. The live badge in the slim strip is screen chrome (that
          strip is display:none in print), so without this line the printed issue
          would carry no verification text at all — which is where it sat before
